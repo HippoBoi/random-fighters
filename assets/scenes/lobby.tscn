@@ -1,0 +1,599 @@
+[gd_scene load_steps=15 format=3 uid="uid://c4ojgswfdm5s3"]
+
+[ext_resource type="Script" uid="uid://2wk7nxsiem53" path="res://assets/scenes/lobby.gd" id="1_ra0n6"]
+[ext_resource type="Script" uid="uid://be5a7kvcyybhp" path="res://assets/scenes/web_socket_client.gd" id="1_vfkro"]
+[ext_resource type="Texture2D" uid="uid://brdci3je8xyyy" path="res://assets/textures/gameMap_TCom_Wall_Stone3_2x2_512_albedo.png" id="2_e80kb"]
+[ext_resource type="Shader" uid="uid://dhm0x2q73b616" path="res://assets/scripts/shaders/scroll_shader.gdshader" id="2_oo8yk"]
+[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="3_87ruf"]
+[ext_resource type="Texture2D" uid="uid://cwomrtxwutbck" path="res://assets/sprites/432352.webp" id="4_ydlbi"]
+[ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="6_qe23s"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qe23s"]
+shader = ExtResource("2_oo8yk")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mh50d"]
+shader = ExtResource("6_qe23s")
+shader_parameter/color = Color(0.349017, 0.467353, 0.533154, 0.154)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 15.0
+shader_parameter/speed = 2.0
+shader_parameter/radius = 1.0
+shader_parameter/line_thickness = 0.03
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mh50d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oo8yk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_87ruf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ddyr"]
+shader = ExtResource("6_qe23s")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 15.0
+shader_parameter/speed = 3.0
+shader_parameter/radius = 1.0
+shader_parameter/line_thickness = 0.1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe23s"]
+
+[node name="Lobby" type="Control"]
+z_index = -4
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ra0n6")
+
+[node name="bgColor" type="ColorRect" parent="."]
+z_index = -4
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.133333, 0.156863, 0.192157, 1)
+
+[node name="Pattern" type="TextureRect" parent="."]
+self_modulate = Color(0.326956, 0.281705, 0.399978, 0.418)
+texture_repeat = 2
+material = SubResource("ShaderMaterial_qe23s")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_e80kb")
+expand_mode = 1
+
+[node name="Status" type="RichTextLabel" parent="."]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 29.0
+offset_right = 640.0
+offset_bottom = 55.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_outline_size = 4
+bbcode_enabled = true
+text = "Lobby"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WebSocketClient" type="Node" parent="."]
+script = ExtResource("1_vfkro")
+
+[node name="PlayerStats" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 569.0
+offset_top = 5.0
+offset_right = 609.0
+offset_bottom = 45.0
+
+[node name="PlayerAvatar" type="TextureRect" parent="PlayerStats"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_87ruf")
+expand_mode = 3
+
+[node name="UserInfo" type="Panel" parent="."]
+clip_contents = true
+layout_mode = 0
+offset_left = 548.0
+offset_top = 46.0
+offset_right = 635.0
+offset_bottom = 61.0
+
+[node name="Username" type="RichTextLabel" parent="UserInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/bold_italics_font_size = 1
+theme_override_font_sizes/italics_font_size = 1
+theme_override_font_sizes/mono_font_size = 2
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 1
+bbcode_enabled = true
+text = "noname"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MatchesContainer" type="Panel" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+material = SubResource("ShaderMaterial_mh50d")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -125.0
+offset_right = 225.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MatchesContainer"]
+z_index = -4
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -117.5
+offset_right = 215.0
+offset_bottom = 117.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0193297, 0.0333015, 0.058865, 1)
+
+[node name="MatchStatus" type="RichTextLabel" parent="MatchesContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = -2.0
+offset_right = 100.0
+offset_bottom = 32.0
+grow_horizontal = 2
+text = "Matches"
+horizontal_alignment = 1
+
+[node name="AvailableMatches" type="VBoxContainer" parent="MatchesContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 27.0
+offset_top = 49.0
+offset_right = -19.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateMatchButton" type="Button" parent="MatchesContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = 1.0
+offset_right = 56.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+disabled = true
+text = "Create Match"
+
+[node name="RefreshButton" type="Button" parent="MatchesContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -240.0
+offset_right = 16.0
+offset_bottom = -207.0
+grow_horizontal = 2
+grow_vertical = 0
+icon = ExtResource("4_ydlbi")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Return" type="Button" parent="MatchesContainer"]
+layout_mode = 0
+offset_left = -94.0
+offset_top = 251.0
+offset_right = 27.0
+offset_bottom = 304.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mh50d")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_oo8yk")
+text = "Return"
+
+[node name="decoRect" type="ColorRect" parent="MatchesContainer"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 27.0
+offset_right = 31.0
+offset_bottom = 31.0
+rotation = 5.23599
+color = Color(0, 0, 0, 0.684)
+
+[node name="decoRect3" type="ColorRect" parent="MatchesContainer"]
+layout_mode = 0
+offset_left = 434.0
+offset_top = -1.0
+offset_right = 467.0
+offset_bottom = 3.0
+rotation = 1.0472
+color = Color(0, 0, 0, 0.684)
+
+[node name="decoRect4" type="ColorRect" parent="MatchesContainer"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 219.0
+offset_right = 36.0
+offset_bottom = 223.0
+rotation = 1.0472
+color = Color(0, 0, 0, 0.684)
+
+[node name="decoRect2" type="ColorRect" parent="MatchesContainer"]
+layout_mode = 0
+offset_left = 431.0
+offset_top = 248.0
+offset_right = 464.0
+offset_bottom = 252.0
+rotation = 5.23599
+color = Color(0, 0, 0, 0.684)
+
+[node name="CreateMatchContainer" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -273.0
+offset_top = -116.0
+offset_right = 276.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateMatch" type="Button" parent="CreateMatchContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -55.5
+offset_top = 2.0
+offset_right = 56.5
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 0
+disabled = true
+text = "Create Match"
+
+[node name="matchName" type="RichTextLabel" parent="CreateMatchContainer"]
+layout_mode = 0
+offset_left = 87.0
+offset_top = 51.0
+offset_right = 246.0
+offset_bottom = 91.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+text = "Match Name:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="matchInput" type="TextEdit" parent="CreateMatchContainer"]
+layout_mode = 0
+offset_left = 326.0
+offset_top = 48.0
+offset_right = 475.0
+offset_bottom = 90.0
+placeholder_text = "..."
+emoji_menu_enabled = false
+
+[node name="maxPlayersText" type="RichTextLabel" parent="CreateMatchContainer"]
+layout_mode = 0
+offset_left = 87.0
+offset_top = 108.0
+offset_right = 246.0
+offset_bottom = 148.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+text = "Max Players:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="maxPlayersInput" type="SpinBox" parent="CreateMatchContainer"]
+layout_mode = 0
+offset_left = 326.0
+offset_top = 107.0
+offset_right = 493.0
+offset_bottom = 147.0
+min_value = 2.0
+max_value = 10.0
+value = 10.0
+update_on_text_changed = true
+
+[node name="Cancel" type="Button" parent="CreateMatchContainer"]
+self_modulate = Color(2, 1, 1, 1)
+layout_mode = 0
+offset_left = 504.0
+offset_top = 4.0
+offset_right = 545.0
+offset_bottom = 35.0
+theme_override_constants/outline_size = 6
+text = "X"
+
+[node name="LobbyContainer" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_87ruf")
+
+[node name="Teams" type="Panel" parent="LobbyContainer"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -100.0
+offset_right = 250.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlackTeamText" type="RichTextLabel" parent="LobbyContainer/Teams"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 115.0
+offset_bottom = 45.0
+text = "Black Team"
+
+[node name="BlackTeam" type="VBoxContainer" parent="LobbyContainer/Teams"]
+layout_mode = 0
+offset_top = 29.0
+offset_right = 240.0
+offset_bottom = 198.0
+
+[node name="BlackTeamJoin" type="Button" parent="LobbyContainer/Teams"]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 2.0
+offset_right = 238.0
+offset_bottom = 27.0
+theme_override_font_sizes/font_size = 12
+text = "Join"
+clip_text = true
+
+[node name="WhiteTeamText" type="RichTextLabel" parent="LobbyContainer/Teams"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -3.0
+offset_top = 5.0
+offset_right = 94.0
+offset_bottom = 45.0
+grow_horizontal = 2
+text = "White Team"
+
+[node name="WhiteTeam" type="VBoxContainer" parent="LobbyContainer/Teams"]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 29.0
+offset_right = 495.0
+offset_bottom = 198.0
+
+[node name="WhiteTeamJoin" type="Button" parent="LobbyContainer/Teams"]
+layout_mode = 0
+offset_left = 384.0
+offset_top = 2.0
+offset_right = 493.0
+offset_bottom = 27.0
+theme_override_font_sizes/font_size = 12
+text = "Join"
+clip_text = true
+
+[node name="Ready" type="Button" parent="LobbyContainer/Teams"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -56.0
+offset_top = -1.0
+offset_right = 56.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Start Match"
+
+[node name="Leave" type="Button" parent="LobbyContainer"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 281.0
+offset_right = 160.0
+offset_bottom = 312.0
+text = "Leave"
+
+[node name="WarningContainer" type="Panel" parent="."]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_87ruf")
+
+[node name="bgColor" type="ColorRect" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.635)
+
+[node name="ColorRect2" type="ColorRect" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.5
+offset_top = -103.5
+offset_right = 198.5
+offset_bottom = 103.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0718777, 0.0623439, 0.0984309, 1)
+
+[node name="warning" type="RichTextLabel" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -89.5
+offset_top = 80.0
+offset_right = 89.5
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 10
+text = "WARNING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="description" type="RichTextLabel" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -173.0
+offset_top = 122.0
+offset_right = 177.0
+offset_bottom = 197.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 10
+text = "In order to host a private match you must have UPnP enabled on your router."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="checkBoxText" type="RichTextLabel" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -63.0
+offset_top = 220.0
+offset_right = 105.0
+offset_bottom = 252.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 14
+text = "Don't show again"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Close" type="Button" parent="WarningContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = -95.0
+offset_right = 45.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Close"
+
+[node name="CheckBox" type="CheckBox" parent="WarningContainer"]
+material = SubResource("ShaderMaterial_6ddyr")
+layout_mode = 0
+offset_left = 253.0
+offset_top = 223.0
+offset_right = 277.0
+offset_bottom = 247.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qe23s")
+
+[connection signal="connected_to_server" from="WebSocketClient" to="." method="_onWebSocketConnectedToServer"]
+[connection signal="connection_closed" from="WebSocketClient" to="." method="_onWebSocketConnectionClose"]
+[connection signal="message_recieved" from="WebSocketClient" to="." method="_onWebSocketMessageRecieved"]
+[connection signal="pressed" from="MatchesContainer/CreateMatchButton" to="." method="_on_create_match_pressed"]
+[connection signal="pressed" from="MatchesContainer/RefreshButton" to="." method="_on_refresh"]
+[connection signal="mouse_entered" from="MatchesContainer/Return" to="." method="_on_return_hovered"]
+[connection signal="pressed" from="MatchesContainer/Return" to="." method="_on_return_pressed"]
+[connection signal="pressed" from="CreateMatchContainer/CreateMatch" to="." method="_onCreateMatch"]
+[connection signal="lines_edited_from" from="CreateMatchContainer/matchInput" to="." method="_onMatchInputChanged"]
+[connection signal="pressed" from="CreateMatchContainer/Cancel" to="." method="_close_creating_match"]
+[connection signal="pressed" from="LobbyContainer/Teams/BlackTeamJoin" to="." method="_on_team_join" binds= ["0"]]
+[connection signal="pressed" from="LobbyContainer/Teams/WhiteTeamJoin" to="." method="_on_team_join" binds= ["1"]]
+[connection signal="pressed" from="LobbyContainer/Teams/Ready" to="." method="_adminStartMatch"]
+[connection signal="pressed" from="LobbyContainer/Leave" to="." method="_on_leave_match"]
+[connection signal="pressed" from="WarningContainer/Close" to="." method="_on_warning_close"]
+[connection signal="toggled" from="WarningContainer/CheckBox" to="." method="_on_check_box_toggled"]

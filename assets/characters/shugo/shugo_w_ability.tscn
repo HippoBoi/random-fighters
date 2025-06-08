@@ -1,0 +1,335 @@
+[gd_scene load_steps=25 format=3 uid="uid://d44omuhdep02"]
+
+[ext_resource type="Script" uid="uid://bl8suf0itb8l8" path="res://assets/characters/shugo/shugo_w_ability.gd" id="1_kw3cl"]
+[ext_resource type="Texture2D" uid="uid://cjjb2q8a7qgh4" path="res://assets/textures/Grass001_1K-JPG_Color.jpg" id="1_q63w2"]
+
+[sub_resource type="Curve" id="Curve_d45fi"]
+_data = [Vector2(0, 0.237354), 0.0, 0.0, 0, 0, Vector2(0.576531, 0.657588), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_cnkhh"]
+curve = SubResource("Curve_d45fi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d8rgy"]
+emission_shape_scale = Vector3(1, 1, 8)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 40.0
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 1, 0)
+scale_curve = SubResource("CurveTexture_cnkhh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gwnvw"]
+albedo_color = Color(0.8, 0.294118, 0.223529, 1)
+emission_enabled = true
+emission = Color(0.959911, 0.521176, 0.398494, 1)
+emission_energy_multiplier = 5.09
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_12s6e"]
+material = SubResource("StandardMaterial3D_gwnvw")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 2
+
+[sub_resource type="Curve" id="Curve_kw3cl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.229592, 1), 0.0, 0.0, 0, 0, Vector2(0.576531, 0.564202), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_26juw"]
+curve = SubResource("Curve_kw3cl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pp0g8"]
+emission_shape_scale = Vector3(1, 1, 5)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -6.0
+radial_accel_max = -2.23517e-06
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_26juw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55lk0"]
+transparency = 1
+albedo_color = Color(0.584314, 0.584314, 0.584314, 0.717647)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ol65v"]
+material = SubResource("StandardMaterial3D_55lk0")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
+
+[sub_resource type="Curve" id="Curve_q63w2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.413265, 0.579767), 0.0, 0.0, 0, 0, Vector2(0.954082, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_kw3cl"]
+curve = SubResource("Curve_q63w2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vn5xs"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(1, 1, 6)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 8.0
+initial_velocity_max = 12.0
+gravity = Vector3(0, -15, 0)
+radial_accel_min = -5.0
+radial_accel_max = -4.0
+tangential_accel_min = -2.23517e-06
+tangential_accel_max = -2.23517e-06
+scale_curve = SubResource("CurveTexture_kw3cl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0cnc0"]
+albedo_color = Color(0.915969, 0.451401, 0.511741, 1)
+albedo_texture = ExtResource("1_q63w2")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e8wqn"]
+material = SubResource("StandardMaterial3D_0cnc0")
+bottom_radius = 0.6
+height = 0.75
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d45fi"]
+transparency = 1
+albedo_color = Color(0.956129, 0.554591, 0.391755, 0.65098)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cnkhh"]
+material = SubResource("StandardMaterial3D_d45fi")
+height = 1.0
+
+[sub_resource type="Animation" id="Animation_q63w2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trail:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 15.7237)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trail:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 8.59122)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("trail:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("trailGlows:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("trailSmoke:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("groundBreak:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_yrkki"]
+resource_name = "attack"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trail:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.793333, 0.883333, 0.933333, 1.70333, 1.82666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 15.7237), Vector3(1, 1, 15.7237), Vector3(4.2, 1.3, 15.7237), Vector3(3.78, 1.3, 15.7237), Vector3(4.536, 1.3, 15.7237), Vector3(0.4536, 1.17, 15.7237)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trail:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.793333, 0.883333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 8.59122), Vector3(0, 0, 8.59122), Vector3(0, 0, 8.59122)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("trail:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.84333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("trailGlows:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.726666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("trailSmoke:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.723333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("groundBreak:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.733333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kw3cl"]
+_data = {
+&"RESET": SubResource("Animation_q63w2"),
+&"attack": SubResource("Animation_yrkki")
+}
+
+[sub_resource type="BoxMesh" id="BoxMesh_kw3cl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26juw"]
+
+[node name="shugo_w_ability" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.8, 0, 0, 0)
+script = ExtResource("1_kw3cl")
+
+[node name="trailGlows" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.2094)
+emitting = false
+amount = 24
+one_shot = true
+explosiveness = 0.53
+process_material = SubResource("ParticleProcessMaterial_d8rgy")
+draw_pass_1 = SubResource("CapsuleMesh_12s6e")
+
+[node name="trailSmoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.75408)
+amount = 16
+one_shot = true
+explosiveness = 0.37
+process_material = SubResource("ParticleProcessMaterial_pp0g8")
+draw_pass_1 = SubResource("CapsuleMesh_ol65v")
+
+[node name="groundBreak" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+emitting = false
+amount = 16
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_vn5xs")
+draw_pass_1 = SubResource("CylinderMesh_e8wqn")
+
+[node name="trail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15.7237, 0, 0, 8.59122)
+visible = false
+mesh = SubResource("CapsuleMesh_cnkhh")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_kw3cl")
+}
+
+[node name="hitbox" type="Node3D" parent="."]
+transform = Transform3D(3.10777, 0, 0, 0, 1, 0, 0, 0, 16.2343, 0, 0, 8.09795)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hitbox"]
+transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 0.948655, 0, 0, 0)
+visible = false
+mesh = SubResource("BoxMesh_kw3cl")
+
+[node name="Area3D" type="Area3D" parent="hitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_26juw")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.8
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="hitbox/MeshInstance3D/Area3D" to="." method="_onTouch"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

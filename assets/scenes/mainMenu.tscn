@@ -1,0 +1,226 @@
+[gd_scene load_steps=8 format=3 uid="uid://ysdddut54uvw"]
+
+[ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_6tsn0"]
+[ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_2cgkr"]
+[ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="3_4agkw"]
+[ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_cmwfe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8at84"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cygf"]
+shader = ExtResource("3_4agkw")
+shader_parameter/MOVE_SPEED = 0.2
+
+[node name="MainMenu" type="Node3D"]
+script = ExtResource("1_6tsn0")
+
+[node name="UI" type="Control" parent="."]
+z_index = 4
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_2cgkr")
+
+[node name="Menu" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="menuButtons" type="Control" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="multiplayerButton" type="Button" parent="UI/Menu/menuButtons"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -62.0
+offset_right = 294.0
+offset_bottom = -17.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+text = "Multiplayer"
+alignment = 0
+
+[node name="optionsButton" type="Button" parent="UI/Menu/menuButtons"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -12.0
+offset_right = 294.0
+offset_bottom = 33.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+text = "Options"
+alignment = 0
+
+[node name="creditsButton" type="Button" parent="UI/Menu/menuButtons"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 38.0
+offset_right = 294.0
+offset_bottom = 83.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+text = "Credits"
+alignment = 0
+
+[node name="exitButton" type="Button" parent="UI/Menu/menuButtons"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 88.0
+offset_right = 294.0
+offset_bottom = 133.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+text = "Exit"
+alignment = 0
+
+[node name="nameInput" type="LineEdit" parent="UI/Menu"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.0
+offset_top = 138.0
+offset_right = 78.0
+offset_bottom = 169.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "..."
+
+[node name="nameInputText" type="RichTextLabel" parent="UI/Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = 117.0
+offset_right = 58.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 14
+text = "Username:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="topRect" type="ColorRect" parent="UI"]
+modulate = Color(1, 1, 1, 0.958)
+light_mask = 0
+z_as_relative = false
+layout_mode = 0
+offset_left = -28.0
+offset_top = 338.0
+offset_right = 725.0
+offset_bottom = 713.0
+rotation = -0.541105
+mouse_filter = 2
+color = Color(0.134221, 0.152641, 0.212648, 1)
+
+[node name="midRect" type="ColorRect" parent="UI"]
+light_mask = 0
+z_index = -1
+z_as_relative = false
+layout_mode = 0
+offset_left = -40.0
+offset_top = 326.0
+offset_right = 713.0
+offset_bottom = 390.0
+rotation = -0.541105
+mouse_filter = 2
+color = Color(0.223529, 0.243137, 0.27451, 1)
+
+[node name="loopingBG" type="TextureRect" parent="UI"]
+modulate = Color(0.336226, 0.39007, 0.433584, 1)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_0cygf")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -76.0
+offset_right = 640.0
+offset_bottom = 438.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("4_cmwfe")
+stretch_mode = 1
+
+[node name="bottomRect" type="ColorRect" parent="UI"]
+light_mask = 0
+z_index = -6
+z_as_relative = false
+y_sort_enabled = true
+layout_mode = 0
+offset_right = 647.0
+offset_bottom = 367.0
+mouse_filter = 2
+color = Color(0.0798956, 0.105834, 0.141231, 1)
+
+[node name="Title1" type="RichTextLabel" parent="UI"]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 18.0
+offset_right = 233.0
+offset_bottom = 90.0
+scale = Vector2(1.1, 1.1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/normal_font_size = 48
+text = "Random"
+
+[node name="Title2" type="RichTextLabel" parent="UI"]
+layout_mode = 0
+offset_left = 73.0
+offset_top = 77.0
+offset_right = 306.0
+offset_bottom = 153.0
+scale = Vector2(1.1, 1.1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/normal_font_size = 48
+text = "Fighters"
+
+[connection signal="pressed" from="UI/Menu/menuButtons/multiplayerButton" to="." method="onFindMatch"]
+[connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host"]
+[connection signal="pressed" from="UI/Menu/menuButtons/creditsButton" to="." method="_joinPressed"]
+[connection signal="text_changed" from="UI/Menu/nameInput" to="." method="_on_name_input"]

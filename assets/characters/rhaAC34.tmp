@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://ky5ntk6upfme"]
+
+[ext_resource type="PackedScene" uid="uid://bpcg3054sbph0" path="res://assets/characters/rhay.glb" id="1_l5qm4"]
+[ext_resource type="Script" path="res://assets/characters/rhay_char.gd" id="2_v1ns3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lptq5"]
+radius = 0.999927
+height = 6.91007
+
+[node name="rhay" instance=ExtResource("1_l5qm4")]
+script = ExtResource("2_v1ns3")
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+bones/5/rotation = Quaternion(0.0115168, 0.0293898, 0.9306, 0.364674)
+bones/5/scale = Vector3(1, 1, 1)
+bones/6/rotation = Quaternion(-0.0310312, 0.0057856, 0.183197, 0.982569)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/rotation = Quaternion(-0.0147906, -0.00229183, 0.153101, 0.988097)
+bones/7/scale = Vector3(1, 1, 1)
+bones/8/rotation = Quaternion(-0.0115168, 0.0293898, 0.9306, -0.364674)
+bones/8/scale = Vector3(1, 1, 1)
+bones/9/rotation = Quaternion(-0.0310312, -0.0057856, -0.183197, 0.982569)
+bones/9/scale = Vector3(1, 1, 1)
+bones/10/rotation = Quaternion(-0.0147906, 0.00229183, -0.153101, 0.988097)
+bones/10/scale = Vector3(1, 1, 1)
+bones/12/rotation = Quaternion(-0.6, -3.46209e-08, 9.50698e-08, 0.8)
+bones/15/rotation = Quaternion(-0.6, 3.46209e-08, -9.50698e-08, 0.8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77329, 0)
+shape = SubResource("CapsuleShape3D_lptq5")

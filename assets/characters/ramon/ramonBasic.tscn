@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqrw68iy5nfjo"]
+
+[ext_resource type="Script" uid="uid://bbv0swsqv6ihf" path="res://assets/characters/ramon/ramonBasic.gd" id="1_6ejj4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hbgk3"]
+size = Vector3(1, 0.025, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sn641"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hqt4k"]
+
+[node name="Ball" type="Node3D"]
+script = ExtResource("1_6ejj4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_hbgk3")
+surface_material_override/0 = SubResource("StandardMaterial3D_sn641")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
+shape = SubResource("SphereShape3D_hqt4k")

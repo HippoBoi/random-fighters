@@ -1,0 +1,222 @@
+[gd_scene load_steps=18 format=3 uid="uid://brsr5u6fwrcdi"]
+
+[ext_resource type="Script" uid="uid://lmwxy6lva5yk" path="res://assets/characters/clean/clean_r_laser.gd" id="1_te77x"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_716ke"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6e4tu"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0e1fo"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sn641"]
+albedo_color = Color(5.67943e-06, 0.81776, 0.713393, 1)
+emission_enabled = true
+emission = Color(0.356841, 0.931984, 0.421923, 1)
+emission_energy_multiplier = 2.94
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hqt4k"]
+radius = 0.324644
+
+[sub_resource type="Curve" id="Curve_0e1fo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.678571, 0.844358), 0.0, 0.0, 0, 0, Vector2(0.943877, 0.22179), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_1vpoh"]
+curve = SubResource("Curve_0e1fo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_te77x"]
+lifetime_randomness = 1.0
+emission_shape_offset = Vector3(0, 0.5, 0)
+direction = Vector3(0, 1, 0)
+spread = 103.77
+initial_velocity_max = 1.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_1vpoh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r1t3o"]
+albedo_color = Color(0.787788, 0.951096, 0.972917, 1)
+emission_enabled = true
+emission = Color(0.396571, 0.996876, 1, 1)
+emission_energy_multiplier = 5.57
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_te77x"]
+material = SubResource("StandardMaterial3D_r1t3o")
+radius = 0.2
+height = 0.4
+radial_segments = 4
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vdiq1"]
+emission_shape_offset = Vector3(0, 0.5, 0)
+spread = 95.164
+initial_velocity_max = 1.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_1vpoh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqg71"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_jv2on"]
+material = SubResource("StandardMaterial3D_gqg71")
+size = Vector3(0.1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_716ke"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("laserStuff/laser:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(3.96, 5.04, 3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("laserStuff/laser:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -2)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("laserStuff/laser:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_chp8b"]
+resource_name = "attack"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("laserStuff/laser:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.333333, 0.883333, 1.25, 1.38333, 1.58333, 1.71667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(3.168, 4.536, 3), Vector3(6.1776, 6.048, 7.56768), Vector3(6.1776, 6.048, 10.9883), Vector3(6.1776, 6.048, 13.1628), Vector3(5.55984, 6.048, 15.8783), Vector3(5.00386, 5.4432, 15.9645), Vector3(4.40339, 4.89888, 15.9645), Vector3(0.396305, 4.40899, 15.9645), Vector3(0.356675, 0.952342, 12.9312)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("laserStuff/laser:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.126667, 0.333333, 0.883333, 1.25, 1.38333, 1.58333, 1.71667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -2), Vector3(0, 0, -6.25892), Vector3(0, 0, -8.73429), Vector3(0, 0, -10.5091), Vector3(0, 0, -12.447), Vector3(0, 0, -12.5867), Vector3(0, 0, -12.5867), Vector3(0, 0, -12.5867), Vector3(0, 0, -10.5491)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("laserStuff/laser:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.75),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6e4tu"]
+_data = {
+&"RESET": SubResource("Animation_716ke"),
+&"attack": SubResource("Animation_chp8b")
+}
+
+[node name="cleanRLaser" type="Node3D"]
+transform = Transform3D(1.22455, 0, 1.76491e-07, 0, 0.983559, 0, -2.14107e-07, 0, 1.00941, 0, 0, 0)
+script = ExtResource("1_te77x")
+
+[node name="laserStuff" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.94273e-07, -1.11111, 1.11111)
+
+[node name="hitbox" type="Node3D" parent="laserStuff"]
+transform = Transform3D(5.17961, 0, -1.13687e-13, 0, 1, 0, -1.13687e-13, 0, 5.53371, -2.29391e-07, 0, -1.05641)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="laserStuff/hitbox"]
+transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 0.948655, 0, 0, 0)
+visible = false
+mesh = SubResource("BoxMesh_716ke")
+
+[node name="Area3D" type="Area3D" parent="laserStuff/hitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="laserStuff/hitbox/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_6e4tu")
+
+[node name="laser" type="Node3D" parent="laserStuff"]
+transform = Transform3D(3.96, 0, 0, 0, 5.04, 0, 0, 0, 3, 0, 0, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="laserStuff/laser"]
+transform = Transform3D(2.23933, 0, 0, 0, -1.0846e-07, 2.82269, 0, -2.48127, -1.23383e-07, 0, 0, -0.405956)
+mesh = SubResource("CapsuleMesh_0e1fo")
+surface_material_override/0 = SubResource("StandardMaterial3D_sn641")
+
+[node name="Area3D" type="Area3D" parent="laserStuff/laser/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="laserStuff/laser/MeshInstance3D/Area3D"]
+shape = SubResource("SphereShape3D_hqt4k")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="laserStuff/laser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0167548, -0.419018, 0.663513)
+amount = 30
+process_material = SubResource("ParticleProcessMaterial_te77x")
+draw_pass_1 = SubResource("CapsuleMesh_te77x")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="laserStuff/laser"]
+amount = 16
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_vdiq1")
+draw_pass_1 = SubResource("BoxMesh_jv2on")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6e4tu")
+}
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.25
+one_shot = true
+autostart = true
+
+[node name="spawnTimer" type="Timer" parent="."]
+wait_time = 1.25
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="laserStuff/hitbox/MeshInstance3D/Area3D" to="." method="_onTouch"]
+[connection signal="body_entered" from="laserStuff/laser/MeshInstance3D/Area3D" to="." method="_onTouch"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="spawnTimer" to="." method="_on_spawn_timer"]

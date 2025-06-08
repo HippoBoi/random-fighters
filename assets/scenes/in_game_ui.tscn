@@ -1,0 +1,549 @@
+[gd_scene load_steps=9 format=3 uid="uid://cs5f0x4jchyj2"]
+
+[ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
+[ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="1_l0sqe"]
+[ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="2_l0sqe"]
+[ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="3_grbm3"]
+[ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="4_6hcns"]
+[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="5_ksudb"]
+[ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="6_rl4ok"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
+font_size = 24
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(4, 4)
+
+[node name="InGameUI" type="Control"]
+z_index = -1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="playerList" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 95.0
+offset_top = 57.0
+offset_right = -70.0
+offset_bottom = -63.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
+
+[node name="livesText" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.5
+offset_top = -42.5
+offset_right = 71.5
+offset_bottom = -15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 2
+text = "Lives"
+horizontal_alignment = 1
+
+[node name="livesContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -15.0
+offset_right = 19.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="template" type="TextureRect" parent="livesContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_l0sqe")
+stretch_mode = 3
+
+[node name="healthBar" type="TextureRect" parent="."]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = 122.0
+offset_right = 177.0
+offset_bottom = 137.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_cjvv2")
+
+[node name="health" type="TextureRect" parent="healthBar"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -7.5
+offset_right = 160.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_l0sqe")
+
+[node name="bgColor" type="TextureRect" parent="healthBar"]
+modulate = Color(0.685036, 0.0534782, 0.453278, 1)
+z_index = -1
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -7.5
+offset_right = 160.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_l0sqe")
+
+[node name="juiceBar" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = 137.0
+offset_right = 177.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_cjvv2")
+
+[node name="juice" type="TextureRect" parent="juiceBar"]
+texture_repeat = 1
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 11.0
+texture = ExtResource("3_grbm3")
+
+[node name="abilitiesUI" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="abilitiesBG" type="TextureRect" parent="abilitiesUI"]
+modulate = Color(0.388235, 0.364706, 0.286275, 0.745098)
+self_modulate = Color(0.524605, 0.416212, 0.508752, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -462.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("4_6hcns")
+expand_mode = 1
+
+[node name="coolLine" type="TextureRect" parent="abilitiesUI"]
+modulate = Color(0.388235, 0.364706, 0.286275, 0.745098)
+self_modulate = Color(0.524605, 0.416212, 0.508752, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -31.0
+offset_right = -462.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("4_6hcns")
+expand_mode = 1
+
+[node name="primaryAbility" type="TextureRect" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -31.0
+offset_right = -76.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_ksudb")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="abilitiesUI/primaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -15.5
+offset_right = 17.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_rl4ok")
+expand_mode = 1
+
+[node name="secondaryAbility" type="TextureRect" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -31.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_ksudb")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="abilitiesUI/secondaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("6_rl4ok")
+expand_mode = 1
+
+[node name="tertiaryAbility" type="TextureRect" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -31.0
+offset_right = 64.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_ksudb")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="abilitiesUI/tertiaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("6_rl4ok")
+expand_mode = 1
+
+[node name="ultiAbility" type="TextureRect" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -31.0
+offset_right = 134.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("5_ksudb")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="abilitiesUI/ultiAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("6_rl4ok")
+expand_mode = 1
+
+[node name="primaryKeybind" type="Label" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -34.0
+offset_right = -107.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Q"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="secondaryKeybind" type="Label" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -34.0
+offset_right = -38.0
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "W
+"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="tertiaryKeybind" type="Label" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -34.0
+offset_right = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "E"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ultiKeybind" type="Label" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 61.0
+offset_top = -34.0
+offset_right = 101.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "r"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="livesText" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -632.0
+offset_top = -28.0
+offset_right = -470.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "Lives:"
+
+[node name="livesContainer2" type="HBoxContainer" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.0
+offset_top = 149.0
+offset_right = -193.0
+offset_bottom = 179.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="template" type="TextureRect" parent="abilitiesUI/livesContainer2"]
+visible = false
+layout_mode = 2
+texture = ExtResource("1_l0sqe")
+stretch_mode = 3
+
+[node name="LVText" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -165.0
+offset_top = -28.0
+offset_right = -124.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "LVL:"
+
+[node name="level" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -28.0
+offset_right = -95.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "0"
+horizontal_alignment = 1
+
+[node name="XPText" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -28.0
+offset_right = -37.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "XP:"
+
+[node name="xp" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -28.0
+offset_right = -7.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "0"
+horizontal_alignment = 1
+
+[node name="respawningText" type="RichTextLabel" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -69.0
+offset_top = -82.0
+offset_right = 74.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 7
+text = "Respawning in"
+
+[node name="respawnTimer" type="RichTextLabel" parent="abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 49.0
+offset_top = -86.0
+offset_right = 109.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+text = "10..."

@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://crynirt1kqpmy"]
+
+[sub_resource type="Curve" id="Curve_5hfq6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.852041, 0.0817121), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tv8x4"]
+curve = SubResource("Curve_5hfq6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tv8x4"]
+spread = 180.0
+flatness = 1.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, -1, 0)
+scale_curve = SubResource("CurveTexture_tv8x4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5hfq6"]
+blend_mode = 1
+shading_mode = 0
+albedo_color = Color(0.949053, 0.590169, 0.607161, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nqixl"]
+material = SubResource("StandardMaterial3D_5hfq6")
+top_radius = 0.25
+bottom_radius = 0.1
+height = 0.25
+radial_segments = 66
+rings = 12
+
+[node name="StunnedParticles" type="Node3D"]
+
+[node name="parts" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 20
+lifetime = 0.75
+process_material = SubResource("ParticleProcessMaterial_tv8x4")
+draw_pass_1 = SubResource("CylinderMesh_nqixl")

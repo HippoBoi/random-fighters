@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2nrmuihinq3n"]
+
+[ext_resource type="PackedScene" uid="uid://bde5k5dhyktvh" path="res://assets/mapAssets/battlefield/heaven_battlefield_map.glb" id="1_mcf6l"]
+[ext_resource type="Material" uid="uid://c3qais7ylarxt" path="res://assets/materials/grass_material.tres" id="2_kg542"]
+
+[node name="heaven_battlefield_map" instance=ExtResource("1_mcf6l")]
+
+[node name="terrain" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_kg542")

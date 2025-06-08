@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3 uid="uid://c6vawk6pxjmkm"]
+
+[ext_resource type="Script" uid="uid://onbrs6j4xi5c" path="res://assets/characters/clean/clean_basic.gd" id="1_0e1fo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0e1fo"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sn641"]
+albedo_color = Color(0.99733, 0.594524, 0.555767, 1)
+emission_enabled = true
+emission = Color(0.888651, 0.551981, 1.92523e-07, 1)
+emission_energy_multiplier = 1.49
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hqt4k"]
+
+[sub_resource type="Curve" id="Curve_0e1fo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.678571, 0.844358), 0.0, 0.0, 0, 0, Vector2(0.943877, 0.22179), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_1vpoh"]
+curve = SubResource("Curve_0e1fo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vdiq1"]
+spread = 95.164
+initial_velocity_max = 1.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_1vpoh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r1t3o"]
+albedo_color = Color(0.995093, 0.820642, 0.747162, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_074bm"]
+material = SubResource("StandardMaterial3D_r1t3o")
+radius = 0.2
+height = 0.4
+radial_segments = 4
+
+[node name="Ball" type="Node3D"]
+script = ExtResource("1_0e1fo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_0e1fo")
+surface_material_override/0 = SubResource("StandardMaterial3D_sn641")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
+shape = SubResource("SphereShape3D_hqt4k")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_vdiq1")
+draw_pass_1 = SubResource("CapsuleMesh_074bm")

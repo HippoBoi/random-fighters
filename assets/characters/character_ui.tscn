@@ -1,0 +1,125 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpwyventqbr55"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bwqgb"]
+viewport_path = NodePath("HealthUI/SubViewport")
+
+[sub_resource type="Theme" id="Theme_i6x1h"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3p2xi"]
+viewport_path = NodePath("PlayerName/SubViewport")
+
+[sub_resource type="LabelSettings" id="LabelSettings_2h7y8"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="CharacterUI" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+
+[node name="HealthUI" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
+billboard = 1
+fixed_size = true
+texture = SubResource("ViewportTexture_bwqgb")
+
+[node name="SubViewport" type="SubViewport" parent="HealthUI"]
+transparent_bg = true
+
+[node name="emptyBar" type="ColorRect" parent="HealthUI/SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -5.0
+offset_right = 55.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+color = Color(0.190958, 0.158231, 0.202544, 1)
+
+[node name="healthBar" type="ColorRect" parent="HealthUI/SubViewport/emptyBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -5.0
+offset_right = 55.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.768589, 0.169974, 0.18192, 1)
+
+[node name="shieldBar" type="ColorRect" parent="HealthUI/SubViewport/emptyBar"]
+z_index = 1
+layout_direction = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -5.0
+offset_right = 55.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.544652, 0.696886, 0.835219, 1)
+
+[node name="levelPanel" type="Panel" parent="HealthUI/SubViewport"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 185.0
+offset_top = -5.0
+offset_right = 201.0
+offset_bottom = 5.0
+grow_vertical = 2
+theme = SubResource("Theme_i6x1h")
+
+[node name="levelText" type="RichTextLabel" parent="HealthUI/SubViewport/levelPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -20.0
+offset_right = 28.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 12
+text = "0"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerName" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0.724453, 0)
+billboard = 1
+fixed_size = true
+texture = SubResource("ViewportTexture_3p2xi")
+
+[node name="SubViewport" type="SubViewport" parent="PlayerName"]
+transparent_bg = true
+
+[node name="Label" type="Label" parent="PlayerName/SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -16.6
+offset_right = 41.0
+offset_bottom = 6.39999
+grow_horizontal = 2
+grow_vertical = 2
+text = "asdasdasd"
+label_settings = SubResource("LabelSettings_2h7y8")

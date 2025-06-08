@@ -1,0 +1,75 @@
+[gd_scene load_steps=8 format=3 uid="uid://bc3abcp8ps8jl"]
+
+[ext_resource type="Script" uid="uid://0hadcsbktvkh" path="res://assets/characters/ramon/ramon_r_ability.gd" id="1_ei0gp"]
+[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="1_sntli"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryhqh"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_ryhqh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.709184, 0.673152), 0.0, 0.0, 0, 0, Vector2(0.994898, 0.00389111), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_6wiod"]
+curve = SubResource("Curve_ryhqh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6wiod"]
+particle_flag_align_y = true
+angle_min = -90.0
+angle_max = 150.0
+velocity_pivot = Vector3(0, -1, 0)
+spread = 180.0
+initial_velocity_min = 12.0
+initial_velocity_max = 14.0
+orbit_velocity_min = -2.0
+orbit_velocity_max = 2.0
+radial_velocity_min = 0.999978
+radial_velocity_max = 4.99998
+gravity = Vector3(0, -7, 0)
+radial_accel_min = -10.0
+radial_accel_max = 5.0
+tangential_accel_min = 8.33
+tangential_accel_max = 12.5
+damping_max = 8.333
+scale_curve = SubResource("CurveTexture_6wiod")
+
+[sub_resource type="BoxMesh" id="BoxMesh_08cgt"]
+size = Vector3(1, 0.05, 1)
+
+[node name="ramon_r_explosion" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.504, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_ei0gp")
+
+[node name="explosionParts" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_ryhqh")
+emitting = false
+amount = 40
+lifetime = 1.5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_6wiod")
+draw_pass_1 = SubResource("BoxMesh_08cgt")
+
+[node name="explosion_hitbox" parent="." instance=ExtResource("1_sntli")]
+transform = Transform3D(1.84762, 0, 0, 0, 0.34992, 0, 0, 0, 1.94226, 0, 1.11408, 0.0860744)
+
+[node name="Area3D" parent="explosion_hitbox/MeshInstance3D" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="killTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+autostart = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="explosion_hitbox/MeshInstance3D/Area3D" to="." method="_onTouch"]
+[connection signal="timeout" from="killTimer" to="." method="_killThing"]
+[connection signal="timeout" from="Timer" to="." method="_enableHitbox"]
+
+[editable path="explosion_hitbox"]

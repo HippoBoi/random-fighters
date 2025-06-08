@@ -1,0 +1,65 @@
+[gd_resource type="VisualShader" load_steps=6 format=3 uid="uid://qfy004jsbvrv"]
+
+[ext_resource type="Texture2D" uid="uid://byp1eccdfnj71" path="res://assets/textures/fx/T_groundmark_emissive.png" id="1_4khmk"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_2grmb"]
+expanded_output_ports = [0]
+texture = ExtResource("1_4khmk")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_4khmk"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_2grmb"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_338ex"]
+parameter_name = "markColor"
+default_value_enabled = true
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform vec4 markColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform sampler2D tex_frg_2;
+
+
+
+void fragment() {
+// ColorParameter:5
+	vec4 n_out5p0 = markColor;
+
+
+// Input:3
+	vec4 n_out3p0 = COLOR;
+	float n_out3p1 = n_out3p0.r;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+	float n_out2p1 = n_out2p0.r;
+
+
+// FloatOp:4
+	float n_out4p0 = n_out3p1 * n_out2p1;
+
+
+// Output:0
+	ALBEDO = vec3(n_out5p0.xyz);
+	ALPHA = n_out4p0;
+
+
+}
+"
+graph_offset = Vector2(-336.952, -48.5526)
+nodes/fragment/0/position = Vector2(640, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_2grmb")
+nodes/fragment/2/position = Vector2(-300, 260)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_4khmk")
+nodes/fragment/3/position = Vector2(-240, -60)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatOp_2grmb")
+nodes/fragment/4/position = Vector2(100, 200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_338ex")
+nodes/fragment/5/position = Vector2(260, -80)
+nodes/fragment/connections = PackedInt32Array(3, 1, 4, 0, 2, 1, 4, 1, 4, 0, 0, 1, 5, 0, 0, 0)

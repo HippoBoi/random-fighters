@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bnsbanit2iyf"]
+
+[ext_resource type="Texture2D" uid="uid://cxb6h5o8rd6wf" path="res://assets/textures/gameMap_TCom_Rock_CliffLayered_1.5x1.png" id="1_r0cbk"]
+
+[resource]
+albedo_color = Color(0.551627, 0.323092, 0.12573, 1)
+albedo_texture = ExtResource("1_r0cbk")
+albedo_texture_force_srgb = true

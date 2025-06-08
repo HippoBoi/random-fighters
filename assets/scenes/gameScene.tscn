@@ -1,0 +1,159 @@
+[gd_scene load_steps=3 format=3 uid="uid://b11rigyeoc3re"]
+
+[ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
+[ext_resource type="PackedScene" uid="uid://cs5f0x4jchyj2" path="res://assets/scenes/in_game_ui.tscn" id="2_68mr5"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_5eccb")
+
+[node name="InGameUI" parent="." instance=ExtResource("2_68mr5")]
+
+[node name="GameInfoUI" type="Control" parent="."]
+visible = false
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Title" type="RichTextLabel" parent="GameInfoUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.0
+offset_top = -63.0
+offset_right = 135.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_y = -3
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/normal_font_size = 30
+text = "Objetive"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="GameInfoUI"]
+modulate = Color(0, 0, 0, 1)
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -68.0
+offset_top = -27.0
+offset_right = 79.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1.01201)
+
+[node name="Description" type="RichTextLabel" parent="GameInfoUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -24.0
+offset_right = 120.0
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/normal_font_size = 14
+text = "description goes here uhh...,,"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoundEndUI" type="Control" parent="."]
+visible = false
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GG" type="Label" parent="RoundEndUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.0
+offset_top = -96.5
+offset_right = 173.0
+offset_bottom = 78.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0.682226, 0.244029, 0.438812, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "GG"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="RichTextLabel" parent="RoundEndUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -144.5
+offset_top = -2.0
+offset_right = 144.5
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/normal_font_size = 16
+text = "{X} team wins this round!!!"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.586907, 0.394385, 0, 0.557745, 0.830012, -0.707107, -0.586907, 0.394385, 4.84099, 9.07359, 3.88934)
+
+[node name="Map" type="Node3D" parent="."]
+
+[node name="placeHolder" type="Node3D" parent="Map"]
+
+[node name="spawnLocations" type="Node3D" parent="Map/placeHolder"]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="Map/placeHolder/spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.95399e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -18.0909, 0.591753, -0.0551581)
+
+[node name="blackTeam" type="Node3D" parent="Map/placeHolder/spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 17.5455, 0.591752, -0.0339885)

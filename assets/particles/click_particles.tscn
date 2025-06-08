@@ -1,0 +1,88 @@
+[gd_scene load_steps=16 format=3 uid="uid://cke7e8yr5mvgp"]
+
+[ext_resource type="Script" uid="uid://cmgg28ynshd5h" path="res://assets/particles/particles.gd" id="1_m6j2a"]
+
+[sub_resource type="Curve" id="Curve_137hp"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.648515, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_lhk0s"]
+curve = SubResource("Curve_137hp")
+
+[sub_resource type="CurveTexture" id="CurveTexture_fflj7"]
+
+[sub_resource type="Curve" id="Curve_k1seo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.69802, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jq0em"]
+curve = SubResource("Curve_k1seo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jnixq"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_jq0em")
+color = Color(0.964706, 0.701961, 0.635294, 1)
+alpha_curve = SubResource("CurveTexture_lhk0s")
+emission_curve = SubResource("CurveTexture_fflj7")
+sub_emitter_mode = 1
+sub_emitter_frequency = 9.0
+sub_emitter_keep_velocity = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_koq3l"]
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="TorusMesh" id="TorusMesh_hpaa6"]
+material = SubResource("StandardMaterial3D_koq3l")
+outer_radius = 0.6
+
+[sub_resource type="Curve" id="Curve_jglw5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.747525, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0lrt1"]
+curve = SubResource("Curve_jglw5")
+
+[sub_resource type="CurveTexture" id="CurveTexture_qcwyu"]
+
+[sub_resource type="Curve" id="Curve_xtbva"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.975248, 0.0943396), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1h7u7"]
+curve = SubResource("Curve_xtbva")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vq2j6"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_1h7u7")
+color = Color(0.612527, 0.838343, 0.681291, 1)
+alpha_curve = SubResource("CurveTexture_0lrt1")
+emission_curve = SubResource("CurveTexture_qcwyu")
+sub_emitter_mode = 1
+sub_emitter_frequency = 4.0
+
+[node name="particles" type="Node3D"]
+script = ExtResource("1_m6j2a")
+
+[node name="clickParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 2
+sub_emitter = NodePath("../clickParticles2")
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_jnixq")
+draw_pass_1 = SubResource("TorusMesh_hpaa6")
+
+[node name="clickParticles2" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 2
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_vq2j6")
+draw_pass_1 = SubResource("TorusMesh_hpaa6")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

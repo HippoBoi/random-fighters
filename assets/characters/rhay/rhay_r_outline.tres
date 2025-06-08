@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b3fmp3jbkjjfd"]
+
+[ext_resource type="Shader" uid="uid://4avn4rtbt27f" path="res://assets/scripts/shaders/outline.gdshader" id="1_j0vcv"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_j0vcv")
+shader_parameter/outline_color = Color(0.295323, 0.33517, 1, 1)
+shader_parameter/outline_width = 4.0
+shader_parameter/fade_start = 10.0
+shader_parameter/fade_end = 30.0
+shader_parameter/enabled = 1.0

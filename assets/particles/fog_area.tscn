@@ -1,0 +1,128 @@
+[gd_scene load_steps=19 format=3 uid="uid://7ayd1wt5j1pp"]
+
+[ext_resource type="Script" uid="uid://d085b2dc12frf" path="res://assets/maps/fog_area.gd" id="1_ptlu2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bl8qg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bl8qg"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.00784314)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pv7kj"]
+material = SubResource("StandardMaterial3D_bl8qg")
+size = Vector3(1, 0.25, 1)
+
+[sub_resource type="Curve" id="Curve_bl8qg"]
+_data = [Vector2(0, 0.0817121), 0.0, 0.0, 0, 0, Vector2(0.358209, 0.47191), 0.0, 0.0, 0, 0, Vector2(0.485075, 0.213483), 0.0, 0.0, 0, 0, Vector2(0.813433, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_pv7kj"]
+curve = SubResource("Curve_bl8qg")
+
+[sub_resource type="Curve" id="Curve_jginh"]
+_data = [Vector2(0, 0.470817), 0.0, 0.0, 0, 0, Vector2(0.331633, 1), 0.0, 0.0, 0, 0, Vector2(0.729592, 0.688716), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_ftqql"]
+curve = SubResource("Curve_jginh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_esdi2"]
+lifetime_randomness = 0.15
+particle_flag_align_y = true
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0.5, 0.5)
+angle_min = -20.0
+angle_max = 20.0
+initial_velocity_max = 0.15
+gravity = Vector3(0, 1, 0)
+scale_min = 6.0
+scale_max = 8.0
+scale_curve = SubResource("CurveTexture_ftqql")
+alpha_curve = SubResource("CurveTexture_pv7kj")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nd666"]
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_42lls"]
+material = SubResource("StandardMaterial3D_nd666")
+height = 1.0
+radial_segments = 4
+rings = 2
+
+[sub_resource type="Curve" id="Curve_pv7kj"]
+_data = [Vector2(0, 0.0817121), 0.0, 0.0, 0, 0, Vector2(0.223881, 0.325843), 0.0, 0.0, 0, 0, Vector2(0.41791, 0.0786518), 0.0, 0.0, 0, 0, Vector2(0.813433, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jginh"]
+curve = SubResource("Curve_pv7kj")
+
+[sub_resource type="Curve" id="Curve_ftqql"]
+_data = [Vector2(0, 0.470817), 0.0, 0.0, 0, 0, Vector2(0.373134, 0.224719), 0.0, 0.0, 0, 0, Vector2(0.671642, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_esdi2"]
+curve = SubResource("Curve_ftqql")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nd666"]
+lifetime_randomness = 0.25
+emission_shape = 3
+emission_box_extents = Vector3(0.4, 0.4, 0.4)
+angle_min = -20.0
+angle_max = 20.0
+initial_velocity_max = 0.15
+orbit_velocity_min = -1.375
+orbit_velocity_max = -0.501
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_esdi2")
+alpha_curve = SubResource("CurveTexture_jginh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ftqql"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.873298, 0.873298, 0.873298, 0.258824)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bl8qg"]
+material = SubResource("StandardMaterial3D_ftqql")
+size = Vector3(4, 1, 4)
+
+[node name="FogArea" type="MeshInstance3D"]
+transform = Transform3D(13.182, 0, 0, 0, 0.9, 0, 0, 0, 12.4105, 0, 0, 0)
+skeleton = NodePath("")
+script = ExtResource("1_ptlu2")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_bl8qg")
+
+[node name="FogMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0221354)
+mesh = SubResource("BoxMesh_pv7kj")
+
+[node name="FogParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.53787, 0)
+amount = 20
+lifetime = 3.0
+speed_scale = 0.6
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_esdi2")
+draw_pass_1 = SubResource("CapsuleMesh_42lls")
+
+[node name="FloorFogParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.638102, 0)
+amount = 40
+lifetime = 3.0
+speed_scale = 0.6
+interpolate = false
+fract_delta = false
+process_material = SubResource("ParticleProcessMaterial_nd666")
+draw_pass_1 = SubResource("BoxMesh_bl8qg")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_fog_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_fog_exit"]

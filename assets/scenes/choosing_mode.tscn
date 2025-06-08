@@ -1,0 +1,411 @@
+[gd_scene load_steps=14 format=3 uid="uid://by3jto66up0ev"]
+
+[ext_resource type="Script" uid="uid://bnt703t7rjxc7" path="res://assets/scenes/choosing_mode.gd" id="1_aidr7"]
+[ext_resource type="Script" uid="uid://bvfyx5dby45fb" path="res://assets/scenes/choose_mode.gd" id="1_awl5g"]
+[ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="1_mpuvj"]
+[ext_resource type="Texture2D" uid="uid://cjjb2q8a7qgh4" path="res://assets/textures/Grass001_1K-JPG_Color.jpg" id="2_tkvfe"]
+[ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="4_ft458"]
+[ext_resource type="Texture2D" uid="uid://caf178hqihny4" path="res://assets/sprites/emptyPoint.png" id="4_whmpy"]
+[ext_resource type="Texture2D" uid="uid://rl54fx2l08qf" path="res://assets/textures/bars.png" id="5_awl5g"]
+[ext_resource type="Texture2D" uid="uid://c3glmdtq8xxac" path="res://assets/textures/bars - copia.png" id="7_5jk3c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xveiu"]
+shader = ExtResource("1_mpuvj")
+shader_parameter/initial_color = Color(1, 1, 1, 0)
+shader_parameter/final_color = Color(0, 0, 0, 0.612)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tkvfe"]
+shader = ExtResource("1_mpuvj")
+shader_parameter/initial_color = Color(0.189535, 0.0996462, 0.272148, 0.45)
+shader_parameter/final_color = Color(0.5, 0, 0, 0.45)
+shader_parameter/vertical = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpuvj"]
+shader = ExtResource("1_mpuvj")
+shader_parameter/initial_color = Color(0, 0, 0.5, 0.45)
+shader_parameter/final_color = Color(5.17406e-07, 0.304013, 0.233154, 0.45)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5jk3c"]
+shader = ExtResource("4_ft458")
+shader_parameter/MOVE_SPEED = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_awl5g"]
+shader = ExtResource("4_ft458")
+shader_parameter/MOVE_SPEED = 0.25
+
+[node name="choosingMode" type="Control"]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_awl5g")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -8
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.296, 0.296, 0.296, 1)
+script = ExtResource("1_aidr7")
+
+[node name="TeamWinsUI" type="Control" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BlackTeam" type="Control" parent="TeamWinsUI"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -107.0
+offset_right = 95.0
+offset_bottom = 180.0
+grow_vertical = 2
+
+[node name="BgGradient" type="ColorRect" parent="TeamWinsUI/BlackTeam"]
+z_index = -1
+material = SubResource("ShaderMaterial_xveiu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
+layout_mode = 0
+offset_right = 97.0
+offset_bottom = 33.0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 16
+text = "Black Team"
+horizontal_alignment = 1
+
+[node name="WinsContainer" type="VBoxContainer" parent="TeamWinsUI/BlackTeam"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 2.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="1" type="TextureRect" parent="TeamWinsUI/BlackTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="2" type="TextureRect" parent="TeamWinsUI/BlackTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="3" type="TextureRect" parent="TeamWinsUI/BlackTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="WinText" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
+modulate = Color(1, 1, 1, 0.536)
+layout_mode = 0
+offset_left = -2.0
+offset_top = 249.0
+offset_right = 93.0
+offset_bottom = 290.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]WIN[b]"
+horizontal_alignment = 1
+
+[node name="WhiteTeam" type="Control" parent="TeamWinsUI"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_top = -287.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="BgGradient" type="ColorRect" parent="TeamWinsUI/WhiteTeam"]
+z_index = -1
+material = SubResource("ShaderMaterial_xveiu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
+layout_mode = 0
+offset_right = 97.0
+offset_bottom = 33.0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 16
+text = "White Team"
+horizontal_alignment = 1
+
+[node name="WinsContainer" type="VBoxContainer" parent="TeamWinsUI/WhiteTeam"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 2.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="1" type="TextureRect" parent="TeamWinsUI/WhiteTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="2" type="TextureRect" parent="TeamWinsUI/WhiteTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="3" type="TextureRect" parent="TeamWinsUI/WhiteTeam/WinsContainer"]
+layout_mode = 2
+texture = ExtResource("4_whmpy")
+expand_mode = 4
+
+[node name="WinText" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
+modulate = Color(1, 1, 1, 0.536)
+layout_mode = 0
+offset_left = -2.0
+offset_top = 249.0
+offset_right = 93.0
+offset_bottom = 290.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]WIN[b]"
+horizontal_alignment = 1
+
+[node name="HorizontalBG" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_tkvfe")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VerticalBG" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_mpuvj")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="modeOutline" type="ColorRect" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -43.0
+offset_right = 43.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="modeTexture" type="TextureRect" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_tkvfe")
+expand_mode = 1
+
+[node name="modeName" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = 44.0
+offset_right = 98.0
+offset_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/normal_font_size = 20
+text = "Game Mode"
+horizontal_alignment = 1
+
+[node name="loopingModeName" type="RichTextLabel" parent="."]
+modulate = Color(0.64, 0.653, 0.661, 0.5)
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 292.0
+offset_top = -199.0
+offset_right = 692.0
+offset_bottom = -92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/normal_font_size = 58
+text = "Game Mode"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="statusText" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -148.0
+offset_right = 124.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 22
+text = "Choosing next mode"
+horizontal_alignment = 1
+
+[node name="statusDots" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 104.0
+offset_right = 140.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 22
+text = ". . ."
+
+[node name="loopingBG" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.2)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_5jk3c")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("5_awl5g")
+stretch_mode = 1
+
+[node name="loopingBG3" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.188)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_awl5g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("7_5jk3c")
+stretch_mode = 1
+
+[node name="loopingBG4" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.188)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_awl5g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("7_5jk3c")
+stretch_mode = 1
+flip_v = true

@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvlwqvmuvg454"]
+
+[sub_resource type="Curve" id="Curve_yl2jj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.717822, 0.849057), 0.0, 0.0, 0, 0, Vector2(1, 0.230189), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_fwfml"]
+curve = SubResource("Curve_yl2jj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g0m8x"]
+particle_flag_align_y = true
+angle_min = 60.0
+angle_max = 208.8
+direction = Vector3(0, 0.2, 1)
+spread = 15.0
+initial_velocity_min = 9.0
+initial_velocity_max = 12.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 0.5
+gravity = Vector3(0, -7, 0)
+scale_curve = SubResource("CurveTexture_fwfml")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ebm5c"]
+size = Vector3(1, 0.05, 1)
+
+[node name="RamonQAbility" type="Node3D"]
+
+[node name="parts" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 24
+one_shot = true
+explosiveness = 0.32
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_g0m8x")
+draw_pass_1 = SubResource("BoxMesh_ebm5c")

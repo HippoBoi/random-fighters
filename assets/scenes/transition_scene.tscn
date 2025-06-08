@@ -1,0 +1,117 @@
+[gd_scene load_steps=5 format=3 uid="uid://emgj7xpeavb8"]
+
+[ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="1_3akex"]
+[ext_resource type="Script" uid="uid://d02s688p8ypve" path="res://assets/scenes/transition_animation.gd" id="1_x0ymw"]
+[ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="2_rtev6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0ymw"]
+shader = ExtResource("1_3akex")
+shader_parameter/MOVE_SPEED = 0.2
+
+[node name="TransitionScene" type="Control"]
+z_index = 14
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x0ymw")
+
+[node name="bgColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -386.0
+offset_top = 213.0
+offset_right = -43.0
+offset_bottom = 521.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+color = Color(0.129412, 0.203922, 0.282353, 1)
+
+[node name="bars" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bar#1" type="ColorRect" parent="bars"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 448.0
+offset_right = 140.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+color = Color(0.329412, 0.466667, 0.572549, 1)
+
+[node name="bar#3" type="ColorRect" parent="bars"]
+z_index = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = 369.0
+offset_right = 102.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+color = Color(0.92549, 0.937255, 0.792157, 1)
+
+[node name="bar#4" type="ColorRect" parent="bars/bar#3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 353.0
+offset_top = -17.0718
+offset_right = -332.0
+offset_bottom = 20.9282
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.92549, 0.937255, 0.792157, 1)
+
+[node name="bar#2" type="ColorRect" parent="bars"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = 284.0
+offset_right = 44.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.523599
+color = Color(0.580392, 0.705882, 0.756863, 1)
+
+[node name="loopingBG" type="TextureRect" parent="."]
+modulate = Color(0.011, 0.011, 0.011, 0)
+light_mask = 0
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_x0ymw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -17.0
+offset_right = 640.0
+offset_bottom = 379.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("2_rtev6")
+stretch_mode = 1

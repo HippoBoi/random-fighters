@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bmsayc34wmv13"]
+
+[ext_resource type="Shader" uid="uid://cvu351l28d7lh" path="res://assets/scripts/shaders/toon_shader.gdshader" id="1_8anb7"]
+
+[sub_resource type="Gradient" id="Gradient_8ohdi"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_08p33"]
+gradient = SubResource("Gradient_8ohdi")
+
+[sub_resource type="Gradient" id="Gradient_34ojq"]
+offsets = PackedFloat32Array(0.177778, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bku27"]
+gradient = SubResource("Gradient_34ojq")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_8anb7")
+shader_parameter/albedo = Color(0.174877, 0.283617, 0.107382, 1)
+shader_parameter/color_gradient = SubResource("GradientTexture1D_08p33")
+shader_parameter/fresnel_gradient = SubResource("GradientTexture1D_bku27")

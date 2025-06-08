@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjb371raxm7pw"]
+
+[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="1_d34tf"]
+
+[node name="paperHitbox" type="Node3D"]
+
+[node name="hirbox1" parent="." instance=ExtResource("1_d34tf")]
+transform = Transform3D(0.7, 0, 0, 0, 0.9, 0, 0, 0, 0.645938, 0, 0, 1.66272)
+
+[node name="hirbox2" parent="." instance=ExtResource("1_d34tf")]
+transform = Transform3D(0.7, 0, 0, 0, 0.9, 0, 0, 0, 0.645938, 0, 0, 4.85968)
+
+[node name="hirbox3" parent="." instance=ExtResource("1_d34tf")]
+transform = Transform3D(0.7, 0, 0, 0, 0.9, 0, 0, 0, 0.376, 0, 0, 7.43623)
+
+[editable path="hirbox1"]
+[editable path="hirbox2"]
+[editable path="hirbox3"]

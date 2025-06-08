@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://b356ul8ss50e"]
+
+[ext_resource type="PackedScene" uid="uid://b6ji7bx646es0" path="res://assets/mapAssets/dark_forest/mesh_dark_forest.tscn" id="1_7prly"]
+[ext_resource type="PackedScene" uid="uid://7ayd1wt5j1pp" path="res://assets/particles/fog_area.tscn" id="2_bl8qg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7prly"]
+size = Vector3(54.8834, 0.260262, 69.1275)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6bwyu"]
+
+[sub_resource type="Sky" id="Sky_y7koq"]
+sky_material = SubResource("ProceduralSkyMaterial_6bwyu")
+
+[sub_resource type="Environment" id="Environment_1m8v4"]
+background_mode = 2
+sky = SubResource("Sky_y7koq")
+ambient_light_source = 3
+sdfgi_use_occlusion = true
+glow_intensity = 1.91
+glow_strength = 1.36
+glow_bloom = 0.01
+fog_enabled = true
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6wape"]
+
+[node name="darkForest" type="Node3D"]
+transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 1.1, 0, 0, 0)
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.95399e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -18.0909, 0.591753, -0.0551581)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 17.5455, 0.591752, -0.0339885)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(0.682563, 0, -3.70956e-08, 2.0342e-08, 1, 1.85478e-08, -4.06839e-08, 0, 0.622362, -9.53674e-07, 0.382018, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0831642, -0.356785, 1.05789)
+shape = SubResource("BoxShape3D_7prly")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.634056, 0.773287, 0, -0.773287, -0.634056, 1.73113, 15.9331, -19.1028)
+light_color = Color(0.741586, 0.772248, 0.91245, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1m8v4")
+camera_attributes = SubResource("CameraAttributesPractical_6wape")
+
+[node name="dark_forest" parent="." instance=ExtResource("1_7prly")]
+
+[node name="FogArea" parent="." instance=ExtResource("2_bl8qg")]
+transform = Transform3D(13.182, 0, 0, 0, 0.9, 0, 0, 0, 12.4105, -14.2067, 0.316321, 11.344)
+
+[node name="FogArea2" parent="." instance=ExtResource("2_bl8qg")]
+transform = Transform3D(13.182, 0, 0, 0, 0.9, 0, 0, 0, 12.4105, -14.2067, 0.316321, -9.80561)
+
+[node name="FogArea4" parent="." instance=ExtResource("2_bl8qg")]
+transform = Transform3D(13.182, 0, 0, 0, 0.9, 0, 0, 0, 12.4105, 12.1569, 0.316321, -0.14724)

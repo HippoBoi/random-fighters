@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://eutptos8bewb"]
+
+[ext_resource type="PackedScene" uid="uid://b2nrmuihinq3n" path="res://assets/mapAssets/battlefield/heaven_battlefield_map_v2.tscn" id="1_qrnna"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jsj4t"]
+size = Vector3(54.8834, 0.260262, 69.1275)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_253s3"]
+
+[sub_resource type="Sky" id="Sky_y7koq"]
+sky_material = SubResource("ProceduralSkyMaterial_253s3")
+
+[sub_resource type="Environment" id="Environment_lq5dk"]
+background_mode = 2
+sky = SubResource("Sky_y7koq")
+ambient_light_source = 3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_hr4na"]
+
+[node name="battlefield" type="Node3D"]
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, 0, -8.74228e-08, -5.32907e-15, 1, 1.3027e-15, 8.74228e-08, 4.37518e-29, -1, -29, 0.591753, -2)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, 0, -8.74228e-08, -3.55271e-15, 1, 1.3027e-15, 8.74228e-08, 4.37518e-29, -1, 33, 0.591752, -1.85217)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, 0, -5.96046e-08, 1.77636e-15, 1, -9.53674e-07, 0.382018, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0831642, -0.356785, 1.05789)
+shape = SubResource("BoxShape3D_jsj4t")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.634056, 0.773287, 0, -0.773287, -0.634056, 1.73113, 15.9331, -19.1028)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lq5dk")
+camera_attributes = SubResource("CameraAttributesPractical_hr4na")
+
+[node name="heaven_battlefield_map2" parent="." instance=ExtResource("1_qrnna")]
+transform = Transform3D(-2.18557e-08, 0, 0.484, 0, 0.44, 0, -0.5, 0, -2.11563e-08, 0, 0, 0)
