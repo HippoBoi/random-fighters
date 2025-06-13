@@ -13,14 +13,15 @@ var lastHpValue = 0;
 var myTeam = -1;
 var myCharacter = null;
 
+var maxRespawnTimer = 10;
+
 var blackTeamStocks = 0;
 var blackTeamSize = 0;
 var whiteTeamStocks = 0;
 var whiteTeamSize = 0;
 
-var myFogInstances = []
-
-var maxRespawnTimer = 10;
+var myFogInstances = [];
+var charSlowedList = [];
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -480,7 +481,7 @@ func updateGlobally(character: CharacterBody3D, _delta):
 	character.armor = character.baseArmor + character.armorOffset;
 	character.attackRange = character.baseAttackRange + character.attackRangeOffset;
 	character.attackSpeed = character.baseAttackSpeed + character.attackSpeedOffset;
-	character.speed = character.baseSpeed + character.speedOffset;
+	character.speed = (character.baseSpeed + character.speedOffset) * character.slowFactor;
 	
 	if not (character.onAction or character.stunned or character.dead):
 		if (character.bufferedInput):

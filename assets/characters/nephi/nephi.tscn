@@ -2416,7 +2416,37 @@ monitoring = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="e_hitboxes/e_outer_hitbox/Area3D" index="0"]
 shape = SubResource("BoxShape3D_4bw0f")
 
-[node name="w_shields" type="Node3D" parent="." index="7"]
+[node name="r_hitboxes" type="Node3D" parent="." index="7"]
+
+[node name="r_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="0"]
+transform = Transform3D(14.7955, 0, 0, 0, 1, 0, 0, 0, 15.5246, 0.177745, 1.02042, 0.10985)
+material_override = SubResource("StandardMaterial3D_5k6x2")
+mesh = SubResource("BoxMesh_5k6x2")
+skeleton = NodePath("")
+
+[node name="Area3D" type="Area3D" parent="r_hitboxes/r_hitbox" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="r_hitboxes/r_hitbox/Area3D" index="0"]
+shape = SubResource("BoxShape3D_4bw0f")
+
+[node name="r_outer_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="1"]
+transform = Transform3D(21.5208, 0, 0, 0, 0.7, 0, 0, 0, 21.4351, 0.177745, 0.897521, 0.10985)
+material_override = SubResource("StandardMaterial3D_5k6x2")
+mesh = SubResource("BoxMesh_5k6x2")
+skeleton = NodePath("")
+
+[node name="Area3D" type="Area3D" parent="r_hitboxes/r_outer_hitbox" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="r_hitboxes/r_outer_hitbox/Area3D" index="0"]
+shape = SubResource("BoxShape3D_4bw0f")
+
+[node name="w_shields" type="Node3D" parent="." index="8"]
 transform = Transform3D(0.78213, 0, 0, 0, 0.79416, 0, 0, 0, 0.80078, 0, 0, 0)
 top_level = true
 visible = false
@@ -2440,7 +2470,7 @@ libraries = {
 }
 speed_scale = 0.5
 
-[node name="w_particles" type="GPUParticles3D" parent="." index="8"]
+[node name="w_particles" type="GPUParticles3D" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6367, 0)
 material_override = SubResource("StandardMaterial3D_4bw0f")
 emitting = false
@@ -2448,7 +2478,7 @@ amount = 20
 process_material = SubResource("ParticleProcessMaterial_tsh70")
 draw_pass_1 = SubResource("TorusMesh_dhhdc")
 
-[node name="w_end_particles" type="GPUParticles3D" parent="." index="9"]
+[node name="w_end_particles" type="GPUParticles3D" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60258, 0)
 material_override = SubResource("StandardMaterial3D_0s7fy")
 emitting = false
@@ -2458,21 +2488,21 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_expdq")
 draw_pass_1 = SubResource("CapsuleMesh_tsh70")
 
-[node name="e_dig_particles" type="GPUParticles3D" parent="." index="10"]
+[node name="e_dig_particles" type="GPUParticles3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379479, 0.208458)
 emitting = false
 amount = 18
 process_material = SubResource("ParticleProcessMaterial_dhhdc")
 draw_pass_1 = SubResource("CylinderMesh_wl3mr")
 
-[node name="dig_trail_particles" type="GPUParticles3D" parent="." index="11"]
+[node name="dig_trail_particles" type="GPUParticles3D" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.379479, -1.74692)
 emitting = false
 amount = 28
 process_material = SubResource("ParticleProcessMaterial_wl3mr")
 draw_pass_1 = SubResource("CylinderMesh_wl3mr")
 
-[node name="nephi_digging" type="Node3D" parent="." index="12"]
+[node name="nephi_digging" type="Node3D" parent="." index="13"]
 transform = Transform3D(1.8, 0, 0, 0, 2.52, 0, 0, 0, 1.728, 0, -1.05535, 0)
 visible = false
 
@@ -2482,7 +2512,7 @@ mesh = SubResource("ArrayMesh_mn7dq")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("5_0s7fy")
 
-[node name="r_particles" type="Node3D" parent="." index="13"]
+[node name="r_particles" type="Node3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.318444, 4.44952, 1.69836)
 
 [node name="spinningParts" type="GPUParticles3D" parent="r_particles" index="0"]
@@ -2505,7 +2535,7 @@ explosiveness = 0.1
 process_material = SubResource("ParticleProcessMaterial_g2yb4")
 draw_pass_1 = SubResource("ArrayMesh_aga0w")
 
-[node name="nephi_thunder" parent="." index="14" instance=ExtResource("6_3uw5u")]
+[node name="nephi_thunder" parent="." index="15" instance=ExtResource("6_3uw5u")]
 transform = Transform3D(1.5, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, -1.33506, 0)
 speed_scale = 0.8
 
@@ -2514,3 +2544,5 @@ speed_scale = 0.8
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D2/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="e_hitboxes/e_hitbox/Area3D" to="." method="_on_e_hit"]
 [connection signal="body_entered" from="e_hitboxes/e_outer_hitbox/Area3D" to="." method="_on_e_outer_hit"]
+[connection signal="body_entered" from="r_hitboxes/r_hitbox/Area3D" to="." method="_on_e_hit"]
+[connection signal="body_entered" from="r_hitboxes/r_outer_hitbox/Area3D" to="." method="_on_e_outer_hit"]
