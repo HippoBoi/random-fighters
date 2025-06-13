@@ -455,6 +455,10 @@ func updateGlobally(character: CharacterBody3D, _delta):
 		if (character.stunTimer <= 0):
 			character.rpc("simulateForcedMove", null);
 	
+	if (character.speedMultiplier < 1.0):
+		character.speedMultiplier += _delta * 0.35;
+		character.speedMultiplier = clamp(character.speedMultiplier, 0.0, 1.0);
+	
 	if (character.stunned):
 		character.moveTo = character.global_position;
 		character.target = null;
@@ -481,7 +485,7 @@ func updateGlobally(character: CharacterBody3D, _delta):
 	character.armor = character.baseArmor + character.armorOffset;
 	character.attackRange = character.baseAttackRange + character.attackRangeOffset;
 	character.attackSpeed = character.baseAttackSpeed + character.attackSpeedOffset;
-	character.speed = (character.baseSpeed + character.speedOffset) * character.slowFactor;
+	character.speed = (character.baseSpeed + character.speedOffset) * character.speedMultiplier;
 	
 	if not (character.onAction or character.stunned or character.dead):
 		if (character.bufferedInput):
@@ -606,6 +610,15 @@ func stunTarget(target, duration, effect := ""):
 	target.stunned = true;
 	target.stunTimer = duration;
 	target.rpc("syncStun", target.stunned, target.stunTimer);
+	
+	if not (effect.is_empty()):
+		target.rpc("syncParticles", effect);
+
+func slowTarget(target: CharacterBody3D, slow: float, effect := ""):
+	target.speedMultiplier -= slow;
+	target.speedMultiplier = clamp(target.speedMultiplier, 0.0, 1.0);
+	
+	target.rpc("syncSlow", slow);
 	
 	if not (effect.is_empty()):
 		target.rpc("syncParticles", effect);

@@ -37,6 +37,7 @@ var attackSpeedOffset = 0;
 var attackSpeed = 0;
 var speedOffset = 0;
 var speed = 0;
+var speedMultiplier = 0;
 
 var timer = 0;
 var team = -1;
@@ -358,6 +359,11 @@ func syncRotation(newPos):
 func syncStun(_isStunned, _stunDuration):
 	stunned = _isStunned;
 	stunTimer = _stunDuration;
+
+@rpc("any_peer")
+func syncSlow(_slowAmount):
+	speedMultiplier -= _slowAmount;
+	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
 
 @rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):

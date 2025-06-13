@@ -2420,6 +2420,7 @@ shape = SubResource("BoxShape3D_4bw0f")
 
 [node name="r_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="0"]
 transform = Transform3D(14.7955, 0, 0, 0, 1, 0, 0, 0, 15.5246, 0.177745, 1.02042, 0.10985)
+visible = false
 material_override = SubResource("StandardMaterial3D_5k6x2")
 mesh = SubResource("BoxMesh_5k6x2")
 skeleton = NodePath("")
@@ -2433,7 +2434,8 @@ monitoring = false
 shape = SubResource("BoxShape3D_4bw0f")
 
 [node name="r_outer_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="1"]
-transform = Transform3D(21.5208, 0, 0, 0, 0.7, 0, 0, 0, 21.4351, 0.177745, 0.897521, 0.10985)
+transform = Transform3D(22.3816, 0, 0, 0, 0.7, 0, 0, 0, 20.5777, 0.177745, 0.897521, 0.10985)
+visible = false
 material_override = SubResource("StandardMaterial3D_5k6x2")
 mesh = SubResource("BoxMesh_5k6x2")
 skeleton = NodePath("")
@@ -2527,7 +2529,6 @@ draw_pass_1 = SubResource("BoxMesh_aga0w")
 
 [node name="shockwave" type="GPUParticles3D" parent="r_particles" index="1"]
 transform = Transform3D(1.5, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0.284869, -5.84789, -1.68503)
-emitting = false
 amount = 2
 lifetime = 0.75
 speed_scale = 0.8
@@ -2544,5 +2545,5 @@ speed_scale = 0.8
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D2/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="e_hitboxes/e_hitbox/Area3D" to="." method="_on_e_hit"]
 [connection signal="body_entered" from="e_hitboxes/e_outer_hitbox/Area3D" to="." method="_on_e_outer_hit"]
-[connection signal="body_entered" from="r_hitboxes/r_hitbox/Area3D" to="." method="_on_e_hit"]
-[connection signal="body_entered" from="r_hitboxes/r_outer_hitbox/Area3D" to="." method="_on_e_outer_hit"]
+[connection signal="body_entered" from="r_hitboxes/r_hitbox/Area3D" to="." method="_on_r_touched"]
+[connection signal="body_entered" from="r_hitboxes/r_outer_hitbox/Area3D" to="." method="_on_r_outer_touched"]

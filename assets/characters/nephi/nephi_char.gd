@@ -38,6 +38,7 @@ var attackSpeedOffset = 0;
 var attackSpeed = 0;
 var speedOffset = 0;
 var speed = 0;
+var speedMultiplier = 0;
 
 var timer = 0;
 var team = -1;
@@ -256,9 +257,14 @@ func _physics_process(delta: float) -> void:
 			var thunderSound = preload("res://assets/sounds/characters/nephi/nephi_thunder.ogg");
 			$nephi_thunder.emitting = true;
 			PlayerFunc.playSound(self, thunderSound);
+			
+			_setHitbox($r_hitboxes/r_outer_hitbox, true);
+			
 		if (ultiTimer <= 0.2 and not electricMode):
 			electricCooldown = 8.0;
 			electricMode = true;
+			_setHitbox($r_hitboxes/r_outer_hitbox, false);
+			_setHitbox($r_hitboxes/r_hitbox, true);
 			_toggle_toon_shader(true);
 			
 		if (ultiTimer <= 0):
@@ -270,6 +276,8 @@ func _physics_process(delta: float) -> void:
 		electricCooldown -= delta;
 	else:
 		electricMode = false;
+		
+		_setHitbox($r_hitboxes/r_hitbox, false);
 		_toggle_toon_shader(false);
 	
 	if (bufferedMoveTo and moveTo == null):
@@ -469,6 +477,11 @@ func syncStun(_isStunned, _stunDuration):
 	stunTimer = _stunDuration;
 
 @rpc("any_peer")
+func syncSlow(_slowAmount):
+	speedMultiplier -= _slowAmount;
+	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
+
+@rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):
 	if (_moveTo):
 		bufferedMoveTo = _moveTo;
@@ -542,3 +555,21 @@ func _on_e_outer_hit(other: Node3D) -> void:
 			var totalDmg = dmg * 0.55;
 			if (other.team != team):
 				PlayerFunc.dealDamage(other, totalDmg);
+
+
+func _on_r_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		alreadyHit.insert(len(alreadyHit), other);
+		var totalDmg = dmg * 0.75;
+		if (other.team != team):
+			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.slowTarget(other, 0.45, stunnedHitEffect);
+
+
+func _on_r_outer_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = dmg * 0.75;
+		if (other.team != team):
+			PlayerFunc.dealDamage(other, totalDmg);
