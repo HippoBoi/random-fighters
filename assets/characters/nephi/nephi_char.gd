@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
-@export var maxHp = 230.0;
-@export var hp = 230.0;
+@export var maxHp = 220.0;
+@export var hp = 220.0;
 @export var baseArmor = 28;
 @export var baseDmg = 12.5;
 @export var baseAttackRange = 3.0;
@@ -570,6 +570,6 @@ func _on_r_touched(other: Node3D) -> void:
 func _on_r_outer_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 0.75;
+		var totalDmg = dmg * 1.15;
 		if (other.team != team):
 			PlayerFunc.dealDamage(other, totalDmg);

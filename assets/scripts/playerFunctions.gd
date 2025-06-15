@@ -697,6 +697,29 @@ func showCharactersUI(character):
 	
 	character.showingUIs = true;
 
+func _calculateHealthBars(character: CharacterBody3D):
+	var charUI = character.get_node("CharacterUI");
+	var emptyBar = charUI.get_node("HealthUI/SubViewport/emptyBar");
+	var templateBar = emptyBar.get_node("templateBar");
+	var barsToDraw = 0;
+	
+	for child in emptyBar.get_children():
+		if (child.name == "bar"):
+			child.queue_free();
+	
+	for i in range(character.maxHp):
+		if (i % 50 == 0):
+			barsToDraw += 1;
+	
+	for i in range(barsToDraw):
+		var newBar = templateBar.duplicate();
+		templateBar.get_parent().add_child(newBar);
+		
+		newBar.visible = true;
+		newBar.size.x = 1.0;
+		newBar.position.x = templateBar.size.x / barsToDraw * i;
+		newBar.name = "bar";
+
 func updateHealthSize(character: CharacterBody3D, damaged = false):
 	var UILoaded = character.has_node("CharacterUI");
 	if not (UILoaded):
@@ -711,6 +734,8 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	healthBar.scale.x = character.hp / character.maxHp;
 	shieldBar.scale.x = character.shield / character.maxHp;
 	levelText.text = str(character.level);
+	
+	_calculateHealthBars(character);
 	
 	if (healthBar.color == Color(0, 0, 0)):
 		healthBar.color = myTeamColor if character.team == myTeam else enemyTeamColor;
