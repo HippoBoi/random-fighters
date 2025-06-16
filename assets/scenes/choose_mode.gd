@@ -65,6 +65,8 @@ func _getModeImage(gamemode: String):
 		image = preload("res://assets/textures/Grass001_1K-JPG_Color.jpg").duplicate();
 	elif (gamemode.to_lower() == "foggy_vision"):
 		image = preload("res://assets/mapAssets/dark_forest/TCom_Sand_Muddy2_2x2_1K_albedo.png").duplicate();
+	elif (gamemode.to_lower() == "hippo_capture"):
+		image = preload("res://assets/textures/gameMap_TCom_Rock_CliffLayered_1.5x1.png").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();

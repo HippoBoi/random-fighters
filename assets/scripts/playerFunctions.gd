@@ -202,11 +202,14 @@ func _autoBasic(character):
 	
 	var hitbox: Area3D = basicArea.get_node("area");
 	hitbox.body_entered.connect(func(other: Node3D):
-		if (other == self or other.dead or other.visible == false):
+		if (other == self or other.visible == false):
 			return;
 		
 		var isCharacter = "CHARACTER_NAME" in other;
 		if (isCharacter):
+			if (other.dead):
+				return;
+			
 			if (other.team != character.team):
 				character.target = other;
 	);

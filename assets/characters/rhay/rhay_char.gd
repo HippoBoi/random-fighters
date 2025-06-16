@@ -60,7 +60,9 @@ var onAction = false;
 var overrideBasic = false;
 var usingSecondary = false;
 var usingTertiary = false;
+var secondaryTimer = 0;
 var tertiaryTimer = 0;
+var ultiTimer = 0;
 var usingUlti = false;
 var ultiTarget = null;
 var bufferedTarget = null;
@@ -150,10 +152,14 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (usingSecondary == true):
-		if (moveTo == null or target):
+		secondaryTimer -= delta;
+		
+		if (moveTo == null or target or secondaryTimer <= 0):
 			cancelSecondary();
 	if (usingUlti):
-		if (moveTo == null or target):
+		ultiTimer -= delta;
+		
+		if (moveTo == null or target or ultiTimer <= 0):
 			cancelUlti();
 		else:
 			ultimate_ability(moveTo, global_position);
@@ -250,6 +256,7 @@ func secondary_ability(_moveTo, _global_pos):
 	var direction = (_moveTo - _global_pos).normalized();
 	var distance = _global_pos.distance_to(_moveTo);
 	usingSecondary = true;
+	secondaryTimer = 0.5;
 	usingUlti = false;
 	onAction = true;
 	target = null;
@@ -304,6 +311,8 @@ func ultimate_ability(_moveTo, _global_pos):
 	
 	moveTo = _moveTo;
 	moveTo.y = _global_pos.y;
+	if (ultiTimer <= 0):
+		ultiTimer = 1.0;
 	usingUlti = true;
 	usingSecondary = false;
 	target = null;
