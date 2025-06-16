@@ -65,6 +65,7 @@ var tertiaryTimer = 0;
 var ultiTimer = 0;
 var usingUlti = false;
 var ultiTarget = null;
+var playingUltiSound = false;
 var bufferedTarget = null;
 var bufferedInput = null;
 
@@ -146,8 +147,11 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
+			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
 			basicDamageDealt = true;
+			
 			PlayerFunc.dealDamage(target, dmg, "hit_01");
+			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -169,6 +173,8 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		
 		if (tertiaryTimer <= 0.55 and not $e_slash/AnimationPlayer.is_playing()):
+			var sound = preload("res://assets/sounds/characters/rhay/rhay_slash.ogg");
+			PlayerFunc.playSound(self, sound);
 			$e_slash/AnimationPlayer.play("slash");
 		if (tertiaryTimer <= 0.45):
 			slashHitbox.get_node("MeshInstance3D/Area3D").monitoring = true;
@@ -228,6 +234,9 @@ func playBasicAttack():
 		if (basicAnimPos >= basicAnimList.size()):
 			basicAnimPos = 0;
 	else:
+		var sound = preload("res://assets/sounds/characters/rhay/rhay_big_hit.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		dmgOffset = 0;
 		overrideBasic = false;
 		basicAttacking = true;
@@ -272,6 +281,9 @@ func secondary_ability(_moveTo, _global_pos):
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
 	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_jump.ogg");
+	PlayerFunc.playSound(self, sound);
+			
 	animPlayer.play("w_ability");
 	syncRotation(moveTo);
 	
@@ -313,12 +325,20 @@ func ultimate_ability(_moveTo, _global_pos):
 	moveTo.y = _global_pos.y;
 	if (ultiTimer <= 0):
 		ultiTimer = 1.0;
+		basicDamageDealt = true;
+		
 	usingUlti = true;
 	usingSecondary = false;
 	target = null;
 		
 	var distance = _global_pos.distance_to(_moveTo);
 	if (distance < R_MAX_RANGE):
+		if not (playingUltiSound):
+			var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+			PlayerFunc.playSound(self, sound);
+			
+			playingUltiSound = true;
+		
 		rTimer = R_COOLDOWN - cooldownReduction;
 		speedOffset = 15;
 		onAction = true;
@@ -338,6 +358,7 @@ func cancelSecondary():
 func cancelUlti():
 	usingUlti = false;
 	onAction = false;
+	playingUltiSound = false;
 	ultiTarget = null;
 	moveTo = null;
 	speedOffset = 0;

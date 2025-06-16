@@ -2529,6 +2529,7 @@ draw_pass_1 = SubResource("BoxMesh_aga0w")
 
 [node name="shockwave" type="GPUParticles3D" parent="r_particles" index="1"]
 transform = Transform3D(1.5, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0.284869, -5.84789, -1.68503)
+emitting = false
 amount = 2
 lifetime = 0.75
 speed_scale = 0.8
