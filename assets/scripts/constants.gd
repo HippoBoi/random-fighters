@@ -6,5 +6,6 @@ enum CursorTypes {
 
 enum GameModes {
 	Free_For_All,
-	Foggy_Vision
+	Foggy_Vision,
+	Hippo_Capture
 }

@@ -60,6 +60,7 @@ var onAction = false;
 var overrideBasic = false;
 var usingSecondary = false;
 var usingTertiary = false;
+var primaryTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultiTimer = 0;
@@ -155,15 +156,19 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (primaryTimer > 0):
+		primaryTimer -= delta;
+	else:
+		dmgOffset = 0;
+		overrideBasic = false;
+	
 	if (usingSecondary == true):
 		secondaryTimer -= delta;
 		
 		if (moveTo == null or target or secondaryTimer <= 0):
 			cancelSecondary();
 	if (usingUlti):
-		ultiTimer -= delta;
-		
-		if (moveTo == null or target or ultiTimer <= 0):
+		if (moveTo == null or target):
 			cancelUlti();
 		else:
 			ultimate_ability(moveTo, global_position);
@@ -188,6 +193,10 @@ func _physics_process(delta: float) -> void:
 			
 			slashHitbox.get_node("MeshInstance3D").visible = false;
 			slashHitbox.get_node("MeshInstance3D/Area3D").monitoring = false;
+	
+	if not (overrideBasic):
+		$q_particles.emitting = false;
+		$q_ground_particles.emitting = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -250,9 +259,13 @@ func _setup_primary():
 func primary_ability():
 	overrideBasic = true;
 	basicAttacking = false;
+	primaryTimer = 4.0;
 	dmgOffset = baseDmg * 1.2;
 	basicAttackTimer = 0;
 	qTimer = Q_COOLDOWN - cooldownReduction;
+	
+	$q_particles.emitting = true;
+	$q_ground_particles.emitting = true;
 
 func _setup_secondary():
 	if (mousePos.is_empty()):
@@ -323,10 +336,7 @@ func ultimate_ability(_moveTo, _global_pos):
 	
 	moveTo = _moveTo;
 	moveTo.y = _global_pos.y;
-	if (ultiTimer <= 0):
-		ultiTimer = 1.0;
-		basicDamageDealt = true;
-		
+	
 	usingUlti = true;
 	usingSecondary = false;
 	target = null;
@@ -356,6 +366,7 @@ func cancelSecondary():
 
 @rpc("call_local")
 func cancelUlti():
+	moveTo = global_position;
 	usingUlti = false;
 	onAction = false;
 	playingUltiSound = false;

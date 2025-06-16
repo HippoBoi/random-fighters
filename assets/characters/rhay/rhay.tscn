@@ -1,11 +1,13 @@
-[gd_scene load_steps=59 format=3 uid="uid://dyg5f2p8gyby2"]
+[gd_scene load_steps=79 format=3 uid="uid://dyg5f2p8gyby2"]
 
 [ext_resource type="PackedScene" uid="uid://bpcg3054sbph0" path="res://assets/characters/rhay.glb" id="1_l5qm4"]
 [ext_resource type="Script" uid="uid://bt1li3vyfdhpt" path="res://assets/characters/rhay/rhay_char.gd" id="2_v1ns3"]
+[ext_resource type="Shader" uid="uid://bxyubbwwnlbv4" path="res://assets/characters/rhay/epic_q_shader.tres" id="3_hpohn"]
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="3_inplr"]
 [ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="3_q3isg"]
 [ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="4_6fwau"]
 [ext_resource type="ArrayMesh" uid="uid://kn5uqpnyi8pf" path="res://assets/characters/rhay.obj" id="5_5op7a"]
+[ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_qpi53"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="7_inplr"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lptq5"]
@@ -897,6 +899,86 @@ _data = {
 &"w_ability": SubResource("Animation_0wm8q")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4qtsf"]
+render_priority = 0
+shader = ExtResource("3_hpohn")
+shader_parameter/hitTexture = ExtResource("7_inplr")
+
+[sub_resource type="Curve" id="Curve_es27p"]
+_data = [Vector2(0, 0.361868), 0.0, 0.0, 0, 0, Vector2(0.545918, 1), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_j7kkc"]
+curve = SubResource("Curve_es27p")
+
+[sub_resource type="Curve" id="Curve_n8gvt"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -133.483), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jlqnf"]
+curve = SubResource("Curve_n8gvt")
+
+[sub_resource type="Gradient" id="Gradient_voxx8"]
+colors = PackedColorArray(2, 0.577, 0.475, 1, 0.808998, 0.808998, 0.808998, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_if8pf"]
+gradient = SubResource("Gradient_voxx8")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_365l8"]
+_data = [Vector2(0, 0.842697), 0.0, 0.0, 0, 0, Vector2(0.313433, 0.235955), 0.0, 0.0, 0, 0, Vector2(0.686567, 0.101124), -1.11285, -1.11285, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_u6w30"]
+curve = SubResource("Curve_365l8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u3jr2"]
+angle_min = 1.07288e-05
+angle_max = 1.00001
+angle_curve = SubResource("CurveTexture_jlqnf")
+initial_velocity_min = 0.1
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.8
+scale_max = 2.2
+scale_curve = SubResource("CurveTexture_u6w30")
+color = Color(1, 1, 6, 1)
+color_ramp = SubResource("GradientTexture1D_if8pf")
+alpha_curve = SubResource("CurveTexture_j7kkc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_hs5xv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ycejn"]
+render_priority = 0
+shader = ExtResource("3_hpohn")
+shader_parameter/hitTexture = ExtResource("5_qpi53")
+
+[sub_resource type="Curve" id="Curve_muese"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_msvpl"]
+curve = SubResource("Curve_muese")
+
+[sub_resource type="Curve" id="Curve_4qtsf"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.985075, -93.0337), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_es27p"]
+curve = SubResource("Curve_4qtsf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j7kkc"]
+angle_min = 1.07288e-05
+angle_max = 10.0
+angle_curve = SubResource("CurveTexture_es27p")
+gravity = Vector3(0, 0, 0)
+color = Color(1.5, 1.5, 3, 1)
+alpha_curve = SubResource("CurveTexture_msvpl")
+
+[sub_resource type="QuadMesh" id="QuadMesh_n8gvt"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oaqk5"]
 render_priority = 0
 shader = ExtResource("4_6fwau")
@@ -1254,27 +1336,26 @@ script = ExtResource("2_v1ns3")
 
 [node name="Skeleton3D" parent="Armature" index="0"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-bones/1/rotation = Quaternion(0.0769416, 0.106822, 0.00546469, 0.991282)
-bones/2/rotation = Quaternion(0.0949764, 0.0555597, 0.0111593, 0.993865)
-bones/3/rotation = Quaternion(-0.0608741, -0.0702579, -0.185087, 0.978315)
-bones/4/rotation = Quaternion(-0.185959, 0.030929, 0.0379552, 0.981337)
+bones/1/rotation = Quaternion(0, 1.19209e-07, 0, 1)
+bones/2/rotation = Quaternion(0, -1.19209e-07, 0, 1)
+bones/4/rotation = Quaternion(-0.194931, 0.0124814, 0.00406569, 0.980729)
 bones/5/rotation = Quaternion(0.0115168, 0.0293898, 0.9306, 0.364674)
 bones/5/scale = Vector3(1, 1, 1)
-bones/6/rotation = Quaternion(0.659836, 0.3564, 0.24186, 0.61571)
+bones/6/rotation = Quaternion(0.313049, 0.272079, 0.0725893, 0.90703)
 bones/6/scale = Vector3(1, 1, 1)
-bones/7/rotation = Quaternion(-0.0682503, 0.828166, 0.124233, 0.542263)
+bones/7/rotation = Quaternion(0.145606, 0.0686979, 0.153372, 0.974965)
 bones/7/scale = Vector3(1, 1, 1)
 bones/8/rotation = Quaternion(-0.0115168, 0.0293898, 0.9306, -0.364674)
 bones/8/scale = Vector3(1, 1, 1)
-bones/9/rotation = Quaternion(-0.227712, 0.0894641, 0.343617, 0.906681)
+bones/9/rotation = Quaternion(-0.533134, 0.315942, -0.156506, 0.769061)
 bones/9/scale = Vector3(1, 1, 1)
-bones/10/rotation = Quaternion(-0.0147906, 0.00229184, -0.153101, 0.988097)
+bones/10/rotation = Quaternion(0.294885, -0.0683896, -0.146266, 0.941792)
 bones/10/scale = Vector3(1, 1, 1)
-bones/12/rotation = Quaternion(-0.578257, -0.16006, -0.213413, 0.771009)
-bones/13/rotation = Quaternion(-7.68646e-08, -5.88263e-08, -0.346871, 0.937913)
+bones/12/rotation = Quaternion(-0.542644, -0.256004, -0.341338, 0.723525)
+bones/13/rotation = Quaternion(-5.3046e-08, -5.87589e-08, -0.239226, 0.970964)
 bones/14/rotation = Quaternion(0.565685, 0.424264, 0.565686, -0.424264)
-bones/15/rotation = Quaternion(-0.59887, -0.0368068, -0.049076, 0.798493)
-bones/16/rotation = Quaternion(-2.76706e-08, 6.04694e-08, 0.121807, 0.992554)
+bones/15/rotation = Quaternion(-0.487941, -0.349161, -0.465548, 0.650588)
+bones/16/rotation = Quaternion(-1.29265e-08, 5.99668e-08, 0.0563335, 0.998412)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77329, 0)
@@ -1287,7 +1368,22 @@ libraries = {
 &"": SubResource("AnimationLibrary_fdyrp")
 }
 
-[node name="e_slash" type="Node3D" parent="." index="4"]
+[node name="q_particles" type="GPUParticles3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.264, 1.4359, -0.0668663)
+material_override = SubResource("ShaderMaterial_4qtsf")
+emitting = false
+amount = 2
+process_material = SubResource("ParticleProcessMaterial_u3jr2")
+draw_pass_1 = SubResource("QuadMesh_hs5xv")
+
+[node name="q_ground_particles" type="GPUParticles3D" parent="." index="5"]
+material_override = SubResource("ShaderMaterial_ycejn")
+emitting = false
+amount = 3
+process_material = SubResource("ParticleProcessMaterial_j7kkc")
+draw_pass_1 = SubResource("QuadMesh_n8gvt")
+
+[node name="e_slash" type="Node3D" parent="." index="6"]
 transform = Transform3D(3.7752, 8.9407e-08, -5.83914e-07, 1.73092e-07, -1, -2.19375e-14, -3.30038e-07, -3.07674e-15, -6.6792, -0.546984, 0, 0.481022)
 
 [node name="Slash" type="MeshInstance3D" parent="e_slash" index="0"]
@@ -1299,7 +1395,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_sky8r")
 }
 
-[node name="slashHitbox" parent="." index="5" instance=ExtResource("3_q3isg")]
+[node name="slashHitbox" parent="." index="7" instance=ExtResource("3_q3isg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.32, 0, 2, -3.38353)
 
 [node name="Area3D" parent="slashHitbox/MeshInstance3D" index="0"]
@@ -1307,7 +1403,7 @@ collision_layer = 5
 collision_mask = 5
 monitoring = false
 
-[node name="w_dash_particles" type="Node3D" parent="." index="6"]
+[node name="w_dash_particles" type="Node3D" parent="." index="8"]
 
 [node name="sparkParticle" type="GPUParticles3D" parent="w_dash_particles" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2948, 0.670071)
@@ -1331,7 +1427,7 @@ explosiveness = 0.5
 process_material = SubResource("ParticleProcessMaterial_muese")
 draw_pass_1 = SubResource("BoxMesh_fgikb")
 
-[node name="r_trail" type="GPUParticles3D" parent="." index="7"]
+[node name="r_trail" type="GPUParticles3D" parent="." index="9"]
 transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.048481, 9.53674e-07, 0.238563)
 material_override = SubResource("StandardMaterial3D_5op7a")
 emitting = false
