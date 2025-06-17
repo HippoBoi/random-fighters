@@ -124,6 +124,8 @@ func _getModeDescription(gameMode: String):
 		description = "Eliminate the other team!"
 	elif (gameMode.to_lower() == "foggy_vision"):
 		description = "Eliminate the other team!"
+	elif (gameMode.to_lower() == "hippo_capture"):
+		description = "Capture 5 Hippos"
 	
 	return description;
 
