@@ -10,15 +10,6 @@
 
 [sub_resource type="Theme" id="Theme_et1oa"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7xejk"]
-shader = ExtResource("4_4y838")
-shader_parameter/color = Color(0.23141, 0.319718, 0.512097, 1)
-shader_parameter/direction = -1.0
-shader_parameter/frequency = 15.0
-shader_parameter/speed = 3.0
-shader_parameter/radius = 1.0
-shader_parameter/line_thickness = 0.03
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4y838"]
 bg_color = Color(0.519177, 0.39289, 0.67135, 1)
 
@@ -39,6 +30,15 @@ Button/styles/normal = SubResource("StyleBoxFlat_1gwi2")
 Button/styles/pressed = SubResource("StyleBoxFlat_et1oa")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1gwi2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7xejk"]
+shader = ExtResource("4_4y838")
+shader_parameter/color = Color(0.23141, 0.319718, 0.512097, 1)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 15.0
+shader_parameter/speed = 3.0
+shader_parameter/radius = 1.0
+shader_parameter/line_thickness = 0.03
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_5eccb")
@@ -229,7 +229,7 @@ anchor_bottom = 0.5
 offset_left = -197.0
 offset_top = -134.5
 offset_right = -17.0
-offset_bottom = 70.5
+offset_bottom = 65.5
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.475109, 0.559679, 0.827677, 1)
@@ -244,7 +244,7 @@ anchor_bottom = 0.5
 offset_left = -196.0
 offset_top = -132.5
 offset_right = -18.0
-offset_bottom = 69.5
+offset_bottom = 64.5
 grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.123487, 0.106051, 0.199465, 1)
@@ -301,6 +301,23 @@ text = "350"
 autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="CloseShop2" type="Button" parent="ShopUI/Shop"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = -37.0
+offset_right = 38.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_4y838")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1gwi2")
+text = "Buy"
 
 [node name="Outline" type="ColorRect" parent="ShopUI"]
 material = SubResource("ShaderMaterial_7xejk")
