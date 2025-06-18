@@ -8,9 +8,11 @@ extends Node3D
 var alreadyHit = [];
 
 var dmg = 0;
+var character = null;
 var team;
 
-func setup(_team, _dmg):
+func setup(_char, _team, _dmg):
+	character = _char;
 	team = _team;
 	dmg = _dmg;
 	alreadyHit = [];
@@ -43,4 +45,4 @@ func _onTouch(other: Node3D) -> void:
 		var totalDmg = dmg * 2.55;
 		if (other.team != team):
 			alreadyHit.insert(len(alreadyHit), other);
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(character, other, totalDmg);

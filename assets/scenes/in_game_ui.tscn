@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cs5f0x4jchyj2"]
+[gd_scene load_steps=13 format=3 uid="uid://cs5f0x4jchyj2"]
 
 [ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
 [ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="1_l0sqe"]
@@ -14,6 +14,30 @@ outline_size = 10
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 4
 shadow_offset = Vector2(4, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grbm3"]
+bg_color = Color(0.749943, 0.581109, 0.208356, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0sqe"]
+bg_color = Color(0.632688, 0.449729, 0.287213, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.894561, 0.660025, 0.396597, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+shadow_size = 2
+shadow_offset = Vector2(-2, -1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6hcns"]
+bg_color = Color(0.455042, 0.318508, 0.101699, 1)
+
+[sub_resource type="Theme" id="Theme_grbm3"]
+Button/styles/hover = SubResource("StyleBoxFlat_grbm3")
+Button/styles/normal = SubResource("StyleBoxFlat_l0sqe")
+Button/styles/pressed = SubResource("StyleBoxFlat_6hcns")
 
 [node name="InGameUI" type="Control"]
 z_index = -1
@@ -445,6 +469,7 @@ texture = ExtResource("1_l0sqe")
 stretch_mode = 3
 
 [node name="LVText" type="RichTextLabel" parent="abilitiesUI"]
+visible = false
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 3
@@ -452,9 +477,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -165.0
+offset_left = -124.0
 offset_top = -28.0
-offset_right = -124.0
+offset_right = -83.0
 offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -462,6 +487,7 @@ theme_override_constants/outline_size = 8
 text = "LVL:"
 
 [node name="level" type="RichTextLabel" parent="abilitiesUI"]
+visible = false
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 3
@@ -469,15 +495,54 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -130.0
+offset_left = -92.0
 offset_top = -28.0
-offset_right = -95.0
+offset_right = -57.0
 offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/outline_size = 8
 text = "0"
 horizontal_alignment = 1
+
+[node name="tokensText" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.591)
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -103.0
+offset_top = -28.0
+offset_right = -24.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/outline_size = 8
+text = "TOKENS:"
+
+[node name="tokens" type="RichTextLabel" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.591)
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.0
+offset_top = -28.0
+offset_right = 8.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/outline_size = 8
+text = "0
+"
 
 [node name="XPText" type="RichTextLabel" parent="abilitiesUI"]
 modulate = Color(1, 1, 1, 0.75)
@@ -487,9 +552,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -74.0
+offset_left = -173.0
 offset_top = -28.0
-offset_right = -37.0
+offset_right = -136.0
 offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -504,15 +569,14 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -42.0
+offset_left = -139.0
 offset_top = -28.0
-offset_right = -7.0
+offset_right = -104.0
 offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/outline_size = 8
 text = "0"
-horizontal_alignment = 1
 
 [node name="respawningText" type="RichTextLabel" parent="abilitiesUI"]
 layout_mode = 1
@@ -547,3 +611,12 @@ theme_override_constants/outline_size = 7
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
 text = "10..."
+
+[node name="shopButton" type="Button" parent="abilitiesUI"]
+modulate = Color(1, 1, 1, 0.757)
+layout_mode = 0
+offset_left = 530.0
+offset_top = 332.0
+offset_right = 636.0
+offset_bottom = 357.0
+theme = SubResource("Theme_grbm3")

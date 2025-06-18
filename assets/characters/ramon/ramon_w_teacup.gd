@@ -4,10 +4,12 @@ extends Node3D
 @onready var particles = $GPUParticles3D;
 @onready var hitbox = $hitbox;
 
+var character: CharacterBody3D = null;
 var dmg = 0;
 var team;
 
-func setup(_team, _dmg):
+func setup(_char, _team, _dmg):
+	character = _char;
 	team = _team;
 	dmg = _dmg;
 
@@ -24,5 +26,5 @@ func _onTouch(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg * 0.85;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(character, other, totalDmg);
 			PlayerFunc.stunTarget(other, 1.5);

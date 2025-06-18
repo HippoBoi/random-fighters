@@ -21,7 +21,6 @@ var whiteTeamStocks = 0;
 var whiteTeamSize = 0;
 
 var myFogInstances = [];
-var charSlowedList = [];
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -354,6 +353,8 @@ func killCharacter(character: CharacterBody3D):
 	character.moveTo = character.global_position;
 	syncMovement(character);
 	
+	#TODO: check character.assistedInKill list and give gold to every player with their ID in there
+	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	character.get_parent().add_child(particles);
 	
@@ -586,7 +587,7 @@ func _inBasicRange(character, target):
 	
 	return false;
 	
-func dealDamage(target, dmg, effect := ""):
+func dealDamage(character, target, dmg, effect := ""):
 	if not (target):
 		print("[dealDamage]: no target found");
 		return;
@@ -603,7 +604,7 @@ func dealDamage(target, dmg, effect := ""):
 		target.hp -= totalDmg;
 		target.hp = clamp(target.hp, 0, target.maxHp);
 	
-	target.rpc("syncHealth", target.hp, true);
+	target.rpc("syncHealth", target.hp, true, character.name);
 	target.rpc("syncShield", target.shield);
 	
 	if not (effect.is_empty()):

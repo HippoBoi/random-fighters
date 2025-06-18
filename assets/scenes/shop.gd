@@ -6,10 +6,10 @@ func _ready() -> void:
 	
 	for item in Constants.items:
 		var newItem: Button = itemTemplate.duplicate();
-		var itemText: RichTextLabel = newItem.get_node("RichTextLabel");
+		var itemPrice: RichTextLabel = newItem.get_node("RichTextLabel");
 		var itemTexture: TextureRect = newItem.get_node("TextureRect");
 		
-		itemText.text = item.name;
+		itemPrice.text = "$" + str(item.price);
 		itemTexture.texture = load(item.texture);
 		
 		itemsContainer.add_child(newItem);

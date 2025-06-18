@@ -78,6 +78,7 @@ var lives = 0;
 var level = 1;
 var xp = 0;
 var respawnTimer = 0;
+var assistedInKill = [];
 
 var extraBasics = 0;
 var hackerTimer = 0;
@@ -243,7 +244,7 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
-	PlayerFunc.dealDamage(basicTarget, dmg);
+	PlayerFunc.dealDamage(self, basicTarget, dmg);
 
 @rpc("call_local")
 func showBasicAttack(_targetPos):
@@ -330,7 +331,7 @@ func _spawn_ulti_laser(_mousePos):
 	
 	laser.global_position = global_position + Vector3(0, 2, 0);
 	laser.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	laser.setup(team, dmg);
+	laser.setup(self, team, dmg);
 
 func _toggle_toon_shader(enable: bool):
 	if (enable):
@@ -418,9 +419,16 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false):
+func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	if not (attackerId.is_empty()):
+		var oldAttackerPos = assistedInKill.find(attackerId);
+		if (oldAttackerPos != -1):
+			assistedInKill.remove_at(oldAttackerPos);
+		
+		assistedInKill.append(attackerId);
 
 @rpc("any_peer", "reliable")
 func syncShield(curShield):

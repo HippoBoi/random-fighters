@@ -89,6 +89,7 @@ var lives = 0;
 var level = 1;
 var xp = 0;
 var respawnTimer = 0;
+var assistedInKill = [];
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $Armature
@@ -229,7 +230,7 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
-	PlayerFunc.dealDamage(basicTarget, dmg * 0.4);
+	PlayerFunc.dealDamage(self, basicTarget, dmg * 0.4);
 
 func _setup_primary():
 	if (mousePos.is_empty()):
@@ -299,7 +300,7 @@ func _spawn_w_teacup(_mousePos):
 	
 	teacup.global_position = global_position + Vector3(0, 2, 0);
 	teacup.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	teacup.setup(team, dmg);
+	teacup.setup(self, team, dmg);
 	
 	var teaAnim: AnimationPlayer = teacup.get_node("AnimationPlayer");
 	teaAnim.play("attack");
@@ -317,7 +318,7 @@ func _spawn_e_ability(_mousePos):
 	
 	teacup.global_position = global_position + Vector3(0, 3, 0);
 	teacup.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	teacup.setup(team, dmg, _mousePos);
+	teacup.setup(self, team, dmg, _mousePos);
 	
 	var teaAnim: AnimationPlayer = teacup.get_node("AnimationPlayer");
 	teaAnim.play("attack");
@@ -328,7 +329,7 @@ func _spawn_r_explosion():
 	
 	explosion.global_position = global_position + Vector3(0, 2, 0);
 	explosion.get_node("explosionParts").emitting = true;
-	explosion.setup(team, dmg);
+	explosion.setup(self, team, dmg);
 
 func _manage_r_papers():
 	var explosionParts: GPUParticles3D = ultiParticles.get_node("explosionParts");
@@ -418,9 +419,16 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false):
+func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	if not (attackerId.is_empty()):
+		var oldAttackerPos = assistedInKill.find(attackerId);
+		if (oldAttackerPos != -1):
+			assistedInKill.remove_at(oldAttackerPos);
+		
+		assistedInKill.append(attackerId);
 
 @rpc("any_peer", "reliable")
 func syncShield(curShield):
@@ -495,7 +503,7 @@ func _on_papers_touch(other) -> void:
 	if (isCharacter):
 		var paperDmg = dmg * 0.25;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, paperDmg);
+			PlayerFunc.dealDamage(self, other, paperDmg);
 
 func _on_ulti_touch(other) -> void:
 	if (other == self):
@@ -508,4 +516,4 @@ func _on_ulti_touch(other) -> void:
 			alreadyHit.insert(len(alreadyHit), other);
 			var paperDmg = dmg * 0.25;
 			if (other.team != team):
-				PlayerFunc.dealDamage(other, paperDmg);
+				PlayerFunc.dealDamage(self, other, paperDmg);

@@ -85,6 +85,7 @@ var lives = 0;
 var level = 1;
 var xp = 0;
 var respawnTimer = 0;
+var assistedInKill = [];
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -164,7 +165,7 @@ func _physics_process(delta: float) -> void:
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
 			basicDamageDealt = true;
-			PlayerFunc.dealDamage(target, (dmg * 0.5) + basicDmgOffset, "hit_01");
+			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, "hit_01");
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
 		
@@ -172,7 +173,7 @@ func _physics_process(delta: float) -> void:
 			if (moveTo == null or target):
 				var distance = global_position.distance_to(primaryTarget.global_position);
 				if (distance < 4):
-					PlayerFunc.dealDamage(primaryTarget, dmg * 0.65);
+					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.65);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -379,7 +380,7 @@ func _spawn_w_trail(_mousePos):
 	
 	attack.global_position = global_position + Vector3(0, 0, 0);
 	attack.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	attack.setup(team, dmg);
+	attack.setup(self, team, dmg);
 	
 	var attackAnim: AnimationPlayer = attack.get_node("AnimationPlayer");
 	attackAnim.play("attack");
@@ -397,7 +398,7 @@ func _spawn_e_geysers(_mousePos):
 	
 	attack.global_position = global_position + Vector3(0, 0, 0);
 	attack.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	attack.setup(team, dmg);
+	attack.setup(self, team, dmg);
 	
 	var attackAnim: AnimationPlayer = attack.get_node("AnimationPlayer");
 	attackAnim.play("attack");
@@ -517,9 +518,16 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false):
+func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	if not (attackerId.is_empty()):
+		var oldAttackerPos = assistedInKill.find(attackerId);
+		if (oldAttackerPos != -1):
+			assistedInKill.remove_at(oldAttackerPos);
+		
+		assistedInKill.append(attackerId);
 
 @rpc("any_peer", "reliable")
 func syncShield(curShield):
@@ -594,14 +602,14 @@ func _onSlashTouched(other) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, dmg);
+			PlayerFunc.dealDamage(self, other, dmg);
 
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
 		var totalDmg = dmg + 15.0;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg * 0.3);
+			PlayerFunc.dealDamage(self, other, totalDmg * 0.3);
 			PlayerFunc.moveTarget(other, 1.0, global_position + Vector3(0, 0, -1), 8);
 
 func _on_e_touched(other: Node3D) -> void:
@@ -609,7 +617,7 @@ func _on_e_touched(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg + 10.5;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg * 0.45);
+			PlayerFunc.dealDamage(self, other, totalDmg * 0.45);
 
 func _on_e_spin_hit(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
@@ -619,4 +627,4 @@ func _on_e_spin_hit(other: Node3D) -> void:
 			alreadyHit.insert(len(alreadyHit), other);
 			var totalDmg = dmg * 0.21;
 			if (other.team != team):
-				PlayerFunc.dealDamage(other, totalDmg);
+				PlayerFunc.dealDamage(self, other, totalDmg);

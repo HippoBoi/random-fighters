@@ -2,10 +2,12 @@ extends Node3D
 
 @onready var hitbox = $e_hitbox;
 
+var character = null;
 var dmg = 0;
 var team;
 
-func setup(_team, _dmg):
+func setup(_char, _team, _dmg):
+	character = _char;
 	team = _team;
 	dmg = _dmg;
 
@@ -22,5 +24,5 @@ func _onHitboxTouch(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(character, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.5);

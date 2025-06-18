@@ -3,10 +3,12 @@ extends Node3D
 @onready var mesh = $explosion_hitbox/MeshInstance3D;
 @onready var hitbox = $explosion_hitbox/MeshInstance3D/Area3D;
 
+var character: CharacterBody3D = null;
 var dmg: int = 0;
 var team: int;
 
-func setup(_team, _dmg,):
+func setup(_char, _team, _dmg,):
+	character = _char;
 	team = _team;
 	dmg = _dmg;
 	
@@ -26,5 +28,5 @@ func _onTouch(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg * 0.8;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(character, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.7);

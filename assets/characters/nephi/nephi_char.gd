@@ -87,6 +87,7 @@ var lives = 0;
 var level = 1;
 var xp = 0;
 var respawnTimer = 0;
+var assistedInKill = [];
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -166,7 +167,7 @@ func _physics_process(delta: float) -> void:
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
 			var sound = preload("res://assets/sounds/characters/nephi/nephi_basic_attack.ogg");
 			basicDamageDealt = true;
-			PlayerFunc.dealDamage(target, dmg + basicDmgOffset, "hit_01");
+			PlayerFunc.dealDamage(self, target, dmg + basicDmgOffset, "hit_01");
 			PlayerFunc.playSound(target, sound);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
@@ -454,9 +455,16 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false):
+func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	if not (attackerId.is_empty()):
+		var oldAttackerPos = assistedInKill.find(attackerId);
+		if (oldAttackerPos != -1):
+			assistedInKill.remove_at(oldAttackerPos);
+		
+		assistedInKill.append(attackerId);
 
 @rpc("any_peer", "reliable")
 func syncShield(curShield):
@@ -534,7 +542,7 @@ func _on_q_touched(other: Node3D) -> void:
 		var newPos = Vector3(global_position.x, other.global_position.y, global_position.z);
 		if (other.team != team):
 			alreadyGrabbed = true;
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.moveTarget(other, 0.5, newPos, 24, stunnedHitEffect);
 
 func _on_e_hit(other: Node3D) -> void:
@@ -543,7 +551,7 @@ func _on_e_hit(other: Node3D) -> void:
 		alreadyHit.insert(len(alreadyHit), other);
 		var totalDmg = dmg;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 1.0, stunnedHitEffect);
 
 func _on_e_outer_hit(other: Node3D) -> void:
@@ -554,7 +562,7 @@ func _on_e_outer_hit(other: Node3D) -> void:
 			alreadyHit.insert(len(alreadyHit), other);
 			var totalDmg = dmg * 0.55;
 			if (other.team != team):
-				PlayerFunc.dealDamage(other, totalDmg);
+				PlayerFunc.dealDamage(self, other, totalDmg);
 
 
 func _on_r_touched(other: Node3D) -> void:
@@ -563,7 +571,7 @@ func _on_r_touched(other: Node3D) -> void:
 		alreadyHit.insert(len(alreadyHit), other);
 		var totalDmg = dmg * 0.75;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.slowTarget(other, 0.45, stunnedHitEffect);
 
 
@@ -572,4 +580,4 @@ func _on_r_outer_touched(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg * 1.15;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg);
+			PlayerFunc.dealDamage(self, other, totalDmg);

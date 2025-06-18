@@ -82,6 +82,7 @@ var lives = 0;
 var level = 1;
 var xp = 0;
 var respawnTimer = 0;
+var assistedInKill = [];
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -151,7 +152,7 @@ func _physics_process(delta: float) -> void:
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
 			basicDamageDealt = true;
 			
-			PlayerFunc.dealDamage(target, dmg, "hit_01");
+			PlayerFunc.dealDamage(self, target, dmg, "hit_01");
 			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
@@ -379,9 +380,16 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false):
+func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	if not (attackerId.is_empty()):
+		var oldAttackerPos = assistedInKill.find(attackerId);
+		if (oldAttackerPos != -1):
+			assistedInKill.remove_at(oldAttackerPos);
+		
+		assistedInKill.append(attackerId);
 
 @rpc("any_peer", "reliable")
 func syncShield(curShield):
@@ -456,4 +464,4 @@ func _onSlashTouched(other) -> void:
 	if (isCharacter):
 		if (other.team != team):
 			qTimer = 0;
-			PlayerFunc.dealDamage(other, (dmg + 0.5));
+			PlayerFunc.dealDamage(self, other, (dmg + 0.5));

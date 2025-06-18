@@ -6,11 +6,13 @@ extends Node3D
 
 const SPEED = 7.0;
 
+var character: CharacterBody3D = null;
 var dmg: int = 0;
 var team: int;
 var targetPos: Vector3;
 
-func setup(_team, _dmg, _pos):
+func setup(_char, _team, _dmg, _pos):
+	character = _char;
 	team = _team;
 	dmg = _dmg;
 	targetPos = _pos;
@@ -35,5 +37,5 @@ func _onTouch(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg;
 		if (other.team != team):
-			PlayerFunc.dealDamage(other, totalDmg * 0.5);
+			PlayerFunc.dealDamage(character, other, totalDmg * 0.5);
 			PlayerFunc.stunTarget(other, 0.25);

@@ -8,31 +8,33 @@ enum CursorTypes {
 enum GameModes {
 	Free_For_All,
 	Foggy_Vision,
-	Hippo_Capture
+	#Hippo_Capture
 }
 
 const items = [
 	{
-		"name": "pato fakiu",
+		"name": "Heaven Shield",
+		"price": 10,
 		"stats": {
-			"hp": 10,
-			"dmg": 5
+			"armor": 10,
 		},
-		"texture": "res://assets/textures/61SLCkmPE8L._AC_UF894,1000_QL80_DpWeblab_.jpg"
+		"texture": "res://assets/textures/items/heaven_shield.png"
 	},
 	{
-		"name": "kris deltarune",
+		"name": "Life Shield",
+		"price": 10,
 		"stats": {
-			"speed": 10,
-			"dmg": 15
+			"hp": 5,
+			"armor": 5,
 		},
-		"texture": "res://assets/textures/Kris_Overworld_b.webp"
+		"texture": "res://assets/textures/items/life_shield.png"
 	},
 	{
 		"name": "ralsei deltarun",
+		"price": 20,
 		"stats": {
-			"speed": 20,
-			"armor": 10,
+			"armor": 5,
+			"speed": 10,
 		},
 		"texture": "res://assets/textures/Ralsei_overworld.webp"
 	}
