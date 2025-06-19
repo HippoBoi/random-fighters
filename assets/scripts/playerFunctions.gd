@@ -150,6 +150,7 @@ func _updateGameUI(character: CharacterBody3D):
 		var UIxp = abilityUI.get_node("xp");
 		var UIrespawningText = abilityUI.get_node("respawningText");
 		var UIrespawnTimer = abilityUI.get_node("respawnTimer");
+		var UItokens = abilityUI.get_node("tokens");
 		var livesContainer = abilityUI.get_node("livesContainer2");
 		primAbility.get_node("cooldown").scale.x = character.qTimer / character.Q_COOLDOWN;
 		secondAbility.get_node("cooldown").scale.x = character.wTimer / character.W_COOLDOWN;
@@ -159,6 +160,7 @@ func _updateGameUI(character: CharacterBody3D):
 		UIlevel.text = str(character.level);
 		UIxp.text = str(character.xp);
 		UIrespawnTimer.text = str(roundf(character.respawnTimer * 100) / 100);
+		UItokens.text = str(character.tokens);
 		
 		_updateLivesInUI(character, livesContainer);
 		
@@ -353,7 +355,15 @@ func killCharacter(character: CharacterBody3D):
 	character.moveTo = character.global_position;
 	syncMovement(character);
 	
-	#TODO: check character.assistedInKill list and give gold to every player with their ID in there
+	for playerId in character.assistedInKill:
+		var scene = character.get_parent();
+		if (scene.name != "Game"):
+			print("[WARNING]: game node not found");
+			return;
+		
+		var player: CharacterBody3D = scene.get_character_by_id(playerId);
+		if (player):
+			player.tokens += 10;
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	character.get_parent().add_child(particles);

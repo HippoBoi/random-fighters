@@ -257,6 +257,18 @@ func onRoundVictory(winnerTeam: int):
 			teamThatHasWon = WHITE_TEAM;
 			teamWonGame.emit(teamThatHasWon);
 
+func get_character_by_id(playerId: String):
+	var charLookingFor = null;
+	for character in addedCharacters:
+		if (character.name == playerId):
+			charLookingFor = character;
+	
+	if not (charLookingFor):
+		print("[WARNING]: couldn't find character");
+		return null;
+	
+	return charLookingFor;
+
 func endGame(_teamThatHasWon: int):
 	gameOver = true;
 	teamThatHasWon = _teamThatHasWon;

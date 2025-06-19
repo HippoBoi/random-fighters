@@ -84,6 +84,7 @@ var fogInstances = [];
 var lives = 0;
 var level = 1;
 var xp = 0;
+var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
 
