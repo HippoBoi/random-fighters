@@ -499,6 +499,9 @@ func syncRespawn(newHp: float, newPos: Vector3):
 func showChatText(newText):
 	print("Ramón: ", newText);
 
+func onCollision():
+	pass;
+
 func _on_papers_touch(other) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):

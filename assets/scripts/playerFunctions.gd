@@ -45,6 +45,10 @@ func _getMapMargins(_gameMode: String) -> Array:
 		xMargins = [-19, 22];
 		zMargins = [-22, 30];
 	
+	if (gameMode.to_lower() == "hippo_capture"):
+		xMargins = [-24, 32];
+		zMargins = [-31, 28];
+	
 	return [xMargins, zMargins];
 
 func _cameraMovement(character: CharacterBody3D, delta):

@@ -498,3 +498,6 @@ func syncRespawn(newHp: float, newPos: Vector3):
 @rpc("call_local")
 func showChatText(newText):
 	print("Clean: ", newText);
+
+func onCollision():
+	pass;

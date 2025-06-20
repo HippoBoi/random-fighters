@@ -536,6 +536,9 @@ func syncRespawn(newHp: float, newPos: Vector3):
 func showChatText(newText):
 	print("Nephi: ", newText);
 
+func onCollision():
+	pass;
+
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):

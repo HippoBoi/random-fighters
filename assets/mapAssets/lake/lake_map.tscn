@@ -100,7 +100,7 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_g8bub")
 
 [node name="bgMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(76.8849, 0, 0, 0, 76.8849, 0, 0, 0, 76.8849, -13.126, -16.7639, 16.7847)
+transform = Transform3D(-3.36075e-06, 0, -101.488, 0, 93.0307, 0, 76.8849, 0, -4.43619e-06, -25.6477, -19.9291, -21.3831)
 mesh = SubResource("ArrayMesh_806gp")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_rb33f")

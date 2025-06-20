@@ -460,6 +460,9 @@ func syncRespawn(newHp: float, newPos: Vector3):
 func showChatText(newText):
 	print("Rhay: ", newText);
 
+func onCollision():
+	pass;
+
 func _onSlashTouched(other) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):

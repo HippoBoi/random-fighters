@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c8u60nf117fq4"]
+[gd_scene load_steps=9 format=3 uid="uid://c8u60nf117fq4"]
 
 [ext_resource type="PackedScene" uid="uid://bqxl78epgrfeg" path="res://assets/mapAssets/lake/lake_map.tscn" id="1_xgn1c"]
 
@@ -23,6 +23,12 @@ fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
 fog_density = 0.025
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_smvvh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xgn1c"]
+size = Vector3(17.1246, 2.14575, 11.2189)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_smvvh"]
+size = Vector3(13.1135, 2.14575, 15.0071)
 
 [node name="Lake" type="Node3D"]
 
@@ -53,3 +59,29 @@ environment = SubResource("Environment_6plii")
 camera_attributes = SubResource("CameraAttributesPractical_smvvh")
 
 [node name="lake_map" parent="." instance=ExtResource("1_xgn1c")]
+
+[node name="CollissionBox" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.952835, 0.572876, 0.0939951)
+shape = SubResource("BoxShape3D_xgn1c")
+
+[node name="CollissionBox2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.1242)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
+shape = SubResource("BoxShape3D_smvvh")
+
+[node name="CollissionBox3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.7989)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox3/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
+shape = SubResource("BoxShape3D_smvvh")
