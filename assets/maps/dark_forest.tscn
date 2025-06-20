@@ -8,17 +8,18 @@ size = Vector3(54.8834, 0.260262, 69.1275)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6bwyu"]
 
-[sub_resource type="Sky" id="Sky_y7koq"]
+[sub_resource type="Sky" id="Sky_bl8qg"]
 sky_material = SubResource("ProceduralSkyMaterial_6bwyu")
 
 [sub_resource type="Environment" id="Environment_1m8v4"]
 background_mode = 2
-sky = SubResource("Sky_y7koq")
+sky = SubResource("Sky_bl8qg")
 ambient_light_source = 3
 sdfgi_use_occlusion = true
-glow_intensity = 1.91
-glow_strength = 1.36
-glow_bloom = 0.01
+glow_enabled = true
+glow_intensity = 1.1
+glow_strength = 1.1
+glow_bloom = 0.03
 fog_enabled = true
 fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
 fog_density = 0.025

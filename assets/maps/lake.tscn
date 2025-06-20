@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://c8u60nf117fq4"]
+
+[ext_resource type="PackedScene" uid="uid://bqxl78epgrfeg" path="res://assets/mapAssets/lake/lake_map.tscn" id="1_xgn1c"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6plii"]
+size = Vector3(90.6493, 0.260262, 96.658)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xgn1c"]
+
+[sub_resource type="Sky" id="Sky_y7koq"]
+sky_material = SubResource("ProceduralSkyMaterial_xgn1c")
+
+[sub_resource type="Environment" id="Environment_6plii"]
+background_mode = 2
+sky = SubResource("Sky_y7koq")
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 1.17
+glow_strength = 1.36
+glow_bloom = 0.05
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_smvvh"]
+
+[node name="Lake" type="Node3D"]
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -26.0909, 0.591753, 24.7125)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 20.5455, 0.591753, -22.034)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(0.682563, 0, -3.70956e-08, 2.0342e-08, 1, 1.85478e-08, -4.06839e-08, 0, 0.622362, -9.53674e-07, 0.382018, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, 0, 0, -5.63884e-16, 1, 0, 0, 0, 1, -2.05675, -0.356785, -1.80062)
+shape = SubResource("BoxShape3D_6plii")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.616486, 0.499234, -0.60886, 0.787366, -0.390887, 0.476721, 0, -0.773287, -0.634056, 1.73113, 15.9331, -19.1028)
+light_color = Color(0.979853, 0.708489, 0.417294, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6plii")
+camera_attributes = SubResource("CameraAttributesPractical_smvvh")
+
+[node name="lake_map" parent="." instance=ExtResource("1_xgn1c")]

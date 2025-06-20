@@ -26,7 +26,7 @@ uniform float backGroundDirY : hint_range(-0.1, 0.1) = 0.01;
 
 void fragment() {
 	vec4 color = vec4(waterColor.rgb , 1);
-	
+
 	vec2 noiseUV = UV * tiling + offSetSpeed * TIME;
 	float noiseValue = texture(waterDistortionNoise, noiseUV).r;
 
@@ -39,7 +39,7 @@ void fragment() {
 	vec4 noiseColor = texture(waterNoise, waterUV);
 	float intensity = smoothstep(WDFreq, WDSize, noiseColor.r);
 	color.rgb += intensity * vec3(WDBrightness);
-	
+
 	vec2 backGroundUV = SCREEN_UV;
 	backGroundUV.x += noiseValue * backGroundDirX;
 	backGroundUV.y += noiseValue * backGroundDirY;

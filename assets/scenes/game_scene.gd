@@ -46,6 +46,9 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "foggy_vision"):
 		newMap = preload("res://assets/maps/dark_forest.tscn").instantiate();
 	
+	elif (gameMode.to_lower() == "hippo_capture"):
+		newMap = preload("res://assets/maps/lake.tscn").instantiate();
+	
 	$Map.add_child(newMap);
 	
 	await get_tree().create_timer(0.5).timeout;
@@ -125,7 +128,7 @@ func _getModeDescription(gameMode: String):
 	elif (gameMode.to_lower() == "foggy_vision"):
 		description = "Eliminate the other team!"
 	elif (gameMode.to_lower() == "hippo_capture"):
-		description = "Capture 5 Hippos"
+		description = "Capture the Hippo!"
 	
 	return description;
 
