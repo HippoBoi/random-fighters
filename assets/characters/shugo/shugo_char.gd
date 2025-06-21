@@ -72,6 +72,7 @@ var tertiaryTimer = 0;
 var usingUlti = false;
 var bufferedTarget = null;
 var bufferedInput = null;
+var playingPrimarySound = false;
 
 var stunned = false;
 var stunnedParts = null;
@@ -190,8 +191,10 @@ func _physics_process(delta: float) -> void:
 		baseSpeed = 6.0;
 	
 	if (usingPrimary == true):
+		primaryTimer -= delta;
+		print(primaryTimer);
+		
 		if (humanForm):
-			primaryTimer -= delta;
 			dashParticles.emitting = true;
 			qHitbox.monitoring = true;
 			
@@ -201,7 +204,7 @@ func _physics_process(delta: float) -> void:
 				qHitbox.monitoring = false;
 				cancelDash();
 		else:
-			if (moveTo == null or target):
+			if (moveTo == null or target or primaryTimer <= 0):
 				cancelPrimary();
 			else:
 				primary_ability(moveTo, global_position, primaryTarget);
@@ -436,11 +439,20 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 		
 		var distance = _global_pos.distance_to(_moveTo);
 		if (distance < ALT_Q_MAX_RANGE):
+			if not (playingPrimarySound):
+				var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+				PlayerFunc.playSound(self, sound);
+				
+				playingPrimarySound = true;
+				primaryTimer = 0.5;
+			
 			qTimer = Q_COOLDOWN - cooldownReduction;
 			speedOffset = 10;
 			onAction = true;
 			
 			kirbyAnimPlayer.play("q_ability");
+		else:
+			primaryTimer = 0.5;
 
 @rpc("call_local", "reliable")
 func secondary_ability(_mousePos):
@@ -508,10 +520,11 @@ func cancelDash():
 
 @rpc("call_local")
 func cancelPrimary():
+	moveTo = global_position;
 	usingPrimary = false;
 	onAction = false;
 	primaryTarget = null;
-	moveTo = null;
+	playingPrimarySound = false;
 	speedOffset = 0;
 
 @rpc("call_local", "any_peer", "reliable")

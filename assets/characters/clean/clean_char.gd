@@ -59,6 +59,7 @@ var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
 var usingUltimate = false;
+var primaryTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultimateTimer = 0;
@@ -155,7 +156,9 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (usingPrimary == true):
-		if (moveTo == null):
+		primaryTimer -= delta;
+		
+		if (moveTo == null or primaryTimer <= 0):
 			cancelDash();
 	
 	if (usingSecondary):
@@ -351,6 +354,7 @@ func primary_ability(_moveTo, _global_pos):
 	var direction = (_moveTo - _global_pos).normalized();
 	var _distance = _global_pos.distance_to(_moveTo);
 	usingPrimary = true;
+	primaryTimer = 0.5;
 	
 	if (target):
 		bufferedTarget = target;

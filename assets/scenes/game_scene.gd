@@ -126,7 +126,7 @@ func _getModeDescription(gameMode: String):
 	if (gameMode.to_lower() == "free_for_all"):
 		description = "Eliminate the other team!"
 	elif (gameMode.to_lower() == "foggy_vision"):
-		description = "Eliminate the other team!"
+		description = "Watch your step...!"
 	elif (gameMode.to_lower() == "hippo_capture"):
 		description = "Capture the Hippo!"
 	

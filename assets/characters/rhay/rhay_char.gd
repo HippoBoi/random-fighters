@@ -170,7 +170,9 @@ func _physics_process(delta: float) -> void:
 		if (moveTo == null or target or secondaryTimer <= 0):
 			cancelSecondary();
 	if (usingUlti):
-		if (moveTo == null or target):
+		ultiTimer -= delta;
+		
+		if (moveTo == null or target or ultiTimer <= 0):
 			cancelUlti();
 		else:
 			ultimate_ability(moveTo, global_position);
@@ -350,6 +352,7 @@ func ultimate_ability(_moveTo, _global_pos):
 			PlayerFunc.playSound(self, sound);
 			
 			playingUltiSound = true;
+			ultiTimer = 0.5;
 		
 		rTimer = R_COOLDOWN - cooldownReduction;
 		speedOffset = 15;
@@ -359,6 +362,8 @@ func ultimate_ability(_moveTo, _global_pos):
 		$w_dash_particles/meshParticles.emitting = true;
 		$r_trail.emitting = true;
 		animPlayer.play("q_ability_001");
+	else:
+		ultiTimer = 0.5;
 
 @rpc("call_local")
 func cancelSecondary():

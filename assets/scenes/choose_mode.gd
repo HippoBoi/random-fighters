@@ -6,7 +6,7 @@ var playerId: int;
 var alreadySelected = [];
 var selectedGameMode = "Unknown";
 var selectedMode = false;
-var forceMode = "Hippo_Capture";
+var forceMode = "hippo_capture";
 
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
