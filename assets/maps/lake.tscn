@@ -24,8 +24,9 @@ fog_density = 0.025
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_smvvh"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xgn1c"]
-size = Vector3(17.1246, 2.14575, 11.2189)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xgn1c"]
+radius = 4.12183
+height = 17.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_smvvh"]
 size = Vector3(13.1135, 2.14575, 15.0071)
@@ -65,8 +66,8 @@ camera_attributes = SubResource("CameraAttributesPractical_smvvh")
 [node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.952835, 0.572876, 0.0939951)
-shape = SubResource("BoxShape3D_xgn1c")
+transform = Transform3D(2.98023e-08, -1, 0, 1, 2.98023e-08, 0, 0, 0, 1, -0.999607, -0.656465, 0.0625432)
+shape = SubResource("CapsuleShape3D_xgn1c")
 
 [node name="CollissionBox2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.1242)
