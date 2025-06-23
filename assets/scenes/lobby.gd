@@ -1,6 +1,6 @@
 extends Control
 
-var webSocketUrl = "wss://6jo8xfyrkk.execute-api.sa-east-1.amazonaws.com/production/";
+var webSocketUrl = EnvLoader.get_env("AWS_SOCKET");
 var messageToSend = "";
 var currentLobbyId = "";
 var currentOwnerId = ""; # lobby owner ID

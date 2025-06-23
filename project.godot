@@ -20,6 +20,7 @@ config/icon="uid://5pk2obyo53cr"
 Server="*res://assets/scripts/server.gd"
 Cursor="*res://assets/scripts/cursor.gd"
 PlayerFunc="*res://assets/scripts/playerFunctions.gd"
+EnvLoader="*res://assets/scripts/envLoader.gd"
 
 [display]
 
