@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://s2mx8uv7sghg"]
+
+[ext_resource type="PackedScene" uid="uid://g5lw33aoifg3" path="res://assets/npcs/hippo.glb" id="1_o0gdo"]
+[ext_resource type="Script" uid="uid://4884ky1qg5tm" path="res://assets/npcs/hippo_npc.gd" id="2_lp57t"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o0gdo"]
+size = Vector3(1.41736, 2.14856, 2.66925)
+
+[node name="hippo" instance=ExtResource("1_o0gdo")]
+collision_layer = 6
+script = ExtResource("2_lp57t")
+
+[node name="Skeleton3D" parent="hippo_armature" index="0"]
+bones/0/position = Vector3(0, 0.137944, 0)
+bones/4/rotation = Quaternion(0.778098, -0.0989802, -0.0251075, 0.619788)
+bones/5/rotation = Quaternion(-0.139034, 0.144312, 0.0604178, 0.977851)
+bones/7/rotation = Quaternion(-0.061854, 0.0277173, -0.408558, 0.910212)
+bones/8/position = Vector3(0, 0.137944, 0)
+bones/8/rotation = Quaternion(0.629862, -0.368729, -0.456113, -0.50919)
+bones/9/rotation = Quaternion(-0.194108, -0.0882176, 0.742098, 0.635476)
+bones/10/rotation = Quaternion(-0.691411, -6.082e-08, -0.148159, 0.707107)
+bones/11/rotation = Quaternion(-0.173675, 0.152775, -0.675703, 0.699944)
+bones/12/rotation = Quaternion(-0.552187, 0.0845528, 0.00791417, 0.829384)
+bones/13/position = Vector3(0, 0.137944, 0)
+bones/14/rotation = Quaternion(-0.0722657, 0.211874, -0.734639, 0.640463)
+bones/15/rotation = Quaternion(-0.673035, -0.00448718, 0.139633, 0.726296)
+bones/17/rotation = Quaternion(-0.640287, -1.30385e-08, -0.137204, 0.755782)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0905151, 0.57428, 0.834625)
+shape = SubResource("BoxShape3D_o0gdo")

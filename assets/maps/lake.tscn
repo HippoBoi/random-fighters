@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://c8u60nf117fq4"]
+[gd_scene load_steps=10 format=3 uid="uid://c8u60nf117fq4"]
 
 [ext_resource type="PackedScene" uid="uid://bqxl78epgrfeg" path="res://assets/mapAssets/lake/lake_map.tscn" id="1_xgn1c"]
+[ext_resource type="PackedScene" uid="uid://s2mx8uv7sghg" path="res://assets/npcs/hippo.tscn" id="2_6plii"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6plii"]
 size = Vector3(90.6493, 0.260262, 96.658)
@@ -86,3 +87,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.7989)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox3/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
 shape = SubResource("BoxShape3D_smvvh")
+
+[node name="hippo" parent="." instance=ExtResource("2_6plii")]
+transform = Transform3D(0.284701, 0, 1.06252, 0, 1.1, 0, -1.06252, 0, 0.284701, -0.361395, 5.13633, -0.0722142)
