@@ -265,8 +265,6 @@ func _onCreateMatch() -> void:
 		"maxPlayers": maxPlayers.value,
 	};
 	_sendMessage(request);
-	
-	_close_creating_match(1.25);
 
 func _close_creating_match(secondsToWait: float = 0.5):
 	var newSound = AudioStreamPlayer.new();
