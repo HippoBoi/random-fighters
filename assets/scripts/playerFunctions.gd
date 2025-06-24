@@ -726,7 +726,7 @@ func _calculateHealthBars(character: CharacterBody3D):
 			child.queue_free();
 	
 	for i in range(character.maxHp):
-		if (i % 50 == 0):
+		if (i % 30 == 0):
 			barsToDraw += 1;
 	
 	for i in range(barsToDraw):
@@ -735,6 +735,8 @@ func _calculateHealthBars(character: CharacterBody3D):
 		
 		newBar.visible = true;
 		newBar.size.x = 1.0;
+		newBar.scale.y = 0.8;
+		newBar.modulate = Color(1, 1, 1, 0.5);
 		newBar.position.x = templateBar.size.x / barsToDraw * i;
 		newBar.name = "bar";
 
