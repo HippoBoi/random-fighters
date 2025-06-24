@@ -1,5 +1,9 @@
 extends Control
 
+signal onItemPurchase(item)
+
+var selectedItem = null;
+
 func _ready() -> void:
 	var itemsContainer = $Shop/ItemsContainer;
 	var itemTemplate = itemsContainer.get_node("itemTemplate");
@@ -9,8 +13,15 @@ func _ready() -> void:
 		var itemPrice: RichTextLabel = newItem.get_node("RichTextLabel");
 		var itemTexture: TextureRect = newItem.get_node("TextureRect");
 		
+		newItem.name = item.name;
 		itemPrice.text = "$" + str(item.price);
 		itemTexture.texture = load(item.texture);
+		
+		newItem.pressed.connect(func(): 
+			selectedItem = newItem;
+			print(selectedItem);
+			print(selectedItem.name);
+		);
 		
 		itemsContainer.add_child(newItem);
 		newItem.visible = true;
