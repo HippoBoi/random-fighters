@@ -1,12 +1,28 @@
 extends Control
 
-signal onItemPurchase(item)
+signal onItemPurchase(item, playerId)
 
+var gameScene = null;
 var selectedItem = null;
 
 func _ready() -> void:
+	gameScene = get_parent();
+	if (gameScene):
+		onItemPurchase.connect(gameScene.onShopBuy);
+	else:
+		print("[WARNING]: shop game scene not found");
+	
+	_setupShop();
+
+func _process(_delta: float) -> void:
+	if (Input.is_action_just_pressed("shop")):
+		_toggle_shop();
+
+func _setupShop():
 	var itemsContainer = $Shop/ItemsContainer;
 	var itemTemplate = itemsContainer.get_node("itemTemplate");
+	
+	gameScene = get_parent();
 	
 	for item in Constants.items:
 		var newItem: Button = itemTemplate.duplicate();
@@ -39,10 +55,6 @@ func _ready() -> void:
 		itemsContainer.add_child(newItem);
 		newItem.visible = true;
 
-func _process(_delta: float) -> void:
-	if (Input.is_action_just_pressed("shop")):
-		_toggle_shop();
-
 func _on_close_shop() -> void:
 	_toggle_shop();
 
@@ -50,7 +62,16 @@ func _toggle_shop():
 	visible = not visible;
 
 func _on_buy_pressed() -> void:
-	if not (selectedItem):
+	print(gameScene);
+	if (gameScene):
+		# TODO: change this, get_multiplayer_auth always returns ID 1
+		var playerId = str(get_multiplayer_authority());
+		
+		onItemPurchase.emit(selectedItem, playerId);
+	selectedItem = null;
+
+func onItemBought(item: Button, character: CharacterBody3D):
+	if not (item):
 		return;
 	
 	var newSound = AudioStreamPlayer.new();
@@ -63,6 +84,3 @@ func _on_buy_pressed() -> void:
 	newSound.finished.connect(func():
 		newSound.queue_free();
 	);
-	
-	onItemPurchase.emit(selectedItem);
-	selectedItem = null;
