@@ -134,6 +134,7 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme = SubResource("Theme_et1oa")
+button_mask = 3
 
 [node name="TextureRect" type="TextureRect" parent="Shop/ItemsContainer/itemTemplate"]
 layout_mode = 1
@@ -243,4 +244,5 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.145266, 0.15813, 0.220946, 1)
 
+[connection signal="pressed" from="Shop/BuyItem" to="." method="_on_buy_pressed"]
 [connection signal="button_up" from="Shop/CloseShop" to="." method="_on_close_shop"]
