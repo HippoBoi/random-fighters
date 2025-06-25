@@ -579,7 +579,9 @@ func stopKeyPressed(character: CharacterBody3D, animPlayer: AnimationPlayer = nu
 	character.basicAttackTimer = 0;
 	stopCharacter(character, stopTarget);
 
-func moveChar(character, delta: float, posToMove: Vector3):
+func moveChar(character: CharacterBody3D, delta: float, posToMove: Vector3):
+	posToMove = Vector3(posToMove.x, character.global_position.y, posToMove.z);
+	
 	var displacement = posToMove - character.global_position;
 	var distance = displacement.length();
 	var direction = displacement / distance;

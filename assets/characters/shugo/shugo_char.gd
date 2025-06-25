@@ -192,7 +192,6 @@ func _physics_process(delta: float) -> void:
 	
 	if (usingPrimary == true):
 		primaryTimer -= delta;
-		print(primaryTimer);
 		
 		if (humanForm):
 			dashParticles.emitting = true;

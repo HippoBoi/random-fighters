@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 150.0;
 @export var hp = 150.0;
 @export var baseArmor = 14;
-@export var baseDmg = 17.5;
+@export var baseDmg = 19.5; # TODO: change to 17.5
 @export var baseAttackRange = 8.0;
 @export var baseAttackSpeed = 5.0;
 @export var baseSpeed = 5.5;
