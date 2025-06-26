@@ -3,18 +3,21 @@ extends Node
 const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 const BASIC_ATTACK_COOLDOWN = 300;
+
 var gameMode = "";
 var gameUI;
+
 var gameStarted = false;
 var freeCam = false;
 var keepBasicAttacking = false;
+var shopOpen = false;
+
 var activeBasicArea: MeshInstance3D = null;
 var lastHpValue = 0;
 var myTeam = -1;
 var myCharacter = null;
 
 var maxRespawnTimer = 10;
-
 var blackTeamStocks = 0;
 var blackTeamSize = 0;
 var whiteTeamStocks = 0;
@@ -661,6 +664,25 @@ func basicAttack(character):
 		character.rpc("playBasicAttack");
 		
 		character.basicAttack();
+
+func _closeShop(shop):
+	shop.queue_free();
+	shopOpen = false;
+
+func shopToggle(character: CharacterBody3D):
+	if (shopOpen == false):
+		var shopScene = preload("res://assets/scenes/shop_ui.tscn").instantiate();
+		shopScene.character = character;
+		shopScene.closeShop.connect(_closeShop);
+		character.add_child(shopScene);
+		
+		shopOpen = true;
+	else:
+		var openedShop = character.has_node("ShopUI");
+		if (openedShop):
+			character.get_node("ShopUI").queue_free();
+			
+		shopOpen = false;
 
 func playSound(character: CharacterBody3D, sound):
 	var newSound = AudioStreamPlayer3D.new();

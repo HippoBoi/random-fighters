@@ -147,6 +147,9 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_action_just_pressed("stop_movement") and not (onAction or stunned)):
 			PlayerFunc.stopKeyPressed(self, animPlayer);
 		
+		if (Input.is_action_just_pressed("shop")):
+			PlayerFunc.shopToggle(self);
+		
 		if (Input.is_anything_pressed()):
 			var action = null;
 			

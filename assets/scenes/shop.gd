@@ -1,28 +1,17 @@
 extends Control
 
-signal onItemPurchase(item, playerId)
+signal closeShop(shop);
+signal onItemPurchase(item, playerId);
 
-var gameScene = null;
+var character: CharacterBody3D = null;
 var selectedItem = null;
 
 func _ready() -> void:
-	gameScene = get_parent();
-	if (gameScene):
-		onItemPurchase.connect(gameScene.onShopBuy);
-	else:
-		print("[WARNING]: shop game scene not found");
-	
 	_setupShop();
-
-func _process(_delta: float) -> void:
-	if (Input.is_action_just_pressed("shop")):
-		_toggle_shop();
 
 func _setupShop():
 	var itemsContainer = $Shop/ItemsContainer;
 	var itemTemplate = itemsContainer.get_node("itemTemplate");
-	
-	gameScene = get_parent();
 	
 	for item in Constants.items:
 		var newItem: Button = itemTemplate.duplicate();
@@ -56,18 +45,16 @@ func _setupShop():
 		newItem.visible = true;
 
 func _on_close_shop() -> void:
-	_toggle_shop();
+	closeShop.emit(self);
 
 func _toggle_shop():
 	visible = not visible;
 
 func _on_buy_pressed() -> void:
-	print(gameScene);
-	if (gameScene):
-		# TODO: change this, get_multiplayer_auth always returns ID 1
-		var playerId = str(get_multiplayer_authority());
-		
-		onItemPurchase.emit(selectedItem, playerId);
+	print(character);
+	# TODO: check player's money and validate item buy, then emit function to grant stats
+	
+	# onItemPurchase.emit(selectedItem, playerId);
 	selectedItem = null;
 
 func onItemBought(item: Button, character: CharacterBody3D):
