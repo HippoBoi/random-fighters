@@ -62,8 +62,13 @@ func onItemBought(character: CharacterBody3D):
 	if not (selectedItem):
 		return;
 	
+	var itemWithStats = null;
+	for item in Constants.items:
+		if (item.name ==  selectedItem.name):
+			itemWithStats = item;
+	
 	character.tokens -= int(selectedItem.get_node("Price").text);
-	character.rpc("onItemPurchase", selectedItem);
+	character.rpc("onItemPurchase", itemWithStats);
 	selectedItem = null;
 	
 	var newSound = AudioStreamPlayer.new();

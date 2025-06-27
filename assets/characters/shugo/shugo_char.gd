@@ -614,6 +614,10 @@ func syncRespawn(newHp: float, newPos: Vector3):
 func showChatText(newText):
 	print("Shugo: ", newText);
 
+@rpc("call_local", "any_peer", "reliable")
+func onItemPurchase(item: Dictionary):
+	PlayerFunc.grantItemStats(self, item)
+
 func onCollision():
 	pass;
 

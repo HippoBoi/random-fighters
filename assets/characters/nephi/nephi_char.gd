@@ -16,7 +16,7 @@ const Q_COOLDOWN = 15.5;
 const W_COOLDOWN = 12.0;
 const E_COOLDOWN = 20.0;
 const ALT_E_COOLDOWN = 2.0;
-const R_COOLDOWN = 2.0;
+const R_COOLDOWN = 35.0;
 const Q_MAX_RANGE = 5.0;
 const ALT_Q_MAX_RANGE = 5.0;
 const stunnedHitEffect = "grabbedEffect";
@@ -538,6 +538,10 @@ func syncRespawn(newHp: float, newPos: Vector3):
 @rpc("call_local")
 func showChatText(newText):
 	print("Nephi: ", newText);
+
+@rpc("call_local", "any_peer", "reliable")
+func onItemPurchase(item: Dictionary):
+	PlayerFunc.grantItemStats(self, item)
 
 func onCollision():
 	pass;

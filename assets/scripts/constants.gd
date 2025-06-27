@@ -14,9 +14,10 @@ enum GameModes {
 const items = [
 	{
 		"name": "Heaven Shield",
-		"price": 10,
+		"price": 0,
 		"stats": {
-			"armor": 10,
+			"hp": 10,
+			"armor": 10
 		},
 		"texture": "res://assets/textures/items/heaven_shield.png"
 	},

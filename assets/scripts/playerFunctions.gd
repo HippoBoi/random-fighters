@@ -684,6 +684,22 @@ func shopToggle(character: CharacterBody3D):
 			
 		shopOpen = false;
 
+func grantItemStats(character: CharacterBody3D, item: Dictionary):
+	if (item.stats.has("hp")):
+		character.maxHp += item.stats.hp;
+		character.hp += item.stats.hp;
+		character.hp = clamp(character.hp, 0, character.maxHp);
+	if (item.stats.has("armor")):
+		character.baseArmor += item.stats.armor;
+	if (item.stats.has("dmg")):
+		character.baseDmg += item.stats.dmg;
+	if (item.stats.has("attackSpeed")):
+		character.baseAttackSpeed += item.stats.attackSpeed;
+	if (item.stats.has("cooldownReduction")):
+		character.cooldownReduction += item.stats.cooldownReduction;
+	if (item.stats.has("speed")):
+		character.baseSpeed += item.stats.speed;
+
 func playSound(character: CharacterBody3D, sound):
 	var newSound = AudioStreamPlayer3D.new();
 	character.add_child(newSound);
@@ -750,7 +766,7 @@ func _calculateHealthBars(character: CharacterBody3D):
 			child.queue_free();
 	
 	for i in range(character.maxHp):
-		if (i % 30 == 0):
+		if (i % 25 == 0):
 			barsToDraw += 1;
 	
 	for i in range(barsToDraw):
@@ -759,8 +775,8 @@ func _calculateHealthBars(character: CharacterBody3D):
 		
 		newBar.visible = true;
 		newBar.size.x = 1.0;
-		newBar.scale.y = 0.8;
-		newBar.modulate = Color(1, 1, 1, 0.5);
+		newBar.scale.y = 0.7;
+		newBar.modulate = Color(1, 1, 1, 0.25);
 		newBar.position.x = templateBar.size.x / barsToDraw * i;
 		newBar.name = "bar";
 
