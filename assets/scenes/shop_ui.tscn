@@ -171,6 +171,64 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="ItemsContainer2" type="BoxContainer" parent="Shop"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 113.0
+offset_top = 29.0
+offset_right = -24.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+vertical = true
+
+[node name="itemTemplate" type="Button" parent="Shop/ItemsContainer2"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_et1oa")
+button_mask = 3
+
+[node name="TextureRect" type="TextureRect" parent="Shop/ItemsContainer2/itemTemplate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_lhdqg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer2/itemTemplate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -24.0
+offset_right = 19.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0.529067, 0.529067, 0.529067, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 2
+text = "$320"
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="BuyItem" type="Button" parent="Shop"]
 z_index = 1
 layout_mode = 1

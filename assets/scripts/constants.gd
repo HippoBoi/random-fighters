@@ -13,30 +13,49 @@ enum GameModes {
 
 const items = [
 	{
-		"name": "Heaven Shield",
-		"price": 0,
+		"name": "Broken Bow",
+		"price": 15,
 		"stats": {
-			"hp": 10,
+			"dmg": 2,
+			"attackSpeed": 2,
+		},
+		"texture": "res://assets/textures/items/broken_bow.png"
+	},
+	{
+		"name": "Heaven Sword",
+		"price": 20,
+		"stats": {
+			"dmg": 4,
+		},
+		"texture": "res://assets/textures/items/heaven_sword.png"
+	},{
+		"name": "Heaven Shield",
+		"price": 20,
+		"stats": {
+			"hp": 25,
 			"armor": 10
 		},
 		"texture": "res://assets/textures/items/heaven_shield.png"
 	},
 	{
-		"name": "Life Shield",
-		"price": 10,
+		"name": "kris",
+		"price": 30,
 		"stats": {
-			"hp": 5,
-			"armor": 5,
+			"attackSpeed": 4,
+			"cooldownReduction": 1.5,
 		},
-		"texture": "res://assets/textures/items/life_shield.png"
+		"texture": "res://assets/textures/Kris_Overworld_b.webp"
 	},
 	{
-		"name": "ralsei deltarun",
-		"price": 20,
+		"name": "Divino",
+		"price": 45,
 		"stats": {
-			"armor": 5,
-			"speed": 10,
+			"hp": 15,
+			"dmg": 7,
+			"attackSpeed": 2,
+			"cooldownReduction": 2,
+			"speed": 1
 		},
-		"texture": "res://assets/textures/Ralsei_overworld.webp"
+		"texture": "res://assets/textures/looping_background.png"
 	}
 ];

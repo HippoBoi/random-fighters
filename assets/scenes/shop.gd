@@ -11,11 +11,15 @@ func _ready() -> void:
 func _setupShop():
 	var itemsContainer = $Shop/ItemsContainer;
 	var itemTemplate = itemsContainer.get_node("itemTemplate");
+	var itemsIndex = 0;
 	
 	for item in Constants.items:
 		var newItem: Button = itemTemplate.duplicate();
 		var itemPrice: RichTextLabel = newItem.get_node("Price");
 		var itemTexture: TextureRect = newItem.get_node("TextureRect");
+		
+		if (itemsIndex > 2):
+			itemsContainer = $Shop/ItemsContainer2;
 		
 		newItem.name = item.name;
 		itemPrice.text = "$" + str(item.price);
@@ -42,6 +46,8 @@ func _setupShop():
 		
 		itemsContainer.add_child(newItem);
 		newItem.visible = true;
+		
+		itemsIndex += 1;
 
 func _on_close_shop() -> void:
 	closeShop.emit(self);
