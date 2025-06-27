@@ -148,7 +148,7 @@ texture = ExtResource("2_lhdqg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Shop/ItemsContainer/itemTemplate"]
+[node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer/itemTemplate"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

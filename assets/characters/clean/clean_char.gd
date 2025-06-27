@@ -506,5 +506,12 @@ func syncRespawn(newHp: float, newPos: Vector3):
 func showChatText(newText):
 	print("Clean: ", newText);
 
+@rpc("call_local")
+func onItemPurchase(itemNode: Button):
+	for item in Constants.items:
+		if (item.name ==  itemNode.name):
+			print("item stats: %s" % item);
+	print("%s buying %s" % [CHARACTER_NAME, itemNode.name]);
+
 func onCollision():
 	pass;

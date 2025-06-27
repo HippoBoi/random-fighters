@@ -1,7 +1,6 @@
 extends Control
 
 signal closeShop(shop);
-signal onItemPurchase(item, playerId);
 
 var character: CharacterBody3D = null;
 var selectedItem = null;
@@ -15,7 +14,7 @@ func _setupShop():
 	
 	for item in Constants.items:
 		var newItem: Button = itemTemplate.duplicate();
-		var itemPrice: RichTextLabel = newItem.get_node("RichTextLabel");
+		var itemPrice: RichTextLabel = newItem.get_node("Price");
 		var itemTexture: TextureRect = newItem.get_node("TextureRect");
 		
 		newItem.name = item.name;
@@ -51,15 +50,21 @@ func _toggle_shop():
 	visible = not visible;
 
 func _on_buy_pressed() -> void:
-	print(character);
-	# TODO: check player's money and validate item buy, then emit function to grant stats
-	
-	# onItemPurchase.emit(selectedItem, playerId);
-	selectedItem = null;
-
-func onItemBought(item: Button, character: CharacterBody3D):
-	if not (item):
+	if not (selectedItem):
 		return;
+	
+	var playerTokens = character.tokens;
+	var itemPrice = int(selectedItem.get_node("Price").text);
+	if (playerTokens - itemPrice >= 0):
+		onItemBought(character)
+
+func onItemBought(character: CharacterBody3D):
+	if not (selectedItem):
+		return;
+	
+	character.tokens -= int(selectedItem.get_node("Price").text);
+	character.rpc("onItemPurchase", selectedItem);
+	selectedItem = null;
 	
 	var newSound = AudioStreamPlayer.new();
 	add_child(newSound);
