@@ -315,6 +315,16 @@ func updateState(character: CharacterBody3D, delta):
 	if (character.timer >= 4 and character.showingUIs == false):
 		showCharactersUI(character);
 
+func _onRoundEnd(gameScene, winnerTeam):
+	for playerId in Server.playersInfo:
+		var playerData = Server.playersInfo[playerId];
+		var character = gameScene.get_character_by_id(str(playerData.playerID));
+		character.tokens += 10;
+		print(character.CHARACTER_NAME);
+		
+	if (gameScene.name == "Game"):
+		gameScene.roundVictory.emit(winnerTeam);
+
 func checkTeamLives(character: CharacterBody3D):
 	var curTeam = character.team;
 	blackTeamSize = 0;
@@ -347,9 +357,8 @@ func checkTeamLives(character: CharacterBody3D):
 		winnerTeam = BLACK_TEAM;
 	
 	if (winnerTeam != -1):
-		var scene = character.get_parent();
-		if (scene.name == "Game"):
-			scene.roundVictory.emit(winnerTeam);
+		var gameScene = character.get_parent();
+		_onRoundEnd(gameScene, winnerTeam);
 
 func killCharacter(character: CharacterBody3D):
 	if (character.dead):
@@ -362,15 +371,30 @@ func killCharacter(character: CharacterBody3D):
 	character.moveTo = character.global_position;
 	syncMovement(character);
 	
+	var scene = character.get_parent();
+	if (scene.name != "Game"):
+		print("[WARNING]: game node not found");
+		return;
+	
+	var invertedAssistsArray: Array = character.assistedInKill;
+	invertedAssistsArray.reverse();
+	
+	var index = 0;
 	for playerId in character.assistedInKill:
-		var scene = character.get_parent();
 		if (scene.name != "Game"):
 			print("[WARNING]: game node not found");
 			return;
 		
+		var tokenReward = 0;
+		if (index == 0):
+			tokenReward = 10;
+		elif (index == 1):
+			tokenReward = 5;
+		
 		var player: CharacterBody3D = scene.get_character_by_id(playerId);
 		if (player):
-			player.tokens += 10;
+			player.tokens += tokenReward;
+		index += 1;
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	character.get_parent().add_child(particles);
