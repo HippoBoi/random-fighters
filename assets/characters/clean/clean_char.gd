@@ -251,7 +251,7 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
-	PlayerFunc.dealDamage(self, basicTarget, dmg);
+	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
 
 @rpc("call_local")
 func showBasicAttack(_targetPos):
@@ -494,6 +494,7 @@ func syncParticles(effect: String, offset: Vector3 = Vector3(0, 2, 0)):
 	
 	add_child(effectInstance);
 	effectInstance.global_position = global_position + offset;
+	effectInstance.rotation = rotation;
 
 @rpc("any_peer")
 func syncRespawn(newHp: float, newPos: Vector3):

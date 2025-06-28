@@ -169,8 +169,9 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
+			var effect = "hit_01" if basicDmgOffset <= 0 else "hit_02";
 			basicDamageDealt = true;
-			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, "hit_01");
+			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, effect);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
 		
