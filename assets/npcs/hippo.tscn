@@ -29,3 +29,5 @@ bones/17/rotation = Quaternion(-0.640287, -1.30385e-08, -0.137204, 0.755782)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0905151, 0.57428, 0.834625)
 shape = SubResource("BoxShape3D_o0gdo")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." index="3"]

@@ -1,10 +1,22 @@
-[gd_scene load_steps=10 format=3 uid="uid://c8u60nf117fq4"]
+[gd_scene load_steps=13 format=3 uid="uid://c8u60nf117fq4"]
 
+[ext_resource type="Script" uid="uid://tpyci5cwaubk" path="res://assets/maps/lake_script.gd" id="1_smvvh"]
 [ext_resource type="PackedScene" uid="uid://bqxl78epgrfeg" path="res://assets/mapAssets/lake/lake_map.tscn" id="1_xgn1c"]
 [ext_resource type="PackedScene" uid="uid://s2mx8uv7sghg" path="res://assets/npcs/hippo.tscn" id="2_6plii"]
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_6plii"]
+vertices = PackedVector3Array(-9.37267, 0.471705, -33.552, -2.12267, 0.471705, -33.802, -2.12267, 0.471705, -34.052, -33.8727, 0.471705, -34.052, -33.8727, 0.471705, -19.802, -9.37267, 0.471705, -19.802, 5.12733, 0.471705, -33.552, 29.8773, 0.471705, -34.052, 5.12733, 0.471705, -19.302, 29.8773, 0.471705, -19.052, -8.37267, 1.9717, -32.802, -8.37267, 1.9717, -18.552, 4.12733, 1.9717, -18.552, 4.12733, 1.9717, -32.802, -4.62267, 0.471705, -4.55204, -4.62267, 0.471705, -17.552, -9.12267, 0.471705, -17.552, -7.87267, 0.471705, -4.05204, -33.8727, 0.471705, -0.0520363, -9.87267, 0.471705, -0.0520363, -9.87267, 0.471705, -1.55204, 4.87733, 0.471705, -17.552, 2.62733, 0.471705, -17.552, 2.62733, 0.471705, -4.55204, 5.87733, 0.471705, -4.05204, 7.37733, 0.471705, -2.55204, 7.87733, 0.471705, -0.0520363, 29.8773, 0.471705, -0.0520363, 4.12733, 0.471705, 2.69796, 5.62733, 0.471705, 1.69796, 6.12733, 0.471705, 0.447964, -6.12267, 0.471705, -2.55204, -7.62267, 0.471705, -1.55204, -8.12267, 0.471705, -0.302036, -7.62267, 0.471705, 1.69796, -6.12267, 0.471705, 2.69796, 5.62733, 0.471705, -1.55204, 4.12733, 0.471705, -2.55204, -7.62267, 3.2217, 1.19796, -6.62267, 2.9717, 2.44796, -5.62267, 2.9717, 2.69796, 3.62733, 2.9717, 2.69796, 4.62733, 2.9717, 2.44796, 5.62733, 3.2217, 1.19796, -6.12267, 2.9717, -2.55204, -7.62267, 3.2217, -1.30204, -6.62267, 3.4717, -1.30204, 5.62733, 3.2217, -1.30204, 3.87733, 2.9717, -2.55204, 4.46067, 3.4717, -1.30204, -4.39767, 3.7217, -1.57704, 3.12248, 3.7217, -0.0451889, 3.1274, 3.7217, -1.5721, -5.88759, 3.7217, -0.0611153, -4.39251, 3.4717, 1.4658, -4.62267, 0.471705, 14.198, -4.62267, 0.471705, 4.69796, -7.87267, 0.471705, 4.19796, -9.37267, 0.471705, 14.448, -9.37267, 0.471705, 28.448, -9.87267, 0.471705, 1.69796, -33.8727, 0.471705, 28.448, 2.62733, 0.471705, 4.69796, 2.62733, 0.471705, 14.198, 4.87733, 0.471705, 14.198, 5.87733, 0.471705, 4.19796, 7.87733, 0.471705, 1.69796, 5.12733, 0.471705, 15.948, 29.8773, 0.471705, 15.698, -8.37267, 1.9717, 15.198, -8.37267, 1.9717, 29.448, 4.12733, 1.9717, 29.448, 4.12733, 1.9717, 15.198, 5.12733, 0.471705, 28.448, 29.8773, 0.471705, 28.448)
+polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(5, 4, 0), PackedInt32Array(0, 4, 3), PackedInt32Array(1, 2, 6), PackedInt32Array(6, 2, 7), PackedInt32Array(8, 6, 9), PackedInt32Array(9, 6, 7), PackedInt32Array(13, 12, 10), PackedInt32Array(10, 12, 11), PackedInt32Array(14, 17, 15), PackedInt32Array(15, 17, 16), PackedInt32Array(20, 19, 18), PackedInt32Array(16, 17, 5), PackedInt32Array(5, 17, 20), PackedInt32Array(5, 20, 4), PackedInt32Array(4, 20, 18), PackedInt32Array(22, 21, 23), PackedInt32Array(23, 21, 24), PackedInt32Array(21, 8, 25), PackedInt32Array(25, 8, 26), PackedInt32Array(26, 8, 27), PackedInt32Array(27, 8, 9), PackedInt32Array(25, 24, 21), PackedInt32Array(15, 22, 14), PackedInt32Array(14, 22, 23), PackedInt32Array(28, 30, 29), PackedInt32Array(31, 33, 32), PackedInt32Array(33, 35, 34), PackedInt32Array(30, 37, 36), PackedInt32Array(33, 31, 35), PackedInt32Array(35, 31, 37), PackedInt32Array(35, 37, 28), PackedInt32Array(28, 37, 30), PackedInt32Array(40, 39, 38), PackedInt32Array(43, 42, 41), PackedInt32Array(44, 46, 45), PackedInt32Array(45, 46, 38), PackedInt32Array(48, 47, 49), PackedInt32Array(49, 47, 43), PackedInt32Array(38, 53, 40), PackedInt32Array(40, 54, 41), PackedInt32Array(41, 51, 43), PackedInt32Array(43, 51, 49), PackedInt32Array(49, 52, 48), PackedInt32Array(48, 50, 44), PackedInt32Array(44, 50, 46), PackedInt32Array(46, 53, 38), PackedInt32Array(53, 54, 40), PackedInt32Array(54, 51, 41), PackedInt32Array(51, 52, 49), PackedInt32Array(52, 50, 48), PackedInt32Array(50, 53, 46), PackedInt32Array(53, 50, 54), PackedInt32Array(54, 50, 51), PackedInt32Array(51, 50, 52), PackedInt32Array(56, 55, 57), PackedInt32Array(57, 55, 58), PackedInt32Array(58, 59, 60), PackedInt32Array(60, 59, 61), PackedInt32Array(60, 61, 18), PackedInt32Array(60, 57, 58), PackedInt32Array(18, 19, 60), PackedInt32Array(63, 62, 64), PackedInt32Array(64, 62, 65), PackedInt32Array(66, 26, 27), PackedInt32Array(64, 65, 67), PackedInt32Array(67, 65, 66), PackedInt32Array(67, 66, 68), PackedInt32Array(68, 66, 27), PackedInt32Array(56, 62, 55), PackedInt32Array(55, 62, 63), PackedInt32Array(72, 71, 69), PackedInt32Array(69, 71, 70), PackedInt32Array(73, 67, 74), PackedInt32Array(74, 67, 68)]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6plii"]
-size = Vector3(90.6493, 0.260262, 96.658)
+size = Vector3(64.6414, 0.260262, 63.2778)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xgn1c"]
+radius = 4.12183
+height = 17.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_smvvh"]
+size = Vector3(13.1135, 2.14575, 15.0071)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xgn1c"]
 
@@ -25,14 +37,10 @@ fog_density = 0.025
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_smvvh"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xgn1c"]
-radius = 4.12183
-height = 17.0
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_smvvh"]
-size = Vector3(13.1135, 2.14575, 15.0071)
+[sub_resource type="BoxMesh" id="BoxMesh_smvvh"]
 
 [node name="Lake" type="Node3D"]
+script = ExtResource("1_smvvh")
 
 [node name="spawnLocations" type="Node3D" parent="."]
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
@@ -43,14 +51,43 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e
 [node name="blackTeam" type="Node3D" parent="spawnLocations"]
 transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 20.5455, 0.591753, -22.034)
 
-[node name="floor" type="StaticBody3D" parent="."]
-transform = Transform3D(0.682563, 0, -3.70956e-08, 2.0342e-08, 1, 1.85478e-08, -4.06839e-08, 0, 0.622362, -9.53674e-07, 0.382018, -0.978203)
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_6plii")
+
+[node name="floor" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.382018, -0.978203)
 collision_layer = 5
 collision_mask = 5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
-transform = Transform3D(1, 0, 0, -5.63884e-16, 1, 0, 0, 0, 1, -2.05675, -0.356785, -1.80062)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/floor"]
+transform = Transform3D(1, -2.76004e-22, 0, -2.76004e-22, 1, 0, 0, 0, 1, -2.05194, -0.356785, -1.93495)
 shape = SubResource("BoxShape3D_6plii")
+
+[node name="CollissionBox" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/CollissionBox"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/CollissionBox/StaticBody3D"]
+transform = Transform3D(2.98023e-08, -1, 0, 1, 2.98023e-08, 0, 0, 0, 1, -0.999607, -0.656465, 0.0625432)
+shape = SubResource("CapsuleShape3D_xgn1c")
+
+[node name="CollissionBox2" type="Node3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.1242)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/CollissionBox2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/CollissionBox2/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
+shape = SubResource("BoxShape3D_smvvh")
+
+[node name="CollissionBox3" type="Node3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.7989)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/CollissionBox3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/CollissionBox3/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
+shape = SubResource("BoxShape3D_smvvh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.616486, 0.499234, -0.60886, 0.787366, -0.390887, 0.476721, 0, -0.773287, -0.634056, 1.73113, 15.9331, -19.1028)
@@ -62,31 +99,25 @@ camera_attributes = SubResource("CameraAttributesPractical_smvvh")
 
 [node name="lake_map" parent="." instance=ExtResource("1_xgn1c")]
 
-[node name="CollissionBox" type="Node3D" parent="."]
-
-[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox/StaticBody3D"]
-transform = Transform3D(2.98023e-08, -1, 0, 1, 2.98023e-08, 0, 0, 0, 1, -0.999607, -0.656465, 0.0625432)
-shape = SubResource("CapsuleShape3D_xgn1c")
-
-[node name="CollissionBox2" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.1242)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox2"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox2/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
-shape = SubResource("BoxShape3D_smvvh")
-
-[node name="CollissionBox3" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.7989)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox3"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox3/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.11298, 0.572876, -1.80008)
-shape = SubResource("BoxShape3D_smvvh")
-
 [node name="hippo" parent="." instance=ExtResource("2_6plii")]
-transform = Transform3D(0.284701, 0, 1.06252, 0, 1.1, 0, -1.06252, 0, 0.284701, -0.361395, 5.13633, -0.0722142)
+transform = Transform3D(0.284701, 0, 1.06252, 0, 1.1, 0, -1.06252, 0, 0.284701, -0.361395, 5.13633, 0.191586)
+
+[node name="HippoPos" type="Node3D" parent="."]
+
+[node name="pos1" type="MeshInstance3D" parent="HippoPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.161, 0, -20)
+mesh = SubResource("BoxMesh_smvvh")
+
+[node name="pos2" type="MeshInstance3D" parent="HippoPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.839, 0, -21)
+mesh = SubResource("BoxMesh_smvvh")
+
+[node name="pos3" type="MeshInstance3D" parent="HippoPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.839, 0, 20)
+mesh = SubResource("BoxMesh_smvvh")
+
+[node name="pos4" type="MeshInstance3D" parent="HippoPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.161, 0, 20)
+mesh = SubResource("BoxMesh_smvvh")
+
+[editable path="hippo"]

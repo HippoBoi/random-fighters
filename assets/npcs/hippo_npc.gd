@@ -92,7 +92,6 @@ var basicAnimPos = 0;
 
 func _ready() -> void:
 	set_multiplayer_authority(-1);
-	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
 
 func rotateChar(newPos) -> void:
@@ -271,7 +270,7 @@ func syncShield(curShield):
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self);
 	
-@rpc
+@rpc("any_peer")
 func syncPosition(newPos):
 	global_position = newPos;
 
