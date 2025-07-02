@@ -477,6 +477,9 @@ func leaveFog(character, _fogInstance):
 	character.inFog = false;
 
 func updateGlobally(character: CharacterBody3D, _delta):
+	if (character.CHARACTER_NAME != "SERVER"):
+		character.global_position.y = 0;
+	
 	if (character.inFog):
 		character.visible = false;
 		

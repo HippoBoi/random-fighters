@@ -277,7 +277,7 @@ func syncShield(curShield):
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self);
 	
-@rpc("any_peer")
+@rpc("any_peer", "reliable")
 func syncPosition(newPos):
 	global_position = newPos;
 
