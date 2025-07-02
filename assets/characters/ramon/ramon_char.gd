@@ -511,10 +511,12 @@ func onCollision():
 
 func _on_papers_touch(other) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
-	if (isCharacter):
-		var paperDmg = dmg * 0.25;
-		if (other.team != team):
-			PlayerFunc.dealDamage(self, other, paperDmg);
+	if not (isCharacter):
+		return;
+	
+	var paperDmg = dmg * 0.25;
+	if (other.team != team):
+		PlayerFunc.dealDamage(self, other, paperDmg);
 
 func _on_ulti_touch(other) -> void:
 	if (other == self):

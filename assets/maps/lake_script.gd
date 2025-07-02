@@ -7,7 +7,7 @@ var startHippo = false;
 @onready var positions = $HippoPos;
 
 func _ready() -> void:
-	startTimer = 3;
+	startTimer = 6;
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
@@ -23,3 +23,6 @@ func _setupHippo():
 		hippo.global_position = initialPos.global_position;
 		
 		hippo.rpc("syncPosition", hippo.global_position);
+		
+		var moveTo = positions.get_node("pos2").global_position;
+		hippo.rpc("simulateMove", moveTo);

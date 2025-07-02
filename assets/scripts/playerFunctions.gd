@@ -320,7 +320,6 @@ func _onRoundEnd(gameScene, winnerTeam):
 		var playerData = Server.playersInfo[playerId];
 		var character = gameScene.get_character_by_id(str(playerData.playerID));
 		character.tokens += 10;
-		print(character.CHARACTER_NAME);
 		
 	if (gameScene.name == "Game"):
 		gameScene.roundVictory.emit(winnerTeam);

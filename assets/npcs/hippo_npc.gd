@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var baseDmg = 17.0;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
-@export var baseSpeed = 6.0;
+@export var baseSpeed = 4.0;
 @export var cooldownReduction = 0;
 var shield = 0;
 
@@ -86,9 +86,12 @@ var assistedInKill = [];
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
+var moveToDirection: Vector3;
+
 @onready var camera = get_viewport().get_camera_3d();
-@onready var charModel = $Armature
-@onready var animPlayer = $AnimationPlayer
+@onready var charModel = $hippo_armature;
+@onready var animPlayer = $AnimationPlayer;
+@onready var nav = $NavigationAgent3D;
 
 func _ready() -> void:
 	set_multiplayer_authority(-1);
@@ -153,6 +156,10 @@ func _physics_process(delta: float) -> void:
 			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
+	
+	moveToDirection = nav.get_next_path_position() - global_position;
+	moveToDirection = moveToDirection.normalized();
+	velocity = velocity.lerp(moveToDirection * speed, delta);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -295,14 +302,14 @@ func syncBufferedInputs(_moveTo = null, _target = null):
 	if (_target):
 		bufferedTarget = _target;
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func simulateMove(newPos, _global_pos = Vector3.ZERO):
 	if (newPos == null):
 		moveTo = _global_pos;
 		return;
 	
+	nav.target_position = newPos;
 	rotateChar(newPos);
-	moveTo = newPos;
 
 @rpc("any_peer", "call_local")
 func simulateForcedMove(newPos, moveSpeed = 7.0, _global_pos = Vector3.ZERO):

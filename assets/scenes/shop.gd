@@ -64,7 +64,7 @@ func _on_buy_pressed() -> void:
 	if (playerTokens - itemPrice >= 0):
 		onItemBought(character)
 
-func onItemBought(character: CharacterBody3D):
+func onItemBought(_character: CharacterBody3D):
 	if not (selectedItem):
 		return;
 	
@@ -73,8 +73,8 @@ func onItemBought(character: CharacterBody3D):
 		if (item.name ==  selectedItem.name):
 			itemWithStats = item;
 	
-	character.tokens -= int(selectedItem.get_node("Price").text);
-	character.rpc("onItemPurchase", itemWithStats);
+	_character.tokens -= int(selectedItem.get_node("Price").text);
+	_character.rpc("onItemPurchase", itemWithStats);
 	selectedItem = null;
 	
 	var newSound = AudioStreamPlayer.new();

@@ -117,11 +117,6 @@ func _selectGameMode():
 	choosingMode.DEBUG = DEBUG;
 	add_child(choosingMode);
 
-func onShopBuy(item: Button, playerId: String):
-	print("%s is trying to buy %s" % [playerId, item]);
-	var character = get_character_by_id(playerId);
-	print(character.CHARACTER_NAME);
-
 func _clearMap():
 	for child in $Map.get_children():
 		child.queue_free();
@@ -265,10 +260,10 @@ func onRoundVictory(winnerTeam: int):
 			teamThatHasWon = WHITE_TEAM;
 			teamWonGame.emit(teamThatHasWon);
 
-func get_character_by_id(playerId: String):
+func get_character_by_id(_playerId: String):
 	var charLookingFor = null;
 	for character in addedCharacters:
-		if (character.name == playerId):
+		if (character.name == _playerId):
 			charLookingFor = character;
 	
 	if not (charLookingFor):
