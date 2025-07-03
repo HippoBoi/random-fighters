@@ -1,0 +1,225 @@
+[gd_scene load_steps=22 format=4 uid="uid://c1tgglpb644av"]
+
+[ext_resource type="PackedScene" uid="uid://b36epdma8l818" path="res://assets/mapAssets/electric_central/mesh_electric_central.tscn" id="1_l3ivx"]
+[ext_resource type="Texture2D" uid="uid://3kx3ijaqi5gb" path="res://assets/textures/fx/spark_05.png" id="2_q5lg7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l3ivx"]
+size = Vector3(68.3361, 0.260262, 68.1143)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l3ivx"]
+
+[sub_resource type="Sky" id="Sky_y7koq"]
+sky_material = SubResource("ProceduralSkyMaterial_l3ivx")
+
+[sub_resource type="Environment" id="Environment_q5lg7"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_y7koq")
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 1.2
+glow_strength = 1.36
+glow_bloom = 0.05
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_we07w"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_q5lg7"]
+expanded_output_ports = [0]
+texture = ExtResource("2_q5lg7")
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_we07w"]
+default_input_values = [1, Vector2(2, 2), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_t6cn1"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_o4e20"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, -0.5)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_s4qr6"]
+default_input_values = [0, 0.0, 1, 0.5, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_qpdq6"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_psinm"]
+default_input_values = [1, 1.0, 2, 2.0, 3, 0.0, 4, 0.5]
+
+[sub_resource type="Gradient" id="Gradient_4cw0f"]
+offsets = PackedFloat32Array(0, 0.653179)
+colors = PackedColorArray(2, 0.372, 0.909, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_65kta"]
+gradient = SubResource("Gradient_4cw0f")
+use_hdr = true
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_u6yjt"]
+texture = SubResource("GradientTexture1D_65kta")
+
+[sub_resource type="VisualShader" id="VisualShader_6ukot"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D tex_frg_2;
+uniform sampler2D tex_frg_9;
+
+
+
+void fragment() {
+// Input:7
+	vec4 n_out7p0 = COLOR;
+
+
+	float n_out8p0;
+// Remap:8
+	float n_in8p1 = 1.00000;
+	float n_in8p2 = 2.00000;
+	float n_in8p3 = 0.00000;
+	float n_in8p4 = 0.50000;
+	{
+		float __input_range = n_in8p2 - n_in8p1;
+		float __output_range = n_in8p4 - n_in8p3;
+		n_out8p0 = n_in8p3 + __output_range * ((n_out7p0.x - n_in8p1) / __input_range);
+	}
+
+
+// Input:4
+	float n_out4p0 = TIME;
+
+
+// VectorOp:5
+	vec2 n_in5p1 = vec2(0.00000, -0.50000);
+	vec2 n_out5p0 = vec2(n_out4p0) * n_in5p1;
+
+
+// UVFunc:3
+	vec2 n_in3p1 = vec2(2.00000, 2.00000);
+	vec2 n_out3p0 = n_out5p0 * n_in3p1 + UV;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, n_out3p0);
+	float n_out2p1 = n_out2p0.r;
+
+
+// SmoothStep:6
+	float n_in6p1 = 0.50000;
+	float n_out6p0 = smoothstep(n_out8p0, n_in6p1, n_out2p1);
+
+
+// Texture2D:9
+	vec4 n_out9p0 = texture(tex_frg_9, vec2(n_out6p0));
+
+
+// Output:0
+	ALBEDO = vec3(n_out9p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+modes/cull = 2
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(1120, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_q5lg7")
+nodes/fragment/2/position = Vector2(-100, 320)
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_we07w")
+nodes/fragment/3/position = Vector2(-380, 300)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_t6cn1")
+nodes/fragment/4/position = Vector2(-880, 240)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_o4e20")
+nodes/fragment/5/position = Vector2(-600, 380)
+nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_s4qr6")
+nodes/fragment/6/position = Vector2(400, 380)
+nodes/fragment/7/node = SubResource("VisualShaderNodeInput_qpdq6")
+nodes/fragment/7/position = Vector2(-220, 40)
+nodes/fragment/8/node = SubResource("VisualShaderNodeRemap_psinm")
+nodes/fragment/8/position = Vector2(160, 120)
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_u6yjt")
+nodes/fragment/9/position = Vector2(660, 40)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 5, 0, 5, 0, 3, 2, 2, 1, 6, 2, 7, 0, 8, 0, 8, 0, 6, 0, 9, 0, 0, 0, 6, 0, 9, 0, 6, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xewp"]
+render_priority = 0
+shader = SubResource("VisualShader_6ukot")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_312ku"]
+_surfaces = [{
+"aabb": AABB(-3.51233, -0.019983, -0.919342, 6.57922, 15.444, 3.17365),
+"format": 34896613377,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEABQAEAAAABQAGAAQABwAGAAUABwAIAAYACQAIAAcACQAKAAgACwAKAAkACwAMAAoADQAMAAsADQAOAAwADwAOAA0ADwAQAA4AEQAQAA8AEQASABAAEwASABEAEwAUABIAFQAUABMAFQAWABQAFwAWABUAFwAYABYAGQAYABcAGQAaABgAGwAaABkAGwAcABoAHQAcABsAHQAeABwAHwAeAB0AHwAgAB4AIQAgAB8A"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 34,
+"vertex_data": PackedByteArray("Vdn/79ZvAABZnv/v//8AADva///QpwAA7pP//7z9AACkqv/fgeQAALXn/99tMQAAobL/z4nDAAD18v/PFgQAABWw/78NrAAA////vwAAAAAGpf+v36kAAA/9/68wGAAAdI3/n2G2AAC37P+f/D0AAJ9c/48awgAA5dD/j1FlAACzLf9/LbgAANqf/39hiwAAdg7/b8GoAABUgP9vdZEAAAAA/19LlgAAN3f/X1OJAABGCv9PQ4YAAFiJ/08qeAAAtir/P014AADDtf8/2mEAAG1Z/y8QagAAAdv/LxhTAACOdP8fXF4AAMzc/x+fUAAAgWz/DwNXAABCx/8P8FAAALliAADbUAAAELQAABRPAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5sjv8"]
+_surfaces = [{
+"aabb": AABB(-3.51233, -0.019983, -0.919342, 6.57922, 15.444, 3.17365),
+"attribute_data": PackedByteArray("////DwAA/w///wAAAAAAAAAA/x////8fAAD/L////y8AAP8/////PwAA/0////9PAAD/X////18AAP9v////bwAA/3////9/AAD/j////48AAP+f////nwAA/6////+vAAD/v////78AAP/P////zwAA/9/////fAAD/7////+8AAP///////w=="),
+"format": 34896613399,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEABQAEAAAABQAGAAQABwAGAAUABwAIAAYACQAIAAcACQAKAAgACwAKAAkACwAMAAoADQAMAAsADQAOAAwADwAOAA0ADwAQAA4AEQAQAA8AEQASABAAEwASABEAEwAUABIAFQAUABMAFQAWABQAFwAWABUAFwAYABYAGQAYABcAGQAaABgAGwAaABkAGwAcABoAHQAcABsAHQAeABwAHwAeAB0AHwAgAB4AIQAgAB8A"),
+"material": SubResource("ShaderMaterial_5xewp"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 34,
+"vertex_data": PackedByteArray("Vdn/79Zvy6JZnv/v//+loDva///Qp86d7pP//7z9qp2kqv/fgeQFprXn/99tMaymobL/z4nD2qX18v/PFgQUpRWw/78NrAmh////vwAADKEGpf+v36n+mg/9/68wGEqcdI3/n2G29JS37P+f/D0+l59c/48awtSO5dD/j1FlDpKzLf9/Lbg4itqf/39hi0uMdg7/b8GolIhUgP9vdZHTiAAA/19LljKIN3f/X1OJMIhGCv9PQ4bDh1iJ/08qeHGHtir/P014pYbDtf8/2mF/hW1Z/y8QasKEAdv/LxhTUYSOdP8fXF6kg8zc/x+fUKuDgWz/DwNX3IJCx/8P8FAFg7liAADbUJmCELQAABRPmYKGcyITam55F8tpgyDIZsodcXeoDHJ3Eg1DetUICny/BSV+xQIRfqECYXrhBzF7QgbWaZ8dIXIWETJXjDImXn4mE0TAQ99KwTeOLyBWNjPRTpki62A9IcdgSyAIYmQk8V6GKs9X1DZdTC8/dUM1Q+w+ukHeQKJBwT90LqNT6jGoTnUj9l1eIpVd")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_312ku")
+
+[node name="ElectricCentral" type="Node3D"]
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, 0, -8.74228e-08, -1.95399e-14, 1, 1.3027e-15, 8.74228e-08, 4.37518e-29, -1, -25, 0.591754, -24)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, 0, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, 4.37518e-29, -1, 25, 0.591751, 25.1478)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.382018, -0.978203)
+visible = false
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, -2.76004e-22, 0, -2.76004e-22, 1, 0, 0, 0, 1, 0.110268, -0.356785, 1.1924)
+shape = SubResource("BoxShape3D_l3ivx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_q5lg7")
+camera_attributes = SubResource("CameraAttributesPractical_we07w")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 12, 0)
+light_color = Color(0.650507, 0.648288, 0.778463, 1)
+light_energy = 0.1
+
+[node name="electricCentral" parent="." instance=ExtResource("1_l3ivx")]
+
+[node name="ThunderOnlyMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8208, 0, 0, 0, 1.43, 0, 0, 0, 1.6, 0.0102795, -6.23713, 0.388107)
+mesh = SubResource("ArrayMesh_5sjv8")
+
+[node name="ThunderOnlyMesh2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.58783e-08, 0, -1.6, 0, 1.43, 0, 0.8208, 0, -6.99382e-08, 0.0102795, -6.23713, 0.388107)
+mesh = SubResource("ArrayMesh_5sjv8")
+
+[node name="ThunderOnlyMesh3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.8208, 0, 1.39876e-07, 0, 1.43, 0, -7.17566e-08, 0, -1.6, 0.0102795, -6.23713, 0.388107)
+mesh = SubResource("ArrayMesh_5sjv8")

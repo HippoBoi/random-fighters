@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b36epdma8l818"]
+
+[ext_resource type="PackedScene" uid="uid://duorgeccd2yu2" path="res://assets/mapAssets/electric_central/electricCentral.glb" id="1_vg15v"]
+
+[node name="electricCentral" instance=ExtResource("1_vg15v")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

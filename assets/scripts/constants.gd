@@ -8,7 +8,8 @@ enum CursorTypes {
 enum GameModes {
 	Free_For_All,
 	Foggy_Vision,
-	Hippo_Capture
+	Hippo_Capture,
+	Doom_Bot
 }
 
 const items = [

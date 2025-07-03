@@ -17,12 +17,12 @@ height = 17.0
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xgn1c"]
 
-[sub_resource type="Sky" id="Sky_y7koq"]
+[sub_resource type="Sky" id="Sky_smvvh"]
 sky_material = SubResource("ProceduralSkyMaterial_xgn1c")
 
 [sub_resource type="Environment" id="Environment_6plii"]
 background_mode = 2
-sky = SubResource("Sky_y7koq")
+sky = SubResource("Sky_smvvh")
 ssao_enabled = true
 sdfgi_use_occlusion = true
 glow_enabled = true

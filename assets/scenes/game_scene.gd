@@ -49,6 +49,9 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "hippo_capture"):
 		newMap = preload("res://assets/maps/lake.tscn").instantiate();
 	
+	elif (gameMode.to_lower() == "doom_bot"):
+		newMap = preload("res://assets/maps/electric_central.tscn").instantiate();
+	
 	$Map.add_child(newMap);
 	
 	await get_tree().create_timer(0.5).timeout;
@@ -129,6 +132,8 @@ func _getModeDescription(gameMode: String):
 		description = "Watch your step...!"
 	elif (gameMode.to_lower() == "hippo_capture"):
 		description = "Capture the Hippo!"
+	elif (gameMode.to_lower() == "doom_bot"):
+		description = "Survive...!"
 	
 	return description;
 
