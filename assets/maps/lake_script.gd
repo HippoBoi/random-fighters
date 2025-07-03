@@ -23,6 +23,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
+		if (Engine.get_physics_frames() % 30 == 0):
+			_updateHippoSpeed();
+		
 		if (startTimer > 0):
 			startTimer -= delta;
 		else:
@@ -49,8 +52,13 @@ func _physics_process(delta: float) -> void:
 			curHippoPos = null;
 			_moveHippo();
 
+func _updateHippoSpeed():
+	var newSpeed = hippo.speedOffset - 1;
+	var finalSpeed = max(0, newSpeed);
+	
+	hippo.rpc("syncStats", finalSpeed);
+
 func _moveHippo():
-	print("changing dir!");
 	var possiblePos = positions.get_children();
 	var posLength = len(possiblePos) - 1;
 	var randomPos: MeshInstance3D = possiblePos[randi_range(0, posLength)];
@@ -67,4 +75,5 @@ func _setupHippo():
 		hippo.global_position = initialPos.global_position;
 		
 		hippo.rpc("syncPosition", hippo.global_position);
+		hippo.rpc("showUI");
 		_moveHippo();

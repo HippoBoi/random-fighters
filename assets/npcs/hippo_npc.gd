@@ -1,11 +1,11 @@
 extends CharacterBody3D
 
-@export var maxHp = 200.0;
-@export var hp = 200.0;
-@export var baseArmor = 14.5;
+@export var maxHp = 450.0;
+@export var hp = 450.0;
+@export var baseArmor = 10.0;
 @export var baseDmg = 17.0;
-@export var baseAttackRange = 3.2;
-@export var baseAttackSpeed = 3.5;
+@export var baseAttackRange = 4.0;
+@export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 4.0;
 @export var cooldownReduction = 0;
 var shield = 0;
@@ -192,70 +192,16 @@ func updateHealthSize():
 	healthBar.scale.x = hp / maxHp;
 	shieldBar.scale.x = shield / maxHp;
 
-func basicAttack():
-	basicDamageDealt = false;
-	basicAttacking = true;
-
 @rpc("call_local", "any_peer", "reliable")
-func playBasicAttack():
-	if (overrideBasic == false):
-		basicAttacking = true;
-		basicAttackTimer = BASIC_ATTACK_COOLDOWN;
-		animPlayer.play(basicAnimList[basicAnimPos]);
-		basicAnimPos += 1;
-		if (basicAnimPos >= basicAnimList.size()):
-			basicAnimPos = 0;
-	else:
-		var sound = preload("res://assets/sounds/characters/rhay/rhay_big_hit.ogg");
-		PlayerFunc.playSound(self, sound);
-		
-		dmgOffset = 0;
-		overrideBasic = false;
-		basicAttacking = true;
-		basicAttackTimer = BASIC_ATTACK_COOLDOWN * 0.5;
-		animPlayer.play("e_ability");
-
-func _setup_primary():
-	rpc("primary_ability");
-
-@rpc("call_local", "reliable")
-func primary_ability():
-	pass;
-
-func _setup_secondary():
-	if (mousePos.is_empty()):
-		return;
+func showUI():
+	var charUI = preload("res://assets/characters/character_ui.tscn").instantiate();
+	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
+	charUI.get_node("PlayerName/SubViewport/Label").text = "";
+	healthBar.color = Color(0.769, 0.17, 0.182);
+	add_child(charUI);
 	
-	rpc("secondary_ability", mousePos.position, global_position);
+	charUI.global_position.y = 4.0;
 
-@rpc("call_local", "reliable")
-func secondary_ability(_moveTo, _global_pos):
-	pass;
-	
-func _setup_tertiary():
-	if (mousePos.is_empty()):
-		return;
-	
-	rpc("tertiary_ability", mousePos.position);
-
-@rpc("call_local", "reliable")
-func tertiary_ability(_mousePos):
-	pass;
-
-func _setup_ultimate():
-	if not (hovering):
-		return;
-	
-	ultiTarget = hovering;
-	moveTo = ultiTarget.global_position;
-	moveTo.y = global_position.y;
-	
-	rpc("ultimate_ability", moveTo, global_position);
-
-@rpc("call_local", "reliable")
-func ultimate_ability(_moveTo, _global_pos):
-	pass;
-	
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):
 	target = _target;
@@ -264,6 +210,10 @@ func syncTarget(_target):
 func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
+	
+	var speedAmount = randf_range(2.0, 4.0);
+	speedOffset += speedAmount;
+	speedOffset = clamp(speedOffset, 0, 20.0);
 	
 	if not (attackerId.is_empty()):
 		var oldAttackerPos = assistedInKill.find(attackerId);
@@ -284,6 +234,10 @@ func syncPosition(newPos):
 @rpc("call_local", "any_peer")
 func syncRotation(newPos):
 	rotateChar(newPos);
+
+@rpc("call_local", "any_peer")
+func syncStats(_speedOffset):
+	speedOffset = _speedOffset;
 
 @rpc("any_peer")
 func syncStun(_isStunned, _stunDuration):

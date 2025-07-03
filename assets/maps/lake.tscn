@@ -83,10 +83,8 @@ camera_attributes = SubResource("CameraAttributesPractical_smvvh")
 
 [node name="lake_map" parent="." instance=ExtResource("1_xgn1c")]
 
-[node name="hippo" parent="." instance=ExtResource("2_6plii")]
-transform = Transform3D(0.284701, 0, 1.06252, 0, 1.1, 0, -1.06252, 0, 0.284701, -0.361395, 5.13633, 0.191586)
-
 [node name="HippoPos" type="Node3D" parent="."]
+visible = false
 
 [node name="pos1" type="MeshInstance3D" parent="HippoPos"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.161, 0, -20)
@@ -121,3 +119,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -31.6184)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox3/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.06402, -1.71301, 2.02383)
 shape = SubResource("CapsuleShape3D_smvvh")
+
+[node name="hippo" parent="." instance=ExtResource("2_6plii")]
+transform = Transform3D(0.184037, 0, 0.518296, 0, 0.55, 0, -0.518296, 0, 0.184037, -0.539642, 4.61405, -0.000790596)
