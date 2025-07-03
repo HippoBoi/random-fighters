@@ -154,7 +154,6 @@ func _updateGameUI(character: CharacterBody3D):
 		var tertAbility = abilityUI.get_node("tertiaryAbility");
 		var ultAbility = abilityUI.get_node("ultiAbility"); 
 		var UIlevel = abilityUI.get_node("level");
-		var UIxp = abilityUI.get_node("xp");
 		var UIrespawningText = abilityUI.get_node("respawningText");
 		var UIrespawnTimer = abilityUI.get_node("respawnTimer");
 		var UItokens = abilityUI.get_node("tokens");
@@ -165,7 +164,6 @@ func _updateGameUI(character: CharacterBody3D):
 		ultAbility.get_node("cooldown").scale.x = character.rTimer / character.R_COOLDOWN;
 		
 		UIlevel.text = str(character.level);
-		UIxp.text = str(character.xp);
 		UIrespawnTimer.text = str(roundf(character.respawnTimer * 100) / 100);
 		UItokens.text = str(character.tokens);
 		
@@ -360,7 +358,7 @@ func checkTeamLives(character: CharacterBody3D):
 		_onRoundEnd(gameScene, winnerTeam);
 
 func killCharacter(character: CharacterBody3D):
-	if (character.dead):
+	if (character.dead or character.CHARACTER_NAME == "SERVER"):
 		return;
 	
 	character.dead = true;

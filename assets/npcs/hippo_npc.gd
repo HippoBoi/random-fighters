@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @export var maxHp = 450.0;
 @export var hp = 450.0;
-@export var baseArmor = 10.0;
+@export var baseArmor = 7.0;
 @export var baseDmg = 17.0;
 @export var baseAttackRange = 4.0;
 @export var baseAttackSpeed = 4.0;
@@ -238,6 +238,68 @@ func syncRotation(newPos):
 @rpc("call_local", "any_peer")
 func syncStats(_speedOffset):
 	speedOffset = _speedOffset;
+
+@rpc("call_local", "any_peer", "reliable")
+func killHippo():
+	if (dead):
+		return;
+	
+	dead = true;
+	visible = false;
+	moveTo = global_position;
+	PlayerFunc.syncMovement(self);
+	
+	var scene = get_parent().get_parent().get_parent(); # lol
+	if (scene.name != "Game"):
+		print("[WARNING]: game node not found");
+		return;
+	
+	var invertedAssistsArray: Array = assistedInKill;
+	invertedAssistsArray.reverse();
+	
+	var index = 0;
+	var winnerTeam = -1;
+	for playerId in assistedInKill:
+		if (scene.name != "Game"):
+			print("[WARNING]: game node not found");
+			return;
+		
+		var character: CharacterBody3D = scene.get_character_by_id(playerId);
+		if (character):
+			if (index != 0):
+				break;
+			
+			character.level += 1;
+			winnerTeam = character.team;
+			
+		index += 1;
+	
+	if (winnerTeam == -1):
+		print("[WARNING]: couldn't find team that killed hippo");
+		return;
+	
+	for playerId in Server.playersInfo:
+		var playerData = Server.playersInfo[playerId];
+		var character = scene.get_character_by_id(str(playerData.playerID));
+		
+		if (character.team == winnerTeam):
+			character.tokens += 5;
+			character.hp += character.maxHp / 1.25;
+			character.hp = clamp(character.hp, 0, character.maxHp);
+			
+			var particles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
+			character.add_child(particles);
+			
+			particles.get_node("buffExplosion").emitting = true;
+			particles.get_node("sparkParticle").emitting = true;
+			particles.get_node("buffParticles").emitting = true;
+	
+	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
+	get_parent().add_child(particles);
+	
+	particles.global_position = global_position + Vector3(0, 2, 0);
+	particles.get_node("pointyParts").emitting = true;
+	particles.get_node("spiralParts").emitting = true;
 
 @rpc("any_peer")
 func syncStun(_isStunned, _stunDuration):

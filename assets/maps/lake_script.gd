@@ -26,21 +26,10 @@ func _physics_process(delta: float) -> void:
 		if (Engine.get_physics_frames() % 30 == 0):
 			_updateHippoSpeed();
 		
-		if (startTimer > 0):
-			startTimer -= delta;
-		else:
-			_setupHippo();
+		_handleTimers(delta);
 		
-		if (moveTimer > 0):
-			moveTimer -= delta;
-		else:
-			moveTimer = MOVE_COOLDOWN;
-			_moveHippo();
-		
-		if (turnTimer > 0):
-			turnTimer -= delta;
-		else:
-			turnTimer = TURN_COOLDOWN;
+		if (hippo.hp <= 0):
+			hippo.rpc("killHippo");
 		
 		if not (curHippoPos):
 			return;
@@ -51,6 +40,23 @@ func _physics_process(delta: float) -> void:
 			turnTimer = TURN_COOLDOWN;
 			curHippoPos = null;
 			_moveHippo();
+
+func _handleTimers(delta):
+	if (startTimer > 0):
+		startTimer -= delta;
+	else:
+		_setupHippo();
+	
+	if (moveTimer > 0):
+		moveTimer -= delta;
+	else:
+		moveTimer = MOVE_COOLDOWN;
+		_moveHippo();
+	
+	if (turnTimer > 0):
+		turnTimer -= delta;
+	else:
+		turnTimer = TURN_COOLDOWN;
 
 func _updateHippoSpeed():
 	var newSpeed = hippo.speedOffset - 1;
