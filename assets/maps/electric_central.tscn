@@ -1,7 +1,9 @@
-[gd_scene load_steps=27 format=4 uid="uid://c1tgglpb644av"]
+[gd_scene load_steps=29 format=4 uid="uid://c1tgglpb644av"]
 
 [ext_resource type="PackedScene" uid="uid://b36epdma8l818" path="res://assets/mapAssets/electric_central/mesh_electric_central.tscn" id="1_l3ivx"]
+[ext_resource type="Script" uid="uid://bwy5xtgc5jqs2" path="res://assets/maps/electric_central.gd" id="1_t6cn1"]
 [ext_resource type="Texture2D" uid="uid://3kx3ijaqi5gb" path="res://assets/textures/fx/spark_05.png" id="2_q5lg7"]
+[ext_resource type="PackedScene" uid="uid://df2n8yfa8o5bq" path="res://assets/npcs/will_bot/will_bot.tscn" id="3_we07w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l3ivx"]
 size = Vector3(68.3361, 0.260262, 68.1143)
@@ -197,6 +199,7 @@ size = Vector3(1.57962, 15.674, 2.49158)
 size = Vector3(0.224869, 12.002, 2.49158)
 
 [node name="ElectricCentral" type="Node3D"]
+script = ExtResource("1_t6cn1")
 
 [node name="spawnLocations" type="Node3D" parent="."]
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
@@ -230,14 +233,17 @@ light_energy = 0.1
 
 [node name="ThunderOnlyMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.8208, 0, 0, 0, 1.43, 0, 0, 0, 1.6, 0.0102795, -6.23713, 0.388107)
+visible = false
 mesh = SubResource("ArrayMesh_5sjv8")
 
 [node name="ThunderOnlyMesh2" type="MeshInstance3D" parent="."]
 transform = Transform3D(-3.58783e-08, 0, -1.6, 0, 1.43, 0, 0.8208, 0, -6.99382e-08, 0.0102795, -6.23713, 0.388107)
+visible = false
 mesh = SubResource("ArrayMesh_5sjv8")
 
 [node name="ThunderOnlyMesh3" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.8208, 0, 1.39876e-07, 0, 1.43, 0, -7.17566e-08, 0, -1.6, 0.0102795, -6.23713, 0.388107)
+visible = false
 mesh = SubResource("ArrayMesh_5sjv8")
 
 [node name="CollisisionBoxes" type="Node3D" parent="."]
@@ -350,3 +356,12 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.598
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisisionBoxes/CollissionBox12/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.78512, 0.18692, 3.38987)
 shape = SubResource("BoxShape3D_o4e20")
+
+[node name="willBot" parent="." instance=ExtResource("3_we07w")]
+transform = Transform3D(0.404008, 0, 0.373878, 0, 0.55, 0, -0.373199, 0, 0.404742, -0.241631, 0.834921, -0.445655)
+
+[node name="willLight" type="SpotLight3D" parent="."]
+transform = Transform3D(0.688393, 0, 0.725338, 0, 1, 0, -0.725338, 0, 0.688393, 3.85619, 3.99561, 3.63175)
+light_energy = 0.0
+spot_range = 7.0
+spot_attenuation = 0.12

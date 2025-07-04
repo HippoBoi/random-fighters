@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://df2n8yfa8o5bq"]
+
+[ext_resource type="PackedScene" uid="uid://cmkxvfts4so5b" path="res://assets/npcs/will_bot/willBot.glb" id="1_xsfxq"]
+
+[node name="willBot" instance=ExtResource("1_xsfxq")]
+
+[node name="Skeleton3D" parent="Will_Armature" index="0"]
+bones/0/position = Vector3(0, 0.789656, 0)
+bones/0/rotation = Quaternion(0.475518, 0, 0, 0.879706)
+bones/3/rotation = Quaternion(-0.177666, 0.0955005, -0.320427, 0.925549)
+bones/4/rotation = Quaternion(-0.302462, 0.078993, -0.102684, 0.944316)
+bones/5/rotation = Quaternion(0.00715656, 7.14392e-05, -0.00998362, 0.999925)
+bones/6/rotation = Quaternion(-0.192702, 0.00155848, 0.0649954, 0.979101)
+bones/7/rotation = Quaternion(-0.317565, 0.0331827, -0.0499362, 0.946339)
+bones/8/rotation = Quaternion(0.00738287, -7.94706e-06, 0.00107224, 0.999972)
+bones/9/rotation = Quaternion(-0.19337, -0.000963212, -0.0409012, 0.980272)
+bones/10/rotation = Quaternion(-0.317792, -0.0197016, 0.0351581, 0.947304)
+bones/11/rotation = Quaternion(0.00738791, 3.85318e-05, -0.005209, 0.999959)
+bones/12/rotation = Quaternion(-0.19037, -0.00378201, -0.155021, 0.969388)
+bones/13/rotation = Quaternion(-0.315136, -0.072205, 0.140599, 0.935793)
+bones/14/rotation = Quaternion(0.00718363, -2.00167e-05, 0.00278117, 0.99997)
+bones/18/rotation = Quaternion(-0.414057, -3.0268e-09, -0.0154181, 0.91012)
+bones/19/rotation = Quaternion(0.0155076, 9.55117e-10, 0.000577451, 0.99988)
+bones/20/rotation = Quaternion(-5.49618e-08, 3.63795e-12, -2.1624e-09, 1)
