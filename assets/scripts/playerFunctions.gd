@@ -317,6 +317,7 @@ func _onRoundEnd(gameScene, winnerTeam):
 	for playerId in Server.playersInfo:
 		var playerData = Server.playersInfo[playerId];
 		var character = gameScene.get_character_by_id(str(playerData.playerID));
+		character.level += 1;
 		character.tokens += 10;
 		
 	if (gameScene.name == "Game"):
