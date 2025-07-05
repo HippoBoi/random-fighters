@@ -9,7 +9,7 @@ const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
-var pointsToWin = 3;
+var pointsToWin = 1;
 var teamThatHasWon = -1;
 
 var gameOver = false;
@@ -240,7 +240,7 @@ func _playRoundEndAnimation(winnerTeam: int):
 	if not (gameOver):
 		_selectGameMode();
 	else:
-		print("[WARNING]: GAME HAS OVER!!");
+		_endGameScreen(teamThatHasWon);
 
 func onRoundVictory(winnerTeam: int):
 	PlayerFunc.gameStarted = false;
@@ -254,9 +254,6 @@ func onRoundVictory(winnerTeam: int):
 			whiteTeamWins += 1;
 		
 		syncTeamWins.emit(blackTeamWins, whiteTeamWins);
-	
-		print("[SERVER]: BLACK WINS: ", blackTeamWins);
-		print("[SERVER]: WHITE WINS: ", whiteTeamWins);
 		
 		if (blackTeamWins >= pointsToWin):
 			teamThatHasWon = BLACK_TEAM;
@@ -281,3 +278,38 @@ func endGame(_teamThatHasWon: int):
 	gameOver = true;
 	teamThatHasWon = _teamThatHasWon;
 	print("THIS TEAM: %s HAS WON THE GAAEEMMM" % _teamThatHasWon);
+
+func _endGameScreen(_teamThatHasWon):
+	var character = get_character_by_id(str(playerId));
+	var gameOverScene = preload("res://assets/scenes/end_game.tscn").instantiate();
+	add_child(gameOverScene);
+	
+	var winnersNode = gameOverScene.get_node("Winners");
+	var winnersContainer = winnersNode.get_node("WinnersContainer");
+	var winnerTeamText = winnersNode.get_node("TeamColor");
+	var statusText = gameOverScene.get_node("statusText");
+	var loopingStatusText = gameOverScene.get_node("loopingStatus");
+	
+	for playerId in Server.playersInfo:
+		var playerData = Server.playersInfo[playerId];
+		var playerChar = get_character_by_id(str(playerId));
+		if (playerChar.team == _teamThatHasWon):
+			var newName: RichTextLabel = winnersContainer.get_node("Template").duplicate();
+			winnersContainer.add_child(newName);
+			
+			newName.text = str(playerData.username);
+			newName.visible = true;
+	
+	if (_teamThatHasWon == 0):
+		winnerTeamText.text = "Black Team";
+	else:
+		winnerTeamText.text = "White Team";
+	
+	if (character.team == _teamThatHasWon):
+		statusText.text = "[b]Victory[b]";
+		statusText.modulate = Color(0.5, 1.0, 1.0);
+		loopingStatusText.text = "Victory";
+	else:
+		statusText.text = "[b]Defeat[b]";
+		statusText.modulate = Color(1.0, 0.25, 0.0);
+		loopingStatusText.text = "Defeat";

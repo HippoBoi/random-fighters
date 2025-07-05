@@ -3,10 +3,10 @@ extends Control
 @onready var horizontalBg = $"../HorizontalBG";
 @onready var verticalBg = $"../VerticalBG";
 
-const primColor = Color(1.0, 0, 0, 0.45);
-const secColor = Color(0.5, 0.25, 0.4, 0.45);
-const tertColor = Color(0.5, 0.1, 0.75, 0.45);
-const fortColor = Color(0.25, 0.05, 1.0, 0.45);
+const primColor = Color(1.0, 0.5, 0, 0.45);
+const secColor = Color(0.5, 0.5, 0.5, 0.45);
+const tertColor = Color(0.75, 0.25, 1.0, 0.45);
+const fortColor = Color(0.5, 0.35, 0.25, 0.45);
 
 func _tween_colors(horColor: Color, verColor: Color):
 	var tween = get_tree().create_tween();

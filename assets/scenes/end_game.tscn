@@ -1,0 +1,312 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgkuuqd0peuxk"]
+
+[ext_resource type="Script" uid="uid://c77ydiooaiofh" path="res://assets/scenes/end_game.gd" id="1_bktvi"]
+[ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="3_ajo2i"]
+[ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="6_jy2q5"]
+[ext_resource type="Texture2D" uid="uid://rl54fx2l08qf" path="res://assets/textures/bars.png" id="7_l2w2j"]
+[ext_resource type="Texture2D" uid="uid://c3glmdtq8xxac" path="res://assets/textures/bars - copia.png" id="8_r0jio"]
+
+[sub_resource type="GDScript" id="GDScript_j35p6"]
+script/source = "extends Control
+
+@onready var horizontalBg = $\"../HorizontalBG\";
+@onready var verticalBg = $\"../VerticalBG\";
+
+const primColor = Color(1.0, 0, 0, 0.45);
+const secColor = Color(0.5, 0.25, 0.4, 0.45);
+const tertColor = Color(0.5, 0.1, 0.75, 0.45);
+const fortColor = Color(0.25, 0.05, 1.0, 0.45);
+
+func _tween_colors(horColor: Color, verColor: Color):
+	var tween = get_tree().create_tween();
+	tween.tween_property(horizontalBg, \"material:shader_parameter/initial_color\", horColor, 1.0);
+	tween = get_tree().create_tween();
+	tween.tween_property(verticalBg, \"material:shader_parameter/initial_color\", verColor, 1.0);
+	await get_tree().create_timer(1.0).timeout;
+	
+	return true;
+
+func _play_colors_animation():
+	await _tween_colors(primColor, secColor);
+	await _tween_colors(secColor, tertColor);
+	await _tween_colors(tertColor, fortColor);
+	await _tween_colors(fortColor, primColor);
+	
+	_play_colors_animation();
+
+func _ready() -> void:
+	_play_colors_animation();
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xveiu"]
+shader = ExtResource("3_ajo2i")
+shader_parameter/initial_color = Color(1, 1, 1, 0)
+shader_parameter/final_color = Color(0, 0, 0, 0.612)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0lt2v"]
+shader = ExtResource("3_ajo2i")
+shader_parameter/initial_color = Color(0.189535, 0.0996462, 0.272148, 0.45)
+shader_parameter/final_color = Color(0.5, 0, 0, 0.45)
+shader_parameter/vertical = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mpuvj"]
+shader = ExtResource("3_ajo2i")
+shader_parameter/initial_color = Color(0, 0, 0.5, 0.45)
+shader_parameter/final_color = Color(5.17406e-07, 0.304013, 0.233154, 0.45)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5jk3c"]
+shader = ExtResource("6_jy2q5")
+shader_parameter/MOVE_SPEED = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_awl5g"]
+shader = ExtResource("6_jy2q5")
+shader_parameter/MOVE_SPEED = 0.25
+
+[node name="EndGame" type="Control"]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bktvi")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -8
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.296, 0.296, 0.296, 1)
+script = SubResource("GDScript_j35p6")
+
+[node name="statusText" type="RichTextLabel" parent="."]
+modulate = Color(1, 0.25, 0, 1)
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -173.0
+offset_top = -8.0
+offset_right = 173.0
+offset_bottom = 96.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 30
+theme_override_font_sizes/bold_font_size = 50
+bbcode_enabled = true
+text = "[b]<status>[b]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Winners" type="Control" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -123.0
+offset_top = -130.0
+offset_right = 135.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BgGradient" type="ColorRect" parent="Winners"]
+z_index = -1
+material = SubResource("ShaderMaterial_xveiu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TeamColor" type="RichTextLabel" parent="Winners"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 198.0
+offset_right = 256.0
+offset_bottom = 238.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 26
+text = "<winner> Team"
+horizontal_alignment = 1
+
+[node name="WinsText" type="RichTextLabel" parent="Winners"]
+layout_mode = 0
+offset_left = -4.0
+offset_top = 225.0
+offset_right = 254.0
+offset_bottom = 269.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[b]WINS[b]"
+horizontal_alignment = 1
+
+[node name="WinnersContainer" type="VBoxContainer" parent="Winners"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 43.0
+offset_right = 3.0
+offset_bottom = -105.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+theme_override_constants/separation = -5
+alignment = 1
+
+[node name="Template" type="RichTextLabel" parent="Winners/WinnersContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+text = "asdasdasd"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="HorizontalBG" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_0lt2v")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VerticalBG" type="Panel" parent="."]
+material = SubResource("ShaderMaterial_mpuvj")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="loopingStatus" type="RichTextLabel" parent="."]
+modulate = Color(0.64, 0.653, 0.661, 0.5)
+z_index = -1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 292.0
+offset_top = -199.0
+offset_right = 783.0
+offset_bottom = -92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/normal_font_size = 58
+text = "Victory/Defeat"
+vertical_alignment = 1
+
+[node name="loopingBG" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.2)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_5jk3c")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("7_l2w2j")
+stretch_mode = 1
+
+[node name="loopingBG3" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.188)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_awl5g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("8_r0jio")
+stretch_mode = 1
+
+[node name="loopingBG4" type="TextureRect" parent="."]
+modulate = Color(0.785, 0.815, 0.739, 0.188)
+light_mask = 0
+z_index = -8
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_awl5g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+offset_right = 640.0
+offset_bottom = 364.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("8_r0jio")
+stretch_mode = 1
+flip_v = true
+
+[node name="returnToLobby" type="Button" parent="."]
+z_index = 2
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -39.0
+offset_right = 68.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 15
+text = "Return to Lobby"
