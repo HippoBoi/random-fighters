@@ -287,12 +287,12 @@ func killHippo():
 			character.hp += character.maxHp / 1.25;
 			character.hp = clamp(character.hp, 0, character.maxHp);
 			
-			var particles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
-			character.add_child(particles);
+			var newParticles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
+			character.add_child(newParticles);
 			
-			particles.get_node("buffExplosion").emitting = true;
-			particles.get_node("sparkParticle").emitting = true;
-			particles.get_node("buffParticles").emitting = true;
+			newParticles.get_node("buffExplosion").emitting = true;
+			newParticles.get_node("sparkParticle").emitting = true;
+			newParticles.get_node("buffParticles").emitting = true;
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	get_parent().add_child(particles);

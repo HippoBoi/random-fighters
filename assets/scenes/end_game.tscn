@@ -199,6 +199,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="VerticalBG" type="Panel" parent="."]
 material = SubResource("ShaderMaterial_mpuvj")
@@ -208,6 +209,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="loopingStatus" type="RichTextLabel" parent="."]
 modulate = Color(0.64, 0.653, 0.661, 0.5)
@@ -224,6 +226,7 @@ offset_right = 783.0
 offset_bottom = -92.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_offset_x = 1
@@ -310,3 +313,5 @@ grow_vertical = 0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 15
 text = "Return to Lobby"
+
+[connection signal="pressed" from="returnToLobby" to="." method="_on_return_pressed"]

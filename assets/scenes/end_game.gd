@@ -4,6 +4,10 @@ extends Control
 var bgNamesCreated = [];
 var bgNamesTimer = 0;
 
+var playerId;
+
+signal returnToLobby(playerId);
+
 func _process(delta: float) -> void:
 	_animate_bg_mode_name(delta);
 
@@ -29,3 +33,6 @@ func _animate_bg_mode_name(_delta):
 	add_child(newName);
 	
 	bgNamesCreated.append(newName);
+
+func _on_return_pressed() -> void:
+	returnToLobby.emit(playerId);

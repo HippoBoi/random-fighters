@@ -176,6 +176,33 @@ func _onSyncTeamWins(blackTeamWins: int, whiteTeamWins: int):
 func _onTeamWonGame(_teamThatWon: int):
 	rpc("teamHasWon", _teamThatWon);
 
+func _onReturnToLobby(playerId):
+	multiplayerPeer.close();
+	
+	var isScene = has_node("Game");
+	if (isScene):
+		var gameScene = get_node("Game");
+		gameScene.queue_free();
+	
+	_clearRoundData();
+	returnToLobby();
+	
+func _clearRoundData():
+	connected = false;
+	gameStarted = false;
+	roundStarted = false;
+	curTeam = -1;
+	curCharacter = "";
+	curGameMode = "";
+	totalPlayers = 0;
+	timer = 0;
+	startRoundTimer = 0.0;
+	playersLockedIn = [];
+	selectedCharacters = [];
+	Server.playersInfo = {};
+	
+	$UI.visible = true;
+
 @rpc
 func addNewPlayerCharacter(newPlayerID):
 	addCharacter(newPlayerID);
@@ -291,6 +318,7 @@ func startGame():
 	gameScene.roundVictory.connect(_onRoundVictory);
 	gameScene.syncTeamWins.connect(_onSyncTeamWins);
 	gameScene.teamWonGame.connect(_onTeamWonGame);
+	gameScene.returnToLobby.connect(_onReturnToLobby);
 	gameScene.playerId = playerId;
 	gameScene.DEBUG = DEBUG;
 	add_child(gameScene);

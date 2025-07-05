@@ -19,6 +19,7 @@ signal gameModeSelected(gamemode);
 signal roundVictory(team);
 signal syncTeamWins(blackTeamWins, whiteTeamWins);
 signal teamWonGame(teamThatHasWon);
+signal returnToLobby(playerId);
 
 func _ready() -> void:
 	if (currentGameMode.is_empty()):
@@ -284,15 +285,20 @@ func _endGameScreen(_teamThatHasWon):
 	var gameOverScene = preload("res://assets/scenes/end_game.tscn").instantiate();
 	add_child(gameOverScene);
 	
+	gameOverScene.playerId = playerId;
+	gameOverScene.returnToLobby.connect(func(_playerId):
+		returnToLobby.emit(_playerId);
+	);
+	
 	var winnersNode = gameOverScene.get_node("Winners");
 	var winnersContainer = winnersNode.get_node("WinnersContainer");
 	var winnerTeamText = winnersNode.get_node("TeamColor");
 	var statusText = gameOverScene.get_node("statusText");
 	var loopingStatusText = gameOverScene.get_node("loopingStatus");
 	
-	for playerId in Server.playersInfo:
-		var playerData = Server.playersInfo[playerId];
-		var playerChar = get_character_by_id(str(playerId));
+	for _playerId in Server.playersInfo:
+		var playerData = Server.playersInfo[_playerId];
+		var playerChar = get_character_by_id(str(_playerId));
 		if (playerChar.team == _teamThatHasWon):
 			var newName: RichTextLabel = winnersContainer.get_node("Template").duplicate();
 			winnersContainer.add_child(newName);
