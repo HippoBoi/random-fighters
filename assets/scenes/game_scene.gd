@@ -9,7 +9,7 @@ const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
-var pointsToWin = 1;
+var pointsToWin = 3;
 var teamThatHasWon = -1;
 
 var gameOver = false;

@@ -45,7 +45,7 @@ const items = [
 			"attackSpeed": 4,
 			"cooldownReduction": 1.5,
 		},
-		"texture": "res://assets/textures/Kris_Overworld_b.webp"
+		"texture": "res://assets/textures/items/placeholder.png"
 	},
 	{
 		"name": "Divino",

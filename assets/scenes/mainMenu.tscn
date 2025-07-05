@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ysdddut54uvw"]
+[gd_scene load_steps=11 format=3 uid="uid://ysdddut54uvw"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_6tsn0"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_2cgkr"]
@@ -8,6 +8,12 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8at84"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4agkw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmwfe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cygf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cygf"]
 shader = ExtResource("3_4agkw")
@@ -66,7 +72,10 @@ offset_bottom = 33.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+disabled = true
 text = "Options"
 alignment = 0
 
@@ -79,7 +88,10 @@ offset_bottom = 83.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+disabled = true
 text = "Credits"
 alignment = 0
 
