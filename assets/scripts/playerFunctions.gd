@@ -409,7 +409,7 @@ func spawnCharacter(character: CharacterBody3D):
 	character.dead = false;
 	character.visible = true;
 	character.inFog = false;
-	character.lives = 1;
+	character.lives = 2;
 	character.fogInstances = [];
 	
 	character.qTimer = 0;
