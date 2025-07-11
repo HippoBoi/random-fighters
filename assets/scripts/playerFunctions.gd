@@ -23,6 +23,8 @@ var blackTeamSize = 0;
 var whiteTeamStocks = 0;
 var whiteTeamSize = 0;
 
+var updateTimer = 0;
+
 var myFogInstances = [];
 
 func _getMousePos(character):
@@ -240,6 +242,7 @@ func updateState(character: CharacterBody3D, delta):
 	myFogInstances = character.fogInstances;
 	character.mousePos = _getMousePos(character);
 	character.timer += delta;
+	updateTimer += delta;
 	
 	for fog in myFogInstances:
 		if (fog):
@@ -648,11 +651,12 @@ func dealDamage(character, target, dmg, effect := ""):
 		target.hp -= totalDmg;
 		target.hp = clamp(target.hp, 0, target.maxHp);
 	
-	target.rpc("syncHealth", target.hp, true, character.name);
-	target.rpc("syncShield", target.shield);
+	if (updateTimer >= 0.1):
+		updateTimer = 0;
+		target.rpc("syncHealth", target.hp, target.shield, true, character.name);
 	
-	if not (effect.is_empty()):
-		target.rpc("syncParticles", effect);
+	# if not (effect.is_empty()):
+		# target.rpc("syncParticles", effect);
 
 func stunTarget(target, duration, effect := ""):
 	target.stunned = true;

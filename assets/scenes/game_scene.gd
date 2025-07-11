@@ -19,7 +19,7 @@ signal gameModeSelected(gamemode);
 signal roundVictory(team);
 signal syncTeamWins(blackTeamWins, whiteTeamWins);
 signal teamWonGame(teamThatHasWon);
-signal returnToLobby(playerId);
+signal returnToLobby;
 
 func _ready() -> void:
 	if (currentGameMode.is_empty()):
@@ -286,8 +286,8 @@ func _endGameScreen(_teamThatHasWon):
 	add_child(gameOverScene);
 	
 	gameOverScene.playerId = playerId;
-	gameOverScene.returnToLobby.connect(func(_playerId):
-		returnToLobby.emit(_playerId);
+	gameOverScene.returnToLobby.connect(func():
+		returnToLobby.emit();
 	);
 	
 	var winnersNode = gameOverScene.get_node("Winners");

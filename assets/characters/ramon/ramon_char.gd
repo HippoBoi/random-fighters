@@ -123,7 +123,7 @@ func _physics_process(delta: float) -> void:
 		if (Engine.get_physics_frames() % 30 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
-			rpc("syncHealth", hp);
+			rpc("syncHealth", hp, shield);
 		
 		PlayerFunc.updateState(self, delta);
 		
@@ -423,8 +423,9 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, damaged = false, attackerId: String = ""):
+func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
 	hp = curHealth;
+	shield = curShield;
 	PlayerFunc.updateHealthSize(self, damaged);
 	
 	if not (attackerId.is_empty()):
@@ -433,11 +434,6 @@ func syncHealth(curHealth, damaged = false, attackerId: String = ""):
 			assistedInKill.remove_at(oldAttackerPos);
 		
 		assistedInKill.append(attackerId);
-
-@rpc("any_peer", "reliable")
-func syncShield(curShield):
-	shield = curShield;
-	PlayerFunc.updateHealthSize(self);
 
 @rpc
 func syncPosition(newPos):

@@ -176,7 +176,7 @@ func _onSyncTeamWins(blackTeamWins: int, whiteTeamWins: int):
 func _onTeamWonGame(_teamThatWon: int):
 	rpc("teamHasWon", _teamThatWon);
 
-func _onReturnToLobby(playerId):
+func _onReturnToLobby():
 	multiplayerPeer.close();
 	
 	var isScene = has_node("Game");

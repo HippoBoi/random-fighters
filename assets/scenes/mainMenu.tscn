@@ -75,7 +75,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
-disabled = true
 text = "Options"
 alignment = 0
 
@@ -91,7 +90,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
-disabled = true
 text = "Credits"
 alignment = 0
 

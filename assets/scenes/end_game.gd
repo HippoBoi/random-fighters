@@ -6,7 +6,7 @@ var bgNamesTimer = 0;
 
 var playerId;
 
-signal returnToLobby(playerId);
+signal returnToLobby;
 
 func _process(delta: float) -> void:
 	_animate_bg_mode_name(delta);
@@ -35,4 +35,4 @@ func _animate_bg_mode_name(_delta):
 	bgNamesCreated.append(newName);
 
 func _on_return_pressed() -> void:
-	returnToLobby.emit(playerId);
+	returnToLobby.emit();
