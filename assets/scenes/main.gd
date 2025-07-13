@@ -20,7 +20,7 @@ var connected = false;
 var gameStarted = false;
 var roundStarted = false;
 
-var DEBUG = false;
+var DEBUG = true;
 
 func _ready() -> void:
 	Cursor.changeCursor(Constants.CursorTypes.cursor);

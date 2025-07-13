@@ -118,7 +118,7 @@ func rotateChar(newPos) -> void:
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
-		if (Engine.get_physics_frames() % 30 == 0):
+		if (Engine.get_physics_frames() % 60 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
 			rpc("syncHealth", hp, shield);

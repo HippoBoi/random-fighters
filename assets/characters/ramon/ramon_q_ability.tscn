@@ -1,4 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvlwqvmuvg454"]
+[gd_scene load_steps=6 format=3 uid="uid://dvlwqvmuvg454"]
+
+[ext_resource type="Script" uid="uid://diqyv4lq5p1jb" path="res://assets/characters/ramon/ramon_q_ability.gd" id="1_0wk4k"]
 
 [sub_resource type="Curve" id="Curve_yl2jj"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.717822, 0.849057), 0.0, 0.0, 0, 0, Vector2(1, 0.230189), 0.0, 0.0, 0, 0]
@@ -24,6 +26,7 @@ scale_curve = SubResource("CurveTexture_fwfml")
 size = Vector3(1, 0.05, 1)
 
 [node name="RamonQAbility" type="Node3D"]
+script = ExtResource("1_0wk4k")
 
 [node name="parts" type="GPUParticles3D" parent="."]
 emitting = false
@@ -33,3 +36,10 @@ explosiveness = 0.32
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_g0m8x")
 draw_pass_1 = SubResource("BoxMesh_ebm5c")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

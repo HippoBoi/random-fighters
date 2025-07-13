@@ -222,7 +222,7 @@ func syncHealth(curHealth, shield, damaged = false, attackerId: String = ""):
 		
 		assistedInKill.append(attackerId);
 	
-@rpc("any_peer", "reliable")
+@rpc("any_peer")
 func syncPosition(newPos):
 	global_position = newPos;
 

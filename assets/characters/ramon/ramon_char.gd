@@ -18,7 +18,7 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Ramón";
-const Q_COOLDOWN = 6.0;
+const Q_COOLDOWN = 5.0;
 const W_COOLDOWN = 10.0;
 const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 60.0;
@@ -120,7 +120,7 @@ func rotateChar(newPos) -> void:
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
-		if (Engine.get_physics_frames() % 30 == 0):
+		if (Engine.get_physics_frames() % 60 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
 			rpc("syncHealth", hp, shield);

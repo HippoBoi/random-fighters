@@ -26,6 +26,7 @@ var whiteTeamSize = 0;
 var updateTimer = 0;
 
 var myFogInstances = [];
+var maxHpStored = {};
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -655,8 +656,8 @@ func dealDamage(character, target, dmg, effect := ""):
 		updateTimer = 0;
 		target.rpc("syncHealth", target.hp, target.shield, true, character.name);
 	
-	# if not (effect.is_empty()):
-		# target.rpc("syncParticles", effect);
+		if not (effect.is_empty()):
+			target.rpc("syncParticles", effect);
 
 func stunTarget(target, duration, effect := ""):
 	target.stunned = true;
@@ -784,7 +785,20 @@ func showCharactersUI(character):
 	
 	character.showingUIs = true;
 
+func _hasMaxHpChanged(character: CharacterBody3D):
+	if not (maxHpStored.has(character.name)):
+		maxHpStored[character.name] = 0;
+		
+	if (maxHpStored[character.name] != character.maxHp):
+		maxHpStored[character.name] = character.maxHp;
+		return true;
+	
+	return false;
+	
 func _calculateHealthBars(character: CharacterBody3D):
+	if not (_hasMaxHpChanged(character)):
+		return;
+	
 	var charUI = character.get_node("CharacterUI");
 	var emptyBar = charUI.get_node("HealthUI/SubViewport/emptyBar");
 	var templateBar = emptyBar.get_node("templateBar");
