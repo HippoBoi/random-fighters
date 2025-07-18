@@ -39,11 +39,11 @@ const items = [
 		"texture": "res://assets/textures/items/heaven_shield.png"
 	},
 	{
-		"name": "kris",
-		"price": 30,
+		"name": "Epic Rod",
+		"price": 25,
 		"stats": {
-			"attackSpeed": 4,
-			"cooldownReduction": 1.5,
+			"dmg": 3,
+			"cooldownReduction": 2.0,
 		},
 		"texture": "res://assets/textures/items/placeholder.png"
 	},

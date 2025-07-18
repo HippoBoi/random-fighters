@@ -534,8 +534,12 @@ func updateGlobally(character: CharacterBody3D, _delta):
 	character.dmg = character.baseDmg + character.dmgOffset;
 	character.armor = character.baseArmor + character.armorOffset;
 	character.attackRange = character.baseAttackRange + character.attackRangeOffset;
-	character.attackSpeed = character.baseAttackSpeed + character.attackSpeedOffset;
 	character.speed = (character.baseSpeed + character.speedOffset) * character.speedMultiplier;
+	
+	if (character.CHARACTER_NAME != "Ale"):
+		character.attackSpeed = character.baseAttackSpeed + character.attackSpeedOffset;
+	else:
+		character.dmg = character.dmg + character.attackSpeedOffset;
 	
 	if not (character.onAction or character.stunned or character.dead):
 		if (character.bufferedInput):
@@ -837,6 +841,14 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	healthBar.scale.x = character.hp / character.maxHp;
 	shieldBar.scale.x = character.shield / character.maxHp;
 	levelText.text = str(character.level);
+	
+	if ("stamina" in character):
+		var emptyStaminaBar = charUI.get_node("HealthUI/SubViewport/emptyBotBar");
+		var staminaBar = charUI.get_node("HealthUI/SubViewport/emptyBotBar/bottomBar");
+		staminaBar.scale.x = character.stamina / character.maxStamina;
+		
+		if not (emptyStaminaBar.visible):
+			emptyStaminaBar.visible = true;
 	
 	_calculateHealthBars(character);
 	

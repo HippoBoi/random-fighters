@@ -88,6 +88,38 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="emptyBotBar" type="ColorRect" parent="HealthUI/SubViewport"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = 8.0
+offset_right = 55.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.4)
+size_flags_horizontal = 4
+color = Color(0.16938, 0.173508, 0.164457, 1)
+
+[node name="bottomBar" type="ColorRect" parent="HealthUI/SubViewport/emptyBotBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -5.0
+offset_right = 55.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1.73271e-06, 0.6705, 0.279753, 1)
+
 [node name="levelPanel" type="Panel" parent="HealthUI/SubViewport"]
 anchors_preset = 4
 anchor_top = 0.5

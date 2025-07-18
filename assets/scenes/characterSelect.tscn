@@ -297,7 +297,7 @@ grow_vertical = 2
 rotation = 0.523599
 color = Color(0, 0, 0, 1)
 
-[node name="Characters" type="BoxContainer" parent="."]
+[node name="Characters" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -310,11 +310,14 @@ offset_right = 216.0
 offset_bottom = 54.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 80
-alignment = 1
 
 [node name="rhay" type="Control" parent="Characters"]
 layout_mode = 2
+anchors_preset = 0
+offset_left = 84.0
+offset_top = -32.0
+offset_right = 84.0
+offset_bottom = 38.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/rhay"]
@@ -377,6 +380,11 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 
 [node name="ramon" type="Control" parent="Characters"]
 layout_mode = 2
+anchors_preset = 0
+offset_left = 172.0
+offset_top = -32.0
+offset_right = 172.0
+offset_bottom = 38.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/ramon"]
@@ -435,6 +443,11 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 
 [node name="clean" type="Control" parent="Characters"]
 layout_mode = 2
+anchors_preset = 0
+offset_left = 259.0
+offset_top = -32.0
+offset_right = 259.0
+offset_bottom = 38.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/clean"]
@@ -494,6 +507,11 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 
 [node name="shugo" type="Control" parent="Characters"]
 layout_mode = 2
+anchors_preset = 0
+offset_left = 348.0
+offset_top = -32.0
+offset_right = 348.0
+offset_bottom = 38.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/shugo"]
@@ -553,6 +571,11 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 
 [node name="nephi" type="Control" parent="Characters"]
 layout_mode = 2
+anchors_preset = 0
+offset_left = 83.0
+offset_top = 48.0
+offset_right = 163.0
+offset_bottom = 118.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/nephi"]
@@ -593,6 +616,70 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="Characters/nephi"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -35.0
+offset_right = 35.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+
+[node name="ale" type="Control" parent="Characters"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 184.0
+offset_top = 48.0
+offset_right = 264.0
+offset_bottom = 118.0
+size_flags_horizontal = 0
+
+[node name="CharacterSplash" type="TextureRect" parent="Characters/ale"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -31.0
+offset_right = 35.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_1lgrt")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterName" type="RichTextLabel" parent="Characters/ale"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -49.5
+offset_right = 37.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Ale"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Characters/ale"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
