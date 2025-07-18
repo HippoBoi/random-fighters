@@ -1,14 +1,14 @@
 extends CharacterBody3D
 
-@export var maxHp = 160.0;
-@export var hp = 160.0;
+@export var maxHp = 180.0;
+@export var hp = 180.0;
 @export var maxStamina = 100.0;
 @export var stamina = 100.0;
-@export var baseArmor = 16.5;
+@export var baseArmor = 18.0;
 @export var baseDmg = 18.0;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
-@export var baseSpeed = 6.0;
+@export var baseSpeed = 5.0;
 @export var cooldownReduction = 0;
 var shield = 0;
 
@@ -22,6 +22,10 @@ const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 1.0;
 const W_MAX_RANGE = 5.5;
 const R_MAX_RANGE = 8.2;
+const Q_STAMINA = 15;
+const W_STAMINA = 15;
+const E_STAMINA = 15;
+const R_STAMINA = 20;
 
 var qTimer = 0;
 var wTimer = 0;
@@ -60,6 +64,7 @@ var basicAttackTimer = 0;
 var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.475;
 var onAction = false;
 var overrideBasic = false;
+var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
 var primaryTimer = 0;
@@ -86,6 +91,9 @@ var xp = 0;
 var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
+
+var staminaRecover = 0.1;
+var maxStaminaRecover = 10.0;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -118,10 +126,11 @@ func rotateChar(newPos) -> void:
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
-		if (Engine.get_physics_frames() % 60 == 0):
+		if (Engine.get_physics_frames() % 45 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
 			rpc("syncHealth", hp, shield);
+			rpc("syncStamina", stamina);
 		
 		PlayerFunc.updateState(self, delta);
 		
@@ -137,13 +146,13 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_anything_pressed()):
 			var action = null;
 			
-			if (Input.is_action_just_pressed("primary") and qTimer <= 0):
+			if (Input.is_action_just_pressed("primary") and qTimer <= 0 and stamina >= Q_STAMINA):
 				action = Callable(self, "_setup_primary");
-			if (Input.is_action_just_pressed("secondary") and wTimer <= 0):
+			if (Input.is_action_just_pressed("secondary") and wTimer <= 0 and stamina >= W_STAMINA):
 				action = Callable(self, "_setup_secondary");
-			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0):
+			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0 and stamina >= E_STAMINA):
 				action = Callable(self, "_setup_tertiary");
-			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0):
+			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0 and stamina >= R_STAMINA):
 				action = Callable(self, "_setup_ultimate");
 			
 			if (action):
@@ -153,16 +162,35 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var totalDmg = dmg * 1.65;
+			var totalDmg = dmg * 1.75;
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
 			basicDamageDealt = true;
 			
 			stamina -= 15;
-			rpc("syncStamina");
+			rpc("syncStamina", stamina, true);
 			PlayerFunc.dealDamage(self, target, totalDmg, "hit_01");
 			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
+	
+	staminaRecover += delta;
+	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
+	stamina += (staminaRecover * delta);
+	
+	if (primaryTimer > 0):
+		primaryTimer -= delta;
+		moveTo = global_position;
+		
+		if (primaryTimer > 0.25 and primaryTimer <= 0.5):
+			$q_hitbox.visible = true;
+			_setHitbox($q_hitbox/MeshInstance3D/Area3D, true);
+		else:
+			$q_hitbox.visible = false;
+			_setHitbox($q_hitbox/MeshInstance3D/Area3D, false);
+	else:
+		if (usingPrimary):
+			usingPrimary = false;
+			onAction = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -199,6 +227,9 @@ func basicAttack():
 	basicDamageDealt = false;
 	basicAttacking = true;
 
+func _setHitbox(hitbox: Node3D, enable: bool = true):
+	hitbox.monitoring = enable;
+
 @rpc("call_local", "any_peer", "reliable")
 func playBasicAttack():
 	if (overrideBasic == false):
@@ -226,16 +257,17 @@ func _setup_primary():
 
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
-	dmgOffset = 0;
-	eTimer = E_COOLDOWN;
-	tertiaryTimer = 0.7;
+	qTimer = Q_COOLDOWN;
+	stamina -= Q_STAMINA;
+	primaryTimer = 1.1;
 	target = null;
-	usingTertiary = true;
-	# onAction = true;
+	usingPrimary = true;
+	onAction = true;
 	animPlayer.play("q_ability");
 	
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
+	rpc("syncStamina", stamina, true);
 
 func _setup_secondary():
 	if (mousePos.is_empty()):
@@ -359,8 +391,12 @@ func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
 		assistedInKill.append(attackerId);
 
 @rpc("call_local", "any_peer")
-func syncStamina(_stamina):
+func syncStamina(_stamina, resetSpeed = false):
 	stamina = _stamina;
+	stamina = clamp(stamina, 0, maxStamina);
+	
+	if (resetSpeed):
+		staminaRecover = 0.1;
 	PlayerFunc.updateHealthSize(self);
 
 @rpc
@@ -439,3 +475,11 @@ func _onSlashTouched(other) -> void:
 		if (other.team != team):
 			qTimer = 0;
 			PlayerFunc.dealDamage(self, other, (dmg + 0.5));
+
+func _on_q_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = dmg * 1.22;
+		if (other.team != team):
+			PlayerFunc.dealDamage(self, other, totalDmg);
+			PlayerFunc.stunTarget(other, 0.75);

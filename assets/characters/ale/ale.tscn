@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://puhqtfalctre"]
+[gd_scene load_steps=16 format=3 uid="uid://puhqtfalctre"]
 
 [ext_resource type="PackedScene" uid="uid://jl4h6iufsi1f" path="res://assets/characters/ale.glb" id="1_lihjd"]
 [ext_resource type="Script" uid="uid://dts1t7oqohrsw" path="res://assets/characters/ale/ale_char.gd" id="2_kqcgl"]
@@ -1285,36 +1285,45 @@ _data = {
 &"w_ability": SubResource("Animation_l7cn5")
 }
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqcgl"]
+transparency = 1
+albedo_color = Color(1, 0.207843, 0.298039, 0.258824)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sdds3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_urmst"]
+
 [node name="ale" instance=ExtResource("1_lihjd")]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
+collision_layer = 6
 script = ExtResource("2_kqcgl")
 
 [node name="ale_armature" parent="." index="0"]
 transform = Transform3D(1.62, 0, 0, 0, 1.62, 0, 0, 0, 1.62, 0, 1.14277, 0)
 
 [node name="Skeleton3D" parent="ale_armature" index="0"]
-bones/0/position = Vector3(0, 0.312799, 0)
-bones/0/rotation = Quaternion(-0.0903202, 0, 0, 0.995913)
-bones/1/rotation = Quaternion(-0.0615968, 0.00249061, 0.0170928, 0.997952)
-bones/3/rotation = Quaternion(0.350257, 0.0896972, 0.174512, 0.915871)
-bones/4/rotation = Quaternion(0.433839, 0.455882, -0.294525, 0.719173)
-bones/5/position = Vector3(0.0717452, 0.630906, 0.318756)
-bones/5/rotation = Quaternion(0.672044, 0.235455, 0.104775, 0.694219)
-bones/5/scale = Vector3(1.00001, 1, 1)
-bones/6/rotation = Quaternion(-3.15486e-08, -6.79238e-08, 1.45155e-09, 1)
-bones/6/scale = Vector3(1, 1, 1)
-bones/7/position = Vector3(0.0717452, 0.630906, 0.318756)
-bones/7/rotation = Quaternion(-0.628949, 0.451212, -0.378477, 0.50753)
-bones/9/rotation = Quaternion(-0.136552, 0.147565, -0.498325, 0.843356)
-bones/10/rotation = Quaternion(0.00373522, 0.0342059, -0.279608, 0.959498)
-bones/11/position = Vector3(-4.77396e-15, 0.312799, -3.4972e-15)
-bones/11/rotation = Quaternion(-0.583619, 0.399235, 0.583619, 0.399235)
-bones/12/rotation = Quaternion(-0.497244, 1.69946e-07, -7.0086e-08, 0.867611)
-bones/13/rotation = Quaternion(-0.0764383, -5.23352e-08, -2.21719e-08, 0.997074)
-bones/14/position = Vector3(4.77396e-15, 0.312799, -3.4972e-15)
-bones/14/rotation = Quaternion(0.583619, 0.399235, 0.583619, -0.399235)
-bones/15/rotation = Quaternion(-0.494448, -1.70021e-07, 6.99926e-08, 0.869207)
-bones/16/rotation = Quaternion(-0.0764383, 5.23352e-08, 2.21719e-08, 0.997074)
+bones/0/position = Vector3(0, 1.1335, 0)
+bones/0/rotation = Quaternion(-0.237787, 0.0787639, -0.111054, 0.961728)
+bones/1/rotation = Quaternion(-0.11033, -0.105598, -0.00463088, 0.988259)
+bones/3/rotation = Quaternion(0.494017, 0.226883, 0.705328, 0.454955)
+bones/4/rotation = Quaternion(-0.27785, 0.19852, 0.198955, 0.918589)
+bones/5/position = Vector3(-0.40106, 0.696142, 0.692058)
+bones/5/rotation = Quaternion(0.0784781, 0.511159, 0.680314, 0.519356)
+bones/5/scale = Vector3(1.06181, 1.0618, 1.0618)
+bones/6/rotation = Quaternion(-0.0341743, 0.0507767, -0.00080978, 0.998125)
+bones/6/scale = Vector3(1.17788, 1.17788, 1.17788)
+bones/7/position = Vector3(-0.401059, 0.696142, 0.692058)
+bones/7/rotation = Quaternion(-0.729149, -0.37526, -0.0728039, 0.567646)
+bones/9/rotation = Quaternion(0.279292, -0.586265, -0.336159, 0.682119)
+bones/10/rotation = Quaternion(-0.410276, -0.573493, -0.298385, 0.64323)
+bones/11/position = Vector3(5.96046e-08, 1.1335, -1.26565e-14)
+bones/11/rotation = Quaternion(-0.576795, 0.403849, 0.590364, 0.394567)
+bones/12/rotation = Quaternion(-0.505829, -0.00418107, 0.0177168, 0.862442)
+bones/13/rotation = Quaternion(-0.0954123, -0.0118862, -0.105883, 0.989719)
+bones/14/position = Vector3(-5.96046e-08, 1.1335, -1.26565e-14)
+bones/14/rotation = Quaternion(0.590364, 0.394567, 0.576795, -0.403849)
+bones/15/rotation = Quaternion(-0.475823, -0.0609158, -0.0712116, 0.874534)
+bones/16/rotation = Quaternion(-0.0571304, -0.0894183, 0.205926, 0.972798)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7482, 0)
@@ -1324,3 +1333,22 @@ shape = SubResource("CapsuleShape3D_lihjd")
 libraries = {
 &"": SubResource("AnimationLibrary_7xkpf")
 }
+
+[node name="q_hitbox" type="Node3D" parent="." index="4"]
+transform = Transform3D(0.648016, 0, 0, 0, 0.72, 0, 0, 0, 2.80181, -0.207886, 1.45214, 7.77838)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="q_hitbox" index="0"]
+transform = Transform3D(5.32, 0, 0, 0, 5.28, 0, 0, 0, 4.93406, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_kqcgl")
+mesh = SubResource("BoxMesh_sdds3")
+
+[node name="Area3D" type="Area3D" parent="q_hitbox/MeshInstance3D" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="q_hitbox/MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_urmst")
+
+[connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]

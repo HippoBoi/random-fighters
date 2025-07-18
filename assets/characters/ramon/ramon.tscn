@@ -1142,7 +1142,7 @@ blend_mode = 1
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.709184, 0.673152), 0.0, 0.0, 0, 0, Vector2(0.994898, 0.00389111), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_6wiod"]
+[sub_resource type="CurveTexture" id="CurveTexture_lx68l"]
 curve = SubResource("Curve_ryhqh")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6wiod"]
@@ -1163,7 +1163,7 @@ radial_accel_max = 5.0
 tangential_accel_min = 8.33
 tangential_accel_max = 12.5
 damping_max = 8.333
-scale_curve = SubResource("CurveTexture_6wiod")
+scale_curve = SubResource("CurveTexture_lx68l")
 
 [sub_resource type="BoxMesh" id="BoxMesh_08cgt"]
 size = Vector3(1, 0.05, 1)
