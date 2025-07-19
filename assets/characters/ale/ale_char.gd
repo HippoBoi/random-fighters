@@ -1,11 +1,11 @@
 extends CharacterBody3D
 
-@export var maxHp = 180.0;
-@export var hp = 180.0;
+@export var maxHp = 170.0;
+@export var hp = 170.0;
 @export var maxStamina = 100.0;
 @export var stamina = 100.0;
-@export var baseArmor = 18.0;
-@export var baseDmg = 18.0;
+@export var baseArmor = 22.0;
+@export var baseDmg = 18.5;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 5.0;
@@ -16,16 +16,16 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 380;
 const CHARACTER_NAME = "Ale";
-const Q_COOLDOWN = 6.5;
-const W_COOLDOWN = 10.0;
-const E_COOLDOWN = 8.0;
+const Q_COOLDOWN = 7.0;
+const W_COOLDOWN = 9.0;
+const E_COOLDOWN = 2.0;
 const R_COOLDOWN = 1.0;
-const W_MAX_RANGE = 5.5;
-const R_MAX_RANGE = 8.2;
-const Q_STAMINA = 15;
-const W_STAMINA = 15;
-const E_STAMINA = 15;
+const E_MAX_RANGE = 6.0;
+const Q_STAMINA = 20;
+const W_STAMINA = 12;
+const E_STAMINA = 12;
 const R_STAMINA = 20;
+const BASIC_STAMINA = 10;
 
 var qTimer = 0;
 var wTimer = 0;
@@ -94,6 +94,8 @@ var assistedInKill = [];
 
 var staminaRecover = 0.1;
 var maxStaminaRecover = 10.0;
+var wParticlesEmitting = false;
+var usingParry = false;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -166,14 +168,14 @@ func _physics_process(delta: float) -> void:
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
 			basicDamageDealt = true;
 			
-			stamina -= 15;
+			stamina -= BASIC_STAMINA;
 			rpc("syncStamina", stamina, true);
 			PlayerFunc.dealDamage(self, target, totalDmg, "hit_01");
 			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	staminaRecover += delta;
+	staminaRecover += 1.5 * delta;
 	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
 	stamina += (staminaRecover * delta);
 	
@@ -182,15 +184,35 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		
 		if (primaryTimer > 0.25 and primaryTimer <= 0.5):
-			$q_hitbox.visible = true;
 			_setHitbox($q_hitbox/MeshInstance3D/Area3D, true);
 		else:
-			$q_hitbox.visible = false;
 			_setHitbox($q_hitbox/MeshInstance3D/Area3D, false);
 	else:
 		if (usingPrimary):
 			usingPrimary = false;
 			onAction = false;
+	
+	if (secondaryTimer > 0):
+		secondaryTimer -= delta;
+		moveTo = global_position;
+		usingParry = false;
+		
+		if (secondaryTimer > 0.45 and secondaryTimer <= 0.65):
+			usingParry = true;
+	else:
+		if (usingSecondary):
+			usingSecondary = false;
+			usingParry = false;
+			onAction = false;
+	
+	if (usingTertiary == true):
+		tertiaryTimer -= delta;
+		
+		if (moveTo == null or tertiaryTimer <= 0):
+			usingTertiary = false;
+			onAction = false;
+			speedOffset -= 6;
+			speedOffset = clamp(speedOffset, 0, 100);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -258,7 +280,7 @@ func _setup_primary():
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
 	qTimer = Q_COOLDOWN;
-	stamina -= Q_STAMINA;
+	stamina -= Q_STAMINA - cooldownReduction;
 	primaryTimer = 1.1;
 	target = null;
 	usingPrimary = true;
@@ -273,89 +295,55 @@ func _setup_secondary():
 	if (mousePos.is_empty()):
 		return;
 	
-	rpc("secondary_ability", mousePos.position, global_position);
+	rpc("secondary_ability", mousePos.position);
 
 @rpc("call_local", "reliable")
-func secondary_ability(_moveTo, _global_pos):
-	var direction = (_moveTo - _global_pos).normalized();
-	var distance = _global_pos.distance_to(_moveTo);
+func secondary_ability(_mousePos):
 	usingSecondary = true;
-	secondaryTimer = 0.5;
-	usingUlti = false;
 	onAction = true;
-	target = null;
-	
-	if (distance > W_MAX_RANGE):
-		moveTo = _global_pos + direction * W_MAX_RANGE;
-	else:
-		moveTo = _moveTo;
-	moveTo.y = _global_pos.y;
+	secondaryTimer = 1.0;
 	wTimer = W_COOLDOWN - cooldownReduction;
-	speedOffset = 7.5;
+	stamina -= W_STAMINA;
 	
-	var sound = preload("res://assets/sounds/characters/rhay/rhay_jump.ogg");
-	PlayerFunc.playSound(self, sound);
-			
 	animPlayer.play("w_ability");
-	syncRotation(moveTo);
+	rpc("syncRotation", _mousePos);
+	rpc("syncStamina", stamina, true);
 	
 func _setup_tertiary():
 	if (mousePos.is_empty()):
 		return;
 	
-	rpc("tertiary_ability", mousePos.position);
+	rpc("tertiary_ability", mousePos.position, global_position);
 
 @rpc("call_local", "reliable")
-func tertiary_ability(_mousePos):
-	dmgOffset = 0;
-	eTimer = E_COOLDOWN;
-	tertiaryTimer = 0.7;
-	target = null;
+func tertiary_ability(_moveTo, _global_pos):
+	var direction = (_moveTo - _global_pos).normalized();
+	var _distance = _global_pos.distance_to(_moveTo);
 	usingTertiary = true;
-	# onAction = true;
-	animPlayer.play("q_ability");
+	tertiaryTimer = 0.6;
 	
-	simulateMove(null, global_position);
-	rpc("syncRotation", _mousePos);
+	if (target):
+		bufferedTarget = target;
+		target = null;
+		rpc("syncBufferedInputs", null, bufferedTarget);
+	
+	moveTo = _global_pos + direction * E_MAX_RANGE;
+	
+	moveTo.y = _global_pos.y;
+	eTimer = E_COOLDOWN - cooldownReduction;
+	stamina -= E_STAMINA;
+	speedOffset = 6;
+	onAction = true;
+	animPlayer.play("e_ability");
+	syncRotation(moveTo);
+	rpc("syncStamina", stamina, true);
 
 func _setup_ultimate():
-	if not (hovering):
-		return;
-	
-	ultiTarget = hovering;
-	moveTo = ultiTarget.global_position;
-	moveTo.y = global_position.y;
-	
-	rpc("ultimate_ability", moveTo, global_position);
+	rpc("ultimate_ability");
 
 @rpc("call_local", "reliable")
-func ultimate_ability(_moveTo, _global_pos):
-	if (_moveTo == null):
-		return;
-	
-	moveTo = _moveTo;
-	moveTo.y = _global_pos.y;
-	
-	usingUlti = true;
-	usingSecondary = false;
-	target = null;
-		
-	var distance = _global_pos.distance_to(_moveTo);
-	if (distance < R_MAX_RANGE):
-		if not (playingUltiSound):
-			var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
-			PlayerFunc.playSound(self, sound);
-			
-			playingUltiSound = true;
-			ultiTimer = 0.5;
-		
-		rTimer = R_COOLDOWN - cooldownReduction;
-		speedOffset = 15;
-		onAction = true;
-		
-		animPlayer.play("q_ability_001");
-	else:
-		ultiTimer = 0.5;
+func ultimate_ability():
+	pass;
 
 @rpc("call_local")
 func cancelSecondary():
@@ -396,7 +384,7 @@ func syncStamina(_stamina, resetSpeed = false):
 	stamina = clamp(stamina, 0, maxStamina);
 	
 	if (resetSpeed):
-		staminaRecover = 0.1;
+		staminaRecover = 0.5;
 	PlayerFunc.updateHealthSize(self);
 
 @rpc

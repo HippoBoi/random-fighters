@@ -1302,28 +1302,28 @@ script = ExtResource("2_kqcgl")
 transform = Transform3D(1.62, 0, 0, 0, 1.62, 0, 0, 0, 1.62, 0, 1.14277, 0)
 
 [node name="Skeleton3D" parent="ale_armature" index="0"]
-bones/0/position = Vector3(0, 1.1335, 0)
-bones/0/rotation = Quaternion(-0.237787, 0.0787639, -0.111054, 0.961728)
-bones/1/rotation = Quaternion(-0.11033, -0.105598, -0.00463088, 0.988259)
-bones/3/rotation = Quaternion(0.494017, 0.226883, 0.705328, 0.454955)
-bones/4/rotation = Quaternion(-0.27785, 0.19852, 0.198955, 0.918589)
-bones/5/position = Vector3(-0.40106, 0.696142, 0.692058)
-bones/5/rotation = Quaternion(0.0784781, 0.511159, 0.680314, 0.519356)
-bones/5/scale = Vector3(1.06181, 1.0618, 1.0618)
-bones/6/rotation = Quaternion(-0.0341743, 0.0507767, -0.00080978, 0.998125)
-bones/6/scale = Vector3(1.17788, 1.17788, 1.17788)
-bones/7/position = Vector3(-0.401059, 0.696142, 0.692058)
-bones/7/rotation = Quaternion(-0.729149, -0.37526, -0.0728039, 0.567646)
-bones/9/rotation = Quaternion(0.279292, -0.586265, -0.336159, 0.682119)
-bones/10/rotation = Quaternion(-0.410276, -0.573493, -0.298385, 0.64323)
-bones/11/position = Vector3(5.96046e-08, 1.1335, -1.26565e-14)
-bones/11/rotation = Quaternion(-0.576795, 0.403849, 0.590364, 0.394567)
-bones/12/rotation = Quaternion(-0.505829, -0.00418107, 0.0177168, 0.862442)
-bones/13/rotation = Quaternion(-0.0954123, -0.0118862, -0.105883, 0.989719)
-bones/14/position = Vector3(-5.96046e-08, 1.1335, -1.26565e-14)
-bones/14/rotation = Quaternion(0.590364, 0.394567, 0.576795, -0.403849)
-bones/15/rotation = Quaternion(-0.475823, -0.0609158, -0.0712116, 0.874534)
-bones/16/rotation = Quaternion(-0.0571304, -0.0894183, 0.205926, 0.972798)
+bones/0/position = Vector3(0, 0.437074, 0)
+bones/0/rotation = Quaternion(-0.00962656, 0.0784094, 0.00210782, 0.996873)
+bones/1/rotation = Quaternion(0.124235, -0.000717118, 0.0172584, 0.992103)
+bones/3/rotation = Quaternion(0.370844, -0.103346, 0.610994, 0.691723)
+bones/4/rotation = Quaternion(0.46015, 0.385812, -0.1215, 0.790347)
+bones/5/position = Vector3(0.230534, 0.710442, 0.399225)
+bones/5/rotation = Quaternion(0.523019, 0.648172, 0.537094, 0.133621)
+bones/5/scale = Vector3(1.00001, 1, 1)
+bones/6/rotation = Quaternion(-4.36557e-08, -6.97864e-08, -5.99903e-09, 1)
+bones/6/scale = Vector3(1, 1, 1)
+bones/7/position = Vector3(0.230534, 0.710442, 0.399225)
+bones/7/rotation = Quaternion(-0.587803, 0.0551101, 0.313905, 0.743582)
+bones/9/rotation = Quaternion(0.309794, -0.257204, -0.608929, 0.683432)
+bones/10/rotation = Quaternion(0.0290941, -0.0138522, -0.0706068, 0.996984)
+bones/11/position = Vector3(-2.98023e-08, 0.437074, 2.54605e-08)
+bones/11/rotation = Quaternion(-0.583619, 0.399235, 0.583619, 0.399235)
+bones/12/rotation = Quaternion(-0.491533, 0.0949676, 0.117561, 0.857645)
+bones/13/rotation = Quaternion(-0.07444, -0.0187313, -0.226384, 0.971009)
+bones/14/position = Vector3(2.98023e-08, 0.437074, 2.54605e-08)
+bones/14/rotation = Quaternion(0.583619, 0.399235, 0.583619, -0.399235)
+bones/15/rotation = Quaternion(-0.488769, -0.0953456, -0.117255, 0.859224)
+bones/16/rotation = Quaternion(-0.07444, 0.020189, 0.226259, 0.971009)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7482, 0)
@@ -1350,5 +1350,7 @@ monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="q_hitbox/MeshInstance3D/Area3D" index="0"]
 shape = SubResource("BoxShape3D_urmst")
+
+[node name="w_particles" type="GPUParticles3D" parent="." index="5"]
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]

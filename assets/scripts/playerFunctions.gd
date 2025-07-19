@@ -646,17 +646,25 @@ func dealDamage(character, target, dmg, effect := ""):
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
+	var canParry = "usingParry" in target;
 	
 	dmgAfterShield = totalDmg - target.shield;
 	target.shield -= totalDmg;
 	target.shield = clamp(target.shield, 0, target.maxHp);
 	totalDmg = dmgAfterShield;
 	
+	if (canParry):
+		if (target.usingParry == true):
+			target.usingParry = false;
+			dealDamage(target, character, dmg, effect);
+			stunTarget(character, 0.75);
+			return;
+	
 	if (totalDmg > 0):
 		target.hp -= totalDmg;
 		target.hp = clamp(target.hp, 0, target.maxHp);
 	
-	if (updateTimer >= 0.1):
+	if (updateTimer >= 0.05):
 		updateTimer = 0;
 		target.rpc("syncHealth", target.hp, target.shield, true, character.name);
 	
