@@ -454,6 +454,10 @@ func showChatText(newText):
 func onItemPurchase(item: Dictionary):
 	PlayerFunc.grantItemStats(self, item)
 
+@rpc("call_local", "any_peer")
+func onParry():
+	$w_particles/w_aura_hit.emitting = true;
+
 func onCollision():
 	pass;
 

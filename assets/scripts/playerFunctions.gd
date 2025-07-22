@@ -655,7 +655,7 @@ func dealDamage(character, target, dmg, effect := ""):
 	
 	if (canParry):
 		if (target.usingParry == true):
-			target.usingParry = false;
+			target.rpc("onParry");
 			dealDamage(target, character, dmg, effect);
 			stunTarget(character, 0.75);
 			return;
@@ -672,6 +672,10 @@ func dealDamage(character, target, dmg, effect := ""):
 			target.rpc("syncParticles", effect);
 
 func stunTarget(target, duration, effect := ""):
+	var canParry = "usingParry" in target;
+	if (canParry and target.usingParry):
+		return;
+	
 	target.stunned = true;
 	target.stunTimer = duration;
 	target.rpc("syncStun", target.stunned, target.stunTimer);
