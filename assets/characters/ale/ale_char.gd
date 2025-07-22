@@ -21,11 +21,20 @@ const W_COOLDOWN = 9.0;
 const E_COOLDOWN = 2.0;
 const R_COOLDOWN = 1.0;
 const E_MAX_RANGE = 6.0;
-const Q_STAMINA = 20;
-const W_STAMINA = 12;
-const E_STAMINA = 12;
-const R_STAMINA = 20;
-const BASIC_STAMINA = 10;
+const Q_STAMINA = 22;
+const W_STAMINA = 22;
+const E_STAMINA = 14;
+const R_STAMINA = 30;
+const BASIC_STAMINA = 20;
+
+var primaryDesc = "Big forward slash that stuns enemies dealing 124% of your PHYSICAL DAMAGE."
+var primaryIcon = "res://icon.svg";
+var secondaryDesc = "Parry attacks with your sword. If any attack hits you during PARRY the attacker will be stunned and recieve the incoming damage.";
+var secondaryIcon = "res://icon.svg";
+var tertiaryDesc = "Roll towards your mouse position.";
+var tertiaryIcon = "res://icon.svg";
+var ultiDesc = "Slash three times where your mouse is facing dealing %s of your PHYSICAL DAMAGE per hit.";
+var ultiIcon = "res://icon.svg";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -93,7 +102,7 @@ var respawnTimer = 0;
 var assistedInKill = [];
 
 var staminaRecover = 0.1;
-var maxStaminaRecover = 10.0;
+var maxStaminaRecover = 20.0;
 var wParticlesEmitting = false;
 var usingParry = false;
 
@@ -128,11 +137,13 @@ func rotateChar(newPos) -> void:
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
+		if (Engine.get_physics_frames() % 15 == 0):
+			rpc("syncStamina", stamina);
+		
 		if (Engine.get_physics_frames() % 45 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
 			rpc("syncHealth", hp, shield);
-			rpc("syncStamina", stamina);
 		
 		PlayerFunc.updateState(self, delta);
 		
@@ -148,13 +159,13 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_anything_pressed()):
 			var action = null;
 			
-			if (Input.is_action_just_pressed("primary") and qTimer <= 0 and stamina >= Q_STAMINA):
+			if (Input.is_action_just_pressed("primary") and qTimer <= 0 and stamina >= Q_STAMINA / 1.5):
 				action = Callable(self, "_setup_primary");
-			if (Input.is_action_just_pressed("secondary") and wTimer <= 0 and stamina >= W_STAMINA):
+			if (Input.is_action_just_pressed("secondary") and wTimer <= 0 and stamina >= W_STAMINA / 1.5):
 				action = Callable(self, "_setup_secondary");
-			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0 and stamina >= E_STAMINA):
+			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0 and stamina >= E_STAMINA / 1.5):
 				action = Callable(self, "_setup_tertiary");
-			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0 and stamina >= R_STAMINA):
+			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0 and stamina >= R_STAMINA / 1.5):
 				action = Callable(self, "_setup_ultimate");
 			
 			if (action):
@@ -164,7 +175,9 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var totalDmg = dmg * 1.75;
+			var baseDmg = 1.0 if stamina >= BASIC_STAMINA else 0.5;
+			var dmgMultiplier = min(1.0 + (stamina * 0.015), 1.85);
+			var totalDmg = dmg * dmgMultiplier;
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
 			basicDamageDealt = true;
 			
@@ -175,7 +188,7 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	staminaRecover += 1.5 * delta;
+	staminaRecover += 2 * delta;
 	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
 	stamina += (staminaRecover * delta);
 	
@@ -471,7 +484,7 @@ func _onSlashTouched(other) -> void:
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.22;
+		var totalDmg = dmg * 1.24;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.stunTarget(other, 0.75);
+			PlayerFunc.stunTarget(other, 0.95);
