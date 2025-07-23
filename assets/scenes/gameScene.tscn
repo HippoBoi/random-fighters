@@ -20,6 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="Title" type="RichTextLabel" parent="GameInfoUI"]
 layout_mode = 1
@@ -95,6 +96,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 
 [node name="GG" type="Label" parent="RoundEndUI"]
 layout_mode = 1

@@ -1,12 +1,16 @@
-[gd_scene load_steps=13 format=3 uid="uid://cs5f0x4jchyj2"]
+[gd_scene load_steps=19 format=3 uid="uid://cs5f0x4jchyj2"]
 
 [ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
+[ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="1_grbm3"]
 [ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="1_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="2_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="3_grbm3"]
 [ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="4_6hcns"]
 [ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="5_ksudb"]
 [ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="6_rl4ok"]
+[ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="9_6hcns"]
+[ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="9_ksudb"]
+[ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="11_rl4ok"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
 font_size = 24
@@ -39,6 +43,21 @@ Button/styles/hover = SubResource("StyleBoxFlat_grbm3")
 Button/styles/normal = SubResource("StyleBoxFlat_l0sqe")
 Button/styles/pressed = SubResource("StyleBoxFlat_6hcns")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rl4ok"]
+shader = ExtResource("9_ksudb")
+shader_parameter/initial_color = Color(0.204327, 0.201211, 0.232194, 1)
+shader_parameter/final_color = Color(0.110392, 0.11396, 0.120228, 1)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ksudb"]
+shader = ExtResource("9_6hcns")
+shader_parameter/color = Color(0.957699, 0.812299, 0.868786, 1)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 6.0
+shader_parameter/radius = 0.75
+shader_parameter/line_thickness = 0.03
+
 [node name="InGameUI" type="Control"]
 z_index = -1
 layout_mode = 3
@@ -47,6 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_grbm3")
 
 [node name="playerList" type="ColorRect" parent="."]
 layout_mode = 1
@@ -584,3 +604,81 @@ offset_top = 332.0
 offset_right = 636.0
 offset_bottom = 357.0
 theme = SubResource("Theme_grbm3")
+
+[node name="abilityDesc" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -133.5
+offset_top = 5.5
+offset_right = 133.5
+offset_bottom = 138.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg" type="ColorRect" parent="abilityDesc"]
+material = SubResource("ShaderMaterial_rl4ok")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.107329, 0.121738, 0.168572, 1)
+
+[node name="outline" type="ColorRect" parent="abilityDesc"]
+z_index = 1
+material = SubResource("ShaderMaterial_ksudb")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.216919, 0.205183, 0.222576, 1)
+
+[node name="descText" type="RichTextLabel" parent="abilityDesc"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -45.5
+offset_right = 118.5
+offset_bottom = 45.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 14
+text = "hola esta habilidad es muy buena muuy buena la habilidad"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="descImage" type="TextureRect" parent="abilityDesc"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -30.0
+offset_right = 75.0
+offset_bottom = 30.0
+grow_vertical = 2
+texture = ExtResource("11_rl4ok")
+expand_mode = 1
+
+[connection signal="mouse_entered" from="abilitiesUI/primaryAbility" to="." method="_on_primary_mouse_hover"]
+[connection signal="mouse_exited" from="abilitiesUI/primaryAbility" to="." method="_on_primary_mouse_exit"]
+[connection signal="mouse_entered" from="abilitiesUI/secondaryAbility" to="." method="_on_secondary_mouse_hover"]
+[connection signal="mouse_exited" from="abilitiesUI/secondaryAbility" to="." method="_on_secondary_mouse_exit"]
+[connection signal="mouse_entered" from="abilitiesUI/tertiaryAbility" to="." method="_on_tertiary_mouse_hover"]
+[connection signal="mouse_exited" from="abilitiesUI/tertiaryAbility" to="." method="_on_tertiary_mouse_exit"]
+[connection signal="mouse_entered" from="abilitiesUI/ultiAbility" to="." method="_on_ulti_mouse_hover"]
+[connection signal="mouse_exited" from="abilitiesUI/ultiAbility" to="." method="_on_ulti_mouse_exit"]

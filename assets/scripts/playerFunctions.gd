@@ -170,6 +170,7 @@ func _updateGameUI(character: CharacterBody3D):
 		UIrespawnTimer.text = str(roundf(character.respawnTimer * 100) / 100);
 		UItokens.text = str(character.tokens);
 		
+		_setupAbilityDescriptions(character, UI);
 		_updateLivesInUI(character, livesContainer);
 		
 		if (character.dead):
@@ -187,6 +188,16 @@ func _updateGameUI(character: CharacterBody3D):
 			UIrespawnTimer.visible = false;
 		
 		healthBar.scale.x = character.hp / character.maxHp;
+
+func _setupAbilityDescriptions(character: CharacterBody3D, UI: Control):
+	UI.primaryDesc = character.primaryDesc;
+	UI.primaryIcon = character.primaryIcon;
+	UI.secondaryDesc = character.secondaryDesc;
+	UI.secondaryIcon = character.secondaryIcon;
+	UI.tertiaryDesc = character.tertiaryDesc;
+	UI.tertiaryIcon = character.tertiaryIcon;
+	UI.ultiDesc = character.ultiDesc;
+	UI.ultiIcon = character.ultiIcon;
 
 func _autoBasic(character):
 	if (activeBasicArea):
@@ -657,7 +668,7 @@ func dealDamage(character, target, dmg, effect := ""):
 		if (target.usingParry == true):
 			target.rpc("onParry");
 			dealDamage(target, character, dmg, effect);
-			stunTarget(character, 0.75);
+			stunTarget(character, 1.5);
 			return;
 	
 	if (totalDmg > 0):
