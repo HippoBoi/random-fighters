@@ -12,8 +12,6 @@ extends CharacterBody3D
 @export var cooldownReduction = 0;
 var shield = 0;
 
-@onready var slashHitbox = $slashHitbox;
-
 const BASIC_ATTACK_COOLDOWN = 380;
 const CHARACTER_NAME = "Ale";
 const Q_COOLDOWN = 7.0;
@@ -197,7 +195,7 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		usingParry = false;
 		
-		if (secondaryTimer > 0.45 and secondaryTimer <= 0.65):
+		if (secondaryTimer >= 0.4 and secondaryTimer <= 0.65):
 			usingParry = true;
 	else:
 		if (usingSecondary):
@@ -213,6 +211,12 @@ func _physics_process(delta: float) -> void:
 			onAction = false;
 			speedOffset -= 6;
 			speedOffset = clamp(speedOffset, 0, 100);
+	
+	if (ultiTimer > 0):
+		ultiTimer -= delta;
+		moveTo = global_position;
+		
+		_handleUltiHitboxes(ultiTimer);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -233,7 +237,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 			animPlayer.play("idle");
-	
+
+func _handleUltiHitboxes(ultiTimer):
+	if (ultiTimer <= 2.55):
+		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
+	if (ultiTimer <= 2.50):
+		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
+	if (ultiTimer <= 1.85):
+		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
+	if (ultiTimer <= 1.80):
+		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
+	if (ultiTimer <= 0.95):
+		_setHitbox($r_hitboxes/ver_hitbox/Area3D, true);
+	if (ultiTimer <= 0.90):
+		_setHitbox($r_hitboxes/ver_hitbox/Area3D, false);
+
 func updateHealthSize():
 	var UILoaded = has_node("CharacterUI");
 	if not (UILoaded):
@@ -339,11 +357,24 @@ func tertiary_ability(_moveTo, _global_pos):
 	rpc("syncStamina", stamina, true);
 
 func _setup_ultimate():
-	rpc("ultimate_ability");
+	if (mousePos.is_empty()):
+		return;
+	
+	rpc("ultimate_ability", mousePos.position);
 
 @rpc("call_local", "reliable")
-func ultimate_ability():
-	pass;
+func ultimate_ability(_mousePos):
+	rTimer = R_COOLDOWN;
+	stamina -= R_STAMINA - cooldownReduction;
+	ultiTimer = 3.1;
+	target = null;
+	usingUlti = true;
+	onAction = true;
+	animPlayer.play("r_ability");
+	
+	simulateMove(null, global_position);
+	rpc("syncRotation", _mousePos);
+	rpc("syncStamina", stamina, true);
 
 @rpc("call_local")
 func cancelSecondary():
@@ -475,3 +506,11 @@ func _on_q_touched(other: Node3D) -> void:
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.75);
+
+func _on_r_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = dmg * 1.1;
+		if (other.team != team):
+			PlayerFunc.dealDamage(self, other, totalDmg);
+			PlayerFunc.stunTarget(other, 1.75);
