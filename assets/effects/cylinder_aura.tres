@@ -11,18 +11,18 @@ texture_type = 1
 expanded_output_ports = [0]
 source = 5
 
-[sub_resource type="Gradient" id="Gradient_tws6v"]
+[sub_resource type="Gradient" id="Gradient_j5m4y"]
 offsets = PackedFloat32Array(0, 0.30625, 0.98125, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_enrrt"]
-gradient = SubResource("Gradient_tws6v")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v0s2c"]
+gradient = SubResource("Gradient_j5m4y")
 fill_from = Vector2(1, 0)
 fill_to = Vector2(1, 1)
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_a0hly"]
 expanded_output_ports = [0]
-texture = SubResource("GradientTexture2D_enrrt")
+texture = SubResource("GradientTexture2D_v0s2c")
 texture_type = 1
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_tws6v"]

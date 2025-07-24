@@ -20,7 +20,16 @@ const E_COOLDOWN = 7.0;
 const ALT_E_COOLDOWN = 13.0;
 const R_COOLDOWN = 6.0;
 const Q_MAX_RANGE = 5.0;
-const ALT_Q_MAX_RANGE = 5.0;
+const ALT_Q_MAX_RANGE = 7.2;
+
+var primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
+var primaryIcon = "res://icon.svg";
+var secondaryDesc = "Hit the ground creating a rift, dealing 75% of your PHYSICAL DAMAGE and stunning enemies.";
+var secondaryIcon = "res://icon.svg";
+var tertiaryDesc = "Short slash that deals 100% of your PHYSICAL DAMAGE.";
+var tertiaryIcon = "res://icon.svg";
+var ultiDesc = "Transform into your smaller form. Gain DAMAGE and SPEED but lose ARMOR.";
+var ultiIcon = "res://icon.svg";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -132,6 +141,26 @@ func rotateChar(newPos) -> void:
 		0.18
 	);
 
+func _updateAbilityDescriptions():
+	if (humanForm):
+		primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
+		primaryIcon = "res://icon.svg";
+		secondaryDesc = "Hit the ground creating a rift, dealing 75% of your PHYSICAL DAMAGE and stunning enemies.";
+		secondaryIcon = "res://icon.svg";
+		tertiaryDesc = "Short slash that deals 100% of your PHYSICAL DAMAGE.";
+		tertiaryIcon = "res://icon.svg";
+		ultiDesc = "Transform into your smaller form. Gain DAMAGE and SPEED but lose ARMOR.";
+		ultiIcon = "res://icon.svg";
+	else:
+		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
+		primaryIcon = "res://icon.svg";
+		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE";
+		secondaryIcon = "res://icon.svg";
+		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
+		tertiaryIcon = "res://icon.svg";
+		ultiDesc = "Transform into your taller form. Gain ARMOR but lose DAMAGE and SPEED.";
+		ultiIcon = "res://icon.svg";
+
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
 		if (Engine.get_physics_frames() % 60 == 0):
@@ -179,19 +208,21 @@ func _physics_process(delta: float) -> void:
 			if (moveTo == null or target):
 				var distance = global_position.distance_to(primaryTarget.global_position);
 				if (distance < 4):
-					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.65);
+					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.85);
 	
 	PlayerFunc.updateGlobally(self, delta);
+	
+	_updateAbilityDescriptions();
 	
 	if (humanForm):
 		baseArmor = 24;
 		baseAttackRange = 3.0;
-		baseAttackSpeed = 4.0;
+		attackSpeedOffset = 0.0;
 		baseSpeed = 5.0;
 	else:
-		baseArmor = 14;
+		baseArmor = 13;
 		baseAttackRange = 2.25;
-		baseAttackSpeed = 5.5;
+		attackSpeedOffset = 2.5;
 		baseSpeed = 6.0;
 	
 	if (usingPrimary == true):

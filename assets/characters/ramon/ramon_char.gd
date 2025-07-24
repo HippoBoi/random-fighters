@@ -25,6 +25,15 @@ const R_COOLDOWN = 60.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
+var primaryDesc = "Throw a bunch of paper sheets dealing 25% of your PHYSICAL DAMAGE per hit."
+var primaryIcon = "res://icon.svg";
+var secondaryDesc = "Throw your biggest cup of tea stunning enemies hit for 1.5 seconds.";
+var secondaryIcon = "res://icon.svg";
+var tertiaryDesc = "Throw a small cup of tea that stuns enemies for 0.5 seconds. This ability has INFINITE range.";
+var tertiaryIcon = "res://icon.svg";
+var ultiDesc = "Unleash all your paper sheets dealing 25% of your PHYSICAL DAMAGE per hit.";
+var ultiIcon = "res://icon.svg";
+
 var qTimer = 0;
 var wTimer = 0;
 var eTimer= 0;

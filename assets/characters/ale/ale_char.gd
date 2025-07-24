@@ -17,7 +17,7 @@ const CHARACTER_NAME = "Ale";
 const Q_COOLDOWN = 7.0;
 const W_COOLDOWN = 9.0;
 const E_COOLDOWN = 2.0;
-const R_COOLDOWN = 1.0;
+const R_COOLDOWN = 40.0;
 const E_MAX_RANGE = 6.0;
 const Q_STAMINA = 22;
 const W_STAMINA = 22;
@@ -31,7 +31,7 @@ var secondaryDesc = "Parry attacks with your sword. If any attack hits you durin
 var secondaryIcon = "res://icon.svg";
 var tertiaryDesc = "Roll towards your mouse position.";
 var tertiaryIcon = "res://icon.svg";
-var ultiDesc = "Slash three times where your mouse is facing dealing %s of your PHYSICAL DAMAGE per hit.";
+var ultiDesc = "Slash three times where your mouse is facing dealing 140% of your PHYSICAL DAMAGE per hit and stunning enemies.";
 var ultiIcon = "res://icon.svg";
 
 var qTimer = 0;
@@ -186,7 +186,7 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	staminaRecover += 2 * delta;
+	staminaRecover += 4 * delta;
 	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
 	stamina += (staminaRecover * delta);
 	
@@ -230,6 +230,10 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		
 		_handleUltiHitboxes(ultiTimer);
+	else:
+		if (usingUlti):
+			usingUlti = false;
+			onAction = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -252,15 +256,15 @@ func _physics_process(delta: float) -> void:
 			animPlayer.play("idle");
 
 func _handleUltiHitboxes(ultiTimer):
-	if (ultiTimer <= 2.55):
+	if (ultiTimer > 2.50 and ultiTimer <= 2.55):
 		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
-	if (ultiTimer <= 2.50):
+	if (ultiTimer > 1.85 and ultiTimer <= 2.50):
 		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
-	if (ultiTimer <= 1.85):
+	if (ultiTimer > 1.80 and ultiTimer <= 1.85):
 		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
-	if (ultiTimer <= 1.80):
+	if (ultiTimer > 0.95 and ultiTimer <= 1.80):
 		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
-	if (ultiTimer <= 0.95):
+	if (ultiTimer > 0.90 and ultiTimer <= 0.95):
 		_setHitbox($r_hitboxes/ver_hitbox/Area3D, true);
 	if (ultiTimer <= 0.90):
 		_setHitbox($r_hitboxes/ver_hitbox/Area3D, false);
@@ -383,7 +387,7 @@ func ultimate_ability(_mousePos):
 	target = null;
 	usingUlti = true;
 	onAction = true;
-	animPlayer.play("r_ability");
+	animPlayer.play("r_ability_001");
 	
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
@@ -518,12 +522,12 @@ func _on_q_touched(other: Node3D) -> void:
 		var totalDmg = dmg * 1.24;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.stunTarget(other, 0.75);
+			PlayerFunc.stunTarget(other, 1.0);
 
 func _on_r_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.1;
+		var totalDmg = dmg * 1.4;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.stunTarget(other, 1.75);
+			PlayerFunc.stunTarget(other, 1.95);

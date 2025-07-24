@@ -21,6 +21,15 @@ const Q_MAX_RANGE = 5.0;
 const ALT_Q_MAX_RANGE = 5.0;
 const stunnedHitEffect = "grabbedEffect";
 
+var primaryDesc = "Fire your DRILL catching and displacing enemies, dealing 100% of your PHYSICAL DAMAGE."
+var primaryIcon = "res://icon.svg";
+var secondaryDesc = "Gain a shield of 10% of your MAX HEALTH and obtain 20 armor for 5 seconds.";
+var secondaryIcon = "res://icon.svg";
+var tertiaryDesc = "Dig underground to gain MOVEMENT SPEED. Cast again to exit and stun near enemies.";
+var tertiaryIcon = "res://icon.svg";
+var ultiDesc = "Create an electric AURA that slows enemies by 55%.";
+var ultiIcon = "res://icon.svg";
+
 var qTimer = 0;
 var wTimer = 0;
 var eTimer= 0;

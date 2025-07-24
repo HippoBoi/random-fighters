@@ -21,6 +21,15 @@ const R_COOLDOWN = 1.0;
 const W_MAX_RANGE = 5.5;
 const R_MAX_RANGE = 8.2;
 
+var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMAGE."
+var primaryIcon = "res://icon.svg";
+var secondaryDesc = "Dash towards your mouse position.";
+var secondaryIcon = "res://icon.svg";
+var tertiaryDesc = "Slash that deals 100% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
+var tertiaryIcon = "res://icon.svg";
+var ultiDesc = "Dash towards an enemy target.";
+var ultiIcon = "res://icon.svg";
+
 var qTimer = 0;
 var wTimer = 0;
 var eTimer= 0;
