@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwoq4kh51kn4r"]
+
+[ext_resource type="PackedScene" uid="uid://vnm7ile4ujl7" path="res://assets/mapAssets/snowmen/snowmap.glb" id="1_mkavy"]
+[ext_resource type="Shader" uid="uid://ctg3on6hks3r" path="res://assets/mapAssets/snowmen/terrain_shader_snowmen.tres" id="2_i6px8"]
+[ext_resource type="Texture2D" uid="uid://btigd657dal1p" path="res://assets/mapAssets/dark_forest/bark_willow_02_diff.png" id="3_21v33"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_21v33"]
+render_priority = 0
+shader = ExtResource("2_i6px8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ybp6n"]
+albedo_color = Color(0.735922, 0.79739, 0.891908, 1)
+albedo_texture = ExtResource("3_21v33")
+
+[node name="snowmap" instance=ExtResource("1_mkavy")]
+
+[node name="Plane" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_21v33")
+
+[node name="tree_03_001" parent="." index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_002" parent="." index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_003" parent="." index="3"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_004" parent="." index="4"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_005" parent="." index="5"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_006" parent="." index="6"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_007" parent="." index="7"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")
+
+[node name="tree_03_008" parent="." index="8"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ybp6n")

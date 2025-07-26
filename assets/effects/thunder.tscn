@@ -1,0 +1,30 @@
+[gd_scene load_steps=7 format=3 uid="uid://botu3xvcslfmi"]
+
+[ext_resource type="ArrayMesh" uid="uid://ljkemdsu7gxf" path="res://assets/effects/thunder_editable.tres" id="1_h2bl1"]
+
+[sub_resource type="Gradient" id="Gradient_fc1hb"]
+offsets = PackedFloat32Array(0, 0.989583, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ywvjg"]
+gradient = SubResource("Gradient_fc1hb")
+
+[sub_resource type="Curve" id="Curve_r4i8y"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.831461), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_428m4"]
+curve = SubResource("Curve_r4i8y")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xilc4"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_428m4")
+color_ramp = SubResource("GradientTexture1D_ywvjg")
+
+[node name="thunder" type="GPUParticles3D"]
+emitting = false
+amount = 1
+lifetime = 1.25
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_xilc4")
+draw_pass_1 = ExtResource("1_h2bl1")

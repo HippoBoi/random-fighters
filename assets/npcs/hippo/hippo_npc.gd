@@ -207,7 +207,7 @@ func syncTarget(_target):
 	target = _target;
 
 @rpc("call_local", "any_peer", "reliable")
-func syncHealth(curHealth, shield, damaged = false, attackerId: String = ""):
+func syncHealth(curHealth, _shield, damaged = false, attackerId: String = ""):
 	hp = curHealth;
 	PlayerFunc.updateHealthSize(self, damaged);
 	

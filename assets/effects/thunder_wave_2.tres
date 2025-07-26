@@ -1,40 +1,40 @@
-[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://degihc78p3ypq"]
+[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://baxicobyf3ivc"]
 
-[ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="1_ggvnf"]
+[ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="1_wqi5r"]
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_3o66v"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_oh43q"]
 expanded_output_ports = [0]
-texture = ExtResource("1_ggvnf")
+texture = ExtResource("1_wqi5r")
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_y007y"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_pyqo0"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_m2vmh"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eggb0"]
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_2fv0u"]
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_6urvi"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 1)]
 op_type = 0
 operator = 2
 
-[sub_resource type="Gradient" id="Gradient_3h2rq"]
-offsets = PackedFloat32Array(0.35, 0.83125, 1)
+[sub_resource type="Gradient" id="Gradient_wqi5r"]
+offsets = PackedFloat32Array(0.575, 0.84375, 1)
 colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_gkp7w"]
-gradient = SubResource("Gradient_3h2rq")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oh43q"]
+gradient = SubResource("Gradient_wqi5r")
 width = 32
 height = 32
 fill_from = Vector2(0, 0.625)
-fill_to = Vector2(0, 0)
+fill_to = Vector2(0, 0.0892857)
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_bgati"]
-texture = SubResource("GradientTexture2D_gkp7w")
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_rn3h6"]
+texture = SubResource("GradientTexture2D_oh43q")
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_nn4re"]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ovlr4"]
 operator = 2
 
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_00idr"]
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dvk4o"]
 parameter_name = "waveColor"
 default_value_enabled = true
 
@@ -88,21 +88,21 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-464.4, 223.099)
+graph_offset = Vector2(-497.209, 177.164)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(540, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_3o66v")
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_oh43q")
 nodes/fragment/2/position = Vector2(-300, 220)
-nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_y007y")
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_pyqo0")
 nodes/fragment/3/position = Vector2(-660, 260)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_m2vmh")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_eggb0")
 nodes/fragment/4/position = Vector2(-1220, 220)
-nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_2fv0u")
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_6urvi")
 nodes/fragment/5/position = Vector2(-900, 360)
-nodes/fragment/6/node = SubResource("VisualShaderNodeTexture_bgati")
+nodes/fragment/6/node = SubResource("VisualShaderNodeTexture_rn3h6")
 nodes/fragment/6/position = Vector2(-300, 640)
-nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_nn4re")
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_ovlr4")
 nodes/fragment/7/position = Vector2(60, 500)
-nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_00idr")
+nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_dvk4o")
 nodes/fragment/8/position = Vector2(80, 60)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 1, 5, 0, 5, 0, 3, 2, 2, 1, 7, 0, 6, 0, 7, 1, 7, 0, 0, 1, 8, 0, 0, 0)

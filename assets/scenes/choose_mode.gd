@@ -6,7 +6,7 @@ var playerId: int;
 var alreadySelected = [];
 var selectedGameMode = "Unknown";
 var selectedMode = false;
-var forceMode = "";
+var forceMode = "snowmen";
 
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
@@ -69,6 +69,8 @@ func _getModeImage(gamemode: String):
 		image = preload("res://assets/textures/gameMap_TCom_Rock_CliffLayered_1.5x1.png").duplicate();
 	elif (gamemode.to_lower() == "doom_bot"):
 		image = preload("res://assets/textures/61SLCkmPE8L._AC_UF894,1000_QL80_DpWeblab_.jpg").duplicate();
+	elif (gamemode.to_lower() == "snowmen"):
+		image = preload("res://assets/textures/Kris_Overworld_b.webp").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();

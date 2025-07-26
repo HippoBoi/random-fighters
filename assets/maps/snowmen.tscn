@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://ctrrbcm2nobis"]
+
+[ext_resource type="PackedScene" uid="uid://dwoq4kh51kn4r" path="res://assets/mapAssets/snowmen/snowmap.tscn" id="1_xbggo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xbggo"]
+size = Vector3(127.261, 0.260262, 62.0472)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o4brt"]
+
+[sub_resource type="Sky" id="Sky_smvvh"]
+sky_material = SubResource("ProceduralSkyMaterial_o4brt")
+
+[sub_resource type="Environment" id="Environment_d3w2u"]
+background_mode = 2
+sky = SubResource("Sky_smvvh")
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 1.17
+glow_strength = 1.36
+glow_bloom = 0.05
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6jubo"]
+
+[node name="Snowmen" type="Node3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.73745e-07, -0.361445, -0.468727)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.04996e-28, -8.74228e-08, -2.30926e-14, 1, 0, 8.74228e-08, -6.05845e-28, -1, 0.909103, 0.591751, 51.7125)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.04996e-28, -8.74228e-08, -2.30926e-14, 1, 0, 8.74228e-08, -6.05845e-28, -1, 0.545497, 0.591754, -53.034)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.382018, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, -2.76004e-22, 0, -2.76004e-22, 1, 0, 0, 0, 1, 0.40784, -0.356785, 1.47646)
+shape = SubResource("BoxShape3D_xbggo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.697372, 0.604967, -0.384301, 0.22071, 0.328872, 0.918221, 0.681879, -0.725161, 0.0958239, 1.73113, 28.9331, -19.1028)
+light_color = Color(0.800178, 0.763048, 0.742369, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d3w2u")
+camera_attributes = SubResource("CameraAttributesPractical_6jubo")
+
+[node name="snowmap" parent="." instance=ExtResource("1_xbggo")]
+transform = Transform3D(0.81, 0, 0, 0, 0.81, 0, 0, 0, 0.81, 0, -0.262688, 0)

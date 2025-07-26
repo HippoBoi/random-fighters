@@ -9,7 +9,8 @@ enum GameModes {
 	Free_For_All,
 	Foggy_Vision,
 	Hippo_Capture,
-	Doom_Bot
+	Doom_Bot,
+	Snowmen
 }
 
 const items = [

@@ -53,6 +53,9 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "doom_bot"):
 		newMap = preload("res://assets/maps/electric_central.tscn").instantiate();
 	
+	elif (gameMode.to_lower() == "snowmen"):
+		newMap = preload("res://assets/maps/snowmen.tscn").instantiate();
+	
 	$Map.add_child(newMap);
 	
 	await get_tree().create_timer(0.5).timeout;
@@ -135,6 +138,8 @@ func _getModeDescription(gameMode: String):
 		description = "Capture the Hippo!"
 	elif (gameMode.to_lower() == "doom_bot"):
 		description = "Survive...!"
+	elif (gameMode.to_lower() == "snowmen"):
+		description = "Destroy enemy snowman!"
 	
 	return description;
 

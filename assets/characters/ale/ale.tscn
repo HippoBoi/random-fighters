@@ -2480,7 +2480,7 @@ draw_pass_1 = SubResource("QuadMesh_wsd73")
 transform = Transform3D(0.712818, 0, 0, 0, 0.72, 0, 0, 0, 2.80181, -0.207886, 1.45214, 7.77838)
 
 [node name="hor_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="0"]
-transform = Transform3D(12.768, 0, 0, 0, 5.28, 0, 0, 0, 4.68933, 0, 0, -0.0720685)
+transform = Transform3D(12.768, 0, 0, 0, 5.28, 0, 0, 0, 4.2204, 0, 0, -0.199731)
 visible = false
 material_override = SubResource("StandardMaterial3D_kqcgl")
 mesh = SubResource("BoxMesh_sdds3")
@@ -2494,7 +2494,7 @@ monitoring = false
 shape = SubResource("BoxShape3D_urmst")
 
 [node name="ver_hitbox" type="MeshInstance3D" parent="r_hitboxes" index="1"]
-transform = Transform3D(5.1072, 0, 0, 0, 5.27999, 0, 0, 0, 6.11326, -0.255642, 0, 0.321272)
+transform = Transform3D(5.1072, 0, 0, 0, 5.27999, 0, 0, 0, 5.50193, -0.255642, 0, 0.0678813)
 visible = false
 material_override = SubResource("StandardMaterial3D_kqcgl")
 mesh = SubResource("BoxMesh_sdds3")
@@ -2554,7 +2554,7 @@ process_material = SubResource("ParticleProcessMaterial_lit7t")
 draw_pass_1 = SubResource("QuadMesh_wsd73")
 
 [node name="GPUTrail3D" type="GPUParticles3D" parent="." index="8"]
-transform = Transform3D(0.205228, -1.71234, 0, 0.765931, 0.458815, 0, 0, 0, 1, 5.12771, -0.214687, -1.8966)
+transform = Transform3D(0.205228, -1.71234, 0, 0.765931, 0.458814, 0, 0, 0, 1, 5.12771, -0.214687, -1.8966)
 amount = 1
 explosiveness = 1.0
 fixed_fps = 60

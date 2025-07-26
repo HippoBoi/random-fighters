@@ -1,0 +1,456 @@
+[gd_scene load_steps=46 format=4 uid="uid://bm3jl75fd7ogc"]
+
+[ext_resource type="Texture2D" uid="uid://dtkyws8pas6cu" path="res://assets/textures/fx/T_VFX_N41.PNG" id="1_8xw6w"]
+[ext_resource type="Texture2D" uid="uid://cdwohxsijyil6" path="res://assets/textures/fx/thunder_texture_2.png" id="2_7cp00"]
+[ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="3_5ycmr"]
+[ext_resource type="Script" uid="uid://bp6ocpdcraftf" path="res://assets/npcs/will_bot/will_thunder.gd" id="4_7cp00"]
+
+[sub_resource type="Gradient" id="Gradient_gakub"]
+offsets = PackedFloat32Array(0, 0.989583, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g6y6e"]
+gradient = SubResource("Gradient_gakub")
+
+[sub_resource type="Curve" id="Curve_ibeu8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.831461), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8ajir"]
+curve = SubResource("Curve_ibeu8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5qdsp"]
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_8ajir")
+color_ramp = SubResource("GradientTexture1D_g6y6e")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6qc07"]
+expanded_output_ports = [0]
+texture = ExtResource("1_8xw6w")
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_l46b1"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_1c5fy"]
+parameter_name = "markColor"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_svera"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_r8c1s"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 1)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_lxhem"]
+
+[sub_resource type="VisualShader" id="VisualShader_0tdrq"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform vec4 markColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform sampler2D tex_frg_2;
+
+
+
+void fragment() {
+// ColorParameter:5
+	vec4 n_out5p0 = markColor;
+
+
+// Input:7
+	vec4 n_out7p0 = COLOR;
+	float n_out7p1 = n_out7p0.r;
+
+
+// VectorOp:8
+	vec2 n_in8p1 = vec2(0.00000, 1.00000);
+	vec2 n_out8p0 = vec2(n_out7p1) * n_in8p1;
+
+
+// UVFunc:9
+	vec2 n_in9p1 = vec2(1.00000, 1.00000);
+	vec2 n_out9p0 = n_out8p0 * n_in9p1 + UV;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, n_out9p0);
+	float n_out2p1 = n_out2p0.r;
+
+
+// FloatOp:4
+	float n_in4p0 = 0.00000;
+	float n_out4p0 = n_in4p0 * n_out2p1;
+
+
+// Output:0
+	ALBEDO = vec3(n_out5p0.xyz);
+	ALPHA = n_out4p0;
+
+
+}
+"
+nodes/fragment/0/position = Vector2(640, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_6qc07")
+nodes/fragment/2/position = Vector2(-360, 240)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatOp_l46b1")
+nodes/fragment/4/position = Vector2(100, 200)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_1c5fy")
+nodes/fragment/5/position = Vector2(260, -80)
+nodes/fragment/7/node = SubResource("VisualShaderNodeInput_svera")
+nodes/fragment/7/position = Vector2(-1280, 300)
+nodes/fragment/8/node = SubResource("VisualShaderNodeVectorOp_r8c1s")
+nodes/fragment/8/position = Vector2(-940, 580)
+nodes/fragment/9/node = SubResource("VisualShaderNodeUVFunc_lxhem")
+nodes/fragment/9/position = Vector2(-720, 340)
+nodes/fragment/connections = PackedInt32Array(2, 1, 4, 1, 4, 0, 0, 1, 5, 0, 0, 0, 7, 1, 8, 0, 8, 0, 9, 2, 9, 0, 2, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_363g8"]
+render_priority = 0
+shader = SubResource("VisualShader_0tdrq")
+shader_parameter/markColor = Color(0.787176, 0.527994, 0.502409, 1)
+
+[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_sip4w"]
+default_input_values = [1, 0.0, 2, 1.0, 3, 0.0, 4, 0.7]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mpqyx"]
+expanded_output_ports = [0]
+texture = ExtResource("2_7cp00")
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_1v062"]
+default_input_values = [1, Vector2(2, 2), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_8kdnk"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_ibvba"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, -0.5)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_o6ak1"]
+default_input_values = [0, 0.0, 1, 0.9, 2, 0.5]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_lf4aa"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="Gradient" id="Gradient_4cw0f"]
+offsets = PackedFloat32Array(0, 0.653179)
+colors = PackedColorArray(5, 0, 0.35, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l805s"]
+gradient = SubResource("Gradient_4cw0f")
+use_hdr = true
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gdps2"]
+texture = SubResource("GradientTexture1D_l805s")
+
+[sub_resource type="VisualShader" id="VisualShader_cdusb"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D tex_frg_2;
+uniform sampler2D tex_frg_9;
+
+
+
+void fragment() {
+// Input:7
+	vec4 n_out7p0 = COLOR;
+	float n_out7p1 = n_out7p0.r;
+
+
+	float n_out10p0;
+// Remap:10
+	float n_in10p1 = 0.00000;
+	float n_in10p2 = 1.00000;
+	float n_in10p3 = 0.00000;
+	float n_in10p4 = 0.70000;
+	{
+		float __input_range = n_in10p2 - n_in10p1;
+		float __output_range = n_in10p4 - n_in10p3;
+		n_out10p0 = n_in10p3 + __output_range * ((n_out7p1 - n_in10p1) / __input_range);
+	}
+
+
+// Input:4
+	float n_out4p0 = TIME;
+
+
+// VectorOp:5
+	vec2 n_in5p1 = vec2(0.00000, -0.50000);
+	vec2 n_out5p0 = vec2(n_out4p0) * n_in5p1;
+
+
+// UVFunc:3
+	vec2 n_in3p1 = vec2(2.00000, 2.00000);
+	vec2 n_out3p0 = n_out5p0 * n_in3p1 + UV;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, n_out3p0);
+	float n_out2p1 = n_out2p0.r;
+
+
+// SmoothStep:6
+	float n_in6p1 = 0.90000;
+	float n_out6p0 = smoothstep(n_out10p0, n_in6p1, n_out2p1);
+
+
+// Texture2D:9
+	vec4 n_out9p0 = texture(tex_frg_9, vec2(n_out6p0));
+
+
+// Output:0
+	ALBEDO = vec3(n_out9p0.xyz);
+	ALPHA = n_out6p0;
+
+
+}
+"
+graph_offset = Vector2(-67.4373, 30.6551)
+modes/cull = 2
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(1120, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_mpqyx")
+nodes/fragment/2/position = Vector2(-120, 380)
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_1v062")
+nodes/fragment/3/position = Vector2(-380, 300)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_8kdnk")
+nodes/fragment/4/position = Vector2(-880, 240)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_ibvba")
+nodes/fragment/5/position = Vector2(-600, 380)
+nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_o6ak1")
+nodes/fragment/6/position = Vector2(400, 380)
+nodes/fragment/7/node = SubResource("VisualShaderNodeInput_lf4aa")
+nodes/fragment/7/position = Vector2(-160, 80)
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_gdps2")
+nodes/fragment/9/position = Vector2(660, 40)
+nodes/fragment/10/node = SubResource("VisualShaderNodeRemap_sip4w")
+nodes/fragment/10/position = Vector2(180, 120)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 5, 0, 5, 0, 3, 2, 2, 1, 6, 2, 9, 0, 0, 0, 6, 0, 9, 0, 6, 0, 0, 1, 7, 1, 10, 0, 10, 0, 6, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ic3r1"]
+render_priority = 0
+shader = SubResource("VisualShader_cdusb")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_bq125"]
+expanded_output_ports = [0]
+texture = ExtResource("3_5ycmr")
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_7ivtr"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_c4u3m"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_wt1xo"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 1)]
+op_type = 0
+operator = 2
+
+[sub_resource type="Gradient" id="Gradient_wqi5r"]
+offsets = PackedFloat32Array(0.575, 0.84375, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oh43q"]
+gradient = SubResource("Gradient_wqi5r")
+width = 32
+height = 32
+fill_from = Vector2(0, 0.625)
+fill_to = Vector2(0, 0.0892857)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_q50xk"]
+texture = SubResource("GradientTexture2D_oh43q")
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_c4el6"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_dqr3v"]
+parameter_name = "waveColor"
+default_value_enabled = true
+
+[sub_resource type="VisualShader" id="VisualShader_khm2g"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 waveColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform sampler2D tex_frg_2;
+uniform sampler2D tex_frg_6;
+
+
+
+void fragment() {
+// ColorParameter:8
+	vec4 n_out8p0 = waveColor;
+
+
+// Input:4
+	vec4 n_out4p0 = COLOR;
+	float n_out4p1 = n_out4p0.r;
+
+
+// VectorOp:5
+	vec2 n_in5p1 = vec2(0.00000, 1.00000);
+	vec2 n_out5p0 = vec2(n_out4p1) * n_in5p1;
+
+
+// UVFunc:3
+	vec2 n_in3p1 = vec2(1.00000, 1.00000);
+	vec2 n_out3p0 = n_out5p0 * n_in3p1 + UV;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, n_out3p0);
+	float n_out2p1 = n_out2p0.r;
+
+
+// Texture2D:6
+	vec4 n_out6p0 = texture(tex_frg_6, UV);
+
+
+// FloatOp:7
+	float n_out7p0 = n_out2p1 * n_out6p0.x;
+
+
+// Output:0
+	ALBEDO = vec3(n_out8p0.xyz);
+	ALPHA = n_out7p0;
+
+
+}
+"
+graph_offset = Vector2(-497.209, 177.164)
+flags/unshaded = true
+nodes/fragment/0/position = Vector2(540, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_bq125")
+nodes/fragment/2/position = Vector2(-300, 220)
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_7ivtr")
+nodes/fragment/3/position = Vector2(-660, 260)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_c4u3m")
+nodes/fragment/4/position = Vector2(-1220, 220)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_wt1xo")
+nodes/fragment/5/position = Vector2(-900, 360)
+nodes/fragment/6/node = SubResource("VisualShaderNodeTexture_q50xk")
+nodes/fragment/6/position = Vector2(-300, 640)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_c4el6")
+nodes/fragment/7/position = Vector2(60, 500)
+nodes/fragment/8/node = SubResource("VisualShaderNodeColorParameter_dqr3v")
+nodes/fragment/8/position = Vector2(80, 60)
+nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 1, 5, 0, 5, 0, 3, 2, 2, 1, 7, 0, 6, 0, 7, 1, 7, 0, 0, 1, 8, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3axl"]
+render_priority = 0
+shader = SubResource("VisualShader_khm2g")
+shader_parameter/waveColor = Color(2, 0.75, 0.948, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_qb0rs"]
+_surfaces = [{
+"aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgABAAMA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("//8AAP//AAAAAAAA//8AAP//AAAAAAAAAAAAAAAAAAA=")
+}, {
+"aabb": AABB(-3.51233, -0.019983, -0.919341, 6.57922, 15.444, 3.17365),
+"format": 34896613377,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEABQAEAAAABQAGAAQABwAGAAUABwAIAAYACQAIAAcACQAKAAgACwAKAAkACwAMAAoADQAMAAsADQAOAAwADwAOAA0ADwAQAA4AEQAQAA8AEQASABAAEwASABEAEwAUABIAFQAUABMAFQAWABQAFwAWABUAFwAYABYAGQAYABcAGQAaABgAGwAaABkAGwAcABoAHQAcABsAHQAeABwAHwAeAB0AHwAgAB4AIQAgAB8A"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 34,
+"vertex_data": PackedByteArray("Vdn/79ZvAABZnv/v//8AADva///QpwAA7pP//7z9AACkqv/fgeQAALXn/99tMQAAobL/z4nDAAD18v/PFgQAABWw/78NrAAA////vwAAAAAGpf+v36kAAA/9/68wGAAAdI3/n2G2AAC37P+f/D0AAJ9c/48awgAA5dD/j1FlAACzLf9/LbgAANqf/39hiwAAdg7/b8GoAABUgP9vdZEAAAAA/19LlgAAN3f/X1OJAABGCv9PQ4YAAFiJ/08qeAAAtir/P014AADDtf8/2mEAAG1Z/y8QagAAAdv/LxhTAACOdP8fXF4AAMzc/x+fUAAAgWz/DwNXAABCx/8P8FAAALliAADbUAAAELQAABRPAAA=")
+}, {
+"aabb": AABB(-3.07499, 0, -2.92876, 6.14998, 2, 5.91642),
+"format": 34896613377,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAAAAIAAQAFAAMABgAAAAQAAwAFAAcACAAGAAQABQAJAAcACgAGAAgABwAJAAsADAAKAAgACQANAAsADgAKAAwACwANAA8AEAAOAAwADQARAA8AEgAOABAADwARABMAFAASABAAEQAVABMAFgASABQAEwAVABcAGAAWABQAFQAZABcAGgAWABgAFwAZABsAHAAaABgAGQAdABsAHgAaABwAGwAdAB8AIAAeABwAHQAhAB8AIgAeACAAHwAhACMAJAAiACAAIQAlACMAJgAiACQAIwAlACcAKAAmACQAJQApACcAKgAmACgAJwApACsALAAqACgAKQAtACsALgAqACwAKwAtAC8AMAAuACwALQAxAC8AMgAuADAALwAxADMANAAyADAAMQA1ADMANgAyADQAMwA1ADcAOAA2ADQANQA5ADcAOgA2ADgANwA5ADsAPAA6ADgAOQA9ADsAPgA6ADwAOwA9AD8APQA+AD8APwA+ADwA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 64,
+"vertex_data": PackedByteArray("IYYAAKpeAAD/fwAACV4AAMiX//9vAgAA/3///wAAAACmrv//pQkAAN15AACqXgAAB4wAAIZgAAA2aP//bwIAALrD//9bFQAA93MAAIZgAAB3kQAAjGMAAFhR//+lCQAAM9b//x0lAACHbgAAjGMAADuWAACcZwAARDz//1sVAABd5f//UTgAAMNpAACcZwAAJJoAAJBsAADLKf//HSUAAKHw//86TgAA2mUAAJBsAAAMnQAAN3IAAKEa//9ROAAAkff//wBmAADyYgAAN3IAANaeAABYeAAAXQ///zpOAAD/////8XoAAChhAABYeAAAcZ8AALl+AABtCP//AGYAAIn9///mlAAAjWAAALl+AADWngAAGYUAAAAA///xegAAQPb//9ytAAAoYQAAGYUAAAydAAA7iwAAdQL//+aUAABs6v//3cQAAPJiAAA7iwAAJJoAAOKQAAC+Cf//3K0AAIHa//8G2QAA2mUAAOKQAAA7lgAA1pUAAJIV///dxAAAHMf//5LpAADDaQAA1pUAAHeRAADmmQAAfSX//wbZAAD7sP//3vUAAIduAADmmQAAB4wAAOucAADiOP//kukAAPiY//9w/QAA93MAAOucAAAhhgAAyJ4AAANP///e9QAA/3//////AADdeQAAyJ4AAP9/AABonwAABmf//3D9AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yo7an"]
+_surfaces = [{
+"aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
+"attribute_data": PackedByteArray("/////wAA/////wAAAAAAAA=="),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgABAAMA"),
+"material": SubResource("ShaderMaterial_363g8"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("//8AAP///78AAAAA////v///AAAAAP+/AAAAAAAA/7////9/////f////3////9/")
+}, {
+"aabb": AABB(-3.51233, -0.019983, -0.919341, 6.57922, 15.444, 3.17365),
+"attribute_data": PackedByteArray("////DwAA/w///wAAAAAAAAAA/x////8fAAD/L////y8AAP8/////PwAA/0////9PAAD/X////18AAP9v////bwAA/3////9/AAD/j////48AAP+f////nwAA/6////+vAAD/v////78AAP/P////zwAA/9/////fAAD/7////+8AAP///////w=="),
+"format": 34896613399,
+"index_count": 96,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEABQAEAAAABQAGAAQABwAGAAUABwAIAAYACQAIAAcACQAKAAgACwAKAAkACwAMAAoADQAMAAsADQAOAAwADwAOAA0ADwAQAA4AEQAQAA8AEQASABAAEwASABEAEwAUABIAFQAUABMAFQAWABQAFwAWABUAFwAYABYAGQAYABcAGQAaABgAGwAaABkAGwAcABoAHQAcABsAHQAeABwAHwAeAB0AHwAgAB4AIQAgAB8A"),
+"material": SubResource("ShaderMaterial_ic3r1"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 34,
+"vertex_data": PackedByteArray("Vdn/79Zvy6JZnv/v//+loDva///Qp86d7pP//7z9qp2kqv/fgeQFprXn/99tMaymobL/z4nD2qX18v/PFgQUpRWw/78NrAmh////vwAADKEGpf+v36n+mg/9/68wGEqcdI3/n2G29JS37P+f/D0+l59c/48awtSO5dD/j1FlDpKzLf9/Lbg4itqf/39hi0uMdg7/b8GolIhUgP9vdZHTiAAA/19LljKIN3f/X1OJMIhGCv9PQ4bDh1iJ/08qeHGHtir/P014pYbDtf8/2mF/hW1Z/y8QasKEAdv/LxhTUYSOdP8fXF6kg8zc/x+fUKuDgWz/DwNX3IJCx/8P8FAFg7liAADbUJmCELQAABRPmYKGcyITam55F8tpgyDIZsodcXeoDHJ3Eg1DetUICny/BSV+xQIRfqECYXrhBzF7QgbWaZ8dIXIWETJXjDImXn4mE0TAQ99KwTeOLyBWNjPRTpki62A9IcdgSyAIYmQk8V6GKs9X1DZdTC8/dUM1Q+w+ukHeQKJBwT90LqNT6jGoTnUj9l1eIpVd")
+}, {
+"aabb": AABB(-3.07499, 0, -2.92876, 6.14998, 2, 5.91642),
+"attribute_data": PackedByteArray("//f/////////9wAA//8AAP/vAAD/7////+cAAP/n////3wAA/9/////XAAD/1////88AAP/P////xwAA/8f///+/AAD/v////7cAAP+3////rwAA/6////+nAAD/p////58AAP+f////lwAA/5f///+PAAD/j////4cAAP+H////fwAA/3////93AAD/d////28AAP9v////ZwAA/2f///9fAAD/X////1cAAP9X////TwAA/0////9HAAD/R////z8AAP8/////NwAA/zf///8vAAD/L////ycAAP8n////HwAA/x////8XAAD/F////w8AAP8P////BwAA/wf//wAAAAAAAP//"),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAAAAIABQAAAAQABgAFAAQABwAFAAYACAAHAAYACQAHAAgACgAJAAgACwAJAAoADAALAAoADQALAAwADgANAAwADwANAA4AEAAPAA4AEQAPABAAEgARABAAEwARABIAFAATABIAFQATABQAFgAVABQAFwAVABYAGAAXABYAGQAXABgAGgAZABgAGwAZABoAHAAbABoAHQAbABwAHgAdABwAHwAdAB4AIAAfAB4AIQAfACAAIgAhACAAIwAhACIAJAAjACIAJQAjACQAJgAlACQAJwAlACYAKAAnACYAKQAnACgAKgApACgAKwApACoALAArACoALQArACwALgAtACwALwAtAC4AMAAvAC4AMQAvADAAMgAxADAAMwAxADIANAAzADIANQAzADQANgA1ADQANwA1ADYAOAA3ADYAOQA3ADgAOgA5ADgAOwA5ADoAPAA7ADoAPQA7ADwAPgA9ADwAPwA9AD4AQAA/AD4AQQA/AEAA"),
+"material": SubResource("ShaderMaterial_u3axl"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 66,
+"vertex_data": PackedByteArray("IYYAAKpeNQP/fwAACV6yAsiX//9vAjUD/3///wAAsgKmrv//pQlkBgeMAACGYGQGusP//1sVhgl3kQAAjGOGCTPW//8dJZQMO5YAAJxnlAxd5f//UTiGDySaAACQbIYPofD//zpOVxIMnQAAN3JXEpH3//8AZqUS1p4AAFh4xxX/////8XpiFnGfAAC5fkwZif3//+aUlBrWngAAGYWeGkD2///crZAcDJ0AADuLmBxs6v//3cRFHiSaAADikEsegdr//wbZrx87lgAA1pWzHxzH//+S6cogd5EAAOaZzSD7sP//3vWXIQeMAADrnJgh+Jj//3D9ESIhhgAAyJ4SIv9//////zsi/38AAGifOyIGZ///cP0RIt15AADInhIiA0///971lyH3cwAA65yYIeI4//+S6cogh24AAOaZzSB9Jf//BtmvH8NpAADWlbMfkhX//93ERR7aZQAA4pBLHr4J///crZAc8mIAADuLmBx1Av//5pSUGihhAAAZhZ4aAAD///F6RRaNYAAAuX75GG0I//8AZsASKGEAAFh4IRZdD///Ok5XEvJiAAA3clcSoRr//1E4hg/aZQAAkGyGD8sp//8dJZQMw2kAAJxnlAxEPP//WxWGCYduAACMY4YJWFH//6UJZAb3cwAAhmBkBjZo//9vAjUD3XkAAKpeNQP/f///AACyAv9/AAAJXrICdtszCGTZZQF22zMIZNllAbTdiw+03YsPwt9JFsLfSRaw4ZwcsOGcHInjqyKJ46siV+WXKFfllyiV5XUqaOdsLOPmgDD06IEyJ+pCOjDqXzpJ7N5AUuz8QJHuA0ia7iBIEfHpTxrxBVDg899Y6PP4WCH3V2Mo92tjDfsCcBL7DnD///9/////fwHw8IQO8OyEVuPciGvj1Yje2B6M99gWjOjP7Y4E0OSOAshskSDIY5HdwLWT+8Crk0K615Vfus2VarAvmUGyRpeEqlmapKxgmJeoppqXqKaaq6J1nKuidZycnE6enJxOnkmWO6BJljugi49KoouPSqIyiIekMoiHpGWBmqZlgZqm")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_qb0rs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8xw6w"]
+transparency = 1
+albedo_color = Color(1, 0.207843, 0.298039, 0.258824)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7cp00"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5ycmr"]
+
+[node name="will_thunder" type="GPUParticles3D"]
+amount = 1
+lifetime = 1.25
+process_material = SubResource("ParticleProcessMaterial_5qdsp")
+draw_pass_1 = SubResource("ArrayMesh_yo7an")
+script = ExtResource("4_7cp00")
+
+[node name="hitbox" type="Node3D" parent="."]
+transform = Transform3D(0.544333, 0, 0, 0, 0.72, 0, 0, 0, 0.627605, 0, 1.44, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hitbox"]
+transform = Transform3D(5.32, 0, 0, 0, 5.28, 0, 0, 0, 4.93406, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8xw6w")
+mesh = SubResource("BoxMesh_7cp00")
+
+[node name="Area3D" type="Area3D" parent="hitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_5ycmr")
+
+[connection signal="body_entered" from="hitbox/MeshInstance3D/Area3D" to="." method="_on_hit"]
