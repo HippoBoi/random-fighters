@@ -6,7 +6,7 @@ var playerId: int;
 var alreadySelected = [];
 var selectedGameMode = "Unknown";
 var selectedMode = false;
-var forceMode = "snowmen";
+var forceMode = "doom_bot";
 
 var blackTeamWins = 0;
 var whiteTeamWins = 0;

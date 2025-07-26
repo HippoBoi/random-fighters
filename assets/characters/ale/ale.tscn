@@ -2587,5 +2587,5 @@ _defaults_have_been_set = true
 metadata/_custom_type_script = "uid://qaiudhsklp0m"
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
-[connection signal="body_entered" from="r_hitboxes/hor_hitbox/Area3D" to="." method="_on_q_touched"]
+[connection signal="body_entered" from="r_hitboxes/hor_hitbox/Area3D" to="." method="_on_r_hit_small"]
 [connection signal="body_entered" from="r_hitboxes/ver_hitbox/Area3D" to="." method="_on_r_touched"]

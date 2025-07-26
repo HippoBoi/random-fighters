@@ -5,6 +5,7 @@ var animPlayer: AnimationPlayer = null;
 
 var startTimer = 0;
 var animTimer = 0;
+var thunderTimer = 0;
 var started = false;
 var idleStarted = false;
 
@@ -20,6 +21,7 @@ func _ready() -> void:
 	animPlayer = willBot.get_node("AnimationPlayer");
 	animTimer = 1.45;
 	startTimer = 2.25;
+	thunderTimer = 7.0;
 
 func _physics_process(delta: float) -> void:
 	_handleTimers(delta);
@@ -44,6 +46,12 @@ func _handleTimers(delta: float):
 		if not (idleStarted):
 			idleStarted = true;
 			animPlayer.play("idle");
+	
+	if (thunderTimer > 0):
+		thunderTimer -= delta;
+	else:
+		thunderTimer = 3.0 + randi_range(1, 5);
+		willBot.rpc("createThunder", Vector3(0, 0, 12));
 
 func _lightTween():
 	await get_tree().create_timer(0.85).timeout;

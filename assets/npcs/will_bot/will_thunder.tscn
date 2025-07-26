@@ -1,9 +1,12 @@
-[gd_scene load_steps=46 format=4 uid="uid://bm3jl75fd7ogc"]
+[gd_scene load_steps=62 format=4 uid="uid://bm3jl75fd7ogc"]
 
 [ext_resource type="Texture2D" uid="uid://dtkyws8pas6cu" path="res://assets/textures/fx/T_VFX_N41.PNG" id="1_8xw6w"]
 [ext_resource type="Texture2D" uid="uid://cdwohxsijyil6" path="res://assets/textures/fx/thunder_texture_2.png" id="2_7cp00"]
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="3_5ycmr"]
 [ext_resource type="Script" uid="uid://bp6ocpdcraftf" path="res://assets/npcs/will_bot/will_thunder.gd" id="4_7cp00"]
+[ext_resource type="Shader" uid="uid://d3iiifpcjnio2" path="res://assets/effects/cylinder_aura.tres" id="5_gakub"]
+[ext_resource type="ArrayMesh" uid="uid://da6qm7vijaxie" path="res://assets/particles/cylinder_long.obj" id="6_g6y6e"]
+[ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="6_ibeu8"]
 
 [sub_resource type="Gradient" id="Gradient_gakub"]
 offsets = PackedFloat32Array(0, 0.989583, 1)
@@ -430,27 +433,117 @@ albedo_color = Color(1, 0.207843, 0.298039, 0.258824)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5ycmr"]
 
-[node name="will_thunder" type="GPUParticles3D"]
-amount = 1
-lifetime = 1.25
-process_material = SubResource("ParticleProcessMaterial_5qdsp")
-draw_pass_1 = SubResource("ArrayMesh_yo7an")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gakub"]
+render_priority = 0
+shader = ExtResource("5_gakub")
+shader_parameter/speed = Vector2(1, 1)
+shader_parameter/auraTexture = ExtResource("6_ibeu8")
+
+[sub_resource type="Gradient" id="Gradient_8ajir"]
+offsets = PackedFloat32Array(0, 0.114583, 0.6875, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.505344, 0.505344, 0.505344, 0.696, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5qdsp"]
+gradient = SubResource("Gradient_8ajir")
+
+[sub_resource type="Curve" id="Curve_6qc07"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.505618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_l46b1"]
+_data = [Vector2(0, 0.213483), 0.0, 0.0, 0, 0, Vector2(1, 0.101124), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_1c5fy"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.505618), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_svera"]
+curve_x = SubResource("Curve_6qc07")
+curve_y = SubResource("Curve_l46b1")
+curve_z = SubResource("Curve_1c5fy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_r8c1s"]
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 3.0
+scale_curve = SubResource("CurveXYZTexture_svera")
+color = Color(3, 0.525, 1, 1)
+color_ramp = SubResource("GradientTexture1D_5qdsp")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6y6e"]
+transparency = 1
+cull_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="Gradient" id="Gradient_ibeu8"]
+colors = PackedColorArray(0.937154, 0.526941, 0.387807, 1, 0.821844, 0, 0.0149827, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8ajir"]
+gradient = SubResource("Gradient_ibeu8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6qc07"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, -4, 0)
+scale_min = 0.5
+scale_max = 1.5
+color_ramp = SubResource("GradientTexture1D_8ajir")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_l46b1"]
+radius = 0.1
+height = 0.25
+radial_segments = 4
+rings = 1
+
+[node name="will_thunder" type="Node3D"]
 script = ExtResource("4_7cp00")
 
-[node name="hitbox" type="Node3D" parent="."]
+[node name="thunderParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1
+lifetime = 1.25
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_5qdsp")
+draw_pass_1 = SubResource("ArrayMesh_yo7an")
+
+[node name="hitbox" type="Node3D" parent="thunderParticles"]
 transform = Transform3D(0.544333, 0, 0, 0, 0.72, 0, 0, 0, 0.627605, 0, 1.44, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="hitbox"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="thunderParticles/hitbox"]
 transform = Transform3D(5.32, 0, 0, 0, 5.28, 0, 0, 0, 4.93406, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_8xw6w")
 mesh = SubResource("BoxMesh_7cp00")
 
-[node name="Area3D" type="Area3D" parent="hitbox/MeshInstance3D"]
+[node name="Area3D" type="Area3D" parent="thunderParticles/hitbox/MeshInstance3D"]
 collision_layer = 5
 collision_mask = 5
 monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox/MeshInstance3D/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="thunderParticles/hitbox/MeshInstance3D/Area3D"]
 shape = SubResource("BoxShape3D_5ycmr")
 
-[connection signal="body_entered" from="hitbox/MeshInstance3D/Area3D" to="." method="_on_hit"]
+[node name="OmniLight3D" type="OmniLight3D" parent="thunderParticles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+light_color = Color(2, 0.5, 0.5, 1)
+
+[node name="warningParticles" type="GPUParticles3D" parent="."]
+material_override = SubResource("ShaderMaterial_gakub")
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 1.5
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_r8c1s")
+draw_pass_1 = ExtResource("6_g6y6e")
+
+[node name="particles" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_g6y6e")
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_6qc07")
+draw_pass_1 = SubResource("CapsuleMesh_l46b1")
+
+[connection signal="body_entered" from="thunderParticles/hitbox/MeshInstance3D/Area3D" to="." method="_on_hit"]

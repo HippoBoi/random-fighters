@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://df2n8yfa8o5bq"]
+[gd_scene load_steps=3 format=3 uid="uid://df2n8yfa8o5bq"]
 
 [ext_resource type="PackedScene" uid="uid://cmkxvfts4so5b" path="res://assets/npcs/will_bot/willBot.glb" id="1_xsfxq"]
+[ext_resource type="Script" uid="uid://do036m0k8ifqo" path="res://assets/npcs/will_bot/will_bot.gd" id="2_fpnb6"]
 
 [node name="willBot" instance=ExtResource("1_xsfxq")]
+script = ExtResource("2_fpnb6")
 
 [node name="Skeleton3D" parent="Will_Armature" index="0"]
 bones/0/position = Vector3(0, 0.789656, 0)

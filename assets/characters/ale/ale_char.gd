@@ -530,4 +530,12 @@ func _on_r_touched(other: Node3D) -> void:
 		var totalDmg = dmg * 1.4;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.stunTarget(other, 1.95);
+			PlayerFunc.stunTarget(other, 1.65);
+
+func _on_r_hit_small(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = dmg * 1.0;
+		if (other.team != team):
+			PlayerFunc.dealDamage(self, other, totalDmg);
+			PlayerFunc.stunTarget(other, 0.5);
