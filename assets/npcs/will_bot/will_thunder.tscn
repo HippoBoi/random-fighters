@@ -511,6 +511,7 @@ draw_pass_1 = SubResource("ArrayMesh_yo7an")
 
 [node name="hitbox" type="Node3D" parent="thunderParticles"]
 transform = Transform3D(0.544333, 0, 0, 0, 0.72, 0, 0, 0, 0.627605, 0, 1.44, 0)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="thunderParticles/hitbox"]
 transform = Transform3D(5.32, 0, 0, 0, 5.28, 0, 0, 0, 4.93406, 0, 0, 0)

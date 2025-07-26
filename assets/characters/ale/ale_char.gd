@@ -208,7 +208,7 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		usingParry = false;
 		
-		if (secondaryTimer >= 0.4 and secondaryTimer <= 0.65):
+		if (secondaryTimer >= 0.3 and secondaryTimer <= 0.65):
 			usingParry = true;
 	else:
 		if (usingSecondary):

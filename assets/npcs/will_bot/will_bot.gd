@@ -5,7 +5,6 @@ func _ready() -> void:
 
 @rpc("call_local", "reliable", "any_peer")
 func createThunder(_position: Vector3):
-	print("CREATING THUNDER AT: %s" % _position);
 	var thunder = preload("res://assets/npcs/will_bot/will_thunder.tscn").instantiate();
 	add_child(thunder);
 	

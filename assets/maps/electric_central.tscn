@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://c1tgglpb644av"]
+[gd_scene load_steps=30 format=4 uid="uid://c1tgglpb644av"]
 
 [ext_resource type="PackedScene" uid="uid://b36epdma8l818" path="res://assets/mapAssets/electric_central/mesh_electric_central.tscn" id="1_l3ivx"]
 [ext_resource type="Script" uid="uid://bwy5xtgc5jqs2" path="res://assets/maps/electric_central.gd" id="1_t6cn1"]
@@ -198,6 +198,8 @@ size = Vector3(1.57962, 15.674, 2.49158)
 [sub_resource type="BoxShape3D" id="BoxShape3D_o4e20"]
 size = Vector3(0.224869, 12.002, 2.49158)
 
+[sub_resource type="BoxMesh" id="BoxMesh_t6cn1"]
+
 [node name="ElectricCentral" type="Node3D"]
 script = ExtResource("1_t6cn1")
 
@@ -365,3 +367,7 @@ transform = Transform3D(0.688393, 0, 0.725338, 0, 1, 0, -0.725338, 0, 0.688393, 
 light_energy = 0.0
 spot_range = 7.0
 spot_attenuation = 0.12
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -30)
+mesh = SubResource("BoxMesh_t6cn1")
