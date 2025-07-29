@@ -1,7 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://cki747kpqtgwt"]
+[gd_scene load_steps=4 format=3 uid="uid://ddo3ki5pngn4y"]
 
 [ext_resource type="PackedScene" uid="uid://bnetulmqgat0n" path="res://assets/npcs/snowman/snowman.glb" id="1_plns1"]
 [ext_resource type="Script" uid="uid://df68w5gjnjvj0" path="res://assets/npcs/snowman/snowman.gd" id="2_p7h3x"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_plns1"]
+size = Vector3(7.44666, 2, 4.12354)
+
 [node name="snowman" instance=ExtResource("1_plns1")]
+collision_layer = 6
 script = ExtResource("2_p7h3x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00543213, 0.499995, 0.494385)
+shape = SubResource("BoxShape3D_plns1")
