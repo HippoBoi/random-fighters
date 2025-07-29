@@ -19,12 +19,12 @@ gradient = SubResource("Gradient_gakub")
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.831461), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_8ajir"]
+[sub_resource type="CurveTexture" id="CurveTexture_ibeu8"]
 curve = SubResource("Curve_ibeu8")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5qdsp"]
 gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_8ajir")
+scale_curve = SubResource("CurveTexture_ibeu8")
 color_ramp = SubResource("GradientTexture1D_g6y6e")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6qc07"]
@@ -350,7 +350,7 @@ render_priority = 0
 shader = SubResource("VisualShader_khm2g")
 shader_parameter/waveColor = Color(2, 0.75, 0.948, 1)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_qb0rs"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_8ajir"]
 _surfaces = [{
 "aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
 "format": 34896613377,
@@ -423,7 +423,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("IYYAAKpeNQP/fwAACV6yAsiX//9vAjUD/3///wAAsgKmrv//pQlkBgeMAACGYGQGusP//1sVhgl3kQAAjGOGCTPW//8dJZQMO5YAAJxnlAxd5f//UTiGDySaAACQbIYPofD//zpOVxIMnQAAN3JXEpH3//8AZqUS1p4AAFh4xxX/////8XpiFnGfAAC5fkwZif3//+aUlBrWngAAGYWeGkD2///crZAcDJ0AADuLmBxs6v//3cRFHiSaAADikEsegdr//wbZrx87lgAA1pWzHxzH//+S6cogd5EAAOaZzSD7sP//3vWXIQeMAADrnJgh+Jj//3D9ESIhhgAAyJ4SIv9//////zsi/38AAGifOyIGZ///cP0RIt15AADInhIiA0///971lyH3cwAA65yYIeI4//+S6cogh24AAOaZzSB9Jf//BtmvH8NpAADWlbMfkhX//93ERR7aZQAA4pBLHr4J///crZAc8mIAADuLmBx1Av//5pSUGihhAAAZhZ4aAAD///F6RRaNYAAAuX75GG0I//8AZsASKGEAAFh4IRZdD///Ok5XEvJiAAA3clcSoRr//1E4hg/aZQAAkGyGD8sp//8dJZQMw2kAAJxnlAxEPP//WxWGCYduAACMY4YJWFH//6UJZAb3cwAAhmBkBjZo//9vAjUD3XkAAKpeNQP/f///AACyAv9/AAAJXrICdtszCGTZZQF22zMIZNllAbTdiw+03YsPwt9JFsLfSRaw4ZwcsOGcHInjqyKJ46siV+WXKFfllyiV5XUqaOdsLOPmgDD06IEyJ+pCOjDqXzpJ7N5AUuz8QJHuA0ia7iBIEfHpTxrxBVDg899Y6PP4WCH3V2Mo92tjDfsCcBL7DnD///9/////fwHw8IQO8OyEVuPciGvj1Yje2B6M99gWjOjP7Y4E0OSOAshskSDIY5HdwLWT+8Crk0K615Vfus2VarAvmUGyRpeEqlmapKxgmJeoppqXqKaaq6J1nKuidZycnE6enJxOnkmWO6BJljugi49KoouPSqIyiIekMoiHpGWBmqZlgZqm")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_qb0rs")
+shadow_mesh = SubResource("ArrayMesh_8ajir")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8xw6w"]
 transparency = 1

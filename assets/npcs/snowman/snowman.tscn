@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cki747kpqtgwt"]
+
+[ext_resource type="PackedScene" uid="uid://bnetulmqgat0n" path="res://assets/npcs/snowman/snowman.glb" id="1_plns1"]
+[ext_resource type="Script" uid="uid://df68w5gjnjvj0" path="res://assets/npcs/snowman/snowman.gd" id="2_p7h3x"]
+
+[node name="snowman" instance=ExtResource("1_plns1")]
+script = ExtResource("2_p7h3x")

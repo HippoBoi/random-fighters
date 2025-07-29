@@ -17,8 +17,9 @@ const CHARACTER_NAME = "Ale";
 const Q_COOLDOWN = 7.0;
 const W_COOLDOWN = 9.0;
 const E_COOLDOWN = 2.0;
-const R_COOLDOWN = 40.0;
+const R_COOLDOWN = 2.0;
 const E_MAX_RANGE = 6.0;
+const R_MAX_RANGE = 10.0;
 const Q_STAMINA = 22;
 const W_STAMINA = 22;
 const E_STAMINA = 14;
@@ -116,6 +117,9 @@ func _ready() -> void:
 	PlayerFunc.setup(self);
 
 func rotateChar(newPos) -> void:
+	if not (newPos):
+		return;
+	
 	var direction = (newPos - global_position);
 	direction.y = 0;
 	direction = direction.normalized();
@@ -216,7 +220,7 @@ func _physics_process(delta: float) -> void:
 			usingParry = false;
 			onAction = false;
 	
-	if (usingTertiary == true):
+	if (usingTertiary):
 		tertiaryTimer -= delta;
 		
 		if (moveTo == null or tertiaryTimer <= 0):
@@ -225,15 +229,26 @@ func _physics_process(delta: float) -> void:
 			speedOffset -= 6;
 			speedOffset = clamp(speedOffset, 0, 100);
 	
-	if (ultiTimer > 0):
+	if (usingUlti):
 		ultiTimer -= delta;
-		moveTo = global_position;
 		
-		_handleUltiHitboxes(ultiTimer);
-	else:
-		if (usingUlti):
+		if (ultiTimer > 1.9):
+			moveTo = global_position;
+		if (ultiTimer <= 1.9):
+			moveTo = ultiTarget;
+		if (ultiTimer > 0.7 and ultiTimer <= 1.0):
+			_setHitbox($r_hitboxes/damage_hitbox/Area3D, true);
+		if (ultiTimer > 0.7 and ultiTimer <= 0.8):
+			_setHitbox($r_hitboxes/slow_hitbox/Area3D, true);
+		if (ultiTimer <= 0.7):
+			_setHitbox($r_hitboxes/damage_hitbox/Area3D, false);
+			_setHitbox($r_hitboxes/slow_hitbox/Area3D, false);
+			
+		if (moveTo == null or ultiTimer <= 0):
 			usingUlti = false;
 			onAction = false;
+			speedOffset -= 7;
+			speedOffset = clamp(speedOffset, 0, 100);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -254,20 +269,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 			animPlayer.play("idle");
-
-func _handleUltiHitboxes(ultiTimer):
-	if (ultiTimer > 2.50 and ultiTimer <= 2.55):
-		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
-	if (ultiTimer > 1.85 and ultiTimer <= 2.50):
-		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
-	if (ultiTimer > 1.80 and ultiTimer <= 1.85):
-		_setHitbox($r_hitboxes/hor_hitbox/Area3D, true);
-	if (ultiTimer > 0.95 and ultiTimer <= 1.80):
-		_setHitbox($r_hitboxes/hor_hitbox/Area3D, false);
-	if (ultiTimer > 0.90 and ultiTimer <= 0.95):
-		_setHitbox($r_hitboxes/ver_hitbox/Area3D, true);
-	if (ultiTimer <= 0.90):
-		_setHitbox($r_hitboxes/ver_hitbox/Area3D, false);
 
 func updateHealthSize():
 	var UILoaded = has_node("CharacterUI");
@@ -353,7 +354,6 @@ func _setup_tertiary():
 @rpc("call_local", "reliable")
 func tertiary_ability(_moveTo, _global_pos):
 	var direction = (_moveTo - _global_pos).normalized();
-	var _distance = _global_pos.distance_to(_moveTo);
 	usingTertiary = true;
 	tertiaryTimer = 0.6;
 	
@@ -363,8 +363,8 @@ func tertiary_ability(_moveTo, _global_pos):
 		rpc("syncBufferedInputs", null, bufferedTarget);
 	
 	moveTo = _global_pos + direction * E_MAX_RANGE;
-	
 	moveTo.y = _global_pos.y;
+	
 	eTimer = E_COOLDOWN - cooldownReduction;
 	stamina -= E_STAMINA;
 	speedOffset = 6;
@@ -377,20 +377,33 @@ func _setup_ultimate():
 	if (mousePos.is_empty()):
 		return;
 	
-	rpc("ultimate_ability", mousePos.position);
+	rpc("ultimate_ability", mousePos.position, global_position);
 
 @rpc("call_local", "reliable")
-func ultimate_ability(_mousePos):
-	rTimer = R_COOLDOWN;
-	stamina -= R_STAMINA - cooldownReduction;
-	ultiTimer = 3.1;
-	target = null;
+func ultimate_ability(_moveTo, _global_pos):
+	var ultAnimPlayer = $NewUltAnimPlayer;
+	var direction = (_moveTo - _global_pos).normalized();
+	var distance = _global_pos.distance_to(_moveTo);
 	usingUlti = true;
-	onAction = true;
-	animPlayer.play("r_ability_001");
+	ultiTimer = 2.7;
 	
-	simulateMove(null, global_position);
-	rpc("syncRotation", _mousePos);
+	if (target):
+		bufferedTarget = target;
+		target = null;
+		rpc("syncBufferedInputs", null, bufferedTarget);
+	
+	if (distance > R_MAX_RANGE):
+		ultiTarget = _global_pos + direction * R_MAX_RANGE;
+	else:
+		ultiTarget = _moveTo;
+	ultiTarget.y = _global_pos.y;
+	
+	onAction = true;
+	rTimer = R_COOLDOWN - cooldownReduction;
+	stamina -= R_STAMINA;
+	speedOffset = 7;
+	ultAnimPlayer.play("r_ability");
+	syncRotation(_moveTo);
 	rpc("syncStamina", stamina, true);
 
 @rpc("call_local")
@@ -407,7 +420,8 @@ func cancelUlti():
 	playingUltiSound = false;
 	ultiTarget = null;
 	moveTo = null;
-	speedOffset = 0;
+	speedOffset -= 7;
+	speedOffset = clamp(speedOffset, 0, 100);
 	
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):
@@ -524,18 +538,18 @@ func _on_q_touched(other: Node3D) -> void:
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 1.0);
 
-func _on_r_touched(other: Node3D) -> void:
+func _on_r_hit_slow(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.4;
+		var totalDmg = dmg * 0.5;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.stunTarget(other, 1.65);
+			PlayerFunc.slowTarget(other, 0.5);
 
-func _on_r_hit_small(other: Node3D) -> void:
+func _on_r_hit_damage(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.0;
+		var totalDmg = dmg * 1.5;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.5);

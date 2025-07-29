@@ -1678,7 +1678,7 @@ height = 0.25
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.413265, 0.579767), 0.0, 0.0, 0, 0, Vector2(0.954082, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_tsh70"]
+[sub_resource type="CurveTexture" id="CurveTexture_w1r0h"]
 curve = SubResource("Curve_expdq")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dhhdc"]
@@ -1692,7 +1692,7 @@ radial_accel_min = -5.0
 radial_accel_max = -4.0
 tangential_accel_min = -2.23517e-06
 tangential_accel_max = -2.23517e-06
-scale_curve = SubResource("CurveTexture_tsh70")
+scale_curve = SubResource("CurveTexture_w1r0h")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_wl3mr"]
 material = ExtResource("5_0s7fy")
