@@ -11,7 +11,7 @@ extends CharacterBody3D
 @export var cooldownReduction = 0;
 var shield = 0;
 
-const BASIC_ATTACK_COOLDOWN = 300;
+const BASE_ATTACK_TIMER = 3.0;
 const CHARACTER_NAME = "SERVER";
 
 var dmgOffset = 0;
@@ -27,6 +27,7 @@ var speed = 0;
 var speedMultiplier = 0;
 
 var timer = 0;
+var attackTimer = 10.0;
 var rayOrigin = Vector3();
 var rayEnd = Vector3();
 var moveTo = Vector3();
@@ -35,24 +36,16 @@ var forceMoveSpeed = 5.0;
 var bufferedMoveTo = Vector3();
 var lastPos = Vector3();
 var target = null;
+var bufferedInput = null;
+var bufferedTarget = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicDamageDealt = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.9;
 var onAction = false;
-var overrideBasic = false;
-var usingSecondary = false;
-var usingTertiary = false;
-var primaryTimer = 0;
-var secondaryTimer = 0;
-var tertiaryTimer = 0;
-var ultiTimer = 0;
-var usingUlti = false;
-var ultiTarget = null;
-var playingUltiSound = false;
-var bufferedTarget = null;
-var bufferedInput = null;
+var usingThrow = false;
+var spawnedSnowball = false;
+var throwTimer = 0;
 
 var stunned = false;
 var stunnedParts = null;
@@ -72,14 +65,18 @@ var assistedInKill = [];
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
-var moveToDirection: Vector3;
+var gameScene = null;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $snowman_armature;
 @onready var animPlayer = $AnimationPlayer;
 
 func _ready() -> void:
-	set_multiplayer_authority(-1);
+	gameScene = get_parent().get_parent().get_parent(); # lolol
+	if (gameScene.name != "Game"):
+		print("[WARNING SNOW]: couldn't find game scene");
+		return;
+	set_multiplayer_authority(1);
 	PlayerFunc.setup(self);
 
 func rotateChar(newPos) -> void:
@@ -101,16 +98,21 @@ func rotateChar(newPos) -> void:
 	);
 
 func _physics_process(delta: float) -> void:
+	if (is_multiplayer_authority()):
+		if (attackTimer > 0 and not usingThrow):
+			attackTimer -= delta;
+		elif (attackTimer <= 0):
+			rpc("snowballThrow");
+		
+		if (usingThrow):
+			throwTimer -= delta;
+			_handleThrowTimers();
+	
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
 		bufferedMoveTo = null;
-	
-	# if (moveTo):
-		#P layerFunc.moveChar(self, delta, moveTo);
-	
-	# move_and_slide();
 	
 	# handle animations
 	if (onAction or basicAttacking):
@@ -122,7 +124,30 @@ func _physics_process(delta: float) -> void:
 	else:
 		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 			animPlayer.play("idle");
+
+func _handleThrowTimers():
+	if (throwTimer <= 2.0):
+		rpc("syncAnimation", "attack");
+		
+	if (throwTimer <= 1.5 and not spawnedSnowball):
+		var character = _getRandomCharacter();
+		rpc("_spawnSnowball", character.global_position);
+		
+	if (throwTimer < 0):
+		usingThrow = false;
+		spawnedSnowball = false;
+
+func _getRandomCharacter():
+	var playersId = [];
+	for playerId in Server.playersInfo:
+		playersId.append(playerId);
 	
+	playersId.shuffle();
+	var randPlayerId = playersId[0];
+	var character = gameScene.get_character_by_id(str(randPlayerId));
+	
+	return character;
+
 func updateHealthSize():
 	var UILoaded = has_node("CharacterUI");
 	if not (UILoaded):
@@ -134,15 +159,42 @@ func updateHealthSize():
 	healthBar.scale.x = hp / maxHp;
 	shieldBar.scale.x = shield / maxHp;
 
+@rpc("call_local", "reliable", "any_peer")
+func _spawnSnowball(_moveTo: Vector3):
+	var snowball = preload("res://assets/npcs/snowman/snowball.tscn").instantiate();
+	var distance = global_position.distance_to(_moveTo);
+	var timeToArrive = distance * 0.02;
+	add_child(snowball);
+	snowball.global_position = global_position + Vector3(0, 5, 0);
+	
+	var tween = get_tree().create_tween();
+	tween.tween_property(snowball, "global_position", _moveTo, timeToArrive);
+	spawnedSnowball = true;
+
+@rpc("call_local", "reliable", "any_peer")
+func snowballThrow():
+	usingThrow = true;
+	throwTimer = 4.0;
+	attackTimer = BASE_ATTACK_TIMER + randf_range(1.0, 3.0);
+	animPlayer.play("charging");
+
 @rpc("call_local", "any_peer", "reliable")
 func showUI():
-	var charUI = preload("res://assets/characters/character_ui.tscn").instantiate();
+	var charUI = preload("res://assets/characters/structure_ui.tscn").instantiate();
 	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 	charUI.get_node("PlayerName/SubViewport/Label").text = "";
 	healthBar.color = Color(0.769, 0.17, 0.182);
 	add_child(charUI);
 	
-	charUI.global_position.y = 4.0;
+	var zOffset = -2.0 if team == 0 else 2.0;
+	var xOffset = 0.0 if team == 0 else 0.65;
+	charUI.global_position.x += xOffset;
+	charUI.global_position.y = 5.0;
+	charUI.global_position.z += zOffset;
+
+@rpc("call_local")
+func syncAnimation(animId: String):
+	animPlayer.play(animId);
 
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):

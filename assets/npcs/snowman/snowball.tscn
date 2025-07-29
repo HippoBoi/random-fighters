@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4k24b64j1bo7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qaok5"]
+radius = 0.25
+height = 0.5
+radial_segments = 6
+rings = 4
+
+[node name="Snowball" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(6.6, 0, 0, 0, 6, 0, 0, 0, 6.6, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_qaok5")
