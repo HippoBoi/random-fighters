@@ -162,9 +162,13 @@ func updateHealthSize():
 func _onSnowballArrived(_snowball):
 	var mesh: MeshInstance3D = _snowball.get_child(0);
 	var particles: GPUParticles3D = _snowball.get_child(1);
+	var hitbox: Area3D = _snowball.get_node("hitbox");
+	var timer: Timer = _snowball.get_node("Timer");
 	
 	mesh.visible = false;
 	particles.emitting = true;
+	hitbox.monitoring = true;
+	timer.start();
 
 @rpc("call_local", "reliable", "any_peer")
 func _spawnSnowball(_moveTo: Vector3):
@@ -176,6 +180,7 @@ func _spawnSnowball(_moveTo: Vector3):
 	
 	trailParticles.visible = true;
 	snowball.global_position = global_position + Vector3(0, 5, 0);
+	snowball.team = team;
 	
 	var tween = get_tree().create_tween();
 	tween.tween_property(snowball, "global_position", _moveTo, timeToArrive);

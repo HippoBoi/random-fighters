@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=23 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="1_qrbhw"]
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://he46kwaimprs" path="res://assets/sprites/shugo.png" id="5_ux7vi"]
 [ext_resource type="Texture2D" uid="uid://ce1p48mexskks" path="res://assets/sprites/nephi.png" id="6_1lgrt"]
 [ext_resource type="Shader" uid="uid://c7crpvx38smj" path="res://assets/scenes/UI_outline_solid.gdshader" id="10_0h5le"]
+[ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vvea"]
 shader = ExtResource("2_70d5h")
@@ -655,7 +656,7 @@ offset_right = 35.0
 offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("6_1lgrt")
+texture = ExtResource("11_3vvea")
 expand_mode = 1
 stretch_mode = 6
 
