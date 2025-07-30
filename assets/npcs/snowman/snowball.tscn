@@ -1,4 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4k24b64j1bo7"]
+[gd_scene load_steps=16 format=3 uid="uid://c4k24b64j1bo7"]
+
+[ext_resource type="Shader" uid="uid://bxyhdnmgvm4xv" path="res://GPUTrail-main/shaders/trail.gdshader" id="1_tufjw"]
+[ext_resource type="Shader" uid="uid://cebg18bd2qbca" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="2_bhpsp"]
+[ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://GPUTrail-main/GPUTrail3D.gd" id="3_ncks7"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qaok5"]
 radius = 0.25
@@ -6,8 +10,86 @@ height = 0.5
 radial_segments = 6
 rings = 4
 
+[sub_resource type="Curve" id="Curve_tufjw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.860656, 0.820225), -0.884378, -0.884378, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_bhpsp"]
+curve = SubResource("Curve_tufjw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ncks7"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, -20, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_bhpsp")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qnqcc"]
+height = 1.0
+radial_segments = 4
+rings = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qnqcc"]
+shader = ExtResource("1_tufjw")
+
+[sub_resource type="Gradient" id="Gradient_t13xa"]
+offsets = PackedFloat32Array(0, 0.271429, 0.55)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.812, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5lfr2"]
+gradient = SubResource("Gradient_t13xa")
+
+[sub_resource type="Curve" id="Curve_li4hs"]
+bake_resolution = 16
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.692771, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_krna5"]
+curve = SubResource("Curve_li4hs")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qo08t"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_bhpsp")
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/color_ramp = SubResource("GradientTexture1D_5lfr2")
+shader_parameter/curve = SubResource("CurveTexture_krna5")
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 40
+
+[sub_resource type="QuadMesh" id="QuadMesh_07b3p"]
+material = SubResource("ShaderMaterial_qo08t")
+
 [node name="Snowball" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(6.6, 0, 0, 0, 6, 0, 0, 0, 6.6, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_qaok5")
+
+[node name="explodeParticles" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 18
+one_shot = true
+explosiveness = 0.9
+process_material = SubResource("ParticleProcessMaterial_ncks7")
+draw_pass_1 = SubResource("CapsuleMesh_qnqcc")
+
+[node name="trailParticles" type="GPUParticles3D" parent="."]
+visible = false
+amount = 50
+lifetime = 50.0
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ShaderMaterial_qnqcc")
+draw_pass_1 = SubResource("QuadMesh_07b3p")
+script = ExtResource("3_ncks7")
+length = 50
+length_seconds = 0.833333
+color_ramp = SubResource("GradientTexture1D_5lfr2")
+curve = SubResource("CurveTexture_krna5")
+_defaults_have_been_set = true
+metadata/_custom_type_script = "uid://qaiudhsklp0m"

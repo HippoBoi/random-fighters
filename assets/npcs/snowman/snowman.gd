@@ -159,16 +159,27 @@ func updateHealthSize():
 	healthBar.scale.x = hp / maxHp;
 	shieldBar.scale.x = shield / maxHp;
 
+func _onSnowballArrived(_snowball):
+	var mesh: MeshInstance3D = _snowball.get_child(0);
+	var particles: GPUParticles3D = _snowball.get_child(1);
+	
+	mesh.visible = false;
+	particles.emitting = true;
+
 @rpc("call_local", "reliable", "any_peer")
 func _spawnSnowball(_moveTo: Vector3):
 	var snowball = preload("res://assets/npcs/snowman/snowball.tscn").instantiate();
+	var trailParticles = snowball.get_child(2);
 	var distance = global_position.distance_to(_moveTo);
-	var timeToArrive = distance * 0.02;
+	var timeToArrive = distance * 0.025;
 	add_child(snowball);
+	
+	trailParticles.visible = true;
 	snowball.global_position = global_position + Vector3(0, 5, 0);
 	
 	var tween = get_tree().create_tween();
 	tween.tween_property(snowball, "global_position", _moveTo, timeToArrive);
+	tween.finished.connect(_onSnowballArrived.bind(snowball));
 	spawnedSnowball = true;
 
 @rpc("call_local", "reliable", "any_peer")
