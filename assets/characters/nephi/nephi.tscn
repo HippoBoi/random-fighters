@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=4 uid="uid://c35ddippw5fml"]
+[gd_scene load_steps=104 format=4 uid="uid://c35ddippw5fml"]
 
 [ext_resource type="PackedScene" uid="uid://b3f4lucne0nka" path="res://assets/characters/nephiRF.glb" id="1_5y7vj"]
 [ext_resource type="Script" uid="uid://ds1bijbpv0elx" path="res://assets/characters/nephi/nephi_char.gd" id="2_5k6x2"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="8_tsh70"]
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="9_dhhdc"]
 [ext_resource type="Texture2D" uid="uid://3kx3ijaqi5gb" path="res://assets/textures/fx/spark_05.png" id="9_wl3mr"]
+[ext_resource type="Texture2D" uid="uid://shqhwl25u6mk" path="res://assets/sprites/character_icons/nephi_icon.png" id="11_w1r0h"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="12_3jppj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5y7vj"]
 radius = 2.54493
@@ -2324,6 +2326,34 @@ bones/24/rotation = Quaternion(0.0536208, -0.180527, -0.0455828, 0.981049)
 
 [node name="body" parent="Armature/Skeleton3D" index="0"]
 transform = Transform3D(1, -2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 2.98023e-08, 1, 0, 0, 0)
+layers = 2
+
+[node name="drill" parent="Armature/Skeleton3D" index="1"]
+layers = 2
+
+[node name="eyeL" parent="Armature/Skeleton3D" index="2"]
+layers = 2
+
+[node name="eyeR" parent="Armature/Skeleton3D" index="3"]
+layers = 2
+
+[node name="legL1" parent="Armature/Skeleton3D" index="4"]
+layers = 2
+
+[node name="legL2" parent="Armature/Skeleton3D" index="5"]
+layers = 2
+
+[node name="legL3" parent="Armature/Skeleton3D" index="6"]
+layers = 2
+
+[node name="legR1" parent="Armature/Skeleton3D" index="7"]
+layers = 2
+
+[node name="legR2" parent="Armature/Skeleton3D" index="8"]
+layers = 2
+
+[node name="legR3" parent="Armature/Skeleton3D" index="9"]
+layers = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.20754, 0)
@@ -2539,6 +2569,15 @@ draw_pass_1 = SubResource("ArrayMesh_aga0w")
 [node name="nephi_thunder" parent="." index="15" instance=ExtResource("6_3uw5u")]
 transform = Transform3D(1.5, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, -1.33506, 0)
 speed_scale = 0.8
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="16"]
+transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+top_level = true
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("11_w1r0h")
+script = ExtResource("12_3jppj")
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D3/Area3D" to="." method="_on_q_touched"]

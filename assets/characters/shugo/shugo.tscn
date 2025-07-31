@@ -1,7 +1,9 @@
-[gd_scene load_steps=116 format=4 uid="uid://c6yxe5iwkc02y"]
+[gd_scene load_steps=118 format=4 uid="uid://c6yxe5iwkc02y"]
 
 [ext_resource type="PackedScene" uid="uid://bsqe8egdp7w15" path="res://assets/characters/lucho.glb" id="1_ijeav"]
 [ext_resource type="Script" uid="uid://v4wsl5tnt2p5" path="res://assets/characters/shugo/shugo_char.gd" id="2_b10fr"]
+[ext_resource type="Texture2D" uid="uid://cfemujfpmkf0g" path="res://assets/sprites/character_icons/shugo_icon.png" id="3_d8rgy"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="4_gwnvw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fiy4"]
 resource_name = "Material.005"
@@ -4774,6 +4776,36 @@ bones/19/position = Vector3(3.77401e-24, 0.0756621, 1.11022e-16)
 bones/20/rotation = Quaternion(-0.571968, -2.03108e-08, 6.31236e-09, 0.820276)
 bones/21/rotation = Quaternion(-0.00769161, 4.19547e-08, 2.57992e-10, 0.99997)
 
+[node name="armL" parent="Armature/Skeleton3D" index="0"]
+layers = 2
+
+[node name="armR" parent="Armature/Skeleton3D" index="1"]
+layers = 2
+
+[node name="body" parent="Armature/Skeleton3D" index="2"]
+layers = 2
+
+[node name="eyeL" parent="Armature/Skeleton3D" index="3"]
+layers = 2
+
+[node name="eyeR" parent="Armature/Skeleton3D" index="4"]
+layers = 2
+
+[node name="hat" parent="Armature/Skeleton3D" index="5"]
+layers = 2
+
+[node name="head" parent="Armature/Skeleton3D" index="6"]
+layers = 2
+
+[node name="legL" parent="Armature/Skeleton3D" index="7"]
+layers = 2
+
+[node name="legR" parent="Armature/Skeleton3D" index="8"]
+layers = 2
+
+[node name="scarf" parent="Armature/Skeleton3D" index="9"]
+layers = 2
+
 [node name="shugo_kirby" type="CharacterBody3D" parent="." index="1"]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.106271, 0, 0.00761461)
 visible = false
@@ -5089,6 +5121,15 @@ libraries = {
 libraries = {
 &"": SubResource("AnimationLibrary_ffj8l")
 }
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="13"]
+transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+top_level = true
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("3_d8rgy")
+script = ExtResource("4_gwnvw")
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="e_hitbox/MeshInstance3D/Area3D" to="." method="_on_e_touched"]

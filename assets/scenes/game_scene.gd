@@ -35,6 +35,7 @@ func _process(_delta: float) -> void:
 
 func startGameMode(gameMode: String):
 	var newMap = null;
+	var minimapCamera: Camera3D = $MinimapUI/SubViewport/Camera3D;
 	
 	currentGameMode = gameMode;
 	PlayerFunc.gameMode = gameMode;
@@ -43,18 +44,23 @@ func startGameMode(gameMode: String):
 	
 	if (gameMode.to_lower() == "free_for_all"):
 		newMap = preload("res://assets/maps/battlefield.tscn").instantiate();
+		minimapCamera.size = 55.0;
 		
 	elif (gameMode.to_lower() == "foggy_vision"):
 		newMap = preload("res://assets/maps/dark_forest.tscn").instantiate();
+		minimapCamera.size = 47.938;
 	
 	elif (gameMode.to_lower() == "hippo_capture"):
 		newMap = preload("res://assets/maps/lake.tscn").instantiate();
+		minimapCamera.size = 75.0;
 	
 	elif (gameMode.to_lower() == "doom_bot"):
 		newMap = preload("res://assets/maps/electric_central.tscn").instantiate();
+		minimapCamera.size = 75.0;
 	
 	elif (gameMode.to_lower() == "snowmen"):
 		newMap = preload("res://assets/maps/snowmen.tscn").instantiate();
+		minimapCamera.size = 105.0;
 	
 	$Map.add_child(newMap);
 	

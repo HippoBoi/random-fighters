@@ -1,13 +1,705 @@
-[gd_scene load_steps=4 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=24 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
-[ext_resource type="PackedScene" uid="uid://cs5f0x4jchyj2" path="res://assets/scenes/in_game_ui.tscn" id="2_68mr5"]
+[ext_resource type="Script" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
+[ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="3_7678e"]
 [ext_resource type="PackedScene" uid="uid://bmg8t7dg4xk3d" path="res://assets/scenes/shop_ui.tscn" id="3_tkgy1"]
+[ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="4_4y838"]
+[ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="4_eny81"]
+[ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="5_e2iu4"]
+[ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="6_5xj4x"]
+[ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="7_5t5vp"]
+[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="8_4emlq"]
+[ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="9_xb6nb"]
+[ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="11_o0ehx"]
+[ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="12_4a3ho"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
+font_size = 24
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_offset = Vector2(4, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grbm3"]
+bg_color = Color(0.749943, 0.581109, 0.208356, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0sqe"]
+bg_color = Color(0.632688, 0.449729, 0.287213, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.894561, 0.660025, 0.396597, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+shadow_size = 2
+shadow_offset = Vector2(-2, -1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6hcns"]
+bg_color = Color(0.455042, 0.318508, 0.101699, 1)
+
+[sub_resource type="Theme" id="Theme_grbm3"]
+Button/styles/hover = SubResource("StyleBoxFlat_grbm3")
+Button/styles/normal = SubResource("StyleBoxFlat_l0sqe")
+Button/styles/pressed = SubResource("StyleBoxFlat_6hcns")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ji54v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rl4ok"]
+shader = ExtResource("4_4y838")
+shader_parameter/initial_color = Color(0.204327, 0.201211, 0.232194, 1)
+shader_parameter/final_color = Color(0.110392, 0.11396, 0.120228, 1)
+shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ksudb"]
+shader = ExtResource("11_o0ehx")
+shader_parameter/color = Color(0.957699, 0.812299, 0.868786, 1)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 10.0
+shader_parameter/speed = 6.0
+shader_parameter/radius = 0.75
+shader_parameter/line_thickness = 0.03
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tkgy1"]
+viewport_path = NodePath("MinimapUI/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_et1oa"]
+shader = ExtResource("4_4y838")
+shader_parameter/initial_color = Color(0, 0, 0, 1)
+shader_parameter/final_color = Color(0, 0, 0, 0)
+shader_parameter/vertical = true
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_5eccb")
 
-[node name="InGameUI" parent="." instance=ExtResource("2_68mr5")]
+[node name="InGameUI" type="Control" parent="."]
+z_index = -1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_ji54v")
+
+[node name="playerList" type="ColorRect" parent="InGameUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 95.0
+offset_top = 57.0
+offset_right = -70.0
+offset_bottom = -63.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
+
+[node name="livesText" type="RichTextLabel" parent="InGameUI"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -71.5
+offset_top = -42.5
+offset_right = 71.5
+offset_bottom = -15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 2
+text = "Lives"
+horizontal_alignment = 1
+
+[node name="livesContainer" type="HBoxContainer" parent="InGameUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -15.0
+offset_right = 19.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="template" type="TextureRect" parent="InGameUI/livesContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_7678e")
+stretch_mode = 3
+
+[node name="healthBar" type="TextureRect" parent="InGameUI"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = 122.0
+offset_right = 177.0
+offset_bottom = 137.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_eny81")
+
+[node name="health" type="TextureRect" parent="InGameUI/healthBar"]
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -7.5
+offset_right = 160.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_e2iu4")
+
+[node name="bgColor" type="TextureRect" parent="InGameUI/healthBar"]
+modulate = Color(0.685036, 0.0534782, 0.453278, 1)
+z_index = -1
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -7.5
+offset_right = 160.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_e2iu4")
+
+[node name="juiceBar" type="TextureRect" parent="InGameUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = 137.0
+offset_right = 177.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_eny81")
+
+[node name="juice" type="TextureRect" parent="InGameUI/juiceBar"]
+texture_repeat = 1
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 11.0
+texture = ExtResource("6_5xj4x")
+
+[node name="abilitiesUI" type="Control" parent="InGameUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="abilitiesBG" type="TextureRect" parent="InGameUI/abilitiesUI"]
+modulate = Color(0.388235, 0.364706, 0.286275, 0.745098)
+self_modulate = Color(0.524605, 0.416212, 0.508752, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -462.0
+offset_top = -27.0
+offset_bottom = 4.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("7_5t5vp")
+expand_mode = 1
+
+[node name="coolLine" type="TextureRect" parent="InGameUI/abilitiesUI"]
+modulate = Color(0.388235, 0.364706, 0.286275, 0.745098)
+self_modulate = Color(0.524605, 0.416212, 0.508752, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -27.0
+offset_right = -462.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("7_5t5vp")
+expand_mode = 1
+
+[node name="primaryAbility" type="TextureRect" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -27.0
+offset_right = -76.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("8_4emlq")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/primaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.0
+offset_top = -15.5
+offset_right = 17.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_xb6nb")
+expand_mode = 1
+
+[node name="secondaryAbility" type="TextureRect" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -27.0
+offset_right = -6.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("8_4emlq")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/secondaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_xb6nb")
+expand_mode = 1
+
+[node name="tertiaryAbility" type="TextureRect" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -27.0
+offset_right = 64.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("8_4emlq")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/tertiaryAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_xb6nb")
+expand_mode = 1
+
+[node name="ultiAbility" type="TextureRect" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -27.0
+offset_right = 134.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("8_4emlq")
+expand_mode = 1
+
+[node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/ultiAbility"]
+modulate = Color(0.184314, 0.184314, 0.184314, 0.819608)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -31.0
+offset_right = 17.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_xb6nb")
+expand_mode = 1
+
+[node name="primaryKeybind" type="Label" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -30.0
+offset_right = -107.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Q"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="secondaryKeybind" type="Label" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -30.0
+offset_right = -38.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "W
+"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="tertiaryKeybind" type="Label" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -30.0
+offset_right = 32.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "E"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ultiKeybind" type="Label" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.603922)
+texture_filter = 1
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 61.0
+offset_top = -30.0
+offset_right = 101.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "r"
+label_settings = SubResource("LabelSettings_4i24o")
+horizontal_alignment = 1
+uppercase = true
+
+[node name="livesText" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -632.0
+offset_top = -24.0
+offset_right = -470.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "Lives:"
+fit_content = true
+scroll_active = false
+
+[node name="livesContainer2" type="HBoxContainer" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.0
+offset_top = 151.0
+offset_right = -193.0
+offset_bottom = 181.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="template" type="TextureRect" parent="InGameUI/abilitiesUI/livesContainer2"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_7678e")
+stretch_mode = 3
+
+[node name="LVText" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -177.0
+offset_top = -24.0
+offset_right = -136.0
+offset_bottom = 2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "LVL:"
+
+[node name="level" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -146.0
+offset_top = -24.0
+offset_right = -111.0
+offset_bottom = 2.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/outline_size = 8
+text = "0"
+horizontal_alignment = 1
+
+[node name="tokensText" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.591)
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -114.0
+offset_right = -21.0
+offset_bottom = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/outline_size = 8
+text = "TOKENS:"
+
+[node name="tokens" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.591)
+z_index = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -114.0
+offset_right = 11.0
+offset_bottom = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/outline_size = 8
+text = "0
+"
+
+[node name="respawningText" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -69.0
+offset_top = -82.0
+offset_right = 74.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 7
+text = "Respawning in"
+
+[node name="respawnTimer" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 49.0
+offset_top = -86.0
+offset_right = 109.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+text = "10..."
+
+[node name="shopButton" type="Button" parent="InGameUI/abilitiesUI"]
+modulate = Color(1, 1, 1, 0.757)
+layout_mode = 0
+offset_left = 533.0
+offset_top = 245.0
+offset_right = 639.0
+offset_bottom = 270.0
+theme = SubResource("Theme_grbm3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ji54v")
+
+[node name="abilityDesc" type="Control" parent="InGameUI"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -133.5
+offset_top = 5.5
+offset_right = 133.5
+offset_bottom = 138.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bg" type="ColorRect" parent="InGameUI/abilityDesc"]
+material = SubResource("ShaderMaterial_rl4ok")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.107329, 0.121738, 0.168572, 1)
+
+[node name="outline" type="ColorRect" parent="InGameUI/abilityDesc"]
+z_index = 1
+material = SubResource("ShaderMaterial_ksudb")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.216919, 0.205183, 0.222576, 1)
+
+[node name="descText" type="RichTextLabel" parent="InGameUI/abilityDesc"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.5
+offset_top = -45.5
+offset_right = 118.5
+offset_bottom = 45.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 14
+text = "hola esta habilidad es muy buena muuy buena la habilidad"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="descImage" type="TextureRect" parent="InGameUI/abilityDesc"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -30.0
+offset_right = 75.0
+offset_bottom = 30.0
+grow_vertical = 2
+texture = ExtResource("12_4a3ho")
+expand_mode = 1
 
 [node name="GameInfoUI" type="Control" parent="."]
 visible = false
@@ -149,8 +841,55 @@ vertical_alignment = 1
 visible = false
 scale = Vector2(1.00096, 1.00541)
 
+[node name="MinimapUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -108.0
+offset_top = -91.0
+offset_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="SubViewport" type="SubViewport" parent="MinimapUI"]
+
+[node name="Camera3D" type="Camera3D" parent="MinimapUI/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 34, 0)
+cull_mask = 1048061
+projection = 1
+size = 105.0
+
+[node name="ViewportTexture" type="TextureRect" parent="MinimapUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("ViewportTexture_tkgy1")
+expand_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="MinimapUI"]
+z_index = -1
+material = SubResource("ShaderMaterial_et1oa")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.454767, 0.483897, 0.496282, 1)
+
 [node name="MainCamera" type="Camera3D" parent="."]
 transform = Transform3D(0.707107, -0.586907, 0.394385, 0, 0.557745, 0.830012, -0.707107, -0.586907, 0.394385, 4.84099, 9.07359, 3.88934)
+cull_mask = 1047551
 
 [node name="Map" type="Node3D" parent="."]
 
@@ -164,3 +903,12 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.95399e-14, 1, 1.3027e
 
 [node name="blackTeam" type="Node3D" parent="Map/placeHolder/spawnLocations"]
 transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 17.5455, 0.591752, -0.0339885)
+
+[connection signal="mouse_entered" from="InGameUI/abilitiesUI/primaryAbility" to="InGameUI" method="_on_primary_mouse_hover"]
+[connection signal="mouse_exited" from="InGameUI/abilitiesUI/primaryAbility" to="InGameUI" method="_on_primary_mouse_exit"]
+[connection signal="mouse_entered" from="InGameUI/abilitiesUI/secondaryAbility" to="InGameUI" method="_on_secondary_mouse_hover"]
+[connection signal="mouse_exited" from="InGameUI/abilitiesUI/secondaryAbility" to="InGameUI" method="_on_secondary_mouse_exit"]
+[connection signal="mouse_entered" from="InGameUI/abilitiesUI/tertiaryAbility" to="InGameUI" method="_on_tertiary_mouse_hover"]
+[connection signal="mouse_exited" from="InGameUI/abilitiesUI/tertiaryAbility" to="InGameUI" method="_on_tertiary_mouse_exit"]
+[connection signal="mouse_entered" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_hover"]
+[connection signal="mouse_exited" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_exit"]

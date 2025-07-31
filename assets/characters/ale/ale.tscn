@@ -1,4 +1,4 @@
-[gd_scene load_steps=165 format=4 uid="uid://puhqtfalctre"]
+[gd_scene load_steps=167 format=4 uid="uid://puhqtfalctre"]
 
 [ext_resource type="PackedScene" uid="uid://jl4h6iufsi1f" path="res://assets/characters/ale.glb" id="1_lihjd"]
 [ext_resource type="Script" uid="uid://dts1t7oqohrsw" path="res://assets/characters/ale/ale_char.gd" id="2_kqcgl"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://cdwohxsijyil6" path="res://assets/textures/fx/thunder_texture_2.png" id="9_0iixj"]
 [ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://GPUTrail-main/GPUTrail3D.gd" id="9_22ed4"]
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="10_7abcr"]
+[ext_resource type="Texture2D" uid="uid://ne1gw1ktjsxc" path="res://assets/sprites/character_icons/ale_icon.png" id="14_fnemj"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="15_j5m4y"]
 
 [sub_resource type="Animation" id="Animation_7fvsu"]
 length = 0.001
@@ -4414,6 +4416,15 @@ curve = SubResource("CurveTexture_j5m4y")
 use_red_as_alpha = true
 _defaults_have_been_set = true
 metadata/_custom_type_script = "uid://qaiudhsklp0m"
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="11"]
+transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+top_level = true
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("14_fnemj")
+script = ExtResource("15_j5m4y")
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="r_hitboxes/damage_hitbox/Area3D" to="." method="_on_r_hit_damage"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://dyg5f2p8gyby2"]
+[gd_scene load_steps=81 format=3 uid="uid://dyg5f2p8gyby2"]
 
 [ext_resource type="PackedScene" uid="uid://bpcg3054sbph0" path="res://assets/characters/rhay.glb" id="1_l5qm4"]
 [ext_resource type="Script" uid="uid://bt1li3vyfdhpt" path="res://assets/characters/rhay/rhay_char.gd" id="2_v1ns3"]
@@ -9,6 +9,8 @@
 [ext_resource type="ArrayMesh" uid="uid://kn5uqpnyi8pf" path="res://assets/characters/rhay.obj" id="5_5op7a"]
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_qpi53"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="7_inplr"]
+[ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="10_qpi53"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="11_ycejn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lptq5"]
 radius = 0.999927
@@ -1357,6 +1359,33 @@ bones/14/rotation = Quaternion(0.565685, 0.424264, 0.565686, -0.424264)
 bones/15/rotation = Quaternion(-0.487941, -0.349161, -0.465548, 0.650588)
 bones/16/rotation = Quaternion(-1.29265e-08, 5.99668e-08, 0.0563335, 0.998412)
 
+[node name="armL" parent="Armature/Skeleton3D" index="0"]
+layers = 2
+
+[node name="armR" parent="Armature/Skeleton3D" index="1"]
+layers = 2
+
+[node name="body" parent="Armature/Skeleton3D" index="2"]
+layers = 2
+
+[node name="eyeL" parent="Armature/Skeleton3D" index="3"]
+layers = 2
+
+[node name="eyeR" parent="Armature/Skeleton3D" index="4"]
+layers = 2
+
+[node name="hair" parent="Armature/Skeleton3D" index="5"]
+layers = 2
+
+[node name="head" parent="Armature/Skeleton3D" index="6"]
+layers = 2
+
+[node name="legL" parent="Armature/Skeleton3D" index="7"]
+layers = 2
+
+[node name="legR" parent="Armature/Skeleton3D" index="8"]
+layers = 2
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77329, 0)
 shape = SubResource("CapsuleShape3D_lptq5")
@@ -1436,6 +1465,15 @@ lifetime = 0.25
 one_shot = true
 process_material = SubResource("ParticleProcessMaterial_6fwau")
 draw_pass_1 = ExtResource("5_5op7a")
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="10"]
+transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+top_level = true
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("10_qpi53")
+script = ExtResource("11_ycejn")
 
 [connection signal="body_entered" from="slashHitbox/MeshInstance3D/Area3D" to="." method="_onSlashTouched"]
 

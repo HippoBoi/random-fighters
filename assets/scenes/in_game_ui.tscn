@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://cs5f0x4jchyj2"]
 
 [ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
-[ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="1_grbm3"]
+[ext_resource type="Script" path="res://assets/scenes/in_game_ui.gd" id="1_grbm3"]
 [ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="1_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="2_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="3_grbm3"]
@@ -600,9 +600,9 @@ text = "10..."
 modulate = Color(1, 1, 1, 0.757)
 layout_mode = 0
 offset_left = 530.0
-offset_top = 332.0
+offset_top = 331.0
 offset_right = 636.0
-offset_bottom = 357.0
+offset_bottom = 356.0
 theme = SubResource("Theme_grbm3")
 
 [node name="abilityDesc" type="Control" parent="."]
