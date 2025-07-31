@@ -66,7 +66,7 @@ shader_parameter/flags = 40
 material = SubResource("ShaderMaterial_qo08t")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_tufjw"]
-radius = 1.71472
+radius = 1.60042
 
 [node name="Snowball" type="Node3D"]
 script = ExtResource("1_bhpsp")
@@ -100,13 +100,12 @@ _defaults_have_been_set = true
 metadata/_custom_type_script = "uid://qaiudhsklp0m"
 
 [node name="hitbox" type="Area3D" parent="."]
+collision_layer = 5
+collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0404358, 0, -0.0723877)
 shape = SubResource("SphereShape3D_tufjw")
 
-[node name="Timer" type="Timer" parent="."]
-
 [connection signal="body_entered" from="hitbox" to="." method="_on_player_hit"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -5,7 +5,7 @@ extends CharacterBody3D
 @export var maxStamina = 100.0;
 @export var stamina = 100.0;
 @export var baseArmor = 22.0;
-@export var baseDmg = 18.5;
+@export var baseDmg = 20.5;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 5.0;
@@ -177,7 +177,6 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var baseDmg = 1.0 if stamina >= BASIC_STAMINA else 0.5;
 			var dmgMultiplier = min(1.0 + (stamina * 0.015), 1.85);
 			var totalDmg = dmg * dmgMultiplier;
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
@@ -212,7 +211,7 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		usingParry = false;
 		
-		if (secondaryTimer >= 0.3 and secondaryTimer <= 0.65):
+		if (secondaryTimer >= 0.35 and secondaryTimer <= 0.65):
 			usingParry = true;
 	else:
 		if (usingSecondary):

@@ -1,17 +1,21 @@
 [gd_scene load_steps=24 format=4 uid="uid://ddo3ki5pngn4y"]
 
-[ext_resource type="Texture2D" uid="uid://bx26mhmgk0uy2" path="res://assets/npcs/snowman/snowman_anims_Snow_001_COLOR.jpg" id="2_fs6jf"]
 [ext_resource type="Script" uid="uid://df68w5gjnjvj0" path="res://assets/npcs/snowman/snowman.gd" id="2_p7h3x"]
 [ext_resource type="PackedScene" uid="uid://c4k24b64j1bo7" path="res://assets/npcs/snowman/snowball.tscn" id="3_fs6jf"]
-[ext_resource type="Texture2D" uid="uid://ct20n7103ajy2" path="res://assets/npcs/snowman/snowman_anims_Snow_001_NORM.jpg" id="3_lpy8l"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p7h3x"]
+load_path = "res://.godot/imported/snowman_anims_Snow_001_COLOR.jpg-9ae7f62134460c28e703adcd9e8f2a5c.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_fs6jf"]
+load_path = "res://.godot/imported/snowman_anims_Snow_001_NORM.jpg-9a5f18a8e47672201b997190aa3e1abc.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3j2j6"]
 resource_name = "Material.001"
 cull_mode = 2
-albedo_texture = ExtResource("2_fs6jf")
+albedo_texture = SubResource("CompressedTexture2D_p7h3x")
 roughness = 0.667273
 normal_enabled = true
-normal_texture = ExtResource("3_lpy8l")
+normal_texture = SubResource("CompressedTexture2D_fs6jf")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2nhnn"]
 resource_name = "snowman_anims_Cube_001"
@@ -648,42 +652,42 @@ bones/0/parent = -1
 bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 bones/0/enabled = true
 bones/0/position = Vector3(0, 0, 0)
-bones/0/rotation = Quaternion(0.10149, 0.349128, 0.0247272, 0.931235)
+bones/0/rotation = Quaternion(-0.69894, 0, 0, 0.71518)
 bones/0/scale = Vector3(1, 1, 1)
 bones/1/name = "Bone.001"
 bones/1/parent = 0
 bones/1/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.66937, 0)
 bones/1/enabled = true
 bones/1/position = Vector3(0, 3.66937, 0)
-bones/1/rotation = Quaternion(0.00103657, -0.0332721, -0.000686405, 0.999446)
+bones/1/rotation = Quaternion(0.000927965, 0.273497, 0.00339906, 0.961866)
 bones/1/scale = Vector3(1, 1, 1)
 bones/2/name = "Bone_L"
 bones/2/parent = 0
 bones/2/rest = Transform3D(-0.057427, -0.99835, 2.93833e-08, 0.99835, -0.057427, -5.10817e-07, 5.11662e-07, 2.84217e-14, 1, 0, 3.66937, 0)
 bones/2/enabled = true
 bones/2/position = Vector3(0, 3.66937, 0)
-bones/2/rotation = Quaternion(0.189431, 0.722729, 0.656291, 0.105171)
+bones/2/rotation = Quaternion(-0.148272, 0.040432, 0.71181, 0.685352)
 bones/2/scale = Vector3(1, 1, 1)
 bones/3/name = "Bone_L.001"
 bones/3/parent = 2
 bones/3/rest = Transform3D(0.99873, -0.0503798, -2.90325e-07, 0.0503798, 0.99873, -4.04553e-08, 2.91994e-07, 2.57774e-08, 1, -1.63913e-07, 4.00182, 4.26326e-14)
 bones/3/enabled = true
 bones/3/position = Vector3(-1.63913e-07, 4.00182, 4.26326e-14)
-bones/3/rotation = Quaternion(-0.142403, -0.396115, -0.0710495, 0.904304)
+bones/3/rotation = Quaternion(0.0546428, 0.26663, 0.0424331, 0.961313)
 bones/3/scale = Vector3(1, 1, 1)
 bones/4/name = "Bone_R"
 bones/4/parent = 0
 bones/4/rest = Transform3D(-0.057427, 0.99835, -2.93833e-08, -0.99835, -0.057427, -5.10817e-07, -5.11662e-07, 2.84217e-14, 1, 0, 3.66937, 0)
 bones/4/enabled = true
 bones/4/position = Vector3(0, 3.66937, 0)
-bones/4/rotation = Quaternion(-0.346896, -0.307602, -0.696048, 0.548235)
+bones/4/rotation = Quaternion(-0.0446531, 0.0368271, -0.832178, 0.551479)
 bones/4/scale = Vector3(1, 1, 1)
 bones/5/name = "Bone_R.001"
 bones/5/parent = 4
 bones/5/rest = Transform3D(0.99873, 0.0503798, 2.90325e-07, -0.0503798, 0.99873, -4.04553e-08, -2.91994e-07, 2.57774e-08, 1, 1.63913e-07, 4.00182, 4.26326e-14)
 bones/5/enabled = true
 bones/5/position = Vector3(1.63913e-07, 4.00182, 4.26326e-14)
-bones/5/rotation = Quaternion(0.127619, -0.360952, 0.123579, 0.915508)
+bones/5/rotation = Quaternion(-0.0606829, 0.522337, 0.0779322, 0.846999)
 bones/5/scale = Vector3(1, 1, 1)
 bones/6/name = "Bone_L.002"
 bones/6/parent = -1
@@ -697,7 +701,7 @@ bones/7/parent = 6
 bones/7/rest = Transform3D(1, -3.33067e-15, 4.30082e-08, -4.29303e-08, -0.0601419, 0.99819, 2.58659e-09, -0.99819, -0.0601419, 0, 0.813377, 1.86265e-09)
 bones/7/enabled = true
 bones/7/position = Vector3(0, 0.813377, 1.86265e-09)
-bones/7/rotation = Quaternion(-0.72806, 1.47414e-08, -1.56563e-08, 0.685514)
+bones/7/rotation = Quaternion(-0.562879, 0.444726, 0.452219, 0.529986)
 bones/7/scale = Vector3(1, 1, 1)
 bones/8/name = "Bone_R.002"
 bones/8/parent = -1
@@ -711,7 +715,7 @@ bones/9/parent = 8
 bones/9/rest = Transform3D(1, 3.33067e-15, -4.30082e-08, 4.29303e-08, -0.0601419, 0.99819, -2.58659e-09, -0.99819, -0.0601419, 0, 0.813377, 1.86265e-09)
 bones/9/enabled = true
 bones/9/position = Vector3(0, 0.813377, 1.86265e-09)
-bones/9/rotation = Quaternion(-0.72806, -1.47414e-08, 1.56563e-08, 0.685514)
+bones/9/rotation = Quaternion(-0.477261, -0.52951, -0.538431, 0.449371)
 bones/9/scale = Vector3(1, 1, 1)
 
 [node name="body" type="MeshInstance3D" parent="snowman_armature/Skeleton3D"]

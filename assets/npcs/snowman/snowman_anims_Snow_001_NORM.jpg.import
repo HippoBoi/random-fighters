@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct20n7103ajy2"
+uid="uid://b4ty8x3s8hw2k"
 path.s3tc="res://.godot/imported/snowman_anims_Snow_001_NORM.jpg-9a5f18a8e47672201b997190aa3e1abc.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "af6b8b23b7e387ccce90e304ebe51d5f"
 }
 
 [deps]

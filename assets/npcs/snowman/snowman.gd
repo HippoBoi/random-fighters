@@ -28,6 +28,7 @@ var speedMultiplier = 0;
 
 var timer = 0;
 var attackTimer = 10.0;
+var deadTimer = 0;
 var rayOrigin = Vector3();
 var rayEnd = Vector3();
 var moveTo = Vector3();
@@ -51,6 +52,7 @@ var stunned = false;
 var stunnedParts = null;
 var stunTimer = 0;
 var dead = false;
+var reallyReallyDead = false;
 var inFog = false;
 var enemyTeamVision = false;
 var fogInstances = [];
@@ -66,6 +68,7 @@ var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
 var gameScene = null;
+var enemySnowman = null;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $snowman_armature;
@@ -73,9 +76,16 @@ var gameScene = null;
 
 func _ready() -> void:
 	gameScene = get_parent().get_parent().get_parent(); # lolol
+	
+	if (team == 0):
+		enemySnowman = get_parent().get_node("snowmanWhite");
+	elif (team == 1):
+		enemySnowman = get_parent().get_node("snowmanBlack");
+	
 	if (gameScene.name != "Game"):
 		print("[WARNING SNOW]: couldn't find game scene");
 		return;
+	
 	set_multiplayer_authority(1);
 	PlayerFunc.setup(self);
 
@@ -107,6 +117,23 @@ func _physics_process(delta: float) -> void:
 		if (usingThrow):
 			throwTimer -= delta;
 			_handleThrowTimers();
+		
+		if (hp <= 0 and not dead):
+			rpc("killSnowman");
+			dead = true;
+		
+	if (dead):
+		deadTimer += delta;
+		if (deadTimer > 2.5 and not reallyReallyDead):
+			var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
+			get_parent().add_child(particles);
+			
+			particles.global_position = global_position + Vector3(0, 2, 0);
+			particles.get_node("pointyParts").emitting = true;
+			particles.get_node("spiralParts").emitting = true;
+			visible = false;
+			
+			reallyReallyDead = true;
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -118,33 +145,43 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	if (velocity != Vector3.ZERO):
-		if not (animPlayer.current_animation == "run"):
-			animPlayer.play("run");
+	if not (dead):
+		if (velocity != Vector3.ZERO):
+			if not (animPlayer.current_animation == "run"):
+				animPlayer.play("run");
+		else:
+			if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
+				animPlayer.play("idle");
 	else:
-		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
-			animPlayer.play("idle");
+		if not (animPlayer.current_animation == "death"):
+			animPlayer.play("death");
 
 func _handleThrowTimers():
-	if (throwTimer <= 2.0):
+	if (throwTimer <= 2.0 and not dead):
 		rpc("syncAnimation", "attack");
 		
-	if (throwTimer <= 1.5 and not spawnedSnowball):
+	if (throwTimer <= 1.5 and not spawnedSnowball and not dead):
 		var character = _getRandomCharacter();
 		rpc("_spawnSnowball", character.global_position);
 		
-	if (throwTimer < 0):
+	if (throwTimer < 0 and not dead):
 		usingThrow = false;
 		spawnedSnowball = false;
 
-func _getRandomCharacter():
+func _getRandomCharacter(tries: int = 0):
+	if (tries > 10):
+		return enemySnowman;
+	
 	var playersId = [];
 	for playerId in Server.playersInfo:
 		playersId.append(playerId);
 	
 	playersId.shuffle();
 	var randPlayerId = playersId[0];
-	var character = gameScene.get_character_by_id(str(randPlayerId));
+	var character: CharacterBody3D = gameScene.get_character_by_id(str(randPlayerId));
+	var distance = global_position.distance_to(character.global_position);
+	if (character.team == team or character.dead or distance > 35):
+		return _getRandomCharacter(tries + 1);
 	
 	return character;
 
@@ -159,40 +196,88 @@ func updateHealthSize():
 	healthBar.scale.x = hp / maxHp;
 	shieldBar.scale.x = shield / maxHp;
 
-func _onSnowballArrived(_snowball):
+func _onSnowballArrived(_snowball, _snowballShadow):
 	var mesh: MeshInstance3D = _snowball.get_child(0);
 	var particles: GPUParticles3D = _snowball.get_child(1);
 	var hitbox: Area3D = _snowball.get_node("hitbox");
-	var timer: Timer = _snowball.get_node("Timer");
 	
 	mesh.visible = false;
 	particles.emitting = true;
 	hitbox.monitoring = true;
-	timer.start();
+	_snowball.timer = 1.0;
+	_snowballShadow.queue_free();
 
 @rpc("call_local", "reliable", "any_peer")
 func _spawnSnowball(_moveTo: Vector3):
+	if (dead):
+		return;
+	
 	var snowball = preload("res://assets/npcs/snowman/snowball.tscn").instantiate();
+	var snowballShadow = preload("res://assets/npcs/snowman/snowball_shadow.tscn").instantiate();
 	var trailParticles = snowball.get_child(2);
 	var distance = global_position.distance_to(_moveTo);
-	var timeToArrive = distance * 0.025;
+	var timeToArrive = distance * 0.04;
 	add_child(snowball);
+	add_child(snowballShadow);
 	
 	trailParticles.visible = true;
 	snowball.global_position = global_position + Vector3(0, 5, 0);
+	snowballShadow.global_position = _moveTo;
 	snowball.team = team;
 	
-	var tween = get_tree().create_tween();
+	var tween = get_tree().create_tween().set_parallel(true);
 	tween.tween_property(snowball, "global_position", _moveTo, timeToArrive);
-	tween.finished.connect(_onSnowballArrived.bind(snowball));
+	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN);
+	tween.tween_property(snowballShadow, "scale", Vector3(0.45, 0.45, 0.45), timeToArrive);
+	tween.finished.connect(_onSnowballArrived.bind(snowball, snowballShadow));
 	spawnedSnowball = true;
 
 @rpc("call_local", "reliable", "any_peer")
 func snowballThrow():
+	if (dead):
+		return;
+	
 	usingThrow = true;
 	throwTimer = 4.0;
 	attackTimer = BASE_ATTACK_TIMER + randf_range(1.0, 3.0);
 	animPlayer.play("charging");
+
+@rpc("call_local", "reliable")
+func killSnowman():
+	dead = true;
+	usingThrow = false;
+	spawnedSnowball = false;
+	
+	var invertedAssistsArray: Array = assistedInKill;
+	invertedAssistsArray.reverse();
+	
+	var index = 0;
+	var winnerTeam = -1;
+	for playerId in assistedInKill:
+		var character: CharacterBody3D = gameScene.get_character_by_id(playerId);
+		if (character):
+			if (index != 0):
+				break;
+			
+			character.level += 1;
+			winnerTeam = character.team;
+			
+		index += 1;
+	
+	if (winnerTeam == -1):
+		print("[WARNING]: couldn't find team that killed snowman");
+		return;
+	
+	for playerId in Server.playersInfo:
+		var playerData = Server.playersInfo[playerId];
+		var character = gameScene.get_character_by_id(str(playerData.playerID));
+		
+		if (character.team == winnerTeam):
+			character.tokens += 5;
+			var newParticles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
+			character.add_child(newParticles);
+			newParticles.get_node("sparkParticle").emitting = true;
+			newParticles.get_node("buffParticles").emitting = true;
 
 @rpc("call_local", "any_peer", "reliable")
 func showUI():
@@ -202,8 +287,8 @@ func showUI():
 	healthBar.color = Color(0.769, 0.17, 0.182);
 	add_child(charUI);
 	
-	var zOffset = -2.0 if team == 0 else 2.0;
-	var xOffset = 0.0 if team == 0 else 0.65;
+	var zOffset = -3.0 if team == 0 else 2.0;
+	var xOffset = -0.5 if team == 0 else 0.65;
 	charUI.global_position.x += xOffset;
 	charUI.global_position.y = 5.0;
 	charUI.global_position.z += zOffset;
@@ -253,51 +338,6 @@ func killHippo():
 	visible = false;
 	moveTo = global_position;
 	PlayerFunc.syncMovement(self);
-	
-	var scene = get_parent().get_parent().get_parent(); # lol
-	if (scene.name != "Game"):
-		print("[WARNING]: game node not found");
-		return;
-	
-	var invertedAssistsArray: Array = assistedInKill;
-	invertedAssistsArray.reverse();
-	
-	var index = 0;
-	var winnerTeam = -1;
-	for playerId in assistedInKill:
-		if (scene.name != "Game"):
-			print("[WARNING]: game node not found");
-			return;
-		
-		var character: CharacterBody3D = scene.get_character_by_id(playerId);
-		if (character):
-			if (index != 0):
-				break;
-			
-			character.level += 1;
-			winnerTeam = character.team;
-			
-		index += 1;
-	
-	if (winnerTeam == -1):
-		print("[WARNING]: couldn't find team that killed hippo");
-		return;
-	
-	for playerId in Server.playersInfo:
-		var playerData = Server.playersInfo[playerId];
-		var character = scene.get_character_by_id(str(playerData.playerID));
-		
-		if (character.team == winnerTeam):
-			character.tokens += 5;
-			character.hp += character.maxHp / 1.25;
-			character.hp = clamp(character.hp, 0, character.maxHp);
-			
-			var newParticles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
-			character.add_child(newParticles);
-			
-			newParticles.get_node("buffExplosion").emitting = true;
-			newParticles.get_node("sparkParticle").emitting = true;
-			newParticles.get_node("buffParticles").emitting = true;
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	get_parent().add_child(particles);
