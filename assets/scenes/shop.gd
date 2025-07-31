@@ -2,6 +2,12 @@ extends Control
 
 signal closeShop(shop);
 
+@onready var itemName = $Shop/itemName;
+@onready var itemTexture = $Shop/itemTexture;
+@onready var stat1 = $Shop/stat1;
+@onready var stat2 = $Shop/stat2;
+@onready var stat3 = $Shop/stat3;
+
 var character: CharacterBody3D = null;
 var selectedItem = null;
 
@@ -39,6 +45,7 @@ func _setupShop():
 		);
 		newItem.button_down.connect(func():
 			selectedItem = newItem;
+			_showItemStats(item);
 			
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
 				_on_buy_pressed();
@@ -49,6 +56,45 @@ func _setupShop():
 		
 		itemsIndex += 1;
 
+func _showItemStats(_newItem):
+	stat1.visible = false;
+	stat2.visible = false;
+	stat3.visible = false;
+	itemName.visible = false;
+	itemTexture.visible = false;
+	
+	if not (_newItem):
+		return;
+	
+	itemName.text = _newItem.name;
+	itemName.visible = true;
+	itemTexture.texture = load(_newItem.texture);
+	itemTexture.visible = true;
+	
+	var index = 0;
+	for stat in _newItem.stats:
+		var statName = stat.capitalize();
+		if (stat == "dmg"):
+			statName = "Damage";
+		if (stat == "cooldownReduction"):
+			statName = "CDR";
+		if (stat == "attackSpeed"):
+			statName = "ATK Speed";
+		
+		if (index == 0):
+			stat1.visible = true;
+			stat1.text = str("%s: %s" % [statName, _newItem.stats[stat]]);
+		
+		if (index == 1):
+			stat2.visible = true;
+			stat2.text = str("%s: %s" % [statName, _newItem.stats[stat]]);
+		
+		if (index == 2):
+			stat3.visible = true;
+			stat3.text = str("%s: %s" % [statName, _newItem.stats[stat]]);
+		
+		index += 1;
+
 func _on_close_shop() -> void:
 	closeShop.emit(self);
 
@@ -58,6 +104,8 @@ func _toggle_shop():
 func _on_buy_pressed() -> void:
 	if not (selectedItem):
 		return;
+	
+	_showItemStats(null);
 	
 	var playerTokens = character.tokens;
 	var itemPrice = int(selectedItem.get_node("Price").text);
