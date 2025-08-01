@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://GPUTrail-main/GPUTrail3D.gd" id="9_22ed4"]
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="10_7abcr"]
 [ext_resource type="Texture2D" uid="uid://ne1gw1ktjsxc" path="res://assets/sprites/character_icons/ale_icon.png" id="14_fnemj"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="15_j5m4y"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="15_j5m4y"]
 
 [sub_resource type="Animation" id="Animation_7fvsu"]
 length = 0.001
@@ -4418,8 +4418,9 @@ _defaults_have_been_set = true
 metadata/_custom_type_script = "uid://qaiudhsklp0m"
 
 [node name="Sprite3D" type="Sprite3D" parent="." index="11"]
-transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
 top_level = true
+visible = false
 layers = 1024
 pixel_size = 0.075
 no_depth_test = true

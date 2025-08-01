@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_qpi53"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="7_inplr"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="10_qpi53"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="11_ycejn"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="11_ycejn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lptq5"]
 radius = 0.999927
@@ -1467,8 +1467,9 @@ process_material = SubResource("ParticleProcessMaterial_6fwau")
 draw_pass_1 = ExtResource("5_5op7a")
 
 [node name="Sprite3D" type="Sprite3D" parent="." index="10"]
-transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
 top_level = true
+visible = false
 layers = 1024
 pixel_size = 0.075
 no_depth_test = true

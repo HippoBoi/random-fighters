@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dilxl3o3ibo3i" path="res://assets/characters/ramon/ramon_char.gd" id="2_6gwxh"]
 [ext_resource type="PackedScene" uid="uid://cjb371raxm7pw" path="res://assets/characters/ramon/paper_hitbox.tscn" id="3_gwnqa"]
 [ext_resource type="Texture2D" uid="uid://dmuun3wigxfe6" path="res://assets/sprites/character_icons/ramon_icon.png" id="4_ynh7j"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="5_k4x2y"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="5_k4x2y"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n05ms"]
 size = Vector3(1.50684, 6.13483, 1)
@@ -1302,8 +1302,9 @@ process_material = SubResource("ParticleProcessMaterial_6wiod")
 draw_pass_1 = SubResource("BoxMesh_08cgt")
 
 [node name="Sprite3D" type="Sprite3D" parent="." index="5"]
-transform = Transform3D(-3, -2.62268e-07, 1.14641e-14, 0, -1.31134e-07, -3, 2.62268e-07, -3, 1.31134e-07, 0, 1, 0)
+transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
 top_level = true
+visible = false
 layers = 1024
 pixel_size = 0.075
 no_depth_test = true
