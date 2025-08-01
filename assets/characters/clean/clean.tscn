@@ -9,7 +9,7 @@
 [ext_resource type="Shader" uid="uid://b65ybvkiwkjuf" path="res://assets/effects/hit_01.tres" id="7_ov23i"]
 [ext_resource type="Texture2D" uid="uid://08841tb5t151" path="res://assets/textures/fx/T_circle42.PNG" id="8_ohlot"]
 [ext_resource type="Texture2D" uid="uid://dmr7hbd7o0iy4" path="res://assets/sprites/character_icons/clean_icon.png" id="9_qn3ih"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="10_2dtim"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="10_2dtim"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pv2p4"]
 radius = 1.13073

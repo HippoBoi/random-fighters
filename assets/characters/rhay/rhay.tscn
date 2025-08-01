@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_qpi53"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="7_inplr"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="10_qpi53"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="11_ycejn"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="11_ycejn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lptq5"]
 radius = 0.999927

@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="9_dhhdc"]
 [ext_resource type="Texture2D" uid="uid://3kx3ijaqi5gb" path="res://assets/textures/fx/spark_05.png" id="9_wl3mr"]
 [ext_resource type="Texture2D" uid="uid://shqhwl25u6mk" path="res://assets/sprites/character_icons/nephi_icon.png" id="11_w1r0h"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="12_3jppj"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="12_3jppj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5y7vj"]
 radius = 2.54493

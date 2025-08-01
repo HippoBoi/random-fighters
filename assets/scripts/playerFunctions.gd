@@ -55,6 +55,14 @@ func _getMapMargins(_gameMode: String) -> Array:
 		xMargins = [-24, 32];
 		zMargins = [-31, 28];
 	
+	if (gameMode.to_lower() == "doom_bot"):
+		xMargins = [-24, 32];
+		zMargins = [-28, 32];
+	
+	if (gameMode.to_lower() == "snowmen"):
+		xMargins = [-11, 20];
+		zMargins = [-48, 60];
+	
 	return [xMargins, zMargins];
 
 func _cameraMovement(character: CharacterBody3D, delta):
@@ -67,8 +75,8 @@ func _cameraMovement(character: CharacterBody3D, delta):
 		currentCamera.global_position.z = character.global_position.z + 5;
 		return;
 	
-	var moveMargin = 24;
-	var cameraSpeed = 22;
+	var moveMargin = 25;
+	var cameraSpeed = 25;
 	var moveVector = Vector3();
 	
 	if (viewportMousePos.x < moveMargin):

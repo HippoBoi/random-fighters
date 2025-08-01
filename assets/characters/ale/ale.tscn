@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://GPUTrail-main/GPUTrail3D.gd" id="9_22ed4"]
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="10_7abcr"]
 [ext_resource type="Texture2D" uid="uid://ne1gw1ktjsxc" path="res://assets/sprites/character_icons/ale_icon.png" id="14_fnemj"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="15_j5m4y"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="15_j5m4y"]
 
 [sub_resource type="Animation" id="Animation_7fvsu"]
 length = 0.001

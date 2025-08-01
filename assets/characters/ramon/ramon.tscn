@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dilxl3o3ibo3i" path="res://assets/characters/ramon/ramon_char.gd" id="2_6gwxh"]
 [ext_resource type="PackedScene" uid="uid://cjb371raxm7pw" path="res://assets/characters/ramon/paper_hitbox.tscn" id="3_gwnqa"]
 [ext_resource type="Texture2D" uid="uid://dmuun3wigxfe6" path="res://assets/sprites/character_icons/ramon_icon.png" id="4_ynh7j"]
-[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/follow_parent_position.gd" id="5_k4x2y"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/scripts/followParentPosition.gd" id="5_k4x2y"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n05ms"]
 size = Vector3(1.50684, 6.13483, 1)
