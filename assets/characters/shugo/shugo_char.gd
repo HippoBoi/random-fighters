@@ -117,6 +117,11 @@ var alreadyHit = [];
 @onready var shugoKirby = $shugo_kirby;
 
 func _ready() -> void:
+	if (is_multiplayer_authority()):
+		var gameScene = get_parent();
+		if (gameScene.name == "Game"):
+			gameScene.myCharacter = self;
+			
 	humanForm = true;
 	shugoKirby.visible = false;
 	
@@ -178,6 +183,9 @@ func _physics_process(delta: float) -> void:
 		
 		if (Input.is_action_just_pressed("shop")):
 			PlayerFunc.shopToggle(self);
+		
+		if (Input.is_action_just_pressed("closeMenu")):
+			PlayerFunc.shopToggle(self, true);
 		
 		if (Input.is_anything_pressed()):
 			var action = null;

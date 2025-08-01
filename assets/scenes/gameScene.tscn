@@ -858,7 +858,7 @@ grow_vertical = 0
 [node name="SubViewport" type="SubViewport" parent="MinimapUI"]
 
 [node name="Camera3D" type="Camera3D" parent="MinimapUI/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 34, 0)
+transform = Transform3D(0.707107, -0.707107, -3.09086e-08, 0, -4.37114e-08, 1, -0.707107, -0.707107, -3.09086e-08, 0, 34, 0)
 cull_mask = 1048061
 projection = 1
 size = 105.0
@@ -913,3 +913,4 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e
 [connection signal="mouse_exited" from="InGameUI/abilitiesUI/tertiaryAbility" to="InGameUI" method="_on_tertiary_mouse_exit"]
 [connection signal="mouse_entered" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_hover"]
 [connection signal="mouse_exited" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_exit"]
+[connection signal="pressed" from="InGameUI/abilitiesUI/shopButton" to="." method="_on_shop_button_pressed"]

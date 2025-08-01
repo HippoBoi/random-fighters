@@ -25,14 +25,14 @@ const items = [
 	},
 	{
 		"name": "Heaven Sword",
-		"price": 20,
+		"price": 0,
 		"stats": {
 			"dmg": 4,
 		},
 		"texture": "res://assets/textures/items/heaven_sword.png"
 	},{
 		"name": "Heaven Shield",
-		"price": 20,
+		"price": 0,
 		"stats": {
 			"hp": 25,
 			"armor": 10

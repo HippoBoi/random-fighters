@@ -2,6 +2,7 @@ extends Node3D
 
 var totalPlayers = 0;
 var playerId = 0;
+var myCharacter = null;
 var addedCharacters = [];
 var currentGameMode = "";
 
@@ -189,7 +190,7 @@ func addCharacter(player, _playerId):
 	if (spawn):
 		charInstance.global_position = spawn.global_position;
 	else:
-		print("[WARNING]: %s does not have a team (is spectator?)" % player.username);
+		print("(gameScene)[WARNING]: %s does not have a team (is spectator?)" % player.username);
 	
 	player.charInstance = charInstance;
 	
@@ -281,7 +282,7 @@ func get_character_by_id(_playerId: String):
 			charLookingFor = character;
 	
 	if not (charLookingFor):
-		print("[WARNING]: couldn't find character");
+		print("(gameScene)[WARNING]: couldn't find character");
 		return null;
 	
 	return charLookingFor;
@@ -330,3 +331,6 @@ func _endGameScreen(_teamThatHasWon):
 		statusText.text = "[b]Defeat[b]";
 		statusText.modulate = Color(1.0, 0.25, 0.0);
 		loopingStatusText.text = "Defeat";
+
+func _on_shop_button_pressed() -> void:
+	PlayerFunc.shopToggle(myCharacter);

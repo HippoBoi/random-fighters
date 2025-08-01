@@ -106,6 +106,11 @@ var assistedInKill = [];
 @onready var animPlayer = $AnimationPlayer
 
 func _ready() -> void:
+	if (is_multiplayer_authority()):
+		var gameScene = get_parent();
+		if (gameScene.name == "Game"):
+			gameScene.myCharacter = self;
+			
 	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
 
@@ -144,6 +149,9 @@ func _physics_process(delta: float) -> void:
 		
 		if (Input.is_action_just_pressed("shop")):
 			PlayerFunc.shopToggle(self);
+		
+		if (Input.is_action_just_pressed("closeMenu")):
+			PlayerFunc.shopToggle(self, true);
 		
 		if (Input.is_anything_pressed()):
 			var action = null;

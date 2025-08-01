@@ -726,8 +726,8 @@ func _closeShop(shop):
 	shop.queue_free();
 	shopOpen = false;
 
-func shopToggle(character: CharacterBody3D):
-	if (shopOpen == false):
+func shopToggle(character: CharacterBody3D, forceClose = false):
+	if (shopOpen == false and forceClose == false):
 		var shopScene = preload("res://assets/scenes/shop_ui.tscn").instantiate();
 		shopScene.character = character;
 		shopScene.closeShop.connect(_closeShop);

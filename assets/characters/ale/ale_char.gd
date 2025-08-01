@@ -113,6 +113,11 @@ var basicAnimPos = 0;
 @onready var animPlayer = $AnimationPlayer2;
 
 func _ready() -> void:
+	if (is_multiplayer_authority()):
+		var gameScene = get_parent();
+		if (gameScene.name == "Game"):
+			gameScene.myCharacter = self;
+	
 	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
 
@@ -157,6 +162,9 @@ func _physics_process(delta: float) -> void:
 		
 		if (Input.is_action_just_pressed("shop")):
 			PlayerFunc.shopToggle(self);
+		
+		if (Input.is_action_just_pressed("closeMenu")):
+			PlayerFunc.shopToggle(self, true);
 		
 		if (Input.is_anything_pressed()):
 			var action = null;
@@ -314,8 +322,8 @@ func _setup_primary():
 
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
-	qTimer = Q_COOLDOWN;
-	stamina -= Q_STAMINA - cooldownReduction;
+	qTimer = Q_COOLDOWN - cooldownReduction;
+	stamina -= Q_STAMINA;
 	primaryTimer = 1.1;
 	target = null;
 	usingPrimary = true;
@@ -364,8 +372,8 @@ func tertiary_ability(_moveTo, _global_pos):
 	moveTo = _global_pos + direction * E_MAX_RANGE;
 	moveTo.y = _global_pos.y;
 	
-	eTimer = E_COOLDOWN - cooldownReduction;
-	stamina -= E_STAMINA;
+	eTimer = E_COOLDOWN;
+	stamina -= E_STAMINA - cooldownReduction;
 	speedOffset = 6;
 	onAction = true;
 	animPlayer.play("e_ability");
