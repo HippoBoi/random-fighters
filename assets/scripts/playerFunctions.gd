@@ -69,10 +69,14 @@ func _cameraMovement(character: CharacterBody3D, delta):
 	var currentCamera = get_viewport().get_camera_3d();
 	var viewportMousePos = get_viewport().get_mouse_position();
 	var viewPortSize = get_viewport().get_visible_rect().size;
+	var margins = _getMapMargins(gameMode);
 	
 	if (freeCam == false):
 		currentCamera.global_position.x = character.global_position.x + 5;
 		currentCamera.global_position.z = character.global_position.z + 5;
+		
+		currentCamera.global_position.x = clamp(currentCamera.global_position.x, margins[0][0], margins[0][1]);
+		currentCamera.global_position.z = clamp(currentCamera.global_position.z, margins[1][0], margins[1][1]);
 		return;
 	
 	var moveMargin = 25;
@@ -90,8 +94,6 @@ func _cameraMovement(character: CharacterBody3D, delta):
 	
 	moveVector = moveVector.rotated(Vector3.UP, currentCamera.rotation.y);
 	currentCamera.global_position += moveVector * delta * cameraSpeed;
-	
-	var margins = _getMapMargins(gameMode);
 	
 	currentCamera.global_position.x = clamp(currentCamera.global_position.x, margins[0][0], margins[0][1]);
 	currentCamera.global_position.z = clamp(currentCamera.global_position.z, margins[1][0], margins[1][1]);
