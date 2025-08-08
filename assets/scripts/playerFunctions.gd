@@ -27,6 +27,7 @@ var updateTimer = 0;
 
 var myFogInstances = [];
 var maxHpStored = {};
+var tokensStored = {};
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -166,6 +167,33 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 	else:
 		print("this is last life");
 
+func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
+	var scene = character.get_parent();
+	var UI = scene.get_node("InGameUI");
+	var tokensUI = UI.get_node("abilitiesUI/tokens");
+	var tokensAmount = int(tokensUI.text);
+	var timeToWait = 0.025;
+	
+	if (tokensAmount < _newTokens):
+		_tokensAnimation(scene, _newTokens);
+		await get_tree().create_timer(1.0).timeout;
+	
+	while (tokensAmount < _newTokens):
+		var difference = _newTokens - tokensAmount;
+		if (difference > _newTokens * 0.5):
+			timeToWait = 0.05;
+		elif (difference > _newTokens * 0.25):
+			timeToWait = 0.075;
+		elif (difference > _newTokens * 0.1):
+			timeToWait = 0.15;
+		
+		tokensAmount += 1;
+		
+		tokensUI.text = str(tokensAmount);
+		await get_tree().create_timer(timeToWait).timeout;
+	
+	tokensUI.text = str(_newTokens);
+
 func _updateLivesInUI(character: CharacterBody3D, livesContainer: HBoxContainer):
 	for oldLive in livesContainer.get_children():
 		if (oldLive.name != "template"):
@@ -201,7 +229,7 @@ func _updateGameUI(character: CharacterBody3D):
 		
 		UIlevel.text = str(character.level);
 		UIrespawnTimer.text = str(roundf(character.respawnTimer * 100) / 100);
-		UItokens.text = str(character.tokens);
+		#UItokens.text = str(character.tokens);
 		
 		_setupAbilityDescriptions(character, UI);
 		_updateLivesInUI(character, livesContainer);
@@ -296,6 +324,8 @@ func updateState(character: CharacterBody3D, delta):
 			fogParticles.emitting = false;
 		else:
 			print("[WARNING]: fog instance not found");
+	
+	_hadTokensChanged(character);
 	
 	if (gameStarted):
 		_cameraMovement(character, delta);
@@ -518,6 +548,27 @@ func respawnCharacter(character: CharacterBody3D):
 	
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
+func _tokensAnimation(scene, _tokens):
+	var UI = scene.get_node("InGameUI");
+	var tokensObtainedUI = UI.get_node("abilitiesUI/tokensObtained").duplicate();
+	var startPos = Vector2(535.0, 210.0);
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT).set_parallel(false);
+	
+	UI.add_child(tokensObtainedUI);
+	tokensObtainedUI.text = str("[b]+%s TKNS[b]" % _tokens);
+	tokensObtainedUI.visible = true;
+	
+	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y - 5), 0.4);
+	await get_tree().create_timer(0.5).timeout;
+	tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
+	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y + 30), 0.75);
+	tween.tween_property(tokensObtainedUI, "modulate:a", 0.0, 0.75);
+	
+	await get_tree().create_timer(0.75).timeout;
+	tokensObtainedUI.queue_free();
+	
+	return true;
+	
 func _takedownAnim(scene):
 	var UI = scene.get_node("InGameUI");
 	var takedownOverlay = UI.get_node("takedownOverlay");
@@ -868,6 +919,14 @@ func _hasMaxHpChanged(character: CharacterBody3D):
 		return true;
 	
 	return false;
+
+func _hadTokensChanged(character: CharacterBody3D):
+	if not (tokensStored.has(character.name)):
+		tokensStored[character.name] = 0;
+		
+	if (tokensStored[character.name] != character.tokens):
+		_updateTokensInUI(character, character.tokens);
+		tokensStored[character.name] = character.tokens;
 	
 func _calculateHealthBars(character: CharacterBody3D):
 	if not (_hasMaxHpChanged(character)):
