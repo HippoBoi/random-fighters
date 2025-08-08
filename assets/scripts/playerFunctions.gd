@@ -441,6 +441,10 @@ func killCharacter(character: CharacterBody3D):
 		var player: CharacterBody3D = scene.get_character_by_id(playerId);
 		if (player):
 			player.tokens += tokenReward;
+			
+			if (player == myCharacter):
+				_takedownAnim(scene);
+			
 		index += 1;
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
@@ -513,6 +517,15 @@ func respawnCharacter(character: CharacterBody3D):
 			character.global_position = whiteTeam.global_position;
 	
 	character.rpc("syncRespawn", character.hp, character.global_position);
+
+func _takedownAnim(scene):
+	var UI = scene.get_node("InGameUI");
+	var takedownOverlay = UI.get_node("takedownOverlay");
+	var tween = get_tree().create_tween();
+	
+	takedownOverlay.color.a = 0.4;
+	tween.tween_property(takedownOverlay, "color:a", 0.0, 0.45);
+	_cameraShake(0.5, 0.5);
 
 func enterFog(character, fogInstance):
 	character.inFog = true;
