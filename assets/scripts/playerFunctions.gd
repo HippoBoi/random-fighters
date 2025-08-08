@@ -98,11 +98,33 @@ func _cameraMovement(character: CharacterBody3D, delta):
 	currentCamera.global_position.x = clamp(currentCamera.global_position.x, margins[0][0], margins[0][1]);
 	currentCamera.global_position.z = clamp(currentCamera.global_position.z, margins[1][0], margins[1][1]);
 
-func _playLivesAnimation(character, inGameUI: Control):
+func _cameraShake(period: float = 1.0, magnitude: float = 1.0): # stolen from reddit
+	var currentCamera = get_viewport().get_camera_3d();
+	var startPos = currentCamera.transform;
+	var elapsedTime = 0.0;
+
+	while (elapsedTime < period):
+		var magnitudeOffset = magnitude - elapsedTime;
+		magnitudeOffset = clamp(magnitudeOffset, 0.0, 1.0);
+		var offset = Vector3(
+			randf_range(-magnitudeOffset, magnitudeOffset),
+			randf_range(-magnitudeOffset, magnitudeOffset),
+			0.0
+		);
+		currentCamera.transform.origin = startPos.origin + offset;
+		elapsedTime += get_process_delta_time();
+		await get_tree().process_frame;
+
+	currentCamera.transform = startPos;
+
+func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
+	_cameraShake(0.8, 0.7);
 	playedLivesAnimation = true;
 	
 	var livesText = inGameUI.get_node("livesText");
 	var livesContainer = inGameUI.get_node("livesContainer");
+	var overlayTween = get_tree().create_tween();
+	overlayTween.tween_property(deadOverlay, "color:a", 0.4, 0.25);
 	
 	livesText.visible = true;
 	livesText.modulate = Color(1, 1, 1, 0);
@@ -171,6 +193,7 @@ func _updateGameUI(character: CharacterBody3D):
 		var UIrespawnTimer = abilityUI.get_node("respawnTimer");
 		var UItokens = abilityUI.get_node("tokens");
 		var livesContainer = abilityUI.get_node("livesContainer2");
+		var deadOverlay = UI.get_node("deadOverlay");
 		primAbility.get_node("cooldown").scale.x = character.qTimer / character.Q_COOLDOWN;
 		secondAbility.get_node("cooldown").scale.x = character.wTimer / character.W_COOLDOWN;
 		tertAbility.get_node("cooldown").scale.x = character.eTimer / character.E_COOLDOWN;
@@ -185,7 +208,7 @@ func _updateGameUI(character: CharacterBody3D):
 		
 		if (character.dead):
 			if not (playedLivesAnimation):
-				_playLivesAnimation(character, UI);
+				_playLivesAnimation(character, UI, deadOverlay);
 			
 			_updateLivesInUI(character, livesContainer);
 		
@@ -193,6 +216,7 @@ func _updateGameUI(character: CharacterBody3D):
 				UIrespawningText.visible = true;
 				UIrespawnTimer.visible = true;
 		else:
+			deadOverlay.color.a = 0.0;
 			playedLivesAnimation = false;
 			UIrespawningText.visible = false;
 			UIrespawnTimer.visible = false;
