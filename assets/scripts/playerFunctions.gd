@@ -173,9 +173,10 @@ func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
 	var tokensUI = UI.get_node("abilitiesUI/tokens");
 	var tokensAmount = int(tokensUI.text);
 	var timeToWait = 0.025;
+	var netGain = _newTokens - tokensAmount;
 	
 	if (tokensAmount < _newTokens):
-		_tokensAnimation(scene, _newTokens);
+		_tokensAnimation(scene, netGain);
 		await get_tree().create_timer(1.0).timeout;
 	
 	while (tokensAmount < _newTokens):
