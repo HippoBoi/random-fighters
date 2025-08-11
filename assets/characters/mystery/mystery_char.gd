@@ -75,7 +75,7 @@ var ultimateTimer = 0;
 var bufferedTarget = null;
 var bufferedInput = null;
 
-var basicAnimList = ["basic_01"];
+var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
 var alreadyHit = [];
@@ -363,7 +363,10 @@ func showBasicAttack(_targetPos):
 func playBasicAttack():
 	basicAttacking = true;
 	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
-	animPlayer.play("basic_01");
+	animPlayer.play(basicAnimList[basicAnimPos]);
+	basicAnimPos += 1;
+	if (basicAnimPos >= basicAnimList.size()):
+		basicAnimPos = 0;
 
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):
