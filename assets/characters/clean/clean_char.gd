@@ -191,6 +191,9 @@ func _physics_process(delta: float) -> void:
 			if (wParticles.visible):
 				$w_dissapear.emitting = true;
 				wParticles.visible = false;
+				
+				var sound = preload("res://assets/sounds/characters/clean/clean_empower_end.ogg");
+				PlayerFunc.playSound(self, sound);
 			
 			usingSecondary = false;
 			extraBasics = 0;
@@ -231,6 +234,9 @@ func _physics_process(delta: float) -> void:
 				appliedBuffs = true;
 				speedOffset += 0.75;
 		else:
+			var sound = preload("res://assets/sounds/characters/clean/clean_hacker_end.ogg");
+			PlayerFunc.playSound(self, sound);
+			
 			$e_clouds.emitting = true;
 			appliedBuffs = false;
 			hackerMode = false;
@@ -268,7 +274,9 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
+	var sound = preload("res://assets/sounds/characters/clean/clean_basic_hit.ogg");
 	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
+	rpc("syncSound", sound);
 
 @rpc("call_local")
 func showBasicAttack(_targetPos):
@@ -278,6 +286,9 @@ func showBasicAttack(_targetPos):
 	var basicScene = preload("res://assets/characters/clean/cleanBasic.tscn");
 	if (extraBasics > 0):
 		basicScene = preload("res://assets/characters/clean/cleanSpecialBasic.tscn");
+	
+	var sound = preload("res://assets/sounds/characters/clean/clean_basic.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	var basic = basicScene.instantiate();
 	get_parent().add_child(basic);
@@ -376,6 +387,9 @@ func primary_ability(_moveTo, _global_pos):
 	usingPrimary = true;
 	primaryTimer = 0.5;
 	
+	var sound = preload("res://assets/sounds/characters/clean/clean_roll.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	if (target):
 		bufferedTarget = target;
 		target = null;
@@ -401,6 +415,9 @@ func secondary_ability():
 	wTimer = W_COOLDOWN - cooldownReduction;
 	secondaryTimer = wTimer * 0.5;
 	animPlayer.play("w_ability");
+	
+	var sound = preload("res://assets/sounds/characters/clean/clean_hacker.ogg");
+	PlayerFunc.playSound(self, sound);
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos: Vector3):
@@ -411,6 +428,9 @@ func tertiary_ability(_mousePos: Vector3):
 	circle.emitting = true;
 	
 	# _spawn_e_ray(_mousePos);
+	
+	var sound = preload("res://assets/sounds/characters/clean/clean_empower.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	animPlayer.play("e_ability");
 	simulateMove(null, global_position);
@@ -523,6 +543,10 @@ func showChatText(newText):
 @rpc("call_local", "any_peer", "reliable")
 func onItemPurchase(item: Dictionary):
 	PlayerFunc.grantItemStats(self, item)
+
+@rpc("call_local", "any_peer")
+func syncSound(sound):
+	PlayerFunc.playSound(self, sound);
 
 func onCollision():
 	pass;
