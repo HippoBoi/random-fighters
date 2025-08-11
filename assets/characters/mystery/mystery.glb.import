@@ -4,16 +4,16 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cd4qwltvi8kxa"
-path="res://.godot/imported/mystery.glb-0ed9e826da3361fdc25b583602169b2f.scn"
+path="res://.godot/imported/mystery.glb-1710536573ad1e8a07a9e6f7a5be8771.scn"
 
 [deps]
 
-source_file="res://mystery.glb"
-dest_files=["res://.godot/imported/mystery.glb-0ed9e826da3361fdc25b583602169b2f.scn"]
+source_file="res://assets/characters/mystery/mystery.glb"
+dest_files=["res://.godot/imported/mystery.glb-1710536573ad1e8a07a9e6f7a5be8771.scn"]
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="CharacterBody3D"
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0

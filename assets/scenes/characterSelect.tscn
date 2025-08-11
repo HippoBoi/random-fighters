@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=24 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="1_qrbhw"]
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ce1p48mexskks" path="res://assets/sprites/nephi.png" id="6_1lgrt"]
 [ext_resource type="Shader" uid="uid://c7crpvx38smj" path="res://assets/scenes/UI_outline_solid.gdshader" id="10_0h5le"]
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
+[ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vvea"]
 shader = ExtResource("2_70d5h")
@@ -637,9 +638,9 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 [node name="ale" type="Control" parent="Characters"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 184.0
+offset_left = 173.0
 offset_top = 48.0
-offset_right = 264.0
+offset_right = 253.0
 offset_bottom = 118.0
 size_flags_horizontal = 0
 
@@ -681,6 +682,70 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="Characters/ale"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -35.0
+offset_right = 35.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+
+[node name="mystery" type="Control" parent="Characters"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 263.0
+offset_top = 48.0
+offset_right = 343.0
+offset_bottom = 118.0
+size_flags_horizontal = 0
+
+[node name="CharacterSplash" type="TextureRect" parent="Characters/mystery"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -31.0
+offset_right = 29.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_x2it3")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterName" type="RichTextLabel" parent="Characters/mystery"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -49.5
+offset_right = 37.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Mystery"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Characters/mystery"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8

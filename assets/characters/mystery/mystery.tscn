@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://chsuri7n1cwcg"]
+
+[ext_resource type="PackedScene" uid="uid://cd4qwltvi8kxa" path="res://assets/characters/mystery/mystery.glb" id="1_sh7qi"]
+[ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0i4rp"]
+size = Vector3(1.50684, 6.13483, 1)
+
+[node name="mystery" instance=ExtResource("1_sh7qi")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+collision_layer = 6
+script = ExtResource("2_0i4rp")
+
+[node name="mystery_armature" parent="." index="0"]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 1.6, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
+shape = SubResource("BoxShape3D_0i4rp")
