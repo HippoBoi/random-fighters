@@ -12,3 +12,6 @@ This project is also a W.I.P.
 
 # Matchmaking
 In order to restore functionality to the matchmaking system you'll have to setup your own backend service (or websocket in my case) to handle the database. Alternatively, you can use p2p connection and remove matchmaking altogether, since this project uses UPnP to host servers.
+
+# CREDITS
+[Unmoving Plaid](https://godotshaders.com/shader/unmoving-plaid-chowder-effect/) shader by: gmpf

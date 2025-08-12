@@ -1,7 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://chsuri7n1cwcg"]
+[gd_scene load_steps=9 format=3 uid="uid://chsuri7n1cwcg"]
 
 [ext_resource type="PackedScene" uid="uid://cd4qwltvi8kxa" path="res://assets/characters/mystery/mystery.glb" id="1_sh7qi"]
 [ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
+[ext_resource type="Shader" uid="uid://dmdskevb2pxeb" path="res://assets/characters/mystery/mystery_shader.gdshader" id="3_wllyx"]
+[ext_resource type="Texture2D" uid="uid://bt25gy2xsanyi" path="res://assets/characters/mystery/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="4_emb01"]
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="5_h2vus"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mf77p"]
+render_priority = 0
+shader = ExtResource("3_wllyx")
+shader_parameter/texture_albedo = ExtResource("4_emb01")
+shader_parameter/scale = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6yj01"]
+render_priority = 0
+shader = ExtResource("3_wllyx")
+shader_parameter/texture_albedo = ExtResource("5_h2vus")
+shader_parameter/scale = 0.25
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0i4rp"]
 size = Vector3(1.50684, 6.13483, 1)
@@ -13,6 +28,12 @@ script = ExtResource("2_0i4rp")
 
 [node name="mystery_armature" parent="." index="0"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.64468, 0)
+
+[node name="body" parent="mystery_armature/Skeleton3D" index="2"]
+surface_material_override/0 = SubResource("ShaderMaterial_mf77p")
+
+[node name="hat" parent="mystery_armature/Skeleton3D" index="6"]
+surface_material_override/0 = SubResource("ShaderMaterial_6yj01")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
