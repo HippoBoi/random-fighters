@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://chsuri7n1cwcg"]
+[gd_scene load_steps=20 format=3 uid="uid://chsuri7n1cwcg"]
 
 [ext_resource type="PackedScene" uid="uid://cd4qwltvi8kxa" path="res://assets/characters/mystery/mystery.glb" id="1_sh7qi"]
 [ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
 [ext_resource type="Shader" uid="uid://dmdskevb2pxeb" path="res://assets/characters/mystery/mystery_shader.gdshader" id="3_wllyx"]
 [ext_resource type="Texture2D" uid="uid://bt25gy2xsanyi" path="res://assets/characters/mystery/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="4_emb01"]
 [ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="5_h2vus"]
+[ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="6_6yj01"]
+[ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="7_erqts"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mf77p"]
 render_priority = 0
@@ -21,6 +23,102 @@ shader_parameter/scale = 0.25
 [sub_resource type="BoxShape3D" id="BoxShape3D_0i4rp"]
 size = Vector3(1.50684, 6.13483, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emb01"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="Curve" id="Curve_h2vus"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.586735, 0.953307), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_6yj01"]
+curve = SubResource("Curve_h2vus")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_emb01"]
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+radial_velocity_min = -2.00002
+radial_velocity_max = -2.23517e-05
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_6yj01")
+color = Color(1, 0.75, 3, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_h2vus"]
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oaqk5"]
+render_priority = 0
+shader = ExtResource("7_erqts")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/gradient_1_slider = -0.225
+shader_parameter/gradient_2_slider = 0.2
+
+[sub_resource type="Animation" id="Animation_r1nbt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_1_slider")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-0.225]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_2_slider")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.2]
+}
+
+[sub_resource type="Animation" id="Animation_xqn7j"]
+resource_name = "slash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_1_slider")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [-0.225, 0.175, 0.565, 0.65]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_2_slider")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.2, -0.58, -1.455, -1.075]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sky8r"]
+_data = {
+&"RESET": SubResource("Animation_r1nbt"),
+&"slash": SubResource("Animation_xqn7j")
+}
+
 [node name="mystery" instance=ExtResource("1_sh7qi")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
 collision_layer = 6
@@ -28,6 +126,22 @@ script = ExtResource("2_0i4rp")
 
 [node name="mystery_armature" parent="." index="0"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.64468, 0)
+
+[node name="Skeleton3D" parent="mystery_armature" index="0"]
+bones/1/rotation = Quaternion(0, -0.401889, 0, 0.915688)
+bones/2/rotation = Quaternion(-0.0808562, -7.49595e-09, -0.0743703, 0.993947)
+bones/4/rotation = Quaternion(-4.98625e-09, 6.0536e-09, 1.37093e-09, 1)
+bones/7/rotation = Quaternion(-0.0999797, 0.55653, -0.309397, 0.76456)
+bones/8/rotation = Quaternion(1.18174e-08, -1.3717e-07, 0.0248459, 0.999691)
+bones/13/rotation = Quaternion(-0.222714, -0.0895294, -0.0305795, 0.970282)
+bones/14/rotation = Quaternion(-0.574031, 0.00990764, 0.00855451, 0.818729)
+bones/15/rotation = Quaternion(-0.0536476, -0.0126663, 0.0424594, 0.997576)
+bones/17/rotation = Quaternion(-0.70422, 0.0638284, 0.0638283, 0.70422)
+bones/18/rotation = Quaternion(-2.22045e-16, 1.77636e-15, 7.88861e-31, 1)
+bones/20/rotation = Quaternion(-0.645988, 0.0795558, 0.0927961, 0.753498)
+bones/21/rotation = Quaternion(4.15623e-12, 1.87926e-09, 3.84171e-09, 1)
+bones/22/position = Vector3(-3.06747, 4.48621, -4.1897)
+bones/22/rotation = Quaternion(-0.127895, 0.752014, -0.321171, 0.561219)
 
 [node name="body" parent="mystery_armature/Skeleton3D" index="2"]
 surface_material_override/0 = SubResource("ShaderMaterial_mf77p")
@@ -38,3 +152,24 @@ surface_material_override/0 = SubResource("ShaderMaterial_6yj01")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
 shape = SubResource("BoxShape3D_0i4rp")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08275, 5.45455)
+material_override = SubResource("StandardMaterial3D_emb01")
+emitting = false
+amount = 12
+explosiveness = 0.1
+process_material = SubResource("ParticleProcessMaterial_emb01")
+draw_pass_1 = SubResource("CapsuleMesh_h2vus")
+
+[node name="Slash2" type="Node3D" parent="." index="4"]
+transform = Transform3D(2.3, 0, 0, 0, 1, 0, 0, 0, 3.96, 0, 0, 0)
+
+[node name="Slash" type="MeshInstance3D" parent="Slash2" index="0"]
+mesh = ExtResource("6_6yj01")
+surface_material_override/0 = SubResource("ShaderMaterial_oaqk5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Slash2" index="1"]
+libraries = {
+&"": SubResource("AnimationLibrary_sky8r")
+}
