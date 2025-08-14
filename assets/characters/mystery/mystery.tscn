@@ -164,7 +164,7 @@ process_material = SubResource("ParticleProcessMaterial_emb01")
 draw_pass_1 = SubResource("CapsuleMesh_h2vus")
 
 [node name="q_slash" type="Node3D" parent="." index="4"]
-transform = Transform3D(-3.67356, 7.64274e-15, 3.29771e-07, 0, -1, 3.29771e-07, 3.21153e-07, 8.74228e-08, 3.77214, 0.412675, 0, 2.35252)
+transform = Transform3D(-4.04092, 7.64274e-15, 3.29771e-07, 0, -1, 3.29771e-07, 3.53268e-07, 8.74228e-08, 3.77214, 0.412675, 0, 3.21884)
 
 [node name="Slash" type="MeshInstance3D" parent="q_slash" index="0"]
 mesh = ExtResource("6_6yj01")

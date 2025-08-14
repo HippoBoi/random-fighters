@@ -11,6 +11,7 @@ shader_parameter/color2 = Color(0.75, 0.5, 2, 1)
 shader_parameter/color = Color(0.99558, 0.99558, 0.99558, 1)
 
 [node name="w_shadow" type="Node3D"]
+transform = Transform3D(0.7, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(20.35, 0, 0, 0, 0.324, 0, 0, 0, 22.75, 0, 0, 0)

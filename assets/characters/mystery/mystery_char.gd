@@ -13,7 +13,7 @@ var shield = 0;
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
 const Q_COOLDOWN = 5.0;
-const W_COOLDOWN = 10.0;
+const W_COOLDOWN = 1.0;
 const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 60.0;
 const W_MAX_RANGE = 5.0;
@@ -95,8 +95,10 @@ var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
 
+var holdingSecondary = false;
 var usingStorm = false;
 var stormInstance = null;
+var stormMousePos = null;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $Armature
@@ -155,7 +157,7 @@ func _physics_process(delta: float) -> void:
 			
 			if (Input.is_action_just_pressed("primary") and qTimer <= 0):
 				action = Callable(self, "_setup_primary");
-			if (Input.is_action_just_pressed("secondary") and wTimer <= 0):
+			if (Input.is_action_just_pressed("secondary") and wTimer <= 0 and not holdingSecondary):
 				action = Callable(self, "_setup_secondary");
 			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0):
 				action = Callable(self, "_setup_tertiary");
@@ -167,6 +169,9 @@ func _physics_process(delta: float) -> void:
 					action.call();
 				else:
 					bufferedInput = action;
+		
+		if (Input.is_action_just_released("secondary")):
+			pass;
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -174,7 +179,7 @@ func _physics_process(delta: float) -> void:
 		primaryTimer -= delta;
 		moveTo = global_position;
 		
-		if (primaryTimer > 0.75 and primaryTimer <= 1.0):
+		if (primaryTimer > 0.75 and primaryTimer <= 0.9):
 			$q_particles.emitting = true;
 			$q_slash/AnimationPlayer.play("slash");
 	else:
@@ -186,12 +191,10 @@ func _physics_process(delta: float) -> void:
 		secondaryTimer -= delta;
 		moveTo = global_position;
 		
-		if (secondaryTimer <= 1.0 and not usingStorm):
-			_spawn_w_storm();
+		if (secondaryTimer <= 1.0 and stormMousePos and not usingStorm):
+			_spawn_w_storm(stormMousePos);
 	else:
 		if (usingSecondary):
-			_kill_previous_storm();
-			
 			usingSecondary = false;
 			usingStorm = false;
 			onAction = false;
@@ -234,13 +237,13 @@ func _kill_previous_storm():
 		stormInstance.queue_free();
 		stormInstance = null;
 
-func _spawn_w_storm():
+func _spawn_w_storm(_mousePos):
 	_kill_previous_storm();
 	
 	var storm = preload("res://assets/characters/mystery/w_storm_shadow.tscn").instantiate();
 	get_parent().add_child(storm);
 	
-	storm.global_position = global_position;
+	storm.global_position = _mousePos + Vector3(0, 0.5, 0);
 	storm.rotation = rotation;
 	stormInstance = storm;
 	usingStorm = true;
@@ -311,6 +314,7 @@ func secondary_ability(_mousePos):
 	secondaryTimer = 1.5;
 	usingSecondary = true;
 	onAction = true;
+	stormMousePos = _mousePos;
 	
 	animPlayer.play("q_ability");
 	simulateMove(null, global_position);
