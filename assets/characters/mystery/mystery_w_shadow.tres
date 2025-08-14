@@ -65,7 +65,7 @@ input_name = "time"
 input_name = "uv"
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_k7a0n"]
-default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
+default_input_values = [1, Vector2(0.5, 0.25), 2, Vector2(0, 0)]
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_ttwvo"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0.25, 1)]
@@ -79,7 +79,7 @@ parameter_name = "gradient_2_slider"
 input_name = "uv"
 
 [sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_jpbpi"]
-default_input_values = [1, Vector2(1, -0.5), 2, Vector2(0, 0)]
+default_input_values = [1, Vector2(1, 0.75), 2, Vector2(0, 0)]
 
 [resource]
 code = "shader_type spatial;
@@ -129,7 +129,7 @@ void fragment() {
 
 
 // UVFunc:4
-	vec2 n_in4p1 = vec2(1.00000, 0.50000);
+	vec2 n_in4p1 = vec2(0.50000, 0.25000);
 	vec2 n_out4p0 = vec2(n_out20p0) * n_in4p1 + n_out6p0;
 
 
@@ -151,7 +151,7 @@ void fragment() {
 
 
 // UVFunc:9
-	vec2 n_in9p1 = vec2(1.00000, -0.50000);
+	vec2 n_in9p1 = vec2(1.00000, 0.75000);
 	vec2 n_out9p0 = vec2(n_out15p0) * n_in9p1 + n_out10p0;
 
 
@@ -174,7 +174,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-697.386, 12.2779)
+graph_offset = Vector2(-676.43, 73.5267)
 nodes/fragment/0/position = Vector2(680, 140)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_tbong")
 nodes/fragment/2/position = Vector2(-400, 200)

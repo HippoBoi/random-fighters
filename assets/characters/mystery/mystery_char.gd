@@ -95,6 +95,9 @@ var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
 
+var usingStorm = false;
+var stormInstance = null;
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $Armature
 @onready var animPlayer = $AnimationPlayer
@@ -180,7 +183,18 @@ func _physics_process(delta: float) -> void:
 			onAction = false;
 	
 	if (secondaryTimer > 0):
-		pass;
+		secondaryTimer -= delta;
+		moveTo = global_position;
+		
+		if (secondaryTimer <= 1.0 and not usingStorm):
+			_spawn_w_storm();
+	else:
+		if (usingSecondary):
+			_kill_previous_storm();
+			
+			usingSecondary = false;
+			usingStorm = false;
+			onAction = false;
 	
 	if (tertiaryTimer > 0):
 		pass;
@@ -211,9 +225,25 @@ func _physics_process(delta: float) -> void:
 
 func _setHitbox(hitbox: Node3D, enable: bool = true):
 	var mesh = hitbox.get_node("MeshInstance3D");
-	# mesh.visible = enable;
+	mesh.visible = enable;
 	var area3D: Area3D = mesh.get_node("Area3D");
 	area3D.monitoring = enable;
+
+func _kill_previous_storm():
+	if (stormInstance):
+		stormInstance.queue_free();
+		stormInstance = null;
+
+func _spawn_w_storm():
+	_kill_previous_storm();
+	
+	var storm = preload("res://assets/characters/mystery/w_storm_shadow.tscn").instantiate();
+	get_parent().add_child(storm);
+	
+	storm.global_position = global_position;
+	storm.rotation = rotation;
+	stormInstance = storm;
+	usingStorm = true;
 
 func basicAttack():
 	if not (target):
@@ -246,21 +276,6 @@ func _setup_tertiary():
 func _setup_ultimate():
 	rpc("ultimate_ability");
 
-func _spawn_q_papers(_mousePos):
-	var direction = (_mousePos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-	var targetRotation = atan2(direction.x, direction.z);
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-	
-	var papers = preload("res://assets/characters/ramon/ramon_q_ability.tscn").instantiate();
-	get_parent().add_child(papers);
-	
-	papers.global_position = global_position + Vector3(0, 2, 0);
-	papers.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	papers.get_node("parts").emitting = true;
-
 func _spawn_w_teacup(_mousePos):
 	var direction = (_mousePos - global_position);
 	direction.y = 0;
@@ -279,32 +294,6 @@ func _spawn_w_teacup(_mousePos):
 	var teaAnim: AnimationPlayer = teacup.get_node("AnimationPlayer");
 	teaAnim.play("attack");
 
-func _spawn_e_ability(_mousePos):
-	var direction = (_mousePos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-	var targetRotation = atan2(direction.x, direction.z);
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-	
-	var teacup = preload("res://assets/characters/ramon/ramon_e_ability.tscn").instantiate();
-	get_parent().add_child(teacup);
-	
-	teacup.global_position = global_position + Vector3(0, 3, 0);
-	teacup.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	teacup.setup(self, team, dmg, _mousePos);
-	
-	var teaAnim: AnimationPlayer = teacup.get_node("AnimationPlayer");
-	teaAnim.play("attack");
-
-func _spawn_r_explosion():
-	var explosion = preload("res://assets/characters/ramon/ramon_r_ability.tscn").instantiate();
-	get_parent().add_child(explosion);
-	
-	explosion.global_position = global_position + Vector3(0, 2, 0);
-	explosion.get_node("explosionParts").emitting = true;
-	explosion.setup(self, team, dmg);
-
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
 	qTimer = Q_COOLDOWN - cooldownReduction;
@@ -319,13 +308,11 @@ func primary_ability(_mousePos):
 @rpc("call_local", "reliable")
 func secondary_ability(_mousePos):
 	wTimer = W_COOLDOWN - cooldownReduction;
-	secondaryTimer = 0.9;
+	secondaryTimer = 1.5;
 	usingSecondary = true;
 	onAction = true;
 	
-	_spawn_w_teacup(_mousePos);
-	
-	animPlayer.play("w_ability");
+	animPlayer.play("q_ability");
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
 
@@ -335,8 +322,6 @@ func tertiary_ability(_mousePos):
 	tertiaryTimer = 0.4;
 	usingTertiary = true;
 	onAction = true;
-	
-	_spawn_e_ability(_mousePos);
 	
 	animPlayer.play("e_ability");
 	simulateMove(null, global_position);
@@ -349,8 +334,6 @@ func ultimate_ability():
 	ultimateTimer = 5.0;
 	usingUltimate = true;
 	alreadyHit = [];
-	
-	_spawn_r_explosion();
 	
 	animPlayer.play("r_ability");
 
