@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dgck1e7sap3ae"]
+
+[ext_resource type="Shader" uid="uid://be8xhl0n43qqe" path="res://assets/characters/mystery/mystery_w_shadow.tres" id="1_4vghb"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_l16uc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7fyyc"]
+render_priority = 0
+shader = ExtResource("1_4vghb")
+shader_parameter/color2 = Color(0.75, 0.5, 2, 1)
+shader_parameter/color = Color(0.99558, 0.99558, 0.99558, 1)
+
+[node name="w_shadow" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(20.35, 0, 0, 0, 0.324, 0, 0, 0, 22.75, 0, 0, 0)
+mesh = SubResource("BoxMesh_l16uc")
+surface_material_override/0 = SubResource("ShaderMaterial_7fyyc")

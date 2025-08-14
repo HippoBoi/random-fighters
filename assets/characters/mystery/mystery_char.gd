@@ -168,8 +168,17 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (primaryTimer > 0):
-		pass;
-			
+		primaryTimer -= delta;
+		moveTo = global_position;
+		
+		if (primaryTimer > 0.75 and primaryTimer <= 1.0):
+			$q_particles.emitting = true;
+			$q_slash/AnimationPlayer.play("slash");
+	else:
+		if (usingPrimary):
+			usingPrimary = false;
+			onAction = false;
+	
 	if (secondaryTimer > 0):
 		pass;
 	
@@ -299,11 +308,10 @@ func _spawn_r_explosion():
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
 	qTimer = Q_COOLDOWN - cooldownReduction;
-	primaryTimer = 0.65;
+	primaryTimer = 1.2;
 	usingPrimary = true;
 	onAction = true;
 	
-	_spawn_q_papers(_mousePos);
 	animPlayer.play("q_ability");
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);

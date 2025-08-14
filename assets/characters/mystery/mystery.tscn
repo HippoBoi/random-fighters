@@ -52,10 +52,10 @@ height = 0.5
 radial_segments = 4
 rings = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oaqk5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_erqts"]
 render_priority = 0
 shader = ExtResource("7_erqts")
-shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/color = Color(1, 0.7, 3, 1)
 shader_parameter/gradient_1_slider = -0.225
 shader_parameter/gradient_2_slider = 0.2
 
@@ -128,20 +128,20 @@ script = ExtResource("2_0i4rp")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.64468, 0)
 
 [node name="Skeleton3D" parent="mystery_armature" index="0"]
-bones/1/rotation = Quaternion(0, -0.401889, 0, 0.915688)
+bones/1/rotation = Quaternion(0.144411, 0.257203, 0.023365, 0.95522)
 bones/2/rotation = Quaternion(-0.0808562, -7.49595e-09, -0.0743703, 0.993947)
 bones/4/rotation = Quaternion(-4.98625e-09, 6.0536e-09, 1.37093e-09, 1)
-bones/7/rotation = Quaternion(-0.0999797, 0.55653, -0.309397, 0.76456)
-bones/8/rotation = Quaternion(1.18174e-08, -1.3717e-07, 0.0248459, 0.999691)
+bones/7/rotation = Quaternion(-0.370378, 0.643459, 0.327891, 0.584181)
+bones/8/rotation = Quaternion(-0.153546, -0.0741411, 0.112578, 0.978904)
 bones/13/rotation = Quaternion(-0.222714, -0.0895294, -0.0305795, 0.970282)
-bones/14/rotation = Quaternion(-0.574031, 0.00990764, 0.00855451, 0.818729)
-bones/15/rotation = Quaternion(-0.0536476, -0.0126663, 0.0424594, 0.997576)
-bones/17/rotation = Quaternion(-0.70422, 0.0638284, 0.0638283, 0.70422)
-bones/18/rotation = Quaternion(-2.22045e-16, 1.77636e-15, 7.88861e-31, 1)
-bones/20/rotation = Quaternion(-0.645988, 0.0795558, 0.0927961, 0.753498)
-bones/21/rotation = Quaternion(4.15623e-12, 1.87926e-09, 3.84171e-09, 1)
-bones/22/position = Vector3(-3.06747, 4.48621, -4.1897)
-bones/22/rotation = Quaternion(-0.127895, 0.752014, -0.321171, 0.561219)
+bones/14/rotation = Quaternion(-0.666494, 0.0525756, -0.11179, 0.735204)
+bones/15/rotation = Quaternion(0.094815, -0.155297, 0.255183, 0.949618)
+bones/17/rotation = Quaternion(-0.716149, 0.0649096, 0.0627284, 0.692085)
+bones/18/rotation = Quaternion(-0.036738, 0.00671481, -1.33971e-09, 0.999302)
+bones/20/rotation = Quaternion(-0.615336, 0.0996156, 0.200654, 0.755762)
+bones/21/rotation = Quaternion(-0.0915261, -0.0954858, -0.285063, 0.949339)
+bones/22/position = Vector3(-2.2559, 0.179051, 1.57002)
+bones/22/rotation = Quaternion(0.900582, -0.0898071, -0.353941, 0.235822)
 
 [node name="body" parent="mystery_armature/Skeleton3D" index="2"]
 surface_material_override/0 = SubResource("ShaderMaterial_mf77p")
@@ -153,23 +153,24 @@ surface_material_override/0 = SubResource("ShaderMaterial_6yj01")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
 shape = SubResource("BoxShape3D_0i4rp")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="3"]
+[node name="q_particles" type="GPUParticles3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08275, 5.45455)
 material_override = SubResource("StandardMaterial3D_emb01")
 emitting = false
 amount = 12
+one_shot = true
 explosiveness = 0.1
 process_material = SubResource("ParticleProcessMaterial_emb01")
 draw_pass_1 = SubResource("CapsuleMesh_h2vus")
 
-[node name="Slash2" type="Node3D" parent="." index="4"]
-transform = Transform3D(2.3, 0, 0, 0, 1, 0, 0, 0, 3.96, 0, 0, 0)
+[node name="q_slash" type="Node3D" parent="." index="4"]
+transform = Transform3D(-3.67356, 7.64274e-15, 3.29771e-07, 0, -1, 3.29771e-07, 3.21153e-07, 8.74228e-08, 3.77214, 0.412675, 0, 2.35252)
 
-[node name="Slash" type="MeshInstance3D" parent="Slash2" index="0"]
+[node name="Slash" type="MeshInstance3D" parent="q_slash" index="0"]
 mesh = ExtResource("6_6yj01")
-surface_material_override/0 = SubResource("ShaderMaterial_oaqk5")
+surface_material_override/0 = SubResource("ShaderMaterial_erqts")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Slash2" index="1"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="q_slash" index="1"]
 libraries = {
 &"": SubResource("AnimationLibrary_sky8r")
 }
