@@ -12,8 +12,8 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
-const Q_COOLDOWN = 5.0;
-const W_COOLDOWN = 1.0;
+const Q_COOLDOWN = 4.5;
+const W_COOLDOWN = 10.0;
 const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 60.0;
 const W_MAX_RANGE = 5.0;
@@ -101,8 +101,8 @@ var stormInstance = null;
 var stormMousePos = null;
 
 @onready var camera = get_viewport().get_camera_3d();
-@onready var charModel = $Armature
-@onready var animPlayer = $AnimationPlayer
+@onready var charModel = $mystery_armature;
+@onready var animPlayer = $AnimationPlayer2;
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -175,6 +175,11 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (usingStorm):
+		speed *= 0.6;
+	
+	print(speed);
+	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
@@ -196,7 +201,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		if (usingSecondary):
 			usingSecondary = false;
-			usingStorm = false;
 			onAction = false;
 	
 	if (tertiaryTimer > 0):
@@ -218,13 +222,20 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	if !(usingUltimate):
-		if (velocity != Vector3.ZERO):
+	if (velocity != Vector3.ZERO):
+		if not (usingStorm):
 			if not (animPlayer.current_animation == "run"):
 				animPlayer.play("run");
 		else:
+			if not (animPlayer.current_animation == "w_run"):
+				animPlayer.play("w_run");
+	else:
+		if not (usingStorm):
 			if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 				animPlayer.play("idle");
+		else:
+			if not (animPlayer.is_playing() and animPlayer.current_animation != "w_run"):
+				animPlayer.play("w_idle");
 
 func _setHitbox(hitbox: Node3D, enable: bool = true):
 	var mesh = hitbox.get_node("MeshInstance3D");
@@ -268,7 +279,7 @@ func _setup_secondary():
 	if (mousePos.is_empty()):
 		return;
 	
-	rpc("secondary_ability", mousePos.position);
+	rpc("secondary_ability", mousePos.position, usingStorm);
 
 func _setup_tertiary():
 	if (mousePos.is_empty()):
@@ -309,16 +320,21 @@ func primary_ability(_mousePos):
 	rpc("syncRotation", _mousePos);
 
 @rpc("call_local", "reliable")
-func secondary_ability(_mousePos):
-	wTimer = W_COOLDOWN - cooldownReduction;
-	secondaryTimer = 1.5;
-	usingSecondary = true;
-	onAction = true;
-	stormMousePos = _mousePos;
-	
-	animPlayer.play("q_ability");
-	simulateMove(null, global_position);
-	rpc("syncRotation", _mousePos);
+func secondary_ability(_mousePos, _usingStorm):
+	if not (_usingStorm):
+		wTimer = 1.0;
+		secondaryTimer = 1.5;
+		usingSecondary = true;
+		onAction = true;
+		stormMousePos = _mousePos;
+		
+		animPlayer.play("w_ability");
+		simulateMove(null, global_position);
+		rpc("syncRotation", _mousePos);
+	else:
+		_kill_previous_storm();
+		wTimer = W_COOLDOWN - cooldownReduction;
+		usingStorm = false;
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
