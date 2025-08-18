@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgck1e7sap3ae"]
+[gd_scene load_steps=13 format=3 uid="uid://dgck1e7sap3ae"]
 
 [ext_resource type="Shader" uid="uid://be8xhl0n43qqe" path="res://assets/characters/mystery/mystery_w_shadow.tres" id="1_4vghb"]
+[ext_resource type="Script" uid="uid://dq05ejxwfhemo" path="res://assets/characters/mystery/w_storm_shadow.gd" id="1_vabyd"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_l16uc"]
 
@@ -10,10 +11,175 @@ shader = ExtResource("1_4vghb")
 shader_parameter/color2 = Color(0.75, 0.5, 2, 1)
 shader_parameter/color = Color(0.99558, 0.99558, 0.99558, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vghb"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="Curve" id="Curve_vabyd"]
+_data = [Vector2(0, 0.123596), 0.0, 0.0, 0, 0, Vector2(0.221311, 1), 0.0, 0.0, 0, 0, Vector2(0.655738, 0.752809), -1.42351, -1.42351, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_tsb3x"]
+curve = SubResource("Curve_vabyd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gxqv0"]
+particle_flag_align_y = true
+emission_shape = 3
+emission_box_extents = Vector3(7, 1, 1)
+direction = Vector3(0, -0.1, 1)
+spread = 5.0
+initial_velocity_min = 10.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, -20, 0)
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_tsb3x")
+color = Color(0.8, 0.6, 3, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_76ac0"]
+lightmap_size_hint = Vector2i(6, 17)
+size = Vector3(0.25, 1, 0.2)
+
+[sub_resource type="Curve" id="Curve_4vghb"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.655738, 0.752809), -1.42351, -1.42351, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_vabyd"]
+curve = SubResource("Curve_4vghb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tsb3x"]
+particle_flag_align_y = true
+direction = Vector3(0, 0, 1)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, -15, 0)
+scale_min = 0.5
+scale_max = 0.9
+scale_curve = SubResource("CurveTexture_vabyd")
+color = Color(0.8, 0.6, 2, 1)
+
 [node name="w_shadow" type="Node3D"]
 transform = Transform3D(0.7, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 0, 0)
+script = ExtResource("1_vabyd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(20.35, 0, 0, 0, 0.324, 0, 0, 0, 22.75, 0, 0, 0)
 mesh = SubResource("BoxMesh_l16uc")
 surface_material_override/0 = SubResource("ShaderMaterial_7fyyc")
+
+[node name="parts" type="GPUParticles3D" parent="."]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 1.60874, 4.83485, -18.0513)
+material_override = SubResource("StandardMaterial3D_4vghb")
+amount = 20
+lifetime = 0.75
+process_material = SubResource("ParticleProcessMaterial_gxqv0")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="splashParticles" type="Node3D" parent="."]
+
+[node name="parts2" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 8.00465)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts3" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 6.87805, 0, 8.1148)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts4" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -5.82639, 0, 8.1148)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts5" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, 1.53435)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts6" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 6.87805, 0, 1.6445)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts7" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -5.82639, 0, 1.6445)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts8" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0, 0, -5.60851)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts9" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 6.87805, 0, -5.49836)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="parts10" type="GPUParticles3D" parent="splashParticles"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, -5.82639, 0, -5.49836)
+material_override = SubResource("StandardMaterial3D_4vghb")
+emitting = false
+amount = 15
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_tsb3x")
+draw_pass_1 = SubResource("PrismMesh_76ac0")
