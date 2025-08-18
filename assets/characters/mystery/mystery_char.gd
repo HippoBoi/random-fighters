@@ -178,8 +178,6 @@ func _physics_process(delta: float) -> void:
 	if (usingStorm):
 		speed *= 0.6;
 	
-	print(speed);
-	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
@@ -457,7 +455,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	
 @rpc("call_local")
 func showChatText(newText):
-	print("Ramón: ", newText);
+	print("Mystery: ", newText);
 
 @rpc("call_local", "any_peer", "reliable")
 func onItemPurchase(item: Dictionary):
