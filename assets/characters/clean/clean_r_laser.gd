@@ -27,6 +27,10 @@ func _on_spawn_timer():
 	laserHitbox.monitoring = true;
 	hitbox.get_node("MeshInstance3D").get_node("Area3D").monitoring = true;
 	$AnimationPlayer.play("attack");
+	
+	var sound = preload("res://assets/sounds/characters/clean/clean_laser_fire.ogg");
+	PlayerFunc.playSound(character, sound, false);
+	print("play sound")
 
 func _on_timer_timeout() -> void:
 	hitbox.get_node("MeshInstance3D").get_node("Area3D").monitoring = false;

@@ -655,6 +655,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_ji54v")
 
 [node name="abilityDesc" type="Control" parent="InGameUI"]
 visible = false
+z_index = 5
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

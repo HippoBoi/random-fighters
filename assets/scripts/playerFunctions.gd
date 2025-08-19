@@ -877,14 +877,15 @@ func grantItemStats(character: CharacterBody3D, item: Dictionary):
 	if (item.stats.has("speed")):
 		character.baseSpeed += item.stats.speed;
 
-func playSound(character: CharacterBody3D, sound):
+func playSound(character: CharacterBody3D, sound, randomPitch: bool = true):
 	var newSound = AudioStreamPlayer3D.new();
 	character.add_child(newSound);
 	
 	newSound.global_position = character.global_position;
 	newSound.stream = sound;
-	newSound.pitch_scale = randf();
-	newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
+	if (randomPitch):
+		newSound.pitch_scale = randf();
+		newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
 	newSound.play();
 	newSound.finished.connect(func():
 		newSound.queue_free();

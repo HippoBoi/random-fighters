@@ -445,6 +445,9 @@ func ultimate_ability(_mousePos):
 	
 	_spawn_ulti_laser(_mousePos);
 	
+	var sound = preload("res://assets/sounds/characters/clean/clean_laser_charge.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	animPlayer.play("r_ability");
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
