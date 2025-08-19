@@ -347,10 +347,15 @@ func updateState(character: CharacterBody3D, delta):
 			if ("team" in mousePos.collider and not mousePos.collider.dead):
 				var target = mousePos.collider;
 				var otherTeam = target.team;
+				var strength = 4.0;
+				var color = Color(0.863, 0, 0) if otherTeam != character.team else Color(0, 0.4, 1.0);
+				character.hovering = target;
 				if (otherTeam != character.team):
-					character.hovering = target;
 					Cursor.changeCursor(Constants.CursorTypes.cursorAttack);
-					setOutline(target, 1.0);
+					setOutline(target, 1.0, strength, color);
+				else:
+					Cursor.changeCursor(Constants.CursorTypes.cursor);
+					setOutline(target, 1.0, strength, color);
 			else:
 				if (character.hovering != null):
 					setOutline(character.hovering, 0.0, 0.0);
@@ -743,6 +748,9 @@ func displaceChar(character, delta: float, posToMove: Vector3):
 	character.global_position = character.global_position.move_toward(posToMove, speed * delta);
 
 func _inBasicRange(character, target):
+	if (target.team == character.team):
+		return;
+	
 	var distance = character.global_position.distance_to(target.global_position);
 	if (distance < character.attackRange):
 		return true;
@@ -888,17 +896,19 @@ func setup(character):
 	character.attackSpeed = character.baseAttackSpeed + character.attackSpeedOffset;
 	character.speed = character.baseSpeed + character.speedOffset;
 	
-func setOutline(character, enabled: float, strength: float = 4.0) -> void:
+func setOutline(character, enabled: float, strength: float = 4.0, color: Color = Color(0.863, 0, 0)) -> void:
 	var model = character.get_child(0).get_child(0);
 	for child in model.get_children():
 		child.material_overlay.set_shader_parameter("enabled", enabled);
 		child.material_overlay.set_shader_parameter("outline_width", strength);
+		child.material_overlay.set_shader_parameter("outline_color", color);
 	
 	if ("MULTIPLE_FORM" in character):
 		var secondModel = character.get_child(1).get_child(0).get_child(0);
 		for child in secondModel.get_children():
 			child.material_overlay.set_shader_parameter("enabled", enabled);
 			child.material_overlay.set_shader_parameter("outline_width", strength);
+			child.material_overlay.set_shader_parameter("outline_color", color);
 
 func showCharactersUI(character):
 	for playerID in Server.playersInfo:

@@ -13,7 +13,7 @@ var shield = 0;
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
 const Q_COOLDOWN = 4.5;
-const W_COOLDOWN = 10.0;
+const W_COOLDOWN = 18.0;
 const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 60.0;
 const W_MAX_RANGE = 5.0;
@@ -99,6 +99,7 @@ var holdingSecondary = false;
 var usingStorm = false;
 var stormInstance = null;
 var stormMousePos = null;
+var stormTimer = 0;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $mystery_armature;
@@ -201,6 +202,14 @@ func _physics_process(delta: float) -> void:
 			usingSecondary = false;
 			onAction = false;
 	
+	if (stormTimer > 0):
+		stormTimer -= delta;
+	else:
+		if (usingStorm):
+			_kill_previous_storm();
+			wTimer = W_COOLDOWN - cooldownReduction;
+			usingStorm = false;
+	
 	if (tertiaryTimer > 0):
 		pass;
 	
@@ -255,6 +264,7 @@ func _spawn_w_storm(_mousePos):
 	storm.global_position = _mousePos + Vector3(0, 0.5, 0);
 	storm.rotation = rotation;
 	stormInstance = storm;
+	stormTimer = 12.0;
 	usingStorm = true;
 
 func basicAttack():

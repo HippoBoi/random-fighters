@@ -58,7 +58,7 @@ scale_curve = SubResource("CurveTexture_vabyd")
 color = Color(0.8, 0.6, 2, 1)
 
 [node name="w_shadow" type="Node3D"]
-transform = Transform3D(0.7, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 0, 0)
+transform = Transform3D(0.63, 0, 0, 0, 1, 0, 0, 0, 0.665337, 0, 0, 0)
 script = ExtResource("1_vabyd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
