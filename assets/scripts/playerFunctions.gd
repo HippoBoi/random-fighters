@@ -756,7 +756,7 @@ func _inBasicRange(character, target):
 		return true;
 	
 	return false;
-	
+
 func dealDamage(character, target, dmg, effect := ""):
 	if not (target):
 		print("[dealDamage]: no target found");
@@ -788,6 +788,19 @@ func dealDamage(character, target, dmg, effect := ""):
 	
 		if not (effect.is_empty()):
 			target.rpc("syncParticles", effect);
+
+func grantShield(character, target, shield, effect := ""):
+	if not (target):
+		print("[grantShield]: no target found");
+		return;
+	
+	target.shield += shield;
+	target.shield = clamp(target.shield, 0, target.maxHp);
+	
+	target.rpc("syncHealth", target.hp, target.shield, true, character.name);
+	
+	if not (effect.is_empty()):
+		target.rpc("syncParticles", effect);
 
 func stunTarget(target, duration, effect := ""):
 	var canParry = "usingParry" in target;

@@ -95,6 +95,10 @@ var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
 
+var usedShield = false;
+var shieldTarget = null;
+var shieldTargetIsEnemy = false;
+
 var holdingSecondary = false;
 var usingStorm = false;
 var stormInstance = null;
@@ -211,7 +215,23 @@ func _physics_process(delta: float) -> void:
 			usingStorm = false;
 	
 	if (tertiaryTimer > 0):
-		pass;
+		tertiaryTimer -= delta;
+		moveTo = global_position;
+		
+		if (tertiaryTimer < 0.4 and not usedShield):
+			usedShield = true;
+			
+			if (shieldTargetIsEnemy):
+				PlayerFunc.dealDamage(self, shieldTarget, 15 + (dmg * 0.75), "hit_02");
+			else:
+				PlayerFunc.grantShield(self, shieldTarget, 5 + (dmg * 0.5), "heal_01");
+	else:
+		if (usingTertiary):
+			onAction = false;
+			usingTertiary = false;
+			usedShield = false;
+			shieldTargetIsEnemy = false;
+			shieldTarget = null;
 	
 	if (ultimateTimer > 0):
 		pass;
@@ -261,7 +281,8 @@ func _spawn_w_storm(_mousePos):
 	var storm = preload("res://assets/characters/mystery/w_storm_shadow.tscn").instantiate();
 	get_parent().add_child(storm);
 	
-	storm.global_position = _mousePos + Vector3(0, 0.5, 0);
+	storm.global_position = _mousePos;
+	storm.global_position.y = 0.25;
 	storm.rotation = rotation;
 	stormInstance = storm;
 	stormTimer = 12.0;
@@ -290,31 +311,17 @@ func _setup_secondary():
 	rpc("secondary_ability", mousePos.position, usingStorm);
 
 func _setup_tertiary():
-	if (mousePos.is_empty()):
+	if not (hovering):
 		return;
 	
-	rpc("tertiary_ability", mousePos.position);
+	shieldTarget = hovering;
+	if (shieldTarget.team != team):
+		shieldTargetIsEnemy = true;
+	
+	rpc("tertiary_ability", shieldTarget);
 
 func _setup_ultimate():
 	rpc("ultimate_ability");
-
-func _spawn_w_teacup(_mousePos):
-	var direction = (_mousePos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-	var targetRotation = atan2(direction.x, direction.z);
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-	
-	var teacup = preload("res://assets/characters/ramon/ramon_w_teacup.tscn").instantiate();
-	get_parent().add_child(teacup);
-	
-	teacup.global_position = global_position + Vector3(0, 2, 0);
-	teacup.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	teacup.setup(self, team, dmg);
-	
-	var teaAnim: AnimationPlayer = teacup.get_node("AnimationPlayer");
-	teaAnim.play("attack");
 
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
@@ -345,15 +352,16 @@ func secondary_ability(_mousePos, _usingStorm):
 		usingStorm = false;
 
 @rpc("call_local", "reliable")
-func tertiary_ability(_mousePos):
+func tertiary_ability(_target: CharacterBody3D):
 	eTimer = E_COOLDOWN - cooldownReduction;
-	tertiaryTimer = 0.4;
+	tertiaryTimer = 0.8;
 	usingTertiary = true;
 	onAction = true;
+	target = null;
+	moveTo = null;
 	
 	animPlayer.play("e_ability");
-	simulateMove(null, global_position);
-	rpc("syncRotation", _mousePos);
+	rpc("syncRotation", _target.global_position);
 
 @rpc("call_local", "reliable")
 func ultimate_ability():

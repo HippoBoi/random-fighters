@@ -181,7 +181,7 @@ func addCharacter(player, _playerId):
 	charInstance.team = player.team;
 	add_child(charInstance);
 	
-	var spawn: Node3D = null
+	var spawn: Node3D = null;
 	if (player.team == 0):
 		spawn = spawnLocations.get_node("blackTeam");
 	elif (player.team == 1):
