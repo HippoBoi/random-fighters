@@ -1663,7 +1663,7 @@ emission_energy_multiplier = 3.09
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.617347, 0.750973), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_kdabp"]
+[sub_resource type="CurveTexture" id="CurveTexture_qn3ih"]
 curve = SubResource("Curve_dm4op")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ov23i"]
@@ -1673,7 +1673,7 @@ direction = Vector3(0, 1, 0)
 initial_velocity_min = 10.0
 initial_velocity_max = 15.0
 gravity = Vector3(0, -3, 0)
-scale_curve = SubResource("CurveTexture_kdabp")
+scale_curve = SubResource("CurveTexture_qn3ih")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ohlot"]
 radius = 0.2

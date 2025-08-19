@@ -287,7 +287,7 @@ func _spawn_q_projectile(_mousePos):
 	var projectile = preload("res://assets/characters/mystery/mystery_q_projectile.tscn").instantiate();
 	get_parent().add_child(projectile);
 	
-	projectile.global_position = global_position + Vector3(0, 0.5, 0);
+	projectile.global_position = global_position + Vector3(0, 0.75, 0);
 	projectile.rotation = rotation;
 	usedPrimaryProjectile = true;
 

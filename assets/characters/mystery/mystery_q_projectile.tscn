@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://w8kj8i2r2vse"]
+[gd_scene load_steps=44 format=3 uid="uid://w8kj8i2r2vse"]
 
 [ext_resource type="Script" uid="uid://hlkxps8dxgho" path="res://assets/characters/mystery/mystery_q_projectile.gd" id="1_t712u"]
 [ext_resource type="Texture2D" uid="uid://08841tb5t151" path="res://assets/textures/fx/T_circle42.PNG" id="2_orvsy"]
@@ -138,8 +138,8 @@ angle_min = 1.07288e-05
 angle_max = 10.0
 angle_curve = SubResource("CurveTexture_nlnos")
 gravity = Vector3(0, 0, 0)
-scale_min = 6.0
-scale_max = 6.0
+scale_min = 5.0
+scale_max = 5.0
 scale_curve = SubResource("CurveTexture_1bx3b")
 color_ramp = SubResource("GradientTexture1D_drk70")
 alpha_curve = SubResource("CurveTexture_158rh")
@@ -234,10 +234,10 @@ curve = SubResource("Curve_fqjyq")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_158rh"]
 particle_flag_align_y = true
-direction = Vector3(0, 0.5, -1)
+direction = Vector3(0, 1, -1)
 spread = 30.0
-initial_velocity_min = 15.0
-initial_velocity_max = 35.0
+initial_velocity_min = 5.0
+initial_velocity_max = 20.0
 gravity = Vector3(0, -40, 0)
 scale_max = 2.5
 scale_curve = SubResource("CurveTexture_2nqxv")
@@ -247,15 +247,52 @@ color_ramp = SubResource("GradientTexture1D_itf3g")
 [sub_resource type="BoxMesh" id="BoxMesh_fgikb"]
 size = Vector3(0.1, 1, 0.1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orvsy"]
+albedo_color = Color(0.75, 0.5, 3, 1)
+emission_enabled = true
+emission = Color(0.581412, 0.480927, 0.952161, 1)
+emission_energy_multiplier = 3.09
+
+[sub_resource type="Curve" id="Curve_ayp60"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.617347, 0.750973), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_kdabp"]
+curve = SubResource("Curve_ayp60")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3uqs8"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, -3, 0)
+scale_curve = SubResource("CurveTexture_kdabp")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0bjf7"]
+radius = 0.2
+height = 0.4
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayp60"]
+transparency = 1
+albedo_color = Color(1, 0.207843, 0.298039, 0.258824)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3uqs8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0bjf7"]
+
 [node name="q_projectile" type="Node3D"]
 script = ExtResource("1_t712u")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("CapsuleMesh_t712u")
 surface_material_override/0 = SubResource("StandardMaterial3D_t712u")
 
 [node name="sparkParticle" type="GPUParticles3D" parent="."]
 material_override = SubResource("ShaderMaterial_swv1b")
+emitting = false
 amount = 1
 lifetime = 1.25
 explosiveness = 1.0
@@ -266,11 +303,36 @@ draw_pass_1 = SubResource("QuadMesh_oe55r")
 [node name="meshParticles" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.367451)
 material_override = SubResource("ShaderMaterial_nlnos")
+emitting = false
 amount = 32
 lifetime = 0.75
 explosiveness = 0.2
 process_material = SubResource("ParticleProcessMaterial_158rh")
 draw_pass_1 = SubResource("BoxMesh_fgikb")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 14, 0, 0)
+[node name="dissapear" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_orvsy")
+emitting = false
+amount = 16
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.51
+process_material = SubResource("ParticleProcessMaterial_3uqs8")
+draw_pass_1 = SubResource("CapsuleMesh_0bjf7")
+
+[node name="q_hitbox" type="Node3D" parent="."]
+transform = Transform3D(0.648016, 0, 0, 0, 0.72, 0, 0, 0, 0.784507, 0, 1, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="q_hitbox"]
+transform = Transform3D(5.32, 0, 0, 0, 5.28, 0, 0, 0, 4.93406, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_ayp60")
+mesh = SubResource("BoxMesh_3uqs8")
+
+[node name="Area3D" type="Area3D" parent="q_hitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="q_hitbox/MeshInstance3D/Area3D"]
+shape = SubResource("BoxShape3D_0bjf7")
