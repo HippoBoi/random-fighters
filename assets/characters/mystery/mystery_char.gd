@@ -95,6 +95,11 @@ var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
 
+var storedMousePos = null;
+
+var usedPrimaryProjectile = false;
+var primaryProjectile = null;
+
 var usedShield = false;
 var shieldTarget = null;
 var shieldTargetIsEnemy = false;
@@ -102,7 +107,6 @@ var shieldTargetIsEnemy = false;
 var holdingSecondary = false;
 var usingStorm = false;
 var stormInstance = null;
-var stormMousePos = null;
 var stormTimer = 0;
 
 @onready var camera = get_viewport().get_camera_3d();
@@ -188,19 +192,23 @@ func _physics_process(delta: float) -> void:
 		moveTo = global_position;
 		
 		if (primaryTimer > 0.75 and primaryTimer <= 0.9):
+			if not (usedPrimaryProjectile):
+				_spawn_q_projectile(storedMousePos);
+			
 			$q_particles.emitting = true;
 			$q_slash/AnimationPlayer.play("slash");
 	else:
 		if (usingPrimary):
 			usingPrimary = false;
 			onAction = false;
+			usedPrimaryProjectile = false;
 	
 	if (secondaryTimer > 0):
 		secondaryTimer -= delta;
 		moveTo = global_position;
 		
-		if (secondaryTimer <= 1.0 and stormMousePos and not usingStorm):
-			_spawn_w_storm(stormMousePos);
+		if (secondaryTimer <= 1.0 and storedMousePos and not usingStorm):
+			_spawn_w_storm(storedMousePos);
 	else:
 		if (usingSecondary):
 			usingSecondary = false;
@@ -275,6 +283,14 @@ func _kill_previous_storm():
 		stormInstance.queue_free();
 		stormInstance = null;
 
+func _spawn_q_projectile(_mousePos):
+	var projectile = preload("res://assets/characters/mystery/mystery_q_projectile.tscn").instantiate();
+	get_parent().add_child(projectile);
+	
+	projectile.global_position = global_position + Vector3(0, 0.5, 0);
+	projectile.rotation = rotation;
+	usedPrimaryProjectile = true;
+
 func _spawn_w_storm(_mousePos):
 	_kill_previous_storm();
 	
@@ -329,6 +345,7 @@ func primary_ability(_mousePos):
 	primaryTimer = 1.2;
 	usingPrimary = true;
 	onAction = true;
+	storedMousePos = _mousePos;
 	
 	animPlayer.play("q_ability");
 	simulateMove(null, global_position);
@@ -341,7 +358,7 @@ func secondary_ability(_mousePos, _usingStorm):
 		secondaryTimer = 1.5;
 		usingSecondary = true;
 		onAction = true;
-		stormMousePos = _mousePos;
+		storedMousePos = _mousePos;
 		
 		animPlayer.play("w_ability");
 		simulateMove(null, global_position);
