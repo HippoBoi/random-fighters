@@ -292,7 +292,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_t712u")
 
 [node name="sparkParticle" type="GPUParticles3D" parent="."]
 material_override = SubResource("ShaderMaterial_swv1b")
-emitting = false
 amount = 1
 lifetime = 1.25
 explosiveness = 1.0
@@ -321,7 +320,7 @@ process_material = SubResource("ParticleProcessMaterial_3uqs8")
 draw_pass_1 = SubResource("CapsuleMesh_0bjf7")
 
 [node name="q_hitbox" type="Node3D" parent="."]
-transform = Transform3D(0.648016, 0, 0, 0, 0.72, 0, 0, 0, 0.784507, 0, 1, 0)
+transform = Transform3D(0.419914, 0, 0, 0, 0.3456, 0, 0, 0, 0.451876, 0, 0, 0)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="q_hitbox"]
@@ -336,3 +335,5 @@ monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="q_hitbox/MeshInstance3D/Area3D"]
 shape = SubResource("BoxShape3D_0bjf7")
+
+[connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_hit"]

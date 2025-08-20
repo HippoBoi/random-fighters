@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dgck1e7sap3ae"]
+[gd_scene load_steps=14 format=3 uid="uid://dgck1e7sap3ae"]
 
 [ext_resource type="Shader" uid="uid://be8xhl0n43qqe" path="res://assets/characters/mystery/mystery_w_shadow.tres" id="1_4vghb"]
 [ext_resource type="Script" uid="uid://dq05ejxwfhemo" path="res://assets/characters/mystery/w_storm_shadow.gd" id="1_vabyd"]
@@ -56,6 +56,9 @@ scale_min = 0.5
 scale_max = 0.9
 scale_curve = SubResource("CurveTexture_vabyd")
 color = Color(0.8, 0.6, 2, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vabyd"]
+size = Vector3(19.9548, 1, 22.3585)
 
 [node name="w_shadow" type="Node3D"]
 transform = Transform3D(0.63, 0, 0, 0, 1, 0, 0, 0, 0.665337, 0, 0, 0)
@@ -183,3 +186,16 @@ explosiveness = 1.0
 randomness = 1.0
 process_material = SubResource("ParticleProcessMaterial_tsb3x")
 draw_pass_1 = SubResource("PrismMesh_76ac0")
+
+[node name="hitbox" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.433629, 0)
+
+[node name="Area3D" type="Area3D" parent="hitbox"]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox/Area3D"]
+shape = SubResource("BoxShape3D_vabyd")
+
+[connection signal="body_entered" from="hitbox/Area3D" to="." method="_on_hit"]
+[connection signal="body_exited" from="hitbox/Area3D" to="." method="_on_hit_exit"]

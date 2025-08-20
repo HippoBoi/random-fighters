@@ -289,6 +289,7 @@ func _spawn_q_projectile(_mousePos):
 	
 	projectile.global_position = global_position + Vector3(0, 0.75, 0);
 	projectile.rotation = rotation;
+	projectile.setup(self, dmg);
 	usedPrimaryProjectile = true;
 
 func _spawn_w_storm(_mousePos):
@@ -300,6 +301,8 @@ func _spawn_w_storm(_mousePos):
 	storm.global_position = _mousePos;
 	storm.global_position.y = 0.25;
 	storm.rotation = rotation;
+	storm.setup(self, dmg);
+	
 	stormInstance = storm;
 	stormTimer = 12.0;
 	usingStorm = true;
@@ -312,7 +315,7 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
-	PlayerFunc.dealDamage(self, basicTarget, dmg * 0.4);
+	PlayerFunc.dealDamage(self, basicTarget, dmg);
 
 func _setup_primary():
 	if (mousePos.is_empty()):
