@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 170.0;
 @export var hp = 170.0;
 @export var baseArmor = 18;
-@export var baseDmg = 17.0;
+@export var baseDmg = 16.0;
 @export var baseAttackRange = 8.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -61,7 +61,7 @@ var target = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
+var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.9;
 var basicTarget = null;
 var onAction = false;
 var usingPrimary = false;
@@ -77,6 +77,7 @@ var bufferedInput = null;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
+var basicDamageDealt = false;
 
 var alreadyHit = [];
 
@@ -179,8 +180,9 @@ func _physics_process(delta: float) -> void:
 				else:
 					bufferedInput = action;
 		
-		if (Input.is_action_just_released("secondary")):
-			pass;
+		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
+			basicDamageDealt = true;
+			rpc("showBasicAttack", target.global_position);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -228,6 +230,9 @@ func _physics_process(delta: float) -> void:
 		
 		if (tertiaryTimer < 0.4 and not usedShield):
 			usedShield = true;
+			
+			var sound = load("res://assets/sounds/characters/mystery/mystery_spell_curse.ogg");
+			PlayerFunc.playSound(self, sound);
 			
 			if (shieldTargetIsEnemy):
 				PlayerFunc.dealDamage(self, shieldTarget, 15 + (dmg * 0.75), "hit_02");
@@ -290,6 +295,10 @@ func _spawn_q_projectile(_mousePos):
 	projectile.global_position = global_position + Vector3(0, 0.75, 0);
 	projectile.rotation = rotation;
 	projectile.setup(self, dmg);
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_projectile.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	usedPrimaryProjectile = true;
 
 func _spawn_w_storm(_mousePos):
@@ -311,10 +320,14 @@ func basicAttack():
 	if not (target):
 		return;
 	
+	basicDamageDealt = false;
+	basicAttacking = true;
 	basicTarget = target;
-	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
+	var sound = load("res://assets/sounds/characters/mystery/mystery_basic_hit.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	PlayerFunc.dealDamage(self, basicTarget, dmg);
 
 func _setup_primary():
@@ -350,6 +363,9 @@ func primary_ability(_mousePos):
 	onAction = true;
 	storedMousePos = _mousePos;
 	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_slash.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	animPlayer.play("q_ability");
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
@@ -362,6 +378,9 @@ func secondary_ability(_mousePos, _usingStorm):
 		usingSecondary = true;
 		onAction = true;
 		storedMousePos = _mousePos;
+		
+		var sound = load("res://assets/sounds/characters/mystery/mystery_storm_start.ogg");
+		PlayerFunc.playSound(self, sound);
 		
 		animPlayer.play("w_ability");
 		simulateMove(null, global_position);
@@ -379,6 +398,9 @@ func tertiary_ability(_target: CharacterBody3D):
 	onAction = true;
 	target = null;
 	moveTo = null;
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_spell.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	animPlayer.play("e_ability");
 	rpc("syncRotation", _target.global_position);
@@ -398,9 +420,12 @@ func showBasicAttack(_targetPos):
 	if not (_targetPos):
 		return;
 	
-	var basic = preload("res://assets/characters/ramon/ramonBasic.tscn").instantiate();
+	var basic = preload("res://assets/characters/mystery/mysteryBasic.tscn").instantiate();
 	get_parent().add_child(basic);
 	basic.global_position = global_position + Vector3(0, 2, 0);
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_basic.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	basic.setTarget(_targetPos);
 	if (is_multiplayer_authority()):

@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var splashParticles = $splashParticles;
 var timer = 0;
+var soundTimer = 0;
 var startDeath = false;
 var deathTimer = 0;
 
@@ -43,6 +44,17 @@ func _process(delta: float) -> void:
 		
 		if (deathTimer >= 1.0):
 			queue_free();
+	
+	_loopSound(delta);
+
+func _loopSound(delta):
+	if (soundTimer > 0 or startDeath):
+		soundTimer -= delta;
+		return;
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_storm.ogg");
+	PlayerFunc.playSound(ownerInstance, sound);
+	soundTimer = 0.5;
 
 func _progressTimers(delta: float):
 	for playerHit in alreadyHit:

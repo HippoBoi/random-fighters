@@ -7,7 +7,7 @@ var team = -1;
 var dmg = 0;
 var ownerInstance = 0;
 
-var minSpeed = 5.0;
+var minSpeed = 4.0;
 var timer = 0;
 var timesUp = false;
 var dieTimer = 0;
@@ -37,12 +37,14 @@ func _process(delta: float) -> void:
 			$sparkParticle.emitting = false;
 			$meshParticles.emitting = false;
 		
-		if (dieTimer >= 0.2):
+		if (dieTimer >= 0.2 and $sparkParticle.visible):
+			var sound = load("res://assets/sounds/characters/mystery/mystery_projectile_pop.ogg");
+			PlayerFunc.playSound(ownerInstance, sound);
+			
 			$sparkParticle.visible = false;
 			$dissapear.emitting = true;
-		if (dieTimer >= 0.75):
+		if (dieTimer >= 0.95):
 			queue_free();
-
 
 func _on_hit(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;

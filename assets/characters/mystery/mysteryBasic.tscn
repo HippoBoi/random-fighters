@@ -1,0 +1,172 @@
+[gd_scene load_steps=23 format=3 uid="uid://bix7u708oxmv5"]
+
+[ext_resource type="Script" uid="uid://0vhke74ng2cc" path="res://assets/characters/mystery/mystery_basic.gd" id="1_muxv3"]
+[ext_resource type="Texture2D" uid="uid://08841tb5t151" path="res://assets/textures/fx/T_circle42.PNG" id="2_7l1n3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7l1n3"]
+albedo_color = Color(1, 0.5, 1, 1)
+metallic = 1.0
+metallic_specular = 0.0
+roughness = 0.5
+emission_enabled = true
+emission = Color(0.5, 0.5, 2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_7l1n3"]
+sections = 2
+section_length = 0.075
+cap_top = false
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_s0ixc"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_4whpf"]
+parameter_name = "hitTexture"
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_2tgk8"]
+expanded_output_ports = [0]
+source = 5
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_jkchi"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_shoti"]
+billboard_type = 3
+keep_scale = true
+
+[sub_resource type="VisualShader" id="VisualShader_dcmsx"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D hitTexture : source_color;
+
+
+
+void vertex() {
+	mat4 n_out2p0;
+// GetBillboardMatrix:2
+	{
+		mat4 __wm = mat4(normalize(INV_VIEW_MATRIX[0]), normalize(INV_VIEW_MATRIX[1]), normalize(INV_VIEW_MATRIX[2]), MODEL_MATRIX[3]);
+		__wm = __wm * mat4(vec4(cos(INSTANCE_CUSTOM.x), -sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(0.0, 0.0, 1.0, 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		__wm = __wm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		n_out2p0 = VIEW_MATRIX * __wm;
+	}
+
+
+// Output:0
+	MODELVIEW_MATRIX = n_out2p0;
+
+
+}
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+	float n_out2p4 = n_out2p0.a;
+
+
+	vec4 n_out4p0;
+// Texture2D:4
+	n_out4p0 = texture(hitTexture, UV);
+	float n_out4p1 = n_out4p0.r;
+
+
+// FloatOp:5
+	float n_out5p0 = n_out4p1 * n_out2p4;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out5p0;
+
+
+}
+"
+flags/unshaded = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_shoti")
+nodes/vertex/2/position = Vector2(120, 380)
+nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)
+nodes/fragment/0/position = Vector2(480, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_s0ixc")
+nodes/fragment/2/position = Vector2(0, 60)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_4whpf")
+nodes/fragment/3/position = Vector2(-220, 320)
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_2tgk8")
+nodes/fragment/4/position = Vector2(60, 360)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_jkchi")
+nodes/fragment/5/position = Vector2(260, 300)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 2, 2, 4, 5, 1, 5, 0, 0, 1, 4, 1, 5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qpk0r"]
+render_priority = 0
+shader = SubResource("VisualShader_dcmsx")
+shader_parameter/hitTexture = ExtResource("2_7l1n3")
+
+[sub_resource type="Curve" id="Curve_npqys"]
+_data = [Vector2(0, 0.361868), 0.0, 0.0, 0, 0, Vector2(0.545918, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.303371), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mv32y"]
+curve = SubResource("Curve_npqys")
+
+[sub_resource type="Curve" id="Curve_jwd3t"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.977612, -20.2247), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_r4bui"]
+curve = SubResource("Curve_jwd3t")
+
+[sub_resource type="Gradient" id="Gradient_1p3uc"]
+offsets = PackedFloat32Array(0, 0.518182, 1)
+colors = PackedColorArray(0.0051646, 0.128738, 0.404455, 1, 0.138571, 0.10471, 0.379045, 1, 0.0051646, 0.128738, 0.404455, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b360h"]
+gradient = SubResource("Gradient_1p3uc")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_oyiw4"]
+_data = [Vector2(0, 0.640449), 0.0, 0.0, 0, 0, Vector2(0.433824, 0.741573), 0.804257, 0.804257, 0, 0, Vector2(0.742647, 0.910112), -1.14607, -1.14607, 0, 0, Vector2(1, 0.651685), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_32ayr"]
+curve = SubResource("Curve_oyiw4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xloxk"]
+angle_min = 1.07288e-05
+angle_max = 10.0
+angle_curve = SubResource("CurveTexture_r4bui")
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_32ayr")
+color_ramp = SubResource("GradientTexture1D_b360h")
+alpha_curve = SubResource("CurveTexture_mv32y")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ax8ix"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hqt4k"]
+
+[node name="MysteryBasic" type="Node3D"]
+script = ExtResource("1_muxv3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_7l1n3")
+mesh = SubResource("TubeTrailMesh_7l1n3")
+
+[node name="sparkParticle" type="GPUParticles3D" parent="MeshInstance3D"]
+material_override = SubResource("ShaderMaterial_qpk0r")
+amount = 1
+lifetime = 1.25
+explosiveness = 1.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_xloxk")
+draw_pass_1 = SubResource("QuadMesh_ax8ix")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
+shape = SubResource("SphereShape3D_hqt4k")
