@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 170.0;
 @export var hp = 170.0;
 @export var baseArmor = 18;
-@export var baseDmg = 16.0;
+@export var baseDmg = 17.0;
 @export var baseAttackRange = 8.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -12,7 +12,7 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
-const Q_COOLDOWN = 4.5;
+const Q_COOLDOWN = 5.5;
 const W_COOLDOWN = 18.0;
 const E_COOLDOWN = 8.0;
 const R_COOLDOWN = 60.0;
@@ -280,7 +280,7 @@ func _setHitbox(hitbox: Node3D, enable: bool = true):
 
 func _kill_previous_storm():
 	if (stormInstance):
-		stormInstance.queue_free();
+		stormInstance.kill();
 		stormInstance = null;
 
 func _spawn_q_projectile(_mousePos):

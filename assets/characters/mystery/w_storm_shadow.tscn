@@ -6,10 +6,12 @@
 [sub_resource type="BoxMesh" id="BoxMesh_l16uc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7fyyc"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_4vghb")
 shader_parameter/color2 = Color(0.75, 0.5, 2, 1)
 shader_parameter/color = Color(0.99558, 0.99558, 0.99558, 1)
+shader_parameter/transparency = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vghb"]
 vertex_color_use_as_albedo = true

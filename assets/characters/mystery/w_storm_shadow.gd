@@ -2,6 +2,8 @@ extends Node3D
 
 @onready var splashParticles = $splashParticles;
 var timer = 0;
+var startDeath = false;
+var deathTimer = 0;
 
 var dmg = 0;
 var team = -1;
@@ -11,12 +13,18 @@ var alreadyHit = [];
 var hittedTimers = {}; # sooorryyyyy
 var keepDamaging = []; # i don't know what im doing
 
+func _ready() -> void:
+	$MeshInstance3D.set("shader_parameter/transparency", 1.0);
+
 func setup(_owner, _dmg):
 	ownerInstance = _owner;
 	team = _owner.team;
 	dmg = _dmg;
 
 func _emitRandomParticle():
+	if (startDeath):
+		return;
+	
 	var particles = splashParticles.get_children();
 	particles.shuffle();
 	particles[0].emitting = true;
@@ -29,37 +37,51 @@ func _process(delta: float) -> void:
 		_emitRandomParticle();
 	
 	_progressTimers(delta);
+	
+	if (startDeath):
+		deathTimer += delta;
+		
+		if (deathTimer >= 1.0):
+			queue_free();
 
 func _progressTimers(delta: float):
 	for playerHit in alreadyHit:
 		if not (hittedTimers[playerHit] > 0):
-			print("TIMER RAN OUT")
 			alreadyHit.erase(playerHit);
-			_on_hit(playerHit);
+			_on_hit(playerHit, true);
 			continue;
 		
 		hittedTimers[playerHit] -= delta;
-		print(hittedTimers[playerHit]);
 
-func _on_hit(other: Node3D) -> void:
+func _on_hit(other: Node3D, forced: bool = false) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var wasHitBefore = alreadyHit.has(other);
-		if not (wasHitBefore):
-			alreadyHit.append(other);
+		if not (forced):
 			keepDamaging.append(other);
+		
+		var wasHitBefore = alreadyHit.has(other);
+		var inHitbox = keepDamaging.has(other);
+		
+		if not (wasHitBefore) and (inHitbox):
+			alreadyHit.append(other);
 			hittedTimers[other] = 0.5;
 			
 			var tickDamage = dmg * 0.25;
 			if (other.team != team):
-				PlayerFunc.dealDamage(self, other, tickDamage);
-				PlayerFunc.slowTarget(other, 0.1);
+				PlayerFunc.dealDamage(ownerInstance, other, tickDamage);
+				PlayerFunc.slowTarget(other, 0.11);
 
 func _on_hit_exit(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if not (isCharacter):
 		return;
 	
-	if (keepDamaging.find(other)):
+	if (keepDamaging.has(other)):
 		keepDamaging.erase(other);
-		print("REMOVING: %s" % other.CHARACTER_NAME);
+
+func kill():
+	$hitbox/Area3D.monitoring = false;
+	$parts.emitting = false;
+	var tween = get_tree().create_tween();
+	tween.tween_property($MeshInstance3D.get_surface_override_material(0), "shader_parameter/transparency", 0.0, 0.25);
+	startDeath = true;
