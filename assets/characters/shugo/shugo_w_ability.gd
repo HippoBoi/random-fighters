@@ -12,7 +12,11 @@ func setup(_char, _team, _dmg):
 	dmg = _dmg;
 
 func _on_timer_timeout() -> void:
+	var sound = load("res://assets/sounds/characters/shugo/shugo_earthquake.ogg");
+	PlayerFunc.playSound(character, sound, false);
+	
 	hitbox.get_node("MeshInstance3D").get_node("Area3D").monitoring = true;
+	
 	await get_tree().create_timer(0.5).timeout;
 	hitbox.get_node("MeshInstance3D").get_node("Area3D").monitoring = false;
 	

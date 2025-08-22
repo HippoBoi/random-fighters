@@ -187,7 +187,7 @@ func _physics_process(delta: float) -> void:
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
 			var dmgMultiplier = min(1.0 + (stamina * 0.015), 1.85);
 			var totalDmg = dmg * dmgMultiplier;
-			var sound = preload("res://assets/sounds/characters/rhay/rhay_basic_attack.ogg");
+			var sound = preload("res://assets/sounds/characters/ale/ale_basic_hit.ogg");
 			basicDamageDealt = true;
 			
 			stamina -= BASIC_STAMINA;

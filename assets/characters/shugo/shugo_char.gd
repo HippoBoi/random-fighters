@@ -504,6 +504,9 @@ func secondary_ability(_mousePos):
 		usingSecondary = true;
 		onAction = true;
 		
+		var sound = load("res://assets/sounds/characters/shugo/shugo_earthquake_start.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		_spawn_w_trail(_mousePos);
 		
 		animPlayer.play("w_ability");
