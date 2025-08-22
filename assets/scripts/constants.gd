@@ -10,7 +10,8 @@ enum GameModes {
 	Foggy_Vision,
 	Hippo_Capture,
 	Doom_Bot,
-	Snowmen
+	Snowmen,
+	Arena
 }
 
 const items = [

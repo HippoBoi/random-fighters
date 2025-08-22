@@ -63,6 +63,10 @@ func startGameMode(gameMode: String):
 		newMap = preload("res://assets/maps/snowmen.tscn").instantiate();
 		minimapCamera.size = 105.0;
 	
+	elif (gameMode.to_lower() == "arena"):
+		newMap = preload("res://assets/maps/arena.tscn").instantiate();
+		minimapCamera.size = 75.0;
+	
 	$Map.add_child(newMap);
 	
 	await get_tree().create_timer(0.5).timeout;
@@ -147,6 +151,8 @@ func _getModeDescription(gameMode: String):
 		description = "Survive...!"
 	elif (gameMode.to_lower() == "snowmen"):
 		description = "Destroy enemy snowman!"
+	elif (gameMode.to_lower() == "snowmen"):
+		description = "Survive!"
 	
 	return description;
 
