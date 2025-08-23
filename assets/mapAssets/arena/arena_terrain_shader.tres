@@ -54,7 +54,7 @@ texture_type = 1
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_toon;
 
 uniform sampler2D tex_frg_2 : source_color;
 uniform sampler2D tex_frg_7 : source_color;
@@ -123,8 +123,8 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-426.881, 9.25052)
 modes/cull = 1
+modes/specular = 1
 nodes/fragment/0/position = Vector2(960, 60)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_ms25m")
 nodes/fragment/2/position = Vector2(-200, 120)

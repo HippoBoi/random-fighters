@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bwot4d2uehph0"]
+[gd_scene load_steps=8 format=3 uid="uid://bwot4d2uehph0"]
 
+[ext_resource type="Script" uid="uid://saovm28vxhs2" path="res://assets/maps/arena.gd" id="1_20fq5"]
 [ext_resource type="PackedScene" uid="uid://b3awqtuov202k" path="res://assets/mapAssets/arena/mesh_arena.tscn" id="1_s7spj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_20fq5"]
@@ -7,12 +8,12 @@ size = Vector3(69.31, 0.260262, 77.4571)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ynrm"]
 
-[sub_resource type="Sky" id="Sky_smvvh"]
+[sub_resource type="Sky" id="Sky_4uk01"]
 sky_material = SubResource("ProceduralSkyMaterial_2ynrm")
 
 [sub_resource type="Environment" id="Environment_s7spj"]
 background_mode = 2
-sky = SubResource("Sky_smvvh")
+sky = SubResource("Sky_4uk01")
 ssao_enabled = true
 sdfgi_use_occlusion = true
 glow_enabled = true
@@ -25,15 +26,16 @@ fog_density = 0.025
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_20fq5"]
 
 [node name="Arena" type="Node3D"]
+script = ExtResource("1_20fq5")
 
 [node name="spawnLocations" type="Node3D" parent="."]
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
 
 [node name="whiteTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.95399e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -18.0909, 0.591753, -0.0551581)
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.13163e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -30.0909, 0.591753, -0.0551583)
 
 [node name="blackTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 17.5455, 0.591752, -0.0339885)
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.24345e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 30.5455, 0.591752, -0.0339883)
 
 [node name="floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.677868, -0.978203)
@@ -53,3 +55,13 @@ environment = SubResource("Environment_s7spj")
 camera_attributes = SubResource("CameraAttributesPractical_20fq5")
 
 [node name="arena" parent="." instance=ExtResource("1_s7spj")]
+
+[node name="closingZones" type="Node3D" parent="."]
+
+[node name="pos1" type="MeshInstance3D" parent="closingZones"]
+
+[node name="pos2" type="MeshInstance3D" parent="closingZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
+
+[node name="pos3" type="MeshInstance3D" parent="closingZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
