@@ -67,7 +67,7 @@ var target = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
+var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.85;
 var basicTarget = null;
 var onAction = false;
 var usingPrimary = false;
@@ -83,6 +83,7 @@ var bufferedInput = null;
 
 var basicAnimList = ["basic_01"];
 var basicAnimPos = 0;
+var basicDamageDealt = false;
 
 var alreadyHit = [];
 
@@ -170,6 +171,10 @@ func _physics_process(delta: float) -> void:
 					action.call();
 				else:
 					bufferedInput = action;
+		
+		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
+			basicDamageDealt = true;
+			rpc("showBasicAttack", target.global_position);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -247,10 +252,14 @@ func basicAttack():
 	if not (target):
 		return;
 	
+	basicDamageDealt = false;
+	basicAttacking = true;
 	basicTarget = target;
-	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
+	var sound = load("res://assets/sounds/characters/ramon/ramon_basic_hit.ogg");
+	rpc("syncSound", sound);
+	
 	PlayerFunc.dealDamage(self, basicTarget, dmg * 0.4);
 
 func _setup_primary():
@@ -361,10 +370,15 @@ func _manage_r_papers():
 	
 	if (decimalTimer % 4 == 0):
 		var isActive = ultiHitbox.get_node("MeshInstance3D/Area3D").monitoring;
+		
 		if (isActive == false):
 			alreadyHit = [];
 		
 		_setHitbox(ultiHitbox, not isActive);
+	
+	if (decimalTimer % 120 == 0 and decimalTimer != 0):
+		var papersSound = preload("res://assets/sounds/characters/ramon/ramon_storm_papers.ogg");
+		PlayerFunc.playSound(self, papersSound);
 
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
@@ -372,6 +386,9 @@ func primary_ability(_mousePos):
 	primaryTimer = 0.65;
 	usingPrimary = true;
 	onAction = true;
+	
+	var sound = preload("res://assets/sounds/characters/ramon/ramon_sheets.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	_spawn_q_papers(_mousePos);
 	animPlayer.play("q_ability");
@@ -384,6 +401,9 @@ func secondary_ability(_mousePos):
 	secondaryTimer = 0.9;
 	usingSecondary = true;
 	onAction = true;
+	
+	var sound = load("res://assets/sounds/characters/ramon/ramon_heavy_teacup.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	_spawn_w_teacup(_mousePos);
 	
@@ -412,6 +432,9 @@ func ultimate_ability():
 	usingUltimate = true;
 	alreadyHit = [];
 	
+	var sound = load("res://assets/sounds/characters/ramon/ramon_storm.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	_spawn_r_explosion();
 	
 	animPlayer.play("r_ability");
@@ -424,6 +447,9 @@ func showBasicAttack(_targetPos):
 	var basic = preload("res://assets/characters/ramon/ramonBasic.tscn").instantiate();
 	get_parent().add_child(basic);
 	basic.global_position = global_position + Vector3(0, 2, 0);
+	
+	var sound = load("res://assets/sounds/characters/ramon/ramon_basic.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	basic.setTarget(_targetPos);
 	if (is_multiplayer_authority()):
@@ -510,6 +536,10 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	hp = newHp;
 	dead = false;
 	visible = true;
+
+@rpc("call_local", "any_peer")
+func syncSound(sound):
+	PlayerFunc.playSound(self, sound);
 	
 @rpc("call_local")
 func showChatText(newText):

@@ -18,6 +18,9 @@ func _on_timer_timeout() -> void:
 	particles.emitting = true;
 	hitbox.get_node("MeshInstance3D").get_node("Area3D").monitoring = true;
 	
+	var sound = load("res://assets/sounds/characters/ramon/ramon_heavy_teacup_break.ogg");
+	PlayerFunc.playSound(character, sound);
+	
 	await get_tree().create_timer(0.75).timeout;
 	queue_free();
 
