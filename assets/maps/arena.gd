@@ -94,7 +94,7 @@ func _damagePlayersOnArea():
 		if (player.dead):
 			continue;
 		
-		PlayerFunc.dealDamage(null, player, fireDamage, "", true);
+		PlayerFunc.dealDamage(null, player, fireDamage, "fire_hit_01", true);
 		
 		# looks like multiple players can't be damaged at the exact same frame
 		# that might be a problem for later?

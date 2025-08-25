@@ -475,7 +475,7 @@ func killCharacter(character: CharacterBody3D):
 			tokenReward = 5;
 		
 		var player: CharacterBody3D = scene.get_character_by_id(playerId);
-		if (player):
+		if (player and player != character):
 			player.tokens += tokenReward;
 			
 			if (player == myCharacter):
