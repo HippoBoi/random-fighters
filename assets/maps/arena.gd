@@ -4,7 +4,7 @@ var closingZone: Node3D = null;
 var closingZoneName: String = "";
 var fireCircle: Node3D = null;
 var bigFireCircle: Node3D = null;
-var fireScale = 11.0;
+var fireScale = 11.0; # default: 11.0
 var fireRatio = 1.68;
 var fireSpeed = 0.15;
 var fireDamage = 10.0;
@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 			
 			rpc("syncParameters", fireScale, hurryTimer);
 		
-		if (damageTimer >= 0.35):
+		if (damageTimer >= 0.5):
 			damageTimer = 0;
 			_damagePlayersOnArea();
 	
@@ -91,7 +91,14 @@ func _physics_process(delta: float) -> void:
 
 func _damagePlayersOnArea():
 	for player in playersOutOfZone:
+		if (player.dead):
+			continue;
+		
 		PlayerFunc.dealDamage(null, player, fireDamage, "", true);
+		
+		# looks like multiple players can't be damaged at the exact same frame
+		# that might be a problem for later?
+		await get_tree().create_timer(0.1).timeout;
 
 func _onAreaEnter(other: Node3D):
 	var isCharacter = "CHARACTER_NAME" in other;

@@ -762,9 +762,6 @@ func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 		print("[dealDamage]: no target found");
 		return;
 	
-	if not (character):
-		print("[dealDamage]: no character found");
-	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
 	var canParry = "usingParry" in target;
