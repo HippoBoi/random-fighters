@@ -44,7 +44,7 @@ func _startThunder():
 func _on_hit(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		PlayerFunc.dealDamage(self, other, dmg);
+		PlayerFunc.dealDamage(null, other, dmg, "", true);
 		PlayerFunc.stunTarget(other, 0.5);
 
 func _handleLight(delta: float):

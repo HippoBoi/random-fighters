@@ -151,8 +151,8 @@ func _getModeDescription(gameMode: String):
 		description = "Survive...!"
 	elif (gameMode.to_lower() == "snowmen"):
 		description = "Destroy enemy snowman!"
-	elif (gameMode.to_lower() == "snowmen"):
-		description = "Survive!"
+	elif (gameMode.to_lower() == "arena"):
+		description = "Stay in the area!"
 	
 	return description;
 

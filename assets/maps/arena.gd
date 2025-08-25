@@ -4,11 +4,14 @@ var closingZone: Node3D = null;
 var closingZoneName: String = "";
 var fireCircle: Node3D = null;
 var bigFireCircle: Node3D = null;
-var fireScale = 15.0;
+var fireScale = 11.0;
 var fireRatio = 1.68;
-var minFireScale = 2.35;
+var fireSpeed = 0.15;
+var fireDamage = 10.0;
+var minFireScale = 2.4;
 var timer = 0;
 var hurryTimer = 0;
+var damageTimer = 0;
 
 var updatedSpawns = false;
 
@@ -22,13 +25,17 @@ func _ready() -> void:
 	add_child(fireCircle);
 	add_child(bigFireCircle);
 	
+	var circleArea: Area3D = fireCircle.get_node("Area3D");
+	circleArea.body_entered.connect(_onAreaEnter);
+	circleArea.body_exited.connect(_onAreaExit);
+	
 	if (is_multiplayer_authority()):
 		var possibleZones = $closingZones.get_children();
 		possibleZones.shuffle();
 		
 		closingZone = possibleZones[0];
 		if (closingZone.name == "pos1"):
-			minFireScale = 2.6;
+			minFireScale = 2.7;
 		
 		rpc("syncPosition", closingZone.global_position, minFireScale, closingZone.name);
 	
@@ -38,10 +45,16 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if (is_multiplayer_authority()):
 		timer += delta;
+		damageTimer += delta;
 		if (timer >= 15):
 			timer = 0;
 			hurryTimer = 0.5;
+			
 			rpc("syncParameters", fireScale, hurryTimer);
+		
+		if (damageTimer >= 0.35):
+			damageTimer = 0;
+			_damagePlayersOnArea();
 	
 	if (hurryTimer > 0):
 		hurryTimer -= delta;
@@ -70,16 +83,41 @@ func _physics_process(delta: float) -> void:
 	fireCircle.scale = Vector3(fireScale * fireRatio, 1.5, fireScale * fireRatio);
 	bigFireCircle.scale = Vector3(fireScale, 1.0, fireScale);
 	
-	fireScale -= (delta + hurryTimer) * 0.15;
+	fireScale -= (delta + hurryTimer) * fireSpeed;
 	fireScale = clamp(fireScale, minFireScale, 50);
 	
 	if (Engine.get_physics_frames() % 90 == 0 and is_multiplayer_authority()):
 		rpc("syncParameters", fireScale, hurryTimer);
 
+func _damagePlayersOnArea():
+	for player in playersOutOfZone:
+		PlayerFunc.dealDamage(null, player, fireDamage, "", true);
+
+func _onAreaEnter(other: Node3D):
+	var isCharacter = "CHARACTER_NAME" in other;
+	if not (isCharacter):
+		return;
+		
+	if (playersOutOfZone.has(other)):
+		print("erased: %s" % other.CHARACTER_NAME);
+		playersOutOfZone.erase(other);
+
+func _onAreaExit(other: Node3D):
+	var isCharacter = "CHARACTER_NAME" in other;
+	if not (isCharacter):
+		return;
+	
+	if (playersOutOfZone.has(other)):
+		print("ALREADY ADDED: %s" % other.CHARACTER_NAME);
+		return;
+	
+	print("added: %s" % other.CHARACTER_NAME);
+	playersOutOfZone.append(other);
+
 @rpc("call_local", "any_peer", "reliable")
 func syncPosition(_position: Vector3, _minFireScale: float, _closingZoneName):
 	fireCircle.global_position = _position;
-	bigFireCircle.global_position = _position + Vector3(0, -0.035, 0);
+	bigFireCircle.global_position = _position + Vector3(0, 0.035, 0);
 	minFireScale = _minFireScale;
 	closingZoneName = _closingZoneName;
 

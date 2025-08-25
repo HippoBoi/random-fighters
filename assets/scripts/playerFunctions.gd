@@ -757,21 +757,27 @@ func _inBasicRange(character, target):
 	
 	return false;
 
-func dealDamage(character, target, dmg, effect := ""):
-	if not (target):
+func dealDamage(character, target, dmg, effect := "", trueDamage := false):
+	if not (target) or (target.dead):
 		print("[dealDamage]: no target found");
 		return;
+	
+	if not (character):
+		print("[dealDamage]: no character found");
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
 	var canParry = "usingParry" in target;
+	
+	if (trueDamage):
+		totalDmg = dmg;
 	
 	dmgAfterShield = totalDmg - target.shield;
 	target.shield -= totalDmg;
 	target.shield = clamp(target.shield, 0, target.maxHp);
 	totalDmg = dmgAfterShield;
 	
-	if (canParry):
+	if (canParry and character != null):
 		if (target.usingParry == true):
 			target.rpc("onParry");
 			dealDamage(target, character, dmg, effect);
@@ -783,8 +789,10 @@ func dealDamage(character, target, dmg, effect := ""):
 		target.hp = clamp(target.hp, 0, target.maxHp);
 	
 	if (updateTimer >= 0.05):
+		var charName = character.name if character else "";
+		
 		updateTimer = 0;
-		target.rpc("syncHealth", target.hp, target.shield, true, character.name);
+		target.rpc("syncHealth", target.hp, target.shield, true, charName);
 	
 		if not (effect.is_empty()):
 			target.rpc("syncParticles", effect);
