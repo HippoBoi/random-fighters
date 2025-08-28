@@ -1,17 +1,19 @@
 extends Node3D
 
-var multiplayerPeer = ENetMultiplayerPeer.new();
+var multiplayerPeer: ENetMultiplayerPeer = ENetMultiplayerPeer.new();
+var norayNetwork: Node = null;
 
-const PORT = 8890;
-var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
+const LOCALHOST: String = "127.0.0.1";
+const PORT: int = 8890;
+var ADDRESS: String;
 
-var username = "noname";
-var curTeam = 0;
-var curCharacter = "";
-var curGameMode = "";
-var totalPlayers = 0;
-var timer = 0;
-var startRoundTimer = 0.0;
+var username: String = "noname";
+var curTeam: int = 0;
+var curCharacter: String = "";
+var curGameMode: String = "";
+var totalPlayers: int = 0;
+var timer: float = 0;
+var startRoundTimer: float = 0.0;
 
 var playersLockedIn = [];
 var selectedCharacters = [];
@@ -20,13 +22,10 @@ var connected = false;
 var gameStarted = false;
 var roundStarted = false;
 
-var DEBUG = true;
+var DEBUG = false;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
-	
-	setupHostNorayConnection();
-	Cursor.changeCursor(Constants.CursorTypes.cursor);
 
 func _process(delta: float) -> void:
 	if not (connected):
@@ -41,13 +40,28 @@ func _process(delta: float) -> void:
 	if (int(round(timer * 100)) % 32 == 0):
 		rpc("syncData", multiplayerPeer.get_unique_id(), username, curTeam, curCharacter);
 
+func _on_multiplayer_instance_changed():
+	pass;
+
 func _on_name_input(new_text: String) -> void:
 	username = new_text;
 
 func _on_host(_port = PORT, _username = username, _team = 0) -> void:
-	print("hosting")
+	print("hosting");
 	
-	await createServerPeer(ADDRESS);
+	if not (DEBUG):
+		if not (norayNetwork):
+			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
+			add_child(norayNetwork);
+			
+			norayNetwork.startNorayHost.connect(startNorayHost);
+		
+		await norayNetwork.createServerPeer(ADDRESS);
+	
+	if (not (norayNetwork) or norayNetwork.isHosting == false):
+		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		multiplayerPeer.create_server(_port);
+		multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	username = _username;
 	curTeam = int(_team);
@@ -72,7 +86,7 @@ func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip = ADDRESS, port = PORT, _username = "noname", _team = "1"):
+func _joinPressed(ip = LOCALHOST, port = PORT, _username = "noname", _team = "1"):
 	username = _username;
 	curTeam = int(_team);
 	print("joining team: %s" % curTeam);
@@ -211,54 +225,18 @@ func _clearRoundData():
 	
 	$UI.visible = true;
 
-func _registerWithNoray(ip: String):
-	print("register with noray hosted at: %s" % ip);
-	var response = OK;
-	
-	response = await Noray.connect_to_host(ip, PORT);
-	if (response != OK):
-		print("[ERROR]: failed noray registration for: %s:%s" % [ip, PORT]);
-		return response;
-	
-	Noray.register_host();
-	await Noray.on_pid;
-	
-	response = await Noray.register_remote();
-	if (response != OK):
-		print("[ERROR]: failed to register remote %s" % response);
-		return response;
-	
-	print("finished noray registration");
-
-func createServerPeer(ip: String):
-	print("CREATING PEER SERVER WITH NORAY");
-	await _registerWithNoray(ip);
-	
-	startNorayHost();
-
 func startNorayHost():
-	print("STARTING NORAY HOST!!");
+	print("ATTEMPTING TO HOST WITH NORAY...");
 	var response = OK;
 	
-	response = multiplayerPeer.create_server(Noray.local_port); #tp
+	response = multiplayerPeer.create_server(Noray.local_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	if (response != OK):
 		print("failed to start host: %s, %s" % [Noray.local_port, response]);
-
-func handleNorayClientConnect(address: String, port: int):
-	var peer = multiplayer.multiplayer_peer as ENetMultiplayerPeer;
-	var response = await PacketHandshake.over_enet(peer.host, address, port);
 	
-	if (response != OK):
-		print("[ERROR]: noray handshake failed: %s" % response);
-		return response;
-	
-	return OK;
-
-func setupHostNorayConnection():
-	Noray.on_connect_nat.connect(handleNorayClientConnect);
-	Noray.on_connect_relay.connect(handleNorayClientConnect);
+	norayNetwork.isHosting = true;
+	print("HOST SUCCESS!!!!!")
 
 @rpc
 func addNewPlayerCharacter(newPlayerID):
@@ -283,8 +261,6 @@ func updateSelectedCharacter(playerId, character: String):
 	
 	if (has_node("CharSelect")):
 		charSelect = get_node("CharSelect");
-	
-	print("PLAYER ID: %s" % playerId);
 	
 	playerList[playerId].character = character;
 	selectedCharacters.insert(len(selectedCharacters), character);

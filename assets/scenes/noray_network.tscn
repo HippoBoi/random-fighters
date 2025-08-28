@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkj2y7asgapfv"]
+
+[ext_resource type="Script" uid="uid://0yr2cqe0fhkl" path="res://assets/scenes/noray_network.gd" id="1_efecj"]
+
+[node name="NorayNetwork" type="Node"]
+script = ExtResource("1_efecj")
