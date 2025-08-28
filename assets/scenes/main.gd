@@ -40,9 +40,6 @@ func _process(delta: float) -> void:
 	if (int(round(timer * 100)) % 32 == 0):
 		rpc("syncData", multiplayerPeer.get_unique_id(), username, curTeam, curCharacter);
 
-func _on_multiplayer_instance_changed():
-	pass;
-
 func _on_name_input(new_text: String) -> void:
 	username = new_text;
 
@@ -54,6 +51,7 @@ func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
 			add_child(norayNetwork);
 			
+			norayNetwork.isClient = false;
 			norayNetwork.startNorayHost.connect(startNorayHost);
 		
 		await norayNetwork.createServerPeer(ADDRESS);
@@ -86,13 +84,27 @@ func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip = LOCALHOST, port = PORT, _username = "noname", _team = "1"):
+func _joinPressed(ip := ADDRESS, port := PORT, _gameId := "", _username := "noname", _team := "1"):
 	username = _username;
 	curTeam = int(_team);
 	print("joining team: %s" % curTeam);
 	
-	multiplayerPeer.create_client(ip, port);
-	multiplayer.multiplayer_peer = multiplayerPeer;
+	if not (DEBUG):
+		if not (norayNetwork):
+			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
+			add_child(norayNetwork);
+			
+			norayNetwork.isClient = true;
+			# norayNetwork.startNorayHost.connect(startNorayHost);
+		
+		await norayNetwork.createClientPeer(ip, _gameId);
+	
+	"""
+	if not (norayNetwork):
+		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		multiplayerPeer.create_client(ip, port);
+		multiplayer.multiplayer_peer = multiplayerPeer;
+	"""
 	
 	updateUI("Client");
 
