@@ -2,8 +2,8 @@ extends Node3D
 
 var multiplayerPeer = ENetMultiplayerPeer.new();
 
-const PORT = 8000;
-const ADDRESS = "127.0.0.1";
+const PORT = 8890;
+var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
 
 var username = "noname";
 var curTeam = 0;
@@ -23,6 +23,9 @@ var roundStarted = false;
 var DEBUG = true;
 
 func _ready() -> void:
+	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
+	
+	setupHostNorayConnection();
 	Cursor.changeCursor(Constants.CursorTypes.cursor);
 
 func _process(delta: float) -> void:
@@ -42,11 +45,12 @@ func _on_name_input(new_text: String) -> void:
 	username = new_text;
 
 func _on_host(_port = PORT, _username = username, _team = 0) -> void:
+	print("hosting")
+	
+	await createServerPeer(ADDRESS);
+	
 	username = _username;
 	curTeam = int(_team);
-	
-	multiplayerPeer.create_server(_port);
-	multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	addPlayer(1);
 	connected = true;
@@ -63,6 +67,10 @@ func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 	);
 	
 	updateUI("Server");
+
+func _hostWithUPnP(_port):
+	multiplayerPeer.create_server(_port);
+	multiplayer.multiplayer_peer = multiplayerPeer;
 
 func _joinPressed(ip = ADDRESS, port = PORT, _username = "noname", _team = "1"):
 	username = _username;
@@ -203,6 +211,55 @@ func _clearRoundData():
 	
 	$UI.visible = true;
 
+func _registerWithNoray(ip: String):
+	print("register with noray hosted at: %s" % ip);
+	var response = OK;
+	
+	response = await Noray.connect_to_host(ip, PORT);
+	if (response != OK):
+		print("[ERROR]: failed noray registration for: %s:%s" % [ip, PORT]);
+		return response;
+	
+	Noray.register_host();
+	await Noray.on_pid;
+	
+	response = await Noray.register_remote();
+	if (response != OK):
+		print("[ERROR]: failed to register remote %s" % response);
+		return response;
+	
+	print("finished noray registration");
+
+func createServerPeer(ip: String):
+	print("CREATING PEER SERVER WITH NORAY");
+	await _registerWithNoray(ip);
+	
+	startNorayHost();
+
+func startNorayHost():
+	print("STARTING NORAY HOST!!");
+	var response = OK;
+	
+	response = multiplayerPeer.create_server(Noray.local_port); #tp
+	multiplayer.multiplayer_peer = multiplayerPeer;
+	
+	if (response != OK):
+		print("failed to start host: %s, %s" % [Noray.local_port, response]);
+
+func handleNorayClientConnect(address: String, port: int):
+	var peer = multiplayer.multiplayer_peer as ENetMultiplayerPeer;
+	var response = await PacketHandshake.over_enet(peer.host, address, port);
+	
+	if (response != OK):
+		print("[ERROR]: noray handshake failed: %s" % response);
+		return response;
+	
+	return OK;
+
+func setupHostNorayConnection():
+	Noray.on_connect_nat.connect(handleNorayClientConnect);
+	Noray.on_connect_relay.connect(handleNorayClientConnect);
+
 @rpc
 func addNewPlayerCharacter(newPlayerID):
 	addCharacter(newPlayerID);
@@ -226,6 +283,8 @@ func updateSelectedCharacter(playerId, character: String):
 	
 	if (has_node("CharSelect")):
 		charSelect = get_node("CharSelect");
+	
+	print("PLAYER ID: %s" % playerId);
 	
 	playerList[playerId].character = character;
 	selectedCharacters.insert(len(selectedCharacters), character);

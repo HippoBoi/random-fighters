@@ -23,6 +23,8 @@ Server="*res://assets/scripts/server.gd"
 Cursor="*res://assets/scripts/cursor.gd"
 PlayerFunc="*res://assets/scripts/playerFunctions.gd"
 EnvLoader="*res://assets/scripts/envLoader.gd"
+Noray="*res://addons/netfox.noray/noray.gd"
+PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
 [display]
 
@@ -32,7 +34,7 @@ window/stretch/mode="viewport"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/terrain_3d/plugin.cfg")
+enabled=PackedStringArray("res://addons/netfox.internals/plugin.cfg", "res://addons/netfox.noray/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
 
 [input]
 
