@@ -8,9 +8,11 @@ const PORT: int = 8890;
 var ADDRESS: String;
 
 var username: String = "noname";
+var gameIdInput: String;
 var curTeam: int = 0;
 var curCharacter: String = "";
 var curGameMode: String = "";
+var curGameId: String = "";
 var totalPlayers: int = 0;
 var timer: float = 0;
 var startRoundTimer: float = 0.0;
@@ -43,6 +45,9 @@ func _process(delta: float) -> void:
 func _on_name_input(new_text: String) -> void:
 	username = new_text;
 
+func _on_game_input_changed(new_text: String) -> void:
+	gameIdInput = new_text;
+
 func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 	print("hosting");
 	
@@ -52,6 +57,7 @@ func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 			add_child(norayNetwork);
 			
 			norayNetwork.isClient = false;
+			norayNetwork.setup();
 			norayNetwork.startNorayHost.connect(startNorayHost);
 		
 		await norayNetwork.createServerPeer(ADDRESS);
@@ -84,10 +90,11 @@ func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip := ADDRESS, port := PORT, _gameId := "", _username := "noname", _team := "1"):
+func _joinPressed(ip := ADDRESS, port := PORT, _gameId := gameIdInput, _username := "noname", _team := "1"):
 	username = _username;
 	curTeam = int(_team);
-	print("joining team: %s" % curTeam);
+	# print("joining team: %s" % curTeam);
+	# print("GAME ID: %s" % _gameId);
 	
 	if not (DEBUG):
 		if not (norayNetwork):
@@ -95,9 +102,11 @@ func _joinPressed(ip := ADDRESS, port := PORT, _gameId := "", _username := "nona
 			add_child(norayNetwork);
 			
 			norayNetwork.isClient = true;
-			# norayNetwork.startNorayHost.connect(startNorayHost);
+			norayNetwork.natConnection.connect(handleNatConnection);
+			norayNetwork.relayConnection.connect(handleRelayConnection);
+			norayNetwork.setup();
 		
-		await norayNetwork.createClientPeer(ip, _gameId);
+		norayNetwork.createClientPeer(ip, _gameId);
 	
 	"""
 	if not (norayNetwork):
@@ -249,6 +258,56 @@ func startNorayHost():
 	
 	norayNetwork.isHosting = true;
 	print("HOST SUCCESS!!!!!")
+
+func connectToNorayHost(address: String, port: int):
+	print("ATTEMPTING TO JOIN WITH NORAY to: %s:%s" % [address, port]);
+	
+	var udp = PacketPeerUDP.new();
+	udp.bind(Noray.local_port);
+	udp.set_dest_address(address, port);
+	
+	var response = await PacketHandshake.over_packet_peer(udp);
+	udp.close();
+	
+	if (response != OK):
+		print("client packet handshake failed: %s" % response);
+		return response;
+	
+	response = multiplayerPeer.create_client(address, port, 0, 0, 0, Noray.local_port);
+	
+	if (response != OK):
+		print("failed create client");
+		return response;
+	
+	multiplayer.multiplayer_peer = multiplayerPeer;
+	return OK;
+
+func handleNatConnection(address: String, port: int):
+	print("attempting nat connection %s:%s" % [address, port]);
+	
+	var response = await connectToNorayHost(address, port);
+	if (response != OK):
+		print("[ERROR]: NAT CONNECTION FAILED.")
+		norayNetwork.pleaseRelay(gameIdInput);
+		return OK;
+	
+	print("NAT CONNECTION SUCCESSFUL");
+	return response;
+
+func handleRelayConnection(address: String, port: int):
+	print("!!!!attempting relay connection %s:%s!!!!!" % [address, port]);
+	
+	return await connectToNorayHost(address, port);
+
+func setupClientNorayConnection():
+	Noray.on_connect_nat.connect(handleNatConnection);
+	Noray.on_connect_relay.connect(handleRelayConnection);
+
+func setupClientEnetConnection():
+	multiplayer.server_disconnected.connect(_norrayServerDisconnected);
+
+func _norrayServerDisconnected():
+	print("well someone disconnected?");
 
 @rpc
 func addNewPlayerCharacter(newPlayerID):

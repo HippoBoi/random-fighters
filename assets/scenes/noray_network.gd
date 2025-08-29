@@ -2,6 +2,8 @@ extends Node
 
 signal startNorayHost;
 signal connectToHost;
+signal natConnection(address, port);
+signal relayConnection(address, port);
 
 const PORT: int = 8890;
 
@@ -13,7 +15,7 @@ var isHosting: bool = false;
 
 var gameId: String;
 
-func _ready() -> void:
+func setup() -> void:
 	print("STARTED NORAY NETWORK!");
 	if (isClient):
 		setupClientNorayConnection();
@@ -32,6 +34,8 @@ func _registerWithNoray(ip: String):
 	Noray.register_host();
 	await Noray.on_pid;
 	
+	print("-- - - -ACTIVE GAME ID: %s - - - - -- -" % Noray.oid);
+	
 	response = await Noray.register_remote();
 	if (response != OK):
 		print("[ERROR]: failed to register remote %s" % response);
@@ -45,14 +49,12 @@ func createServerPeer(ip: String):
 	
 	startNorayHost.emit();
 
-func createClientPeer(ip: String, _gameId: String):
+func createClientPeer(ip: String, _gameOid: String):
 	print("CREATING PEER CLIENT WITH NORAY");
-	
-	gameId = _gameId;
 	await _registerWithNoray(ip);
 	
-	setupClientEnetConnection();
-	Noray.connect_nat(_gameId);
+	Noray.connect_nat(_gameOid);
+	# connectToHost.emit();
 
 func handleNorayClientConnect(address: String, port: int):
 	var peer = multiplayer.multiplayer_peer as ENetMultiplayerPeer;
@@ -64,46 +66,15 @@ func handleNorayClientConnect(address: String, port: int):
 	
 	return OK;
 
-func _handleConnect(address: String, port: int):
-	print("client handle connect to: %s:%s" % [address, port]);
-	
-	var udp = PacketPeerUDP.new();
-	udp.bind(Noray.local_port);
-	udp.set_dest_address(address, port);
-	
-	var response = await PacketHandshake.over_packet_peer(udp);
-	udp.close();
-	
-	if (response != OK):
-		print("client packet handshake failed: %s" % response);
-		return response;
-	
-	response = multiplayerPeer.create_client(address, port, 0, 0, 0, Noray.local_port);
-	
-	if (response != OK):
-		print("failed create client");
-		return response;
-	
-	multiplayer.multiplayerPeer = multiplayerPeer;
-	return OK;
+func pleaseRelay(_gameOid: String):
+	print("PLEASE RELAY")
+	Noray.connect_relay(_gameOid);
 
 func handleNatConnection(address: String, port: int):
-	print("attempting nat connection %s:%s" % [address, port]);
-	
-	var response = await _handleConnect(address, port);
-	if (response != OK):
-		print("[ERROR]: NAT CONNECTION FAILED.")
-		Noray.connect_relay(gameId);
-		return OK;
-	else:
-		print("NAT CONNECTION SUCCESSFUL");
-	
-	return response;
+	natConnection.emit(address, port);
 
 func handleRelayConnection(address: String, port: int):
-	print("attempting relay connection %s:%s" % [address, port]);
-	
-	return await _handleConnect(address, port);
+	relayConnection.emit(address, port);
 
 func setupHostNorayConnection():
 	Noray.on_connect_nat.connect(handleNorayClientConnect);
@@ -112,9 +83,3 @@ func setupHostNorayConnection():
 func setupClientNorayConnection():
 	Noray.on_connect_nat.connect(handleNatConnection);
 	Noray.on_connect_relay.connect(handleRelayConnection);
-
-func setupClientEnetConnection():
-	multiplayer.server_disconnected.connect(_norrayServerDisconnected);
-
-func _norrayServerDisconnected():
-	print("well someone disconnected?");
