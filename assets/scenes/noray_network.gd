@@ -23,7 +23,6 @@ func setup() -> void:
 		setupHostNorayConnection();
 
 func _registerWithNoray(ip: String):
-	print("register with noray hosted at: %s" % ip);
 	var response = OK;
 	
 	response = await Noray.connect_to_host(ip, PORT);
@@ -34,26 +33,20 @@ func _registerWithNoray(ip: String):
 	Noray.register_host();
 	await Noray.on_pid;
 	
-	print("-- - - -ACTIVE GAME ID: %s - - - - -- -" % Noray.oid);
-	
 	response = await Noray.register_remote();
 	if (response != OK):
 		print("[ERROR]: failed to register remote %s" % response);
 		return response;
-	
-	print("finished noray registration");
 
 func createServerPeer(ip: String):
-	print("CREATING PEER SERVER WITH NORAY");
 	await _registerWithNoray(ip);
 	
 	startNorayHost.emit();
 
 func createClientPeer(ip: String, _gameOid: String):
-	print("CREATING PEER CLIENT WITH NORAY");
 	await _registerWithNoray(ip);
 	
-	Noray.connect_nat(_gameOid);
+	Noray.connect_relay(_gameOid);
 	# connectToHost.emit();
 
 func handleNorayClientConnect(address: String, port: int):
@@ -66,9 +59,8 @@ func handleNorayClientConnect(address: String, port: int):
 	
 	return OK;
 
-func pleaseRelay(_gameOid: String):
-	print("PLEASE RELAY")
-	Noray.connect_relay(_gameOid);
+func useNatConnection(_gameOid: String):
+	Noray.connect_nat(_gameOid);
 
 func handleNatConnection(address: String, port: int):
 	natConnection.emit(address, port);

@@ -49,8 +49,6 @@ func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
 
 func _on_host(_port = PORT, _username = username, _team = 0) -> void:
-	print("hosting");
-	
 	if not (DEBUG):
 		if not (norayNetwork):
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
@@ -247,7 +245,6 @@ func _clearRoundData():
 	$UI.visible = true;
 
 func startNorayHost():
-	print("ATTEMPTING TO HOST WITH NORAY...");
 	var response = OK;
 	
 	response = multiplayerPeer.create_server(Noray.local_port);
@@ -260,8 +257,6 @@ func startNorayHost():
 	print("HOST SUCCESS!!!!!")
 
 func connectToNorayHost(address: String, port: int):
-	print("ATTEMPTING TO JOIN WITH NORAY to: %s:%s" % [address, port]);
-	
 	var udp = PacketPeerUDP.new();
 	udp.bind(Noray.local_port);
 	udp.set_dest_address(address, port);
@@ -288,16 +283,20 @@ func handleNatConnection(address: String, port: int):
 	var response = await connectToNorayHost(address, port);
 	if (response != OK):
 		print("[ERROR]: NAT CONNECTION FAILED.")
-		norayNetwork.pleaseRelay(gameIdInput);
-		return OK;
+		return response;
 	
 	print("NAT CONNECTION SUCCESSFUL");
 	return response;
 
 func handleRelayConnection(address: String, port: int):
-	print("!!!!attempting relay connection %s:%s!!!!!" % [address, port]);
-	
-	return await connectToNorayHost(address, port);
+	var response = await connectToNorayHost(address, port);
+	if (response != OK):
+		print("[ERROR]: RELAY CONNECTION FAILED.")
+		norayNetwork.useNatConnection(curGameId);
+		return response;
+		
+	print("CONNECTION SUCCESS!!!")
+	return response;
 
 func setupClientNorayConnection():
 	Noray.on_connect_nat.connect(handleNatConnection);
