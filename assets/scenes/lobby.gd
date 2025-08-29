@@ -29,7 +29,7 @@ var dontShowAgain = false;
 
 signal returnToLobby;
 signal startClient(ip, port, username, team);
-signal startHost(port, username, team);
+signal startHost(port, username, team, isLocal);
 
 @onready var _client: WebSocketClient = $WebSocketClient;
 
@@ -100,9 +100,13 @@ func _processRecievedMessage(message):
 			return;
 			
 		print("connecting to: %s, %s" % [responseMsg.response.ip, responseMsg.response.port]);
-			
+		
 		statusText.text = "Starting game...";
-		startClient.emit(responseMsg.response.ip, responseMsg.response.port, fakeUser.username, currentTeam);
+		
+		var ip = responseMsg.response.ip;
+		var port = responseMsg.response.port;
+		var gameId = responseMsg.response.gameId;
+		startClient.emit(ip, port, gameId, fakeUser.username, currentTeam);
 		
 		_client.close(1000, "game started normally!");
 
@@ -287,38 +291,10 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	await get_tree().create_timer(secondsToWait).timeout;
 	_loadMatches();
 
-func _hostMatch(_port = 8000):
-	print("ATTEMPTING TO HOST MATCH");
+func hostMatch(_matchIp: String, _port: int, _gameOid: String):
+	print("ATTEMPTING TO HOST MATCH, ip: %s, gameId: %s" % [_matchIp, _gameOid]);
 	
-	var upnp = UPNP.new();
-	var discoverResult = upnp.discover();
-	
-	if (discoverResult == UPNP.UPNP_RESULT_SUCCESS):
-		if (upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
-			var _delete_map_result = upnp.delete_port_mapping(_port);
-			
-			var mapResultUDP = upnp.add_port_mapping(_port, 0, "udp-godot", "UDP");
-			var mapResultTCP = upnp.add_port_mapping(_port, 0, "tcp-godot", "TCP");
-			
-			if not (mapResultUDP):
-				mapResultUDP = upnp.add_port_mapping(_port, 0, "", "UDP");
-			if not (mapResultTCP):
-				mapResultTCP = upnp.add_port_mapping(_port, 0, "", "TCP");
-	
-	startHost.emit(_port, fakeUser.username, currentTeam);
-	
-	var external_ip = upnp.query_external_address();
-	return external_ip;
-
-func _adminStartMatch() -> void:
-	if (currentLobbyId.is_empty()):
-		return;
-	
-	var port = 8890;
-	var matchIp = _hostMatch(port);
-	print("matchIp: ", matchIp);
-	
-	if (matchIp.is_empty()):
+	if (_matchIp.is_empty()):
 		print("FAILED: couldn't host match");
 		return;
 	
@@ -326,11 +302,22 @@ func _adminStartMatch() -> void:
 		"op": MATCH_READY,
 		"matchId": currentLobbyId,
 		"playerId": fakeUser.playerId,
-		"MATCH_IP": matchIp,
-		"MATCH_PORT": port
+		"MATCH_IP": _matchIp,
+		"MATCH_PORT": _port,
+		"GAME_ID": _gameOid
 	};
 	
 	_sendMessage(request);
+
+func _adminStartMatch() -> void:
+	if (currentLobbyId.is_empty()):
+		return;
+	
+	var matchIp = EnvLoader.get_env("NORAY_ADDRESS");
+	var port = 8890;
+	print("matchIp: ", matchIp);
+	
+	startHost.emit(port, fakeUser.username, currentTeam, false);
 
 func _on_refresh() -> void:
 	_loadMatches();

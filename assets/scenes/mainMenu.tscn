@@ -247,7 +247,7 @@ theme_override_font_sizes/normal_font_size = 48
 text = "Fighters"
 
 [connection signal="pressed" from="UI/Menu/menuButtons/multiplayerButton" to="." method="onFindMatch"]
-[connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host"]
+[connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host" binds= [8890, "unnamed", "0"]]
 [connection signal="pressed" from="UI/Menu/menuButtons/creditsButton" to="." method="_joinPressed"]
 [connection signal="text_changed" from="UI/Menu/nameInput" to="." method="_on_name_input"]
 [connection signal="text_changed" from="UI/Menu/gameInput" to="." method="_on_game_input_changed"]

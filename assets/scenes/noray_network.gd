@@ -13,10 +13,13 @@ var multiplayerPeer: ENetMultiplayerPeer = ENetMultiplayerPeer.new();
 var isClient: bool = false;
 var isHosting: bool = false;
 
+var main: Node3D;
 var gameId: String;
 
-func setup() -> void:
+func setup(_mainInstance) -> void:
 	print("STARTED NORAY NETWORK!");
+	main = _mainInstance;
+	
 	if (isClient):
 		setupClientNorayConnection();
 	else:
@@ -33,10 +36,14 @@ func _registerWithNoray(ip: String):
 	Noray.register_host();
 	await Noray.on_pid;
 	
+	main.curGameId = Noray.oid;
+	
 	response = await Noray.register_remote();
 	if (response != OK):
 		print("[ERROR]: failed to register remote %s" % response);
 		return response;
+	
+	return Noray.oid;
 
 func createServerPeer(ip: String):
 	await _registerWithNoray(ip);

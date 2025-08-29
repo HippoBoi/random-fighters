@@ -24,6 +24,8 @@ var connected = false;
 var gameStarted = false;
 var roundStarted = false;
 
+var lobbyScene: Control = null;
+
 var DEBUG = false;
 
 func _ready() -> void:
@@ -48,14 +50,14 @@ func _on_name_input(new_text: String) -> void:
 func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
 
-func _on_host(_port = PORT, _username = username, _team = 0) -> void:
-	if not (DEBUG):
+func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> void:
+	if not (isLocal and DEBUG):
 		if not (norayNetwork):
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
 			add_child(norayNetwork);
 			
 			norayNetwork.isClient = false;
-			norayNetwork.setup();
+			norayNetwork.setup(self);
 			norayNetwork.startNorayHost.connect(startNorayHost);
 		
 		await norayNetwork.createServerPeer(ADDRESS);
@@ -82,13 +84,16 @@ func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 			rpc("disconnectPlayer", playerID);
 	);
 	
+	if not (isLocal):
+		lobbyScene.hostMatch(ADDRESS, PORT, curGameId);
+	
 	updateUI("Server");
 
 func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip := ADDRESS, port := PORT, _gameId := gameIdInput, _username := "noname", _team := "1"):
+func _joinPressed(ip := ADDRESS, port := PORT, _gameId := curGameId, _username := "noname", _team := "1"):
 	username = _username;
 	curTeam = int(_team);
 	# print("joining team: %s" % curTeam);
@@ -102,7 +107,7 @@ func _joinPressed(ip := ADDRESS, port := PORT, _gameId := gameIdInput, _username
 			norayNetwork.isClient = true;
 			norayNetwork.natConnection.connect(handleNatConnection);
 			norayNetwork.relayConnection.connect(handleRelayConnection);
-			norayNetwork.setup();
+			norayNetwork.setup(self);
 		
 		norayNetwork.createClientPeer(ip, _gameId);
 	
@@ -115,15 +120,15 @@ func _joinPressed(ip := ADDRESS, port := PORT, _gameId := gameIdInput, _username
 	
 	updateUI("Client");
 
-func startHost(port, _username, _team):
+func startHost(port: int, _username: String, _team: String, _isLocal: bool):
 	print("HOSTING, port: %s", port);
-	_on_host(port, _username, _team);
+	_on_host(port, _username, _team, _isLocal);
 	
 	get_node("Lobby").visible = false;
 
-func startClient(ip, port, _username, _team):
-	print("client joining: %s, %s" % [ip, port]);
-	_joinPressed(ip, port, _username, _team);
+func startClient(ip: String, port: int, _gameId: String, _username: String, _team: String):
+	print("client joining: %s:%s, gameId: %s" % [ip, port, _gameId]);
+	_joinPressed(ip, port, _gameId, _username, _team);
 	
 	get_node("Lobby").visible = false;
 
@@ -190,7 +195,7 @@ func onFindMatch():
 		"rank": 1000
 	};
 	
-	var lobbyScene = preload("res://assets/scenes/lobby.tscn").instantiate();
+	lobbyScene = preload("res://assets/scenes/lobby.tscn").instantiate();
 	lobbyScene.fakeUser = fakeUser;
 	lobbyScene.returnToLobby.connect(returnToLobby);
 	lobbyScene.startHost.connect(startHost);
