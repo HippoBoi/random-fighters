@@ -1,17 +1,21 @@
 extends Node3D
 
-var multiplayerPeer = ENetMultiplayerPeer.new();
+var multiplayerPeer: ENetMultiplayerPeer = ENetMultiplayerPeer.new();
+var norayNetwork: Node = null;
 
-const PORT = 8890;
-var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
+const LOCALHOST: String = "127.0.0.1";
+const PORT: int = 8890;
+var ADDRESS: String;
 
-var username = "noname";
-var curTeam = 0;
-var curCharacter = "";
-var curGameMode = "";
-var totalPlayers = 0;
-var timer = 0;
-var startRoundTimer = 0.0;
+var username: String = "noname";
+var gameIdInput: String;
+var curTeam: int = 0;
+var curCharacter: String = "";
+var curGameMode: String = "";
+var curGameId: String = "";
+var totalPlayers: int = 0;
+var timer: float = 0;
+var startRoundTimer: float = 0.0;
 
 var playersLockedIn = [];
 var selectedCharacters = [];
@@ -20,13 +24,12 @@ var connected = false;
 var gameStarted = false;
 var roundStarted = false;
 
-var DEBUG = true;
+var lobbyScene: Control = null;
+
+var DEBUG = false;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
-	
-	setupHostNorayConnection();
-	Cursor.changeCursor(Constants.CursorTypes.cursor);
 
 func _process(delta: float) -> void:
 	if not (connected):
@@ -44,10 +47,25 @@ func _process(delta: float) -> void:
 func _on_name_input(new_text: String) -> void:
 	username = new_text;
 
-func _on_host(_port = PORT, _username = username, _team = 0) -> void:
-	print("hosting")
+func _on_game_input_changed(new_text: String) -> void:
+	gameIdInput = new_text;
+
+func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> void:
+	if not (isLocal and DEBUG):
+		if not (norayNetwork):
+			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
+			add_child(norayNetwork);
+			
+			norayNetwork.isClient = false;
+			norayNetwork.setup(self);
+			norayNetwork.startNorayHost.connect(startNorayHost);
+		
+		await norayNetwork.createServerPeer(ADDRESS);
 	
-	await createServerPeer(ADDRESS);
+	if (not (norayNetwork) or norayNetwork.isHosting == false):
+		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		multiplayerPeer.create_server(_port);
+		multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	username = _username;
 	curTeam = int(_team);
@@ -66,31 +84,51 @@ func _on_host(_port = PORT, _username = username, _team = 0) -> void:
 			rpc("disconnectPlayer", playerID);
 	);
 	
+	if not (isLocal):
+		lobbyScene.hostMatch(ADDRESS, PORT, curGameId);
+	
 	updateUI("Server");
 
 func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip = ADDRESS, port = PORT, _username = "noname", _team = "1"):
+func _joinPressed(ip := ADDRESS, port := PORT, _gameId := curGameId, _username := "noname", _team := "1"):
 	username = _username;
 	curTeam = int(_team);
-	print("joining team: %s" % curTeam);
+	# print("joining team: %s" % curTeam);
+	# print("GAME ID: %s" % _gameId);
 	
-	multiplayerPeer.create_client(ip, port);
-	multiplayer.multiplayer_peer = multiplayerPeer;
+	if not (DEBUG):
+		if not (norayNetwork):
+			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
+			add_child(norayNetwork);
+			
+			norayNetwork.isClient = true;
+			norayNetwork.natConnection.connect(handleNatConnection);
+			norayNetwork.relayConnection.connect(handleRelayConnection);
+			norayNetwork.setup(self);
+		
+		norayNetwork.createClientPeer(ip, _gameId);
+	
+	"""
+	if not (norayNetwork):
+		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		multiplayerPeer.create_client(ip, port);
+		multiplayer.multiplayer_peer = multiplayerPeer;
+	"""
 	
 	updateUI("Client");
 
-func startHost(port, _username, _team):
+func startHost(port: int, _username: String, _team: String, _isLocal: bool):
 	print("HOSTING, port: %s", port);
-	_on_host(port, _username, _team);
+	_on_host(port, _username, _team, _isLocal);
 	
 	get_node("Lobby").visible = false;
 
-func startClient(ip, port, _username, _team):
-	print("client joining: %s, %s" % [ip, port]);
-	_joinPressed(ip, port, _username, _team);
+func startClient(ip: String, port: int, _gameId: String, _username: String, _team: String):
+	print("client joining: %s:%s, gameId: %s" % [ip, port, _gameId]);
+	_joinPressed(ip, port, _gameId, _username, _team);
 	
 	get_node("Lobby").visible = false;
 
@@ -157,7 +195,7 @@ func onFindMatch():
 		"rank": 1000
 	};
 	
-	var lobbyScene = preload("res://assets/scenes/lobby.tscn").instantiate();
+	lobbyScene = preload("res://assets/scenes/lobby.tscn").instantiate();
 	lobbyScene.fakeUser = fakeUser;
 	lobbyScene.returnToLobby.connect(returnToLobby);
 	lobbyScene.startHost.connect(startHost);
@@ -211,54 +249,69 @@ func _clearRoundData():
 	
 	$UI.visible = true;
 
-func _registerWithNoray(ip: String):
-	print("register with noray hosted at: %s" % ip);
-	var response = OK;
-	
-	response = await Noray.connect_to_host(ip, PORT);
-	if (response != OK):
-		print("[ERROR]: failed noray registration for: %s:%s" % [ip, PORT]);
-		return response;
-	
-	Noray.register_host();
-	await Noray.on_pid;
-	
-	response = await Noray.register_remote();
-	if (response != OK):
-		print("[ERROR]: failed to register remote %s" % response);
-		return response;
-	
-	print("finished noray registration");
-
-func createServerPeer(ip: String):
-	print("CREATING PEER SERVER WITH NORAY");
-	await _registerWithNoray(ip);
-	
-	startNorayHost();
-
 func startNorayHost():
-	print("STARTING NORAY HOST!!");
 	var response = OK;
 	
-	response = multiplayerPeer.create_server(Noray.local_port); #tp
+	response = multiplayerPeer.create_server(Noray.local_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	if (response != OK):
 		print("failed to start host: %s, %s" % [Noray.local_port, response]);
+	
+	norayNetwork.isHosting = true;
+	print("HOST SUCCESS!!!!!")
 
-func handleNorayClientConnect(address: String, port: int):
-	var peer = multiplayer.multiplayer_peer as ENetMultiplayerPeer;
-	var response = await PacketHandshake.over_enet(peer.host, address, port);
+func connectToNorayHost(address: String, port: int):
+	var udp = PacketPeerUDP.new();
+	udp.bind(Noray.local_port);
+	udp.set_dest_address(address, port);
+	
+	var response = await PacketHandshake.over_packet_peer(udp);
+	udp.close();
 	
 	if (response != OK):
-		print("[ERROR]: noray handshake failed: %s" % response);
+		print("client packet handshake failed: %s" % response);
 		return response;
 	
+	response = multiplayerPeer.create_client(address, port, 0, 0, 0, Noray.local_port);
+	
+	if (response != OK):
+		print("failed create client");
+		return response;
+	
+	multiplayer.multiplayer_peer = multiplayerPeer;
 	return OK;
 
-func setupHostNorayConnection():
-	Noray.on_connect_nat.connect(handleNorayClientConnect);
-	Noray.on_connect_relay.connect(handleNorayClientConnect);
+func handleNatConnection(address: String, port: int):
+	print("attempting nat connection %s:%s" % [address, port]);
+	
+	var response = await connectToNorayHost(address, port);
+	if (response != OK):
+		print("[ERROR]: NAT CONNECTION FAILED.")
+		return response;
+	
+	print("NAT CONNECTION SUCCESSFUL");
+	return response;
+
+func handleRelayConnection(address: String, port: int):
+	var response = await connectToNorayHost(address, port);
+	if (response != OK):
+		print("[ERROR]: RELAY CONNECTION FAILED.")
+		norayNetwork.useNatConnection(curGameId);
+		return response;
+		
+	print("CONNECTION SUCCESS!!!")
+	return response;
+
+func setupClientNorayConnection():
+	Noray.on_connect_nat.connect(handleNatConnection);
+	Noray.on_connect_relay.connect(handleRelayConnection);
+
+func setupClientEnetConnection():
+	multiplayer.server_disconnected.connect(_norrayServerDisconnected);
+
+func _norrayServerDisconnected():
+	print("well someone disconnected?");
 
 @rpc
 func addNewPlayerCharacter(newPlayerID):
@@ -283,8 +336,6 @@ func updateSelectedCharacter(playerId, character: String):
 	
 	if (has_node("CharSelect")):
 		charSelect = get_node("CharSelect");
-	
-	print("PLAYER ID: %s" % playerId);
 	
 	playerList[playerId].character = character;
 	selectedCharacters.insert(len(selectedCharacters), character);
