@@ -19,7 +19,7 @@ const ALT_W_COOLDOWN = 10.0;
 const E_COOLDOWN = 7.0;
 const ALT_E_COOLDOWN = 13.0;
 const R_COOLDOWN = 6.0;
-const Q_MAX_RANGE = 5.0;
+const Q_MAX_RANGE = 6.5;
 const ALT_Q_MAX_RANGE = 7.2;
 
 var primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
@@ -211,6 +211,9 @@ func _physics_process(delta: float) -> void:
 			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, effect);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
+			
+			var path = "res://assets/sounds/characters/shugo/shugo_basic_hit.ogg";
+			rpc("syncSound", path);
 		
 		if (usingPrimary == true and not humanForm):
 			if (moveTo == null or target):
@@ -466,9 +469,13 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 		moveTo.y = _global_pos.y;
 		qTimer = Q_COOLDOWN - cooldownReduction;
 		primaryTimer = 0.5;
-		speedOffset = 5;
+		speedOffset = 5.5;
 		onAction = true;
 		animPlayer.play("q_ability");
+		
+		var sound = preload("res://assets/sounds/characters/shugo/shugo_dash.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		syncRotation(moveTo);
 	else:
 		if (_moveTo == null):
@@ -482,7 +489,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 		var distance = _global_pos.distance_to(_moveTo);
 		if (distance < ALT_Q_MAX_RANGE):
 			if not (playingPrimarySound):
-				var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+				var sound = preload("res://assets/sounds/characters/shugo/shugo_dash.ogg");
 				PlayerFunc.playSound(self, sound);
 				
 				playingPrimarySound = true;
@@ -532,11 +539,18 @@ func tertiary_ability(_mousePos):
 		
 		# _spawn_e_geysers(_mousePos);
 		
+		var sound = preload("res://assets/sounds/characters/shugo/shugo_slash.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		simulateMove(null, global_position);
 		rpc("syncRotation", _mousePos);
 	else:
 		usingTertiary = true;
 		tertiaryTimer = 1.0;
+		
+		var sound = preload("res://assets/sounds/characters/shugo/shugo_spin.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		kirbyAnimPlayer.play("e_ability");
 
 @rpc("call_local", "reliable")
@@ -554,6 +568,9 @@ func ultimate_ability():
 	$e_spin_hitbox/MeshInstance3D/Area3D.monitoring = false;
 	$e_hitbox/MeshInstance3D/Area3D.monitoring = false;
 	usingTertiary = false;
+	
+	var sound = preload("res://assets/sounds/characters/shugo/shugo_transform.ogg");
+	PlayerFunc.playSound(self, sound, false);
 	
 	animPlayer.play("swap_form");
 	kirbyAnimPlayer.play("swap_form");
@@ -648,6 +665,11 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	hp = newHp;
 	dead = false;
 	visible = true;
+
+@rpc("call_local", "any_peer")
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
+	PlayerFunc.playSound(self, sound);
 
 @rpc("call_local")
 func showChatText(newText):
