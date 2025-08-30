@@ -257,8 +257,8 @@ func basicAttack():
 	basicTarget = target;
 
 func _onBasicTouched():
-	var sound = load("res://assets/sounds/characters/ramon/ramon_basic_hit.ogg");
-	rpc("syncSound", sound);
+	var path = "res://assets/sounds/characters/ramon/ramon_basic_hit.ogg";
+	rpc("syncSound", path);
 	
 	PlayerFunc.dealDamage(self, basicTarget, dmg * 0.4);
 
@@ -538,7 +538,8 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	visible = true;
 
 @rpc("call_local", "any_peer")
-func syncSound(sound):
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
 	PlayerFunc.playSound(self, sound);
 	
 @rpc("call_local")

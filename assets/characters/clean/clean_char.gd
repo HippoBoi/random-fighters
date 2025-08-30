@@ -274,9 +274,9 @@ func basicAttack():
 	rpc("showBasicAttack", target.global_position);
 
 func _onBasicTouched():
-	var sound = preload("res://assets/sounds/characters/clean/clean_basic_hit.ogg");
+	var path = "res://assets/sounds/characters/clean/clean_basic_hit.ogg";
 	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
-	rpc("syncSound", sound);
+	rpc("syncSound", path);
 
 @rpc("call_local")
 func showBasicAttack(_targetPos):
@@ -548,7 +548,8 @@ func onItemPurchase(item: Dictionary):
 	PlayerFunc.grantItemStats(self, item)
 
 @rpc("call_local", "any_peer")
-func syncSound(sound):
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
 	PlayerFunc.playSound(self, sound);
 
 func onCollision():

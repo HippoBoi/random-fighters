@@ -325,8 +325,8 @@ func basicAttack():
 	basicTarget = target;
 
 func _onBasicTouched():
-	var sound = load("res://assets/sounds/characters/mystery/mystery_basic_hit.ogg");
-	PlayerFunc.playSound(self, sound);
+	var path = "res://assets/sounds/characters/mystery/mystery_basic_hit.ogg";
+	rpc("syncSound", path);
 	
 	PlayerFunc.dealDamage(self, basicTarget, dmg);
 
@@ -515,7 +515,12 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	hp = newHp;
 	dead = false;
 	visible = true;
-	
+
+@rpc("call_local", "any_peer")
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
+	PlayerFunc.playSound(self, sound);
+
 @rpc("call_local")
 func showChatText(newText):
 	print("Mystery: ", newText);

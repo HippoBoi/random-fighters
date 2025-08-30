@@ -186,12 +186,13 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var sound = preload("res://assets/sounds/characters/nephi/nephi_basic_attack.ogg");
+			var path = "res://assets/sounds/characters/nephi/nephi_basic_attack.ogg";
 			basicDamageDealt = true;
 			PlayerFunc.dealDamage(self, target, dmg + basicDmgOffset, "hit_01");
-			PlayerFunc.playSound(target, sound);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
+			
+			rpc("syncSound", path);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -547,6 +548,11 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	hp = newHp;
 	dead = false;
 	visible = true;
+
+@rpc("call_local", "any_peer")
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
+	PlayerFunc.playSound(self, sound);
 
 @rpc("call_local")
 func showChatText(newText):

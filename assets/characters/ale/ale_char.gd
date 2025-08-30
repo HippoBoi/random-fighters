@@ -187,13 +187,13 @@ func _physics_process(delta: float) -> void:
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
 			var dmgMultiplier = min(1.0 + (stamina * 0.015), 1.85);
 			var totalDmg = dmg * dmgMultiplier;
-			var sound = preload("res://assets/sounds/characters/ale/ale_basic_hit.ogg");
+			var soundPath = "res://assets/sounds/characters/ale/ale_basic_hit.ogg";
 			basicDamageDealt = true;
 			
 			stamina -= BASIC_STAMINA;
 			rpc("syncStamina", stamina, true);
+			rpc("syncSound", soundPath); 
 			PlayerFunc.dealDamage(self, target, totalDmg, "hit_01");
-			PlayerFunc.playSound(self, sound);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -514,6 +514,11 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	hp = newHp;
 	dead = false;
 	visible = true;
+
+@rpc("call_local", "any_peer")
+func syncSound(soundPath: String):
+	var sound = load(soundPath);
+	PlayerFunc.playSound(self, sound);
 
 @rpc("call_local")
 func showChatText(newText):
