@@ -122,22 +122,6 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "..."
 
-[node name="gameInput" type="LineEdit" parent="UI/Menu"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -71.0
-offset_top = 66.0
-offset_right = 78.0
-offset_bottom = 97.0
-grow_horizontal = 2
-grow_vertical = 2
-placeholder_text = "..."
-
 [node name="nameInputText" type="RichTextLabel" parent="UI/Menu"]
 layout_mode = 1
 anchors_preset = 8
@@ -250,5 +234,3 @@ text = "Fighters"
 [connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host" binds= [8890, "unnamed", "0"]]
 [connection signal="pressed" from="UI/Menu/menuButtons/creditsButton" to="." method="_joinPressed"]
 [connection signal="text_changed" from="UI/Menu/nameInput" to="." method="_on_name_input"]
-[connection signal="text_changed" from="UI/Menu/gameInput" to="." method="_on_game_input_changed"]
-[connection signal="text_changed" from="UI/Menu/gameInput" to="." method="_on_name_input"]

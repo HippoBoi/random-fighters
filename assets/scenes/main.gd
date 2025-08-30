@@ -26,7 +26,7 @@ var roundStarted = false;
 
 var lobbyScene: Control = null;
 
-var DEBUG = false;
+var DEBUG = true;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
@@ -64,8 +64,7 @@ func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> 
 	
 	if (not (norayNetwork) or norayNetwork.isHosting == false):
 		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
-		multiplayerPeer.create_server(_port);
-		multiplayer.multiplayer_peer = multiplayerPeer;
+		_hostWithUPnP(_port);
 	
 	username = _username;
 	curTeam = int(_team);
@@ -90,6 +89,7 @@ func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> 
 	updateUI("Server");
 
 func _hostWithUPnP(_port):
+	print("host...")
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
@@ -111,12 +111,10 @@ func _joinPressed(ip := ADDRESS, port := PORT, _gameId := curGameId, _username :
 		
 		norayNetwork.createClientPeer(ip, _gameId);
 	
-	"""
 	if not (norayNetwork):
-		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		ip = LOCALHOST;
 		multiplayerPeer.create_client(ip, port);
 		multiplayer.multiplayer_peer = multiplayerPeer;
-	"""
 	
 	updateUI("Client");
 

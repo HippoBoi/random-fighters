@@ -106,7 +106,6 @@ func _onAreaEnter(other: Node3D):
 		return;
 		
 	if (playersOutOfZone.has(other)):
-		print("erased: %s" % other.CHARACTER_NAME);
 		playersOutOfZone.erase(other);
 
 func _onAreaExit(other: Node3D):
@@ -118,7 +117,6 @@ func _onAreaExit(other: Node3D):
 		print("ALREADY ADDED: %s" % other.CHARACTER_NAME);
 		return;
 	
-	print("added: %s" % other.CHARACTER_NAME);
 	playersOutOfZone.append(other);
 
 @rpc("call_local", "any_peer", "reliable")
