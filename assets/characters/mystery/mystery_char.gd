@@ -393,6 +393,7 @@ func secondary_ability(_mousePos, _usingStorm):
 @rpc("call_local", "reliable")
 func tertiary_ability(_target: CharacterBody3D):
 	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 4.0, E_COOLDOWN);
 	tertiaryTimer = 0.8;
 	usingTertiary = true;
 	onAction = true;

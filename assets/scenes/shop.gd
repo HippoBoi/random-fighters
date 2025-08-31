@@ -8,6 +8,8 @@ signal closeShop(shop);
 @onready var stat2 = $Shop/stat2;
 @onready var stat3 = $Shop/stat3;
 
+const SPRITE_VALUE = 24;
+
 var character: CharacterBody3D = null;
 var selectedItem = null;
 
@@ -26,6 +28,8 @@ func _setupShop():
 		
 		if (itemsIndex > 2):
 			itemsContainer = $Shop/ItemsContainer2;
+		if (itemsIndex > 5):
+			itemsContainer = $Shop/ItemsContainer3;
 		
 		newItem.name = item.name;
 		itemPrice.text = "$" + str(item.price);
@@ -135,3 +139,33 @@ func onItemBought(_character: CharacterBody3D):
 	newSound.finished.connect(func():
 		newSound.queue_free();
 	);
+	
+	_itemBuyAnim();
+
+func _isSprite(node):
+	if (node.name != "SwordIcon" and node.name != "ShieldIcon" and node.name != "SwordIcon2" and node.name != "ShieldIcon2"):
+		return false;
+	
+	return true;
+
+func _itemBuyAnim():
+	var itemsOutline = $Shop/ItemsOutline;
+	var defOutlineColor = itemsOutline.color;
+	
+	# setup
+	for child in $Shop.get_children():
+		var randRotation = randf_range(-0.5, -0.05);
+		
+		if (_isSprite(child)):
+			randRotation = randf_range(0.1, 10.1);
+		
+		child.rotation = randRotation;
+	
+	itemsOutline.color = Color(1, 1, 0);
+	
+	# tweening
+	var tween = get_tree().create_tween().set_parallel(true).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
+	for child in $Shop.get_children():
+		tween.tween_property(child, "rotation", 0, 0.5);
+	
+	tween.tween_property(itemsOutline, "color", defOutlineColor, 1.5);

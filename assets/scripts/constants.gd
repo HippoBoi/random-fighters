@@ -16,7 +16,7 @@ enum GameModes {
 
 const items = [
 	{
-		"name": "Broken Bow",
+		"name": "Cool Bow",
 		"price": 15,
 		"stats": {
 			"dmg": 2,
@@ -31,23 +31,49 @@ const items = [
 			"dmg": 4,
 		},
 		"texture": "res://assets/textures/items/heaven_sword.png"
-	},{
-		"name": "Heaven Shield",
+	},
+	{
+		"name": "Epic Rod",
 		"price": 15,
 		"stats": {
-			"hp": 25,
-			"armor": 10
+			"dmg": 2,
+			"cooldownReduction": 1.25,
+		},
+		"texture": "res://assets/textures/items/rod.png"
+	},
+	{
+		"name": "Heaven Shield",
+		"price": 0,
+		"stats": {
+			"hp": 20,
+			"armor": 15
 		},
 		"texture": "res://assets/textures/items/heaven_shield.png"
 	},
 	{
-		"name": "Epic Rod",
+		"name": "Life Shield",
+		"price": 0,
+		"stats": {
+			"hp": 50
+		},
+		"texture": "res://assets/textures/items/life_shield.png"
+	},
+	{
+		"name": "Speed Boots",
+		"price": 0,
+		"stats": {
+			"speed": 1,
+		},
+		"texture": "res://assets/textures/items/boots.png"
+	},
+	{
+		"name": "Sword Shield",
 		"price": 25,
 		"stats": {
-			"dmg": 3,
-			"cooldownReduction": 2.0,
+			"dmg": 6,
+			"armor": 15,
 		},
-		"texture": "res://assets/textures/items/placeholder.png"
+		"texture": "res://assets/textures/items/sword_shield.png"
 	},
 	{
 		"name": "Divino",

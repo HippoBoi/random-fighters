@@ -1,8 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bmg8t7dg4xk3d"]
+[gd_scene load_steps=14 format=3 uid="uid://bmg8t7dg4xk3d"]
 
 [ext_resource type="Script" uid="uid://d172rxc2oke1c" path="res://assets/scenes/shop.gd" id="1_8mshb"]
 [ext_resource type="Texture2D" uid="uid://bmsln1pifbvs6" path="res://assets/textures/fx/hit_02_effect.jpg" id="2_lhdqg"]
+[ext_resource type="Texture2D" uid="uid://cmggtt645ngqc" path="res://assets/sprites/sword_shadow.png" id="3_lhdqg"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="3_yqcb6"]
+[ext_resource type="Texture2D" uid="uid://tmd1vr78712h" path="res://assets/sprites/shield_shadow.png" id="4_yqcb6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_et1oa"]
 
@@ -56,7 +58,7 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -281.0
+offset_left = -319.0
 offset_top = -170.0
 offset_bottom = 149.0
 grow_horizontal = 0
@@ -73,9 +75,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -279.0
+offset_left = -318.0
 offset_top = -169.0
-offset_right = -2.0
+offset_right = -3.0
 offset_bottom = 148.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -89,9 +91,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -261.0
-offset_top = -136.5
-offset_right = -17.0
+offset_left = -300.0
+offset_top = -132.5
+offset_right = -16.0
 offset_bottom = 51.5
 grow_horizontal = 0
 grow_vertical = 2
@@ -105,10 +107,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -132.5
-offset_right = -18.0
-offset_bottom = 49.5
+offset_left = -299.0
+offset_top = -130.5
+offset_right = -17.0
+offset_bottom = 50.5
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
@@ -120,9 +122,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 49.0
+offset_left = 29.0
 offset_top = 34.0
-offset_right = -156.0
+offset_right = -211.0
 offset_bottom = -119.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -178,9 +180,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 160.0
+offset_left = 120.0
 offset_top = 34.0
-offset_right = -45.0
+offset_right = -120.0
 offset_bottom = -119.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -230,6 +232,64 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="ItemsContainer3" type="BoxContainer" parent="Shop"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 211.0
+offset_top = 34.0
+offset_right = -29.0
+offset_bottom = -119.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+vertical = true
+
+[node name="itemTemplate" type="Button" parent="Shop/ItemsContainer3"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_et1oa")
+button_mask = 3
+
+[node name="TextureRect" type="TextureRect" parent="Shop/ItemsContainer3/itemTemplate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_lhdqg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer3/itemTemplate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -24.0
+offset_right = 19.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0.529067, 0.529067, 0.529067, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 2
+text = "$320"
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="BuyItem" type="Button" parent="Shop"]
 z_index = 1
 layout_mode = 1
@@ -238,9 +298,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 42.5
+offset_left = 45.5
 offset_top = -35.0
-offset_right = 118.5
+offset_right = 139.5
 offset_bottom = -13.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -250,7 +310,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_1gwi2")
 text = "Buy"
 
 [node name="CloseShop" type="Button" parent="Shop"]
-z_index = 1
+z_index = 2
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -289,12 +349,12 @@ vertical_alignment = 1
 [node name="stat1" type="RichTextLabel" parent="Shop"]
 visible = false
 layout_mode = 0
-offset_left = 89.0
+offset_left = 117.0
 offset_top = 216.0
-offset_right = 136.0
+offset_right = 164.0
 offset_bottom = 240.0
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 13
 text = "stat:"
 fit_content = true
 scroll_active = false
@@ -303,12 +363,12 @@ autowrap_mode = 0
 [node name="stat2" type="RichTextLabel" parent="Shop"]
 visible = false
 layout_mode = 0
-offset_left = 89.0
+offset_left = 117.0
 offset_top = 240.0
-offset_right = 136.0
+offset_right = 164.0
 offset_bottom = 264.0
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 13
 text = "stat:"
 fit_content = true
 scroll_active = false
@@ -317,12 +377,12 @@ autowrap_mode = 0
 [node name="stat3" type="RichTextLabel" parent="Shop"]
 visible = false
 layout_mode = 0
-offset_left = 89.0
+offset_left = 117.0
 offset_top = 264.0
-offset_right = 136.0
+offset_right = 164.0
 offset_bottom = 288.0
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 13
 text = "stat:"
 fit_content = true
 scroll_active = false
@@ -332,9 +392,9 @@ autowrap_mode = 0
 visible = false
 modulate = Color(0.8, 0.749, 0.974, 1)
 layout_mode = 0
-offset_left = 10.0
+offset_left = 29.0
 offset_top = 272.0
-offset_right = 88.0
+offset_right = 107.0
 offset_bottom = 296.0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 14
@@ -361,6 +421,38 @@ texture = ExtResource("2_lhdqg")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="SwordIcon" type="Sprite2D" parent="Shop"]
+modulate = Color(1, 1, 1, 0.575)
+z_index = 2
+texture_filter = 1
+position = Vector2(69, 23.5)
+scale = Vector2(0.875, 0.84375)
+texture = ExtResource("3_lhdqg")
+
+[node name="ShieldIcon" type="Sprite2D" parent="Shop"]
+modulate = Color(1, 1, 1, 0.575)
+z_index = 2
+texture_filter = 1
+position = Vector2(157, 23.5)
+scale = Vector2(0.875, 0.84375)
+texture = ExtResource("4_yqcb6")
+
+[node name="SwordIcon2" type="Sprite2D" parent="Shop"]
+modulate = Color(1, 1, 1, 0.575)
+z_index = 2
+texture_filter = 1
+position = Vector2(245, 20.5)
+scale = Vector2(0.75, 0.78125)
+texture = ExtResource("3_lhdqg")
+
+[node name="ShieldIcon2" type="Sprite2D" parent="Shop"]
+modulate = Color(1, 1, 1, 0.575)
+z_index = 2
+texture_filter = 1
+position = Vector2(252, 25)
+scale = Vector2(0.8125, 0.8125)
+texture = ExtResource("4_yqcb6")
+
 [node name="Outline" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_7xejk")
 layout_mode = 1
@@ -369,7 +461,7 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -279.0
+offset_left = -317.0
 offset_top = -169.0
 offset_right = -2.0
 offset_bottom = 148.0

@@ -229,12 +229,10 @@ func _physics_process(delta: float) -> void:
 		baseArmor = 24;
 		baseAttackRange = 3.0;
 		attackSpeedOffset = 0.0;
-		baseSpeed = 5.0;
 	else:
 		baseArmor = 13;
 		baseAttackRange = 2.25;
 		attackSpeedOffset = 2.5;
-		baseSpeed = 6.0;
 	
 	if (usingPrimary == true):
 		primaryTimer -= delta;

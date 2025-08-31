@@ -287,6 +287,7 @@ func primary_ability():
 	dmgOffset = baseDmg * 1.2;
 	basicAttackTimer = 0;
 	qTimer = Q_COOLDOWN - cooldownReduction;
+	qTimer = clamp(qTimer, 2.0, Q_COOLDOWN);
 	
 	$q_particles.emitting = true;
 	$q_ground_particles.emitting = true;
@@ -333,7 +334,8 @@ func _setup_tertiary():
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
 	dmgOffset = 0;
-	eTimer = E_COOLDOWN;
+	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
 	tertiaryTimer = 0.7;
 	target = null;
 	usingTertiary = true;
@@ -374,7 +376,7 @@ func ultimate_ability(_moveTo, _global_pos):
 			playingUltiSound = true;
 			ultiTimer = 0.5;
 		
-		rTimer = R_COOLDOWN - cooldownReduction;
+		rTimer = R_COOLDOWN;
 		speedOffset = 15;
 		onAction = true;
 		
