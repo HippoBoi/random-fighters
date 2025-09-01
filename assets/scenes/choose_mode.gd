@@ -6,7 +6,7 @@ var playerId: int;
 var alreadySelected = [];
 var selectedGameMode = "Unknown";
 var selectedMode = false;
-var forceMode = "arena";
+var forceMode = "trainwreck";
 
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
@@ -73,6 +73,8 @@ func _getModeImage(gamemode: String):
 		image = preload("res://assets/textures/Kris_Overworld_b.webp").duplicate();
 	elif (gamemode.to_lower() == "arena"):
 		image = preload("res://assets/mapAssets/arena/fancy-scaled-gold_roughness.png").duplicate();
+	elif (gamemode.to_lower() == "trainwreck"):
+		image = preload("res://assets/textures/HQ_Noise_LowEndClamp.jpg").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();

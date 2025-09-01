@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://sfeg3mnlkab1"]
+
+[ext_resource type="PackedScene" uid="uid://dixacmg3m1boa" path="res://assets/mapAssets/trainwreck/trainwreck_map.tscn" id="1_4eq4x"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4eq4x"]
+size = Vector3(31.4847, 0.260262, 52.8477)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_05qc5"]
+
+[sub_resource type="Sky" id="Sky_4uk01"]
+sky_material = SubResource("ProceduralSkyMaterial_05qc5")
+
+[sub_resource type="Environment" id="Environment_ogm2e"]
+background_mode = 2
+sky = SubResource("Sky_4uk01")
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 1.17
+glow_strength = 1.36
+glow_bloom = 0.05
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_72eyd"]
+
+[node name="Trainwreck" type="Node3D"]
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -23.0909, 0.591753, -0.0551582)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.42109e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 21.5455, 0.591752, -0.0339884)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.677868, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, -2.76004e-22, 0, -2.76004e-22, 1, 0, 0, 0, 1, 0.00231105, -0.356785, 0.978723)
+shape = SubResource("BoxShape3D_4eq4x")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-1, -1.42031e-08, 8.62613e-08, 8.74228e-08, -0.162465, 0.986714, 0, 0.986714, 0.162465, 1.73113, 15.9331, -19.1028)
+light_color = Color(0.972598, 0.80168, 0.726624, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ogm2e")
+camera_attributes = SubResource("CameraAttributesPractical_72eyd")
+
+[node name="trainwreck" parent="." instance=ExtResource("1_4eq4x")]

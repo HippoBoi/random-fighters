@@ -150,7 +150,7 @@ func _isSprite(node):
 
 func _itemBuyAnim():
 	var itemsOutline = $Shop/ItemsOutline;
-	var defOutlineColor = itemsOutline.color;
+	var defOutlineColor = Color(0.475, 0.56, 0.828);
 	
 	# setup
 	for child in $Shop.get_children():

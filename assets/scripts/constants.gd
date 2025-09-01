@@ -11,7 +11,8 @@ enum GameModes {
 	Hippo_Capture,
 	Doom_Bot,
 	Snowmen,
-	Arena
+	Arena,
+	Trainwreck
 }
 
 const items = [
@@ -43,7 +44,7 @@ const items = [
 	},
 	{
 		"name": "Heaven Shield",
-		"price": 0,
+		"price": 15,
 		"stats": {
 			"hp": 20,
 			"armor": 15
@@ -52,7 +53,7 @@ const items = [
 	},
 	{
 		"name": "Life Shield",
-		"price": 0,
+		"price": 15,
 		"stats": {
 			"hp": 50
 		},
@@ -60,7 +61,7 @@ const items = [
 	},
 	{
 		"name": "Speed Boots",
-		"price": 0,
+		"price": 15,
 		"stats": {
 			"speed": 1,
 		},

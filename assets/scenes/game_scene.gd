@@ -28,7 +28,7 @@ func _ready() -> void:
 	
 	spawnPlayers();
 	
-func _process(_delta: float) -> void:	
+func _process(_delta: float) -> void:
 	if (Input.is_action_pressed("tab")):
 		$InGameUI/playerList.visible = true;
 	else:
@@ -66,6 +66,10 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "arena"):
 		newMap = preload("res://assets/maps/arena.tscn").instantiate();
 		minimapCamera.size = 75.0;
+	
+	elif (gameMode.to_lower() == "trainwreck"):
+		newMap = preload("res://assets/maps/trainwreck.tscn").instantiate();
+		minimapCamera.size = 45.0;
 	
 	$Map.add_child(newMap);
 	
@@ -153,6 +157,8 @@ func _getModeDescription(gameMode: String):
 		description = "Destroy enemy snowman!"
 	elif (gameMode.to_lower() == "arena"):
 		description = "Stay in the area!"
+	elif (gameMode.to_lower() == "trainwreck"):
+		description = "Look both ways...!"
 	
 	return description;
 

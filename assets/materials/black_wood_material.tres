@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://pknmo2sjtmd"]
+
+[ext_resource type="Texture2D" uid="uid://cavk771nh6e7g" path="res://assets/mapAssets/trainwreck/trainwreck_bark_willow_compressed.png" id="1_nwqja"]
+
+[resource]
+albedo_color = Color(0.324415, 0.152183, 0, 1)
+albedo_texture = ExtResource("1_nwqja")
