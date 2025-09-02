@@ -46,7 +46,7 @@ shape = SubResource("BoxShape3D_4eq4x")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-1, -1.42031e-08, 8.62613e-08, 8.74228e-08, -0.162465, 0.986714, 0, 0.986714, 0.162465, 1.73113, 15.9331, -19.1028)
-light_color = Color(0.972598, 0.80168, 0.726624, 1)
+light_color = Color(0.916259, 0.689631, 0.554878, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ogm2e")

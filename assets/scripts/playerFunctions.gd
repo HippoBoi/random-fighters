@@ -9,6 +9,7 @@ var gameUI;
 
 var gameStarted = false;
 var freeCam = false;
+var WASDControls = true;
 var keepBasicAttacking = false;
 var shopOpen = false;
 
@@ -339,8 +340,27 @@ func updateState(character: CharacterBody3D, delta):
 		if (Input.is_action_just_released("space")):
 			freeCam = true;
 		
-		if (Input.is_action_just_pressed("autoBasic")):
+		if (Input.is_action_just_pressed("autoBasic") and WASDControls == false):
 			_autoBasic(character);
+		
+		if (WASDControls and Input.is_anything_pressed()):
+			var newPos = character.global_position;
+			if (Input.is_action_pressed("W")):
+				newPos += Vector3(-0.1, 0, -0.1);
+				
+			if (Input.is_action_pressed("A")):
+				newPos += Vector3(-0.1, 0, 0.1);
+				
+			if (Input.is_action_pressed("S")):
+				newPos += Vector3(0.1, 0, 0.1);
+				
+			if (Input.is_action_pressed("D")):
+				newPos += Vector3(0.1, 0, -0.1);
+			
+			character.simulateMove(newPos);
+			
+			if (Engine.get_physics_frames() % 2 == 0):
+				character.rpc("simulateMove", newPos);
 	
 		var mousePos = character.mousePos;
 		if not (mousePos.is_empty()):
@@ -687,6 +707,9 @@ func onRightClick(character: CharacterBody3D):
 		else:
 			character.bufferedTarget = character.hovering;
 			character.rpc("syncBufferedInputs", null, character.bufferedTarget);
+		return;
+	
+	if (WASDControls):
 		return;
 	
 	var particles = preload("res://assets/particles/click_particles.tscn").instantiate();
