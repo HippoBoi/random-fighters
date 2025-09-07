@@ -1,30 +1,30 @@
-[gd_resource type="VisualShader" load_steps=12 format=3 uid="uid://b3bst2u6gaxie"]
+[gd_resource type="VisualShader" load_steps=12 format=3 uid="uid://bso2jl7qoimjc"]
 
-[ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="1_8pcty"]
+[ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="1_qek2g"]
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_tjp2c"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_eunba"]
 expanded_output_ports = [0]
-texture = ExtResource("1_8pcty")
+texture = ExtResource("1_qek2g")
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_mkt5q"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_26jym"]
 default_input_values = [1, Vector2(2, 2), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_so6dy"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_wvtt5"]
 input_name = "time"
 
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_r4b4k"]
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_5yxtp"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0.685)]
 op_type = 0
 operator = 2
 
-[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_tqdjk"]
+[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_1fdbi"]
 default_input_values = [0, 0.0, 1, 0.05, 2, 0.5]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eumkc"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_vo7er"]
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_gemwf"]
+[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_dplxa"]
 default_input_values = [1, 1.0, 2, 2.0, 3, 0.0, 4, 0.5]
 
 [sub_resource type="Gradient" id="Gradient_4cw0f"]
@@ -35,7 +35,7 @@ colors = PackedColorArray(0.999765, 0.105144, 0.200457, 1, 0.97675, 0.283615, 0.
 gradient = SubResource("Gradient_4cw0f")
 use_hdr = true
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mf1dl"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_8ycb5"]
 texture = SubResource("GradientTexture1D_65kta")
 
 [resource]
@@ -100,24 +100,24 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-577.484, 64.7284)
+graph_offset = Vector2(-146.765, -76.7108)
 modes/cull = 2
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1120, 120)
-nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_tjp2c")
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_eunba")
 nodes/fragment/2/position = Vector2(-100, 320)
-nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_mkt5q")
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_26jym")
 nodes/fragment/3/position = Vector2(-380, 300)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_so6dy")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_wvtt5")
 nodes/fragment/4/position = Vector2(-880, 240)
-nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_r4b4k")
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_5yxtp")
 nodes/fragment/5/position = Vector2(-600, 380)
-nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_tqdjk")
+nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_1fdbi")
 nodes/fragment/6/position = Vector2(400, 380)
-nodes/fragment/7/node = SubResource("VisualShaderNodeInput_eumkc")
+nodes/fragment/7/node = SubResource("VisualShaderNodeInput_vo7er")
 nodes/fragment/7/position = Vector2(-220, 40)
-nodes/fragment/8/node = SubResource("VisualShaderNodeRemap_gemwf")
+nodes/fragment/8/node = SubResource("VisualShaderNodeRemap_dplxa")
 nodes/fragment/8/position = Vector2(160, 120)
-nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_mf1dl")
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_8ycb5")
 nodes/fragment/9/position = Vector2(660, 40)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 5, 0, 5, 0, 3, 2, 2, 1, 6, 2, 7, 0, 8, 0, 8, 0, 6, 0, 6, 0, 9, 0, 6, 0, 0, 1, 9, 0, 0, 0)

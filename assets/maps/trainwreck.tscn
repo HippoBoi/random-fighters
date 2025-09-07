@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://sfeg3mnlkab1"]
+[gd_scene load_steps=11 format=3 uid="uid://sfeg3mnlkab1"]
 
 [ext_resource type="PackedScene" uid="uid://dixacmg3m1boa" path="res://assets/mapAssets/trainwreck/trainwreck_map.tscn" id="1_4eq4x"]
 [ext_resource type="Script" uid="uid://br4jihcat15tu" path="res://assets/maps/trainwreck.gd" id="1_05qc5"]
@@ -27,6 +27,12 @@ fog_density = 0.025
 
 [sub_resource type="BoxMesh" id="BoxMesh_05qc5"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_72eyd"]
+resource_local_to_scene = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ogm2e"]
+resource_local_to_scene = true
+
 [node name="Trainwreck" type="Node3D"]
 script = ExtResource("1_05qc5")
 
@@ -34,10 +40,10 @@ script = ExtResource("1_05qc5")
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
 
 [node name="whiteTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -23.0909, 0.591753, -0.0551582)
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -2.30926e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, -15.0909, 0.591753, -0.0551581)
 
 [node name="blackTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.42109e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 21.5455, 0.591752, -0.0339884)
+transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.59872e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 14.5455, 0.591752, -0.0339885)
 
 [node name="floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.53674e-07, 0.677868, -0.978203)
@@ -61,31 +67,46 @@ camera_attributes = SubResource("CameraAttributesPractical_72eyd")
 [node name="trainPositions" type="Node3D" parent="."]
 
 [node name="1" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -63.9008, -0.791977, 0)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
 
 [node name="2" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, 8.58939)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -63.9008, -0.791977, 8.58939)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
 
 [node name="3" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, -9.45095)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -63.9008, -0.791977, -9.45095)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
 
 [node name="4" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, -0.574371)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64.0992, -0.791977, -0.574371)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
 
 [node name="5" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, -9.16376)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64.0992, -0.791977, -9.16376)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
 
 [node name="6" type="MeshInstance3D" parent="trainPositions"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, 8.87658)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64.0992, -0.791977, 8.87658)
 mesh = SubResource("BoxMesh_05qc5")
 skeleton = NodePath("../..")
+
+[node name="warningPos2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.51006e-07, 0, 27.4505, 0, 0.3, 0, -3.45462, 0, -1.1999e-06, 0, 0, 8.62649)
+visible = false
+mesh = SubResource("BoxMesh_72eyd")
+
+[node name="warningPos1" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.51006e-07, 0, 27.4505, 0, 0.3, 0, -3.45462, 0, -1.1999e-06, 0, 0, -0.0865583)
+visible = false
+mesh = SubResource("BoxMesh_ogm2e")
+
+[node name="warningPos3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1.51006e-07, 0, 27.4505, 0, 0.3, 0, -3.45462, 0, -1.1999e-06, 0, 0, -9.60224)
+visible = false
+mesh = SubResource("BoxMesh_72eyd")

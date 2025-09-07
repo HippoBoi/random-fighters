@@ -79,6 +79,10 @@ func _getMapMargins(_gameMode: String) -> Array:
 		xMargins = [-11, 20];
 		zMargins = [-48, 60];
 	
+	if (gameMode.to_lower() == "trainwreck"):
+		xMargins = [-13, 16];
+		zMargins = [-28, 29];
+	
 	return [xMargins, zMargins];
 
 func _cameraMovement(character: CharacterBody3D, delta):

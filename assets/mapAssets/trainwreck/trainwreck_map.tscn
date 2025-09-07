@@ -716,6 +716,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16.878)
 mesh = SubResource("ArrayMesh_ay121")
 skeleton = NodePath("")
 
+[node name="woodenThing2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6127, -0.284915, 19.878)
+mesh = SubResource("ArrayMesh_ay121")
+skeleton = NodePath("")
+
+[node name="woodenThing3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.2067, -0.284915, -21.3821)
+mesh = SubResource("ArrayMesh_ay121")
+skeleton = NodePath("")
+
 [node name="woodenThing_001" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1, -3.01992e-07, 0, 3.01992e-07, -1, 0, 0, 0, 1, 0.460951, 1.6144, 16.878)
 mesh = SubResource("ArrayMesh_j555p")
