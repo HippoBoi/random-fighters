@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=26 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
 [ext_resource type="Script" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
@@ -65,6 +65,21 @@ shader_parameter/line_thickness = 0.03
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tkgy1"]
 viewport_path = NodePath("MinimapUI/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eny81"]
+shader = ExtResource("4_4y838")
+shader_parameter/initial_color = Color(0.273795, 0.276934, 0.357369, 0)
+shader_parameter/final_color = Color(0.255, 0.298, 0.402, 0.701)
+shader_parameter/vertical = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7678e"]
+shader = ExtResource("11_o0ehx")
+shader_parameter/color = Color(0.223529, 0.243137, 0.27451, 0.309804)
+shader_parameter/direction = 1.0
+shader_parameter/frequency = 2.0
+shader_parameter/speed = 3.0
+shader_parameter/radius = 1.0
+shader_parameter/line_thickness = 0.03
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_5eccb")
@@ -953,6 +968,143 @@ grow_vertical = 2
 rotation = -0.785398
 texture = ExtResource("7_5t5vp")
 expand_mode = 1
+
+[node name="OptionsUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 58.0
+offset_top = 16.0
+offset_right = -48.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="bottomRect" type="ColorRect" parent="OptionsUI"]
+light_mask = 0
+z_index = 3
+z_as_relative = false
+y_sort_enabled = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0798956, 0.105834, 0.141231, 1)
+
+[node name="bgColor1" type="ColorRect" parent="OptionsUI"]
+light_mask = 0
+z_index = 5
+z_as_relative = false
+y_sort_enabled = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.058
+anchor_top = 0.211
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.027998
+offset_top = -4.52
+offset_right = -30.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.178, 0.221, 0.298, 0.575)
+
+[node name="bgColor2" type="ColorRect" parent="OptionsUI"]
+light_mask = 0
+z_index = 5
+z_as_relative = false
+y_sort_enabled = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.058
+anchor_top = 0.211
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.027998
+offset_top = -4.52
+offset_right = -30.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.178, 0.221, 0.298, 0.575)
+
+[node name="rectLine" type="ColorRect" parent="OptionsUI"]
+light_mask = 0
+z_index = 4
+z_as_relative = false
+material = SubResource("ShaderMaterial_eny81")
+offset_left = -165.0
+offset_top = 169.0
+offset_right = 613.0
+offset_bottom = 208.0
+rotation = -0.349066
+mouse_filter = 2
+color = Color(0.224, 0.243, 0.275, 0.31)
+
+[node name="outline" type="ColorRect" parent="OptionsUI"]
+light_mask = 0
+z_index = 3
+z_as_relative = false
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_7678e")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="OptionsUI"]
+z_index = 3
+layout_mode = 0
+offset_left = 19.0
+offset_top = 12.0
+offset_right = 163.0
+offset_bottom = 63.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/bold_font_size = 30
+bbcode_enabled = true
+text = "[b]OPTIONS[b]"
+fit_content = true
+
+[node name="Options" type="Control" parent="OptionsUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 31.0
+offset_top = 63.0
+offset_right = -30.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="wasdOptiion" type="RichTextLabel" parent="OptionsUI/Options"]
+z_index = 5
+layout_mode = 2
+offset_left = 49.0
+offset_top = 15.0
+offset_right = 273.0
+offset_bottom = 51.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+text = "Use WASD movement"
+fit_content = true
 
 [node name="MainCamera" type="Camera3D" parent="."]
 transform = Transform3D(0.707107, -0.586907, 0.394385, 0, 0.557745, 0.830012, -0.707107, -0.586907, 0.394385, 4.84099, 9.07359, 3.88934)
