@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq517vg5igk2p"]
+
+[ext_resource type="PackedScene" uid="uid://c2c85pgltabm" path="res://assets/npcs/big_train/train_big.glb" id="1_8npi4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8npi4"]
+size = Vector3(5.36041, 5.06067, 39.8493)
+
+[node name="train_big" instance=ExtResource("1_8npi4")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.176361, 3.5058, 0.00566101)
+shape = SubResource("BoxShape3D_8npi4")

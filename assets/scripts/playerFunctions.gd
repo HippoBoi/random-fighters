@@ -9,9 +9,10 @@ var gameUI;
 
 var gameStarted = false;
 var freeCam = false;
-var WASDControls = true;
+var wasdMovement = false;
 var keepBasicAttacking = false;
 var shopOpen = false;
+var optionsOpen = false;
 
 var activeBasicArea: MeshInstance3D = null;
 var lastHpValue = 0;
@@ -26,9 +27,22 @@ var whiteTeamSize = 0;
 
 var updateTimer = 0;
 
+var musicVolume = 1.0;
+var soundsVolume = 1.0;
+
 var myFogInstances = [];
 var maxHpStored = {};
 var tokensStored = {};
+
+var userPreferences: UserPreferences;
+
+func _ready() -> void:
+	userPreferences = UserPreferences.loadOrCreate();
+	
+	if (userPreferences):
+		musicVolume = userPreferences.musicVolume;
+		soundsVolume = userPreferences.soundsVolume;
+		wasdMovement = userPreferences.wasdMovement;
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -340,10 +354,10 @@ func updateState(character: CharacterBody3D, delta):
 		if (Input.is_action_just_released("space")):
 			freeCam = true;
 		
-		if (Input.is_action_just_pressed("autoBasic") and WASDControls == false):
+		if (Input.is_action_just_pressed("autoBasic") and wasdMovement == false):
 			_autoBasic(character);
 		
-		if (WASDControls and Input.is_anything_pressed()):
+		if (wasdMovement and Input.is_anything_pressed()):
 			var newPos = character.global_position;
 			if (Input.is_action_pressed("W")):
 				newPos += Vector3(-0.1, 0, -0.1);
@@ -709,7 +723,7 @@ func onRightClick(character: CharacterBody3D):
 			character.rpc("syncBufferedInputs", null, character.bufferedTarget);
 		return;
 	
-	if (WASDControls):
+	if (wasdMovement):
 		return;
 	
 	var particles = preload("res://assets/particles/click_particles.tscn").instantiate();
@@ -888,6 +902,20 @@ func shopToggle(character: CharacterBody3D, forceClose = false):
 			character.get_node("ShopUI").queue_free();
 			
 		shopOpen = false;
+
+func optionsToggle():
+	if not (myCharacter):
+		return;
+	
+	var scene = myCharacter.get_parent();
+	var optionsUI = scene.get_node("OptionsUI");
+	
+	if (shopOpen):
+		optionsUI.visible = false;
+		return;
+	
+	optionsOpen = !optionsOpen;
+	optionsUI.visible = optionsOpen;
 
 func grantItemStats(character: CharacterBody3D, item: Dictionary):
 	if (item.stats.has("hp")):

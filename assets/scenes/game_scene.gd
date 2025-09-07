@@ -13,6 +13,8 @@ var whiteTeamWins = 0;
 var pointsToWin = 3;
 var teamThatHasWon = -1;
 
+var userPreferences: UserPreferences;
+
 var gameOver = false;
 var DEBUG = false;
 
@@ -26,6 +28,11 @@ func _ready() -> void:
 	if (currentGameMode.is_empty()):
 		_selectGameMode();
 	
+	userPreferences = UserPreferences.loadOrCreate();
+	$OptionsUI/Options/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
+	$OptionsUI/Options/music/musicSlider.value = userPreferences.musicVolume;
+	$OptionsUI/Options/sounds/soundsSlider.value = userPreferences.soundsVolume;
+	
 	spawnPlayers();
 	
 func _process(_delta: float) -> void:
@@ -33,6 +40,9 @@ func _process(_delta: float) -> void:
 		$InGameUI/playerList.visible = true;
 	else:
 		$InGameUI/playerList.visible = false;
+	
+	if (Input.is_action_just_pressed("closeMenu")):
+		PlayerFunc.optionsToggle();
 
 func startGameMode(gameMode: String):
 	var newMap = null;
@@ -346,3 +356,24 @@ func _endGameScreen(_teamThatHasWon):
 
 func _on_shop_button_pressed() -> void:
 	PlayerFunc.shopToggle(myCharacter);
+
+func _on_exit_pressed() -> void:
+	PlayerFunc.optionsToggle();
+
+func _on_save_and_exit_pressed() -> void:
+	PlayerFunc.optionsToggle();
+	
+	if (userPreferences):
+		userPreferences.save();
+
+func _on_check_box_toggled(toggled_on: bool) -> void:
+	if (userPreferences):
+		userPreferences.wasdMovement = toggled_on;
+
+func _on_music_slider_value_changed(value: float) -> void:
+	if (userPreferences):
+		userPreferences.musicVolume = value;
+		
+func _on_sounds_slider_value_changed(value: float) -> void:
+	if (userPreferences):
+		userPreferences.soundsVolume = value;
