@@ -1,10 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://2r6qeaxpu1ue"]
+[gd_scene load_steps=7 format=3 uid="uid://2r6qeaxpu1ue"]
 
 [ext_resource type="PackedScene" uid="uid://cdeal5meit7fr" path="res://assets/npcs/small_train/mr_train.glb" id="1_4frhs"]
 [ext_resource type="Script" uid="uid://cc8lwbu7ahipu" path="res://assets/npcs/small_train/train_script.gd" id="2_6ocyf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4frhs"]
 size = Vector3(2.0509, 1.96097, 6.0022)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ocyf"]
+transparency = 1
+albedo_color = Color(1, 0.207843, 0.298039, 0.258824)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p0e5g"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dfqwq"]
 
 [node name="mr_train" instance=ExtResource("1_4frhs")]
 script = ExtResource("2_6ocyf")
@@ -13,3 +21,19 @@ script = ExtResource("2_6ocyf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.585464, -0.795776)
 shape = SubResource("BoxShape3D_4frhs")
 disabled = true
+
+[node name="hitbox" type="Node3D" parent="." index="8"]
+transform = Transform3D(0.349929, 0, 0, 0, 0.4536, 0, 0, 0, 0.317725, -0.119436, 0.875078, 0.232958)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="hitbox" index="0"]
+transform = Transform3D(7.448, 0, 0, 0, 5.28, 0, 0, 0, 14.551, 0.461248, 0, -2.8553)
+visible = false
+material_override = SubResource("StandardMaterial3D_6ocyf")
+mesh = SubResource("BoxMesh_p0e5g")
+
+[node name="Area3D" type="Area3D" parent="hitbox/MeshInstance3D" index="0"]
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="hitbox/MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_dfqwq")

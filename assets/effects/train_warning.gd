@@ -11,5 +11,4 @@ func _on_timer_timeout() -> void:
 	$Timer2.start();
 
 func _on_timer_2_timeout() -> void:
-	print("im free")
 	queue_free();
