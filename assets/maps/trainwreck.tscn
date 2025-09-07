@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://sfeg3mnlkab1"]
+[gd_scene load_steps=9 format=3 uid="uid://sfeg3mnlkab1"]
 
 [ext_resource type="PackedScene" uid="uid://dixacmg3m1boa" path="res://assets/mapAssets/trainwreck/trainwreck_map.tscn" id="1_4eq4x"]
+[ext_resource type="Script" uid="uid://br4jihcat15tu" path="res://assets/maps/trainwreck.gd" id="1_05qc5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4eq4x"]
 size = Vector3(31.4847, 0.260262, 52.8477)
@@ -24,7 +25,10 @@ fog_density = 0.025
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_72eyd"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_05qc5"]
+
 [node name="Trainwreck" type="Node3D"]
+script = ExtResource("1_05qc5")
 
 [node name="spawnLocations" type="Node3D" parent="."]
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.76837e-07, -0.361445, -4.76837e-07)
@@ -53,3 +57,35 @@ environment = SubResource("Environment_ogm2e")
 camera_attributes = SubResource("CameraAttributesPractical_72eyd")
 
 [node name="trainwreck" parent="." instance=ExtResource("1_4eq4x")]
+
+[node name="trainPositions" type="Node3D" parent="."]
+
+[node name="1" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, 0)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
+
+[node name="2" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, 8.58939)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
+
+[node name="3" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -39.9008, 0.1, -9.45095)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
+
+[node name="4" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, -0.574371)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
+
+[node name="5" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, -9.16376)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
+
+[node name="6" type="MeshInstance3D" parent="trainPositions"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 40.0992, 0.1, 8.87658)
+mesh = SubResource("BoxMesh_05qc5")
+skeleton = NodePath("../..")
