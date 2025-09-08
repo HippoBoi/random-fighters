@@ -20,8 +20,6 @@ func _on_primary_mouse_hover() -> void:
 	abilityDescNode.visible = true;
 	abilityDescNode.position.x = 90;
 
-
-
 func _on_secondary_mouse_hover() -> void:
 	var image = load(secondaryIcon);
 	descriptionText.text = secondaryDesc;
@@ -54,3 +52,9 @@ func _on_tertiary_mouse_exit() -> void:
 
 func _on_ulti_mouse_exit() -> void:
 	abilityDescNode.visible = false;
+
+func updateIcons():
+	$abilitiesUI/primaryAbility.texture = load(primaryIcon);
+	$abilitiesUI/secondaryAbility.texture = load(secondaryIcon);
+	$abilitiesUI/tertiaryAbility.texture = load(tertiaryIcon);
+	$abilitiesUI/ultiAbility.texture = load(ultiIcon);

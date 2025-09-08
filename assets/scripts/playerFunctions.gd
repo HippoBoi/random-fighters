@@ -280,6 +280,8 @@ func _setupAbilityDescriptions(character: CharacterBody3D, UI: Control):
 	UI.tertiaryIcon = character.tertiaryIcon;
 	UI.ultiDesc = character.ultiDesc;
 	UI.ultiIcon = character.ultiIcon;
+	
+	UI.updateIcons();
 
 func _autoBasic(character):
 	if (activeBasicArea):

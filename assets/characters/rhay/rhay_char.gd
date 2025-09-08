@@ -22,13 +22,13 @@ const W_MAX_RANGE = 5.5;
 const R_MAX_RANGE = 8.2;
 
 var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMAGE."
-var primaryIcon = "res://icon.svg";
+var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash towards your mouse position.";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Slash that deals 100% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
 var ultiDesc = "Dash towards an enemy target.";
-var ultiIcon = "res://icon.svg";
+var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;

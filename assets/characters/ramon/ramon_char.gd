@@ -26,13 +26,13 @@ const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
 var primaryDesc = "Throw a bunch of paper sheets dealing 25% of your PHYSICAL DAMAGE per hit."
-var primaryIcon = "res://icon.svg";
+var primaryIcon = "res://assets/sprites/ramon_abilities/ramon_primary.png";
 var secondaryDesc = "Throw your biggest cup of tea stunning enemies hit for 1.5 seconds.";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/ramon_abilities/ramon_secondary.png";
 var tertiaryDesc = "Throw a small cup of tea that stuns enemies for 0.5 seconds. This ability has INFINITE range.";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/ramon_abilities/ramon_tertiary.png";
 var ultiDesc = "Unleash all your paper sheets dealing 25% of your PHYSICAL DAMAGE per hit.";
-var ultiIcon = "res://icon.svg";
+var ultiIcon = "res://assets/sprites/ramon_abilities/ramon_ulti.png";
 
 var qTimer = 0;
 var wTimer = 0;

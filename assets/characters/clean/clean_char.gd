@@ -18,14 +18,14 @@ const E_COOLDOWN = 14.0;
 const R_COOLDOWN = 50.0;
 const Q_MAX_RANGE = 5.0;
 
-var primaryDesc = "Roll towards your mouse position. Rolling will cancel HACKER MODE."
-var primaryIcon = "res://icon.svg";
+var primaryDesc = "Roll towards your mouse position. Rolling will cancel HACKER MODE.";
+var primaryIcon = "res://assets/sprites/clean_abilities/clean_primary.png";
 var secondaryDesc = "Gain 20% Attack Speed for 3 BASIC ATTACKS. Runs out after a few seconds";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/clean_abilities/clean_secondary.png";
 var tertiaryDesc = "Enter HACKER MODE and gain 25% movement speed for 4 seconds. Using roll will cancel this.";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_tertiary.png";
 var ultiDesc = "Fire a huge laser towards your mouse position dealing 250% of your PHYSICAL DAMAGE.";
-var ultiIcon = "res://icon.svg";
+var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;
