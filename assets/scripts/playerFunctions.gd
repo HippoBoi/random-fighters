@@ -1,4 +1,4 @@
-extends Node
+extends Node	
 
 const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;

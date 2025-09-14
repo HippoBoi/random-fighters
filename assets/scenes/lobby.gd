@@ -7,6 +7,10 @@ var currentOwnerId = ""; # lobby owner ID
 var currentTeam = "1";
 var fakeUser = {};
 
+const LOADING_COLOR = Color(1.0, 1.0, 0.5);
+const ONLINE_COLOR = Color(0.0, 1.0, 0.5);
+const OFFLINE_COLOR = Color(1.0, 0.0, 0.25);
+
 const REQUEST_MATCHES = "REQUEST_MATCHES";
 const PLAYER_JOINED = "PLAYER_JOINED";
 const PLAYER_DROPPED = "PLAYER_DROPPED";
@@ -22,10 +26,13 @@ const BLACK_TEAM = "0";
 const WHITE_TEAM = "1";
 
 var dontShowAgain = false;
+var userPreferences: UserPreferences;
 
 @onready var statusText = $Status;
 @onready var playerAvatar = $PlayerStats/PlayerAvatar;
 @onready var playerUsername = $UserInfo/Username;
+@onready var serverText = $ServerStatus/Status;
+@onready var serverIcon = $ServerStatus/Icon;
 
 signal returnToLobby;
 signal startClient(ip, port, username, team);
@@ -34,13 +41,40 @@ signal startHost(port, username, team, isLocal);
 @onready var _client: WebSocketClient = $WebSocketClient;
 
 func _ready() -> void:
+	userPreferences = UserPreferences.loadOrCreate();
+	dontShowAgain = userPreferences.dontShowCreateWarning;
+	
 	print("attempting server connection");
 	playerUsername.text = fakeUser.username;
 	$MatchesContainer.visible = true;
 	$CreateMatchContainer.visible = false;
 	$LobbyContainer.visible = false;
 	
+	_updateServerStatus();
 	_connectToMatchmakingServer();
+
+func _updateServerStatus():
+	serverText.text = "LOADING";
+	serverIcon.modulate = LOADING_COLOR;
+	
+	var response = await testConnection();
+	
+	if (response == OK):
+		serverText.text = "ONLINE";
+		serverIcon.modulate = ONLINE_COLOR;
+	else:
+		serverText.text = "OFFLINE";
+		serverIcon.modulate = OFFLINE_COLOR;
+
+func testConnection():
+	var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
+	var PORT = 8890;
+	
+	var response = await Noray.connect_to_host(ADDRESS, PORT);
+	if (response != OK):
+		return response;
+	
+	return response;
 
 func _connectToMatchmakingServer():
 	var response = _client.connectToURL(webSocketUrl);
@@ -386,3 +420,7 @@ func _on_check_box_toggled(toggled_on: bool) -> void:
 		$WarningContainer/CheckBox.material = null;
 	
 	dontShowAgain = toggled_on;
+	
+	if (userPreferences):
+		userPreferences.dontShowCreateWarning = toggled_on;
+		userPreferences.save();
