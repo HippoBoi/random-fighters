@@ -140,7 +140,8 @@ func _processRecievedMessage(message):
 		var ip = responseMsg.response.ip;
 		var port = responseMsg.response.port;
 		var gameId = responseMsg.response.gameId;
-		startClient.emit(ip, port, gameId, fakeUser.username, currentTeam);
+		var useUPnP = responseMsg.response.useUPnP;
+		startClient.emit(ip, port, gameId, fakeUser.username, currentTeam, useUPnP);
 		
 		_client.close(1000, "game started normally!");
 
@@ -325,12 +326,39 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	await get_tree().create_timer(secondsToWait).timeout;
 	_loadMatches();
 
-func hostMatch(_matchIp: String, _port: int, _gameOid: String):
+func getUPnPAddress(_port = 8890):
+	print("GETTING UPNP ADDRESS");
+	
+	var upnp = UPNP.new();
+	var discoverResult = upnp.discover();
+	
+	if (discoverResult == UPNP.UPNP_RESULT_SUCCESS):
+		if (upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
+			var _delete_map_result = upnp.delete_port_mapping(_port);
+			
+			var mapResultUDP = upnp.add_port_mapping(_port, 0, "udp-godot", "UDP");
+			var mapResultTCP = upnp.add_port_mapping(_port, 0, "tcp-godot", "TCP");
+			
+			if not (mapResultUDP):
+				mapResultUDP = upnp.add_port_mapping(_port, 0, "", "UDP");
+			if not (mapResultTCP):
+				mapResultTCP = upnp.add_port_mapping(_port, 0, "", "TCP");
+	
+	# startHost.emit(_port, fakeUser.username, currentTeam);
+	
+	var external_ip = upnp.query_external_address();
+	return external_ip;
+
+func hostMatch(_matchIp: String, _port: int, _gameOid: String, _useUPnP: bool):
 	print("ATTEMPTING TO HOST MATCH, ip: %s, gameId: %s" % [_matchIp, _gameOid]);
 	
 	if (_matchIp.is_empty()):
 		print("FAILED: couldn't host match");
 		return;
+	
+	if (_useUPnP):
+		_matchIp = getUPnPAddress(_port);
+		print("NEW UPNP MATCH IP: %s" % _matchIp);
 	
 	var request = {
 		"op": MATCH_READY,
@@ -338,7 +366,8 @@ func hostMatch(_matchIp: String, _port: int, _gameOid: String):
 		"playerId": fakeUser.playerId,
 		"MATCH_IP": _matchIp,
 		"MATCH_PORT": _port,
-		"GAME_ID": _gameOid
+		"GAME_ID": _gameOid,
+		"USE_UPNP": _useUPnP,
 	};
 	
 	_sendMessage(request);

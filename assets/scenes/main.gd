@@ -51,6 +51,8 @@ func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
 
 func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> void:
+	var useUPnP: bool = false;
+	
 	if not (isLocal and DEBUG):
 		if not (norayNetwork):
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
@@ -64,6 +66,8 @@ func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> 
 	
 	if (not (norayNetwork) or norayNetwork.isHosting == false):
 		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
+		useUPnP = true;
+		
 		_hostWithUPnP(_port);
 	
 	username = _username;
@@ -84,7 +88,7 @@ func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> 
 	);
 	
 	if not (isLocal):
-		lobbyScene.hostMatch(ADDRESS, PORT, curGameId);
+		lobbyScene.hostMatch(ADDRESS, PORT, curGameId, useUPnP);
 	
 	updateUI("Server");
 
@@ -93,13 +97,13 @@ func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip := ADDRESS, port := PORT, _gameId := curGameId, _username := "noname", _team := "1"):
+func _joinPressed(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
 	username = _username;
 	curTeam = int(_team);
 	# print("joining team: %s" % curTeam);
 	# print("GAME ID: %s" % _gameId);
 	
-	if not (DEBUG):
+	if not (_useUPnP):
 		if not (norayNetwork):
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
 			add_child(norayNetwork);
@@ -110,23 +114,22 @@ func _joinPressed(ip := ADDRESS, port := PORT, _gameId := curGameId, _username :
 			norayNetwork.setup(self);
 		
 		norayNetwork.createClientPeer(ip, _gameId);
-	
-	if not (norayNetwork):
-		ip = LOCALHOST;
+	else:
+		print("USING UPNP TO JOIN: %s:%s" % [ip, port]);
 		multiplayerPeer.create_client(ip, port);
 		multiplayer.multiplayer_peer = multiplayerPeer;
 	
 	updateUI("Client");
 
 func startHost(port: int, _username: String, _team: String, _isLocal: bool):
-	print("HOSTING, port: %s", port);
+	print("CALL TO HOST ON PORT: %s" % port);
 	_on_host(port, _username, _team, _isLocal);
 	
 	get_node("Lobby").visible = false;
 
-func startClient(ip: String, port: int, _gameId: String, _username: String, _team: String):
-	print("client joining: %s:%s, gameId: %s" % [ip, port, _gameId]);
-	_joinPressed(ip, port, _gameId, _username, _team);
+func startClient(ip: String, port: int, _gameId: String, _username: String, _team: String, _useUPnP: bool):
+	print("client joining: %s:%s, gameId: %s, useUPnP: %s" % [ip, port, _gameId, _useUPnP]);
+	_joinPressed(ip, port, _gameId, _username, _team, _useUPnP);
 	
 	get_node("Lobby").visible = false;
 
@@ -253,11 +256,11 @@ func startNorayHost():
 	response = multiplayerPeer.create_server(Noray.local_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 	
-	if (response != OK):
+	if (response == OK):
+		norayNetwork.isHosting = true;
+		print("HOST SUCCESS!!!!!")
+	else:
 		print("failed to start host: %s, %s" % [Noray.local_port, response]);
-	
-	norayNetwork.isHosting = true;
-	print("HOST SUCCESS!!!!!")
 
 func connectToNorayHost(address: String, port: int):
 	var udp = PacketPeerUDP.new();
