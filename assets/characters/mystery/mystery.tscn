@@ -1399,7 +1399,6 @@ tracks/23/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
 [sub_resource type="Animation" id="Animation_rfufu"]
 resource_name = "r_idle"
-length = 1.04167
 loop_mode = 1
 tracks/0/type = "position_3d"
 tracks/0/imported = true
@@ -2386,24 +2385,26 @@ script = ExtResource("2_0i4rp")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.64468, 0)
 
 [node name="Skeleton3D" parent="mystery_armature" index="0"]
-bones/0/rotation = Quaternion(0, 0.0782906, 0, 0.996931)
-bones/1/rotation = Quaternion(0.15396, 0.546382, -0.16457, 0.806647)
-bones/2/rotation = Quaternion(-3.11246e-09, -0.0117579, -5.13632e-10, 0.999931)
-bones/4/rotation = Quaternion(3.94209e-09, 0.0335886, -4.32445e-10, 0.999436)
-bones/5/rotation = Quaternion(3.3284e-09, 3.72529e-09, 1.56285e-09, 1)
-bones/7/rotation = Quaternion(0.33552, 0.43189, 0.0246431, 0.836834)
-bones/8/rotation = Quaternion(-1.20309e-05, 9.01937e-06, 0.0248459, 0.999691)
-bones/10/rotation = Quaternion(3.2233e-08, -1.67255e-07, -0.545748, 0.83795)
-bones/11/rotation = Quaternion(3.93835e-09, 1.38763e-07, -0.0248459, 0.999691)
-bones/13/rotation = Quaternion(-0.394141, -0.0181205, -0.00618931, 0.91885)
-bones/14/rotation = Quaternion(-0.27582, -0.0460126, -0.0401602, 0.959267)
-bones/15/rotation = Quaternion(-0.204211, -0.0795682, -0.074872, 0.972811)
-bones/17/rotation = Quaternion(-0.636103, 2.91273e-08, -2.40122e-08, 0.771604)
-bones/18/rotation = Quaternion(-0.0571504, 3.48903e-15, -4.31473e-09, 0.998366)
-bones/20/rotation = Quaternion(-0.684587, -2.75164e-08, 2.58424e-08, 0.728932)
-bones/21/rotation = Quaternion(-0.0447433, -1.78508e-15, 3.37802e-09, 0.998999)
-bones/22/position = Vector3(1.49954, 3.93156, 4.51348)
-bones/22/rotation = Quaternion(0.316807, 0.168113, -0.827695, 0.431615)
+bones/0/position = Vector3(0, 3.13587, 0)
+bones/1/rotation = Quaternion(-0.0981357, 0.525286, -0.0978038, 0.83957)
+bones/2/rotation = Quaternion(0.0661226, 0.0369242, 0.103609, 0.991731)
+bones/4/rotation = Quaternion(-0.0242753, 5.58958e-09, 3.72639e-09, 0.999705)
+bones/5/rotation = Quaternion(-0.0186357, -1.86297e-09, 1.49037e-08, 0.999826)
+bones/7/rotation = Quaternion(0.230518, -0.181734, -0.339717, 0.893547)
+bones/8/rotation = Quaternion(0.0404645, 0.507612, -0.0626421, 0.858352)
+bones/10/rotation = Quaternion(0.152575, 0.242847, 0.418975, 0.861514)
+bones/11/rotation = Quaternion(-0.0957663, -0.452767, 0.0341674, 0.885812)
+bones/13/rotation = Quaternion(-0.236446, -0.0725998, 0.0681382, 0.96653)
+bones/14/rotation = Quaternion(-0.702505, 0.127085, 0.0715154, 0.696579)
+bones/15/rotation = Quaternion(0.203404, -0.143478, -0.115359, 0.96163)
+bones/16/position = Vector3(0, 3.13587, 0)
+bones/17/rotation = Quaternion(-0.629209, -0.00452403, -0.00558817, 0.777203)
+bones/18/rotation = Quaternion(-0.000318491, 0.0290823, 0.14006, 0.989716)
+bones/19/position = Vector3(0, 3.13587, 0)
+bones/20/rotation = Quaternion(-0.614756, 0.00442011, 0.00567072, 0.788685)
+bones/21/rotation = Quaternion(-0.000373523, -0.0341066, -0.138893, 0.98972)
+bones/22/position = Vector3(0.815589, 8.7119, 4.93548)
+bones/22/rotation = Quaternion(-0.0904424, -0.475581, -0.154769, 0.861214)
 
 [node name="body" parent="mystery_armature/Skeleton3D" index="2"]
 surface_material_override/0 = SubResource("ShaderMaterial_mf77p")

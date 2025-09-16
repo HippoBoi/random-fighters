@@ -15,7 +15,7 @@ const CHARACTER_NAME = "Mystery";
 const Q_COOLDOWN = 5.5;
 const W_COOLDOWN = 18.0;
 const E_COOLDOWN = 8.0;
-const R_COOLDOWN = 60.0;
+const R_COOLDOWN = 15.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
@@ -107,6 +107,7 @@ var shieldTargetIsEnemy = false;
 
 var holdingSecondary = false;
 var usingStorm = false;
+var godMode = false;
 var stormInstance = null;
 var stormTimer = 0;
 
@@ -246,7 +247,20 @@ func _physics_process(delta: float) -> void:
 			shieldTarget = null;
 	
 	if (ultimateTimer > 0):
-		pass;
+		ultimateTimer -= delta;
+		
+		if (ultimateTimer >= 15):
+			moveTo = global_position;
+		if (ultimateTimer < 15.0 and godMode == false):
+			godMode = true;
+			onAction = false;
+	else:
+		if (usingUltimate):
+			usingUltimate = false;
+			onAction = false;
+			godMode = false;
+			speedOffset = 0;
+			dmgOffset = 0;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -262,19 +276,25 @@ func _physics_process(delta: float) -> void:
 		return;
 	
 	if (velocity != Vector3.ZERO):
-		if not (usingStorm):
+		if not (usingStorm or usingUltimate):
 			if not (animPlayer.current_animation == "run"):
 				animPlayer.play("run");
-		else:
+		elif (usingStorm):
 			if not (animPlayer.current_animation == "w_run"):
 				animPlayer.play("w_run");
+		else:
+			if not (animPlayer.current_animation == "r_idle"):
+				animPlayer.play("r_idle");
 	else:
-		if not (usingStorm):
+		if not (usingStorm or usingUltimate):
 			if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 				animPlayer.play("idle");
-		else:
+		elif (usingStorm):
 			if not (animPlayer.is_playing() and animPlayer.current_animation != "w_run"):
 				animPlayer.play("w_idle");
+		else:
+			if not (animPlayer.current_animation == "r_idle"):
+				animPlayer.play("r_idle");
 
 func _setHitbox(hitbox: Node3D, enable: bool = true):
 	var mesh = hitbox.get_node("MeshInstance3D");
@@ -408,10 +428,16 @@ func tertiary_ability(_target: CharacterBody3D):
 @rpc("call_local", "reliable")
 func ultimate_ability():
 	rTimer = R_COOLDOWN - cooldownReduction;
-	speedOffset = -(baseSpeed * 0.5);
-	ultimateTimer = 5.0;
+	qTimer = 0;
+	wTimer = 0;
+	eTimer = 0;
+	
+	speedOffset = +(baseSpeed * 0.25);
+	dmgOffset = baseDmg * 0.1;
+	ultimateTimer = 15.5;
+	
 	usingUltimate = true;
-	alreadyHit = [];
+	onAction = true;
 	
 	animPlayer.play("r_ability");
 

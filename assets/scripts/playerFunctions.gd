@@ -575,6 +575,8 @@ func respawnCharacter(character: CharacterBody3D):
 	character.inFog = false;
 	character.fogInstances = [];
 	
+	character.rpc("syncHealth", character.hp, character.shield);
+	
 	var scene = character.get_parent();
 	if (scene.name == "Game"):
 		var mapNode = scene.get_node("Map");
