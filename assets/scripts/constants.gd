@@ -18,7 +18,7 @@ enum GameModes {
 const items = [
 	{
 		"name": "Cool Bow",
-		"price": 15,
+		"price": 0,
 		"stats": {
 			"dmg": 2,
 			"attackSpeed": 2,
@@ -44,7 +44,7 @@ const items = [
 	},
 	{
 		"name": "Heaven Shield",
-		"price": 15,
+		"price": 0,
 		"stats": {
 			"hp": 20,
 			"armor": 15

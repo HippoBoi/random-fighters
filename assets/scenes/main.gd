@@ -26,7 +26,7 @@ var roundStarted = false;
 
 var lobbyScene: Control = null;
 
-var DEBUG = false;
+var DEBUG = true;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");

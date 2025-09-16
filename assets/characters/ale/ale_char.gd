@@ -150,7 +150,6 @@ func _physics_process(delta: float) -> void:
 		if (Engine.get_physics_frames() % 45 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
-			rpc("syncHealth", hp, shield);
 		
 		PlayerFunc.updateState(self, delta);
 		
