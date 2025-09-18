@@ -40,9 +40,7 @@ func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	
 	if (userPreferences):
-		musicVolume = userPreferences.musicVolume;
-		soundsVolume = userPreferences.soundsVolume;
-		wasdMovement = userPreferences.wasdMovement;
+		_applyUserPreferences();
 
 func _getMousePos(character):
 	var spaceState = character.get_world_3d().direct_space_state;
@@ -563,6 +561,7 @@ func spawnCharacter(character: CharacterBody3D):
 		else:
 			character.global_position = whiteTeam.global_position;
 	
+	character.rpc("syncHealth", character.hp, character.shield);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 	
 func respawnCharacter(character: CharacterBody3D):
@@ -574,8 +573,6 @@ func respawnCharacter(character: CharacterBody3D):
 	character.visible = true;
 	character.inFog = false;
 	character.fogInstances = [];
-	
-	character.rpc("syncHealth", character.hp, character.shield);
 	
 	var scene = character.get_parent();
 	if (scene.name == "Game"):
@@ -594,6 +591,7 @@ func respawnCharacter(character: CharacterBody3D):
 		else:
 			character.global_position = whiteTeam.global_position;
 	
+	character.rpc("syncHealth", character.hp, character.shield);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
 func _tokensAnimation(scene, _tokens):
@@ -904,6 +902,7 @@ func shopToggle(character: CharacterBody3D, forceClose = false):
 		character.add_child(shopScene);
 		
 		shopOpen = true;
+		optionsOpen = true;
 	else:
 		var openedShop = character.has_node("ShopUI");
 		if (openedShop):
@@ -918,12 +917,15 @@ func optionsToggle():
 	var scene = myCharacter.get_parent();
 	var optionsUI = scene.get_node("OptionsUI");
 	
-	if (shopOpen):
-		optionsUI.visible = false;
-		return;
-	
 	optionsOpen = !optionsOpen;
 	optionsUI.visible = optionsOpen;
+	
+	_applyUserPreferences();
+
+func _applyUserPreferences():
+	musicVolume = userPreferences.musicVolume;
+	soundsVolume = userPreferences.soundsVolume;
+	wasdMovement = userPreferences.wasdMovement;
 
 func grantItemStats(character: CharacterBody3D, item: Dictionary):
 	if (item.stats.has("hp")):
@@ -940,6 +942,8 @@ func grantItemStats(character: CharacterBody3D, item: Dictionary):
 		character.cooldownReduction += item.stats.cooldownReduction;
 	if (item.stats.has("speed")):
 		character.baseSpeed += item.stats.speed;
+	
+	character.rpc("syncHealth", character.hp, character.shield);
 
 func playSound(character: CharacterBody3D, sound, randomPitch: bool = true):
 	var newSound = AudioStreamPlayer3D.new();
