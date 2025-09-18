@@ -12,10 +12,16 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
-const Q_COOLDOWN = 5.5;
-const W_COOLDOWN = 18.0;
-const E_COOLDOWN = 8.0;
-const R_COOLDOWN = 15.0;
+const MAX_Q_COOLDOWN = 5.5;
+const MAX_W_COOLDOWN = 18.0;
+const MAX_E_COOLDOWN = 8.0;
+const MAX_R_COOLDOWN = 15.0;
+const MAX_R_SLASH_COOLDOWN = 1.75;
+
+var Q_COOLDOWN = 5.5;
+var W_COOLDOWN = 18.0;
+var E_COOLDOWN = 8.0;
+var R_COOLDOWN = 15.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
@@ -68,10 +74,12 @@ var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
 var usingUltimate = false;
+var usingUltiSlash = false;
 var primaryTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultimateTimer = 0;
+var ultiSlashTimer = 0;
 var bufferedTarget = null;
 var bufferedInput = null;
 
@@ -100,6 +108,8 @@ var storedMousePos = null;
 
 var usedPrimaryProjectile = false;
 var primaryProjectile = null;
+
+var usedUltiProjectile = false;
 
 var usedShield = false;
 var shieldTarget = null;
@@ -175,8 +185,12 @@ func _physics_process(delta: float) -> void:
 				action = Callable(self, "_setup_ultimate");
 			
 			if (action):
-				if not (onAction or stunned or usingUltimate or dead):
-					action.call();
+				if not (onAction or stunned or dead):
+					if (usingUltimate == false):
+						action.call();
+					else:
+						print("ULTI SLASH")
+						_setup_ulti_slash();
 				else:
 					bufferedInput = action;
 		
@@ -252,15 +266,40 @@ func _physics_process(delta: float) -> void:
 		if (ultimateTimer >= 15):
 			moveTo = global_position;
 		if (ultimateTimer < 15.0 and godMode == false):
+			$r_mesh.visible = true;
+			$r_particles.emitting = true;
 			godMode = true;
 			onAction = false;
 	else:
 		if (usingUltimate):
+			$r_mesh.visible = false;
+			$r_particles.emitting = false;
 			usingUltimate = false;
 			onAction = false;
 			godMode = false;
 			speedOffset = 0;
 			dmgOffset = 0;
+			
+			Q_COOLDOWN = MAX_Q_COOLDOWN;
+			W_COOLDOWN = MAX_W_COOLDOWN;
+			E_COOLDOWN = MAX_E_COOLDOWN;
+	
+	if (ultiSlashTimer > 0):
+		ultiSlashTimer -= delta;
+		moveTo = global_position;
+		
+		if (ultiSlashTimer):
+			if (ultiSlashTimer < 0.55):
+				if not (usedUltiProjectile):
+					_spawn_r_projectile(storedMousePos);
+				
+				$q_particles.emitting = true;
+				$q_slash/AnimationPlayer.play("slash");
+	else:
+		if (usingUltiSlash):
+			usingUltiSlash = false;
+			usedUltiProjectile = false;
+			onAction = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -335,6 +374,19 @@ func _spawn_w_storm(_mousePos):
 	stormTimer = 12.0;
 	usingStorm = true;
 
+func _spawn_r_projectile(_mousePos):
+	var projectile = preload("res://assets/characters/mystery/mystery_r_projectile.tscn").instantiate();
+	get_parent().add_child(projectile);
+	
+	projectile.global_position = global_position + Vector3(0, 1.25, 0);
+	projectile.rotation = rotation;
+	projectile.setup(self, dmg);
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_projectile.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	usedUltiProjectile = true;
+
 func basicAttack():
 	if not (target):
 		return;
@@ -373,6 +425,12 @@ func _setup_tertiary():
 
 func _setup_ultimate():
 	rpc("ultimate_ability");
+
+func _setup_ulti_slash():
+	if (mousePos.is_empty()):
+		return;
+	
+	rpc("ultimate_slash", mousePos.position);
 
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
@@ -440,6 +498,28 @@ func ultimate_ability():
 	onAction = true;
 	
 	animPlayer.play("r_ability");
+
+@rpc("call_local", "reliable")
+func ultimate_slash(_mousePos = null):
+	Q_COOLDOWN = MAX_R_SLASH_COOLDOWN;
+	W_COOLDOWN = MAX_R_SLASH_COOLDOWN;
+	E_COOLDOWN = MAX_R_SLASH_COOLDOWN;
+	
+	qTimer = MAX_R_SLASH_COOLDOWN;
+	wTimer = MAX_R_SLASH_COOLDOWN;
+	eTimer = MAX_R_SLASH_COOLDOWN;
+	
+	ultiSlashTimer = 1.1;
+	usingUltiSlash = true;
+	onAction = true;
+	storedMousePos = _mousePos;
+	
+	var sound = load("res://assets/sounds/characters/mystery/mystery_slash.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	animPlayer.play("r_attack");
+	simulateMove(null, global_position);
+	rpc("syncRotation", _mousePos);
 
 @rpc("call_local")
 func showBasicAttack(_targetPos):

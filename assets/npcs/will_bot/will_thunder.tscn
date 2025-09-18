@@ -144,12 +144,12 @@ input_name = "color"
 offsets = PackedFloat32Array(0, 0.653179)
 colors = PackedColorArray(5, 0, 0.35, 1, 1, 1, 1, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_l805s"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ibeu8"]
 gradient = SubResource("Gradient_4cw0f")
 use_hdr = true
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gdps2"]
-texture = SubResource("GradientTexture1D_l805s")
+texture = SubResource("GradientTexture1D_ibeu8")
 
 [sub_resource type="VisualShader" id="VisualShader_cdusb"]
 code = "shader_type spatial;
@@ -214,7 +214,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-67.4373, 30.6551)
+graph_offset = Vector2(125.201, -20.4613)
 modes/cull = 2
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1120, 120)
@@ -236,7 +236,7 @@ nodes/fragment/10/node = SubResource("VisualShaderNodeRemap_sip4w")
 nodes/fragment/10/position = Vector2(180, 120)
 nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 5, 0, 5, 0, 3, 2, 2, 1, 6, 2, 9, 0, 0, 0, 6, 0, 9, 0, 6, 0, 0, 1, 7, 1, 10, 0, 10, 0, 6, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ic3r1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g6y6e"]
 render_priority = 0
 shader = SubResource("VisualShader_cdusb")
 
@@ -326,7 +326,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-497.209, 177.164)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(540, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_bq125")
@@ -350,7 +349,7 @@ render_priority = 0
 shader = SubResource("VisualShader_khm2g")
 shader_parameter/waveColor = Color(2, 0.75, 0.948, 1)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_8ajir"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ibeu8"]
 _surfaces = [{
 "aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
 "format": 34896613377,
@@ -384,7 +383,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_yo7an"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_8ajir"]
 _surfaces = [{
 "aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
 "attribute_data": PackedByteArray("/////wAA/////wAAAAAAAA=="),
@@ -403,7 +402,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 96,
 "index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEABQAEAAAABQAGAAQABwAGAAUABwAIAAYACQAIAAcACQAKAAgACwAKAAkACwAMAAoADQAMAAsADQAOAAwADwAOAA0ADwAQAA4AEQAQAA8AEQASABAAEwASABEAEwAUABIAFQAUABMAFQAWABQAFwAWABUAFwAYABYAGQAYABcAGQAaABgAGwAaABkAGwAcABoAHQAcABsAHQAeABwAHwAeAB0AHwAgAB4AIQAgAB8A"),
-"material": SubResource("ShaderMaterial_ic3r1"),
+"material": SubResource("ShaderMaterial_g6y6e"),
 "name": "Material",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -423,7 +422,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("IYYAAKpeNQP/fwAACV6yAsiX//9vAjUD/3///wAAsgKmrv//pQlkBgeMAACGYGQGusP//1sVhgl3kQAAjGOGCTPW//8dJZQMO5YAAJxnlAxd5f//UTiGDySaAACQbIYPofD//zpOVxIMnQAAN3JXEpH3//8AZqUS1p4AAFh4xxX/////8XpiFnGfAAC5fkwZif3//+aUlBrWngAAGYWeGkD2///crZAcDJ0AADuLmBxs6v//3cRFHiSaAADikEsegdr//wbZrx87lgAA1pWzHxzH//+S6cogd5EAAOaZzSD7sP//3vWXIQeMAADrnJgh+Jj//3D9ESIhhgAAyJ4SIv9//////zsi/38AAGifOyIGZ///cP0RIt15AADInhIiA0///971lyH3cwAA65yYIeI4//+S6cogh24AAOaZzSB9Jf//BtmvH8NpAADWlbMfkhX//93ERR7aZQAA4pBLHr4J///crZAc8mIAADuLmBx1Av//5pSUGihhAAAZhZ4aAAD///F6RRaNYAAAuX75GG0I//8AZsASKGEAAFh4IRZdD///Ok5XEvJiAAA3clcSoRr//1E4hg/aZQAAkGyGD8sp//8dJZQMw2kAAJxnlAxEPP//WxWGCYduAACMY4YJWFH//6UJZAb3cwAAhmBkBjZo//9vAjUD3XkAAKpeNQP/f///AACyAv9/AAAJXrICdtszCGTZZQF22zMIZNllAbTdiw+03YsPwt9JFsLfSRaw4ZwcsOGcHInjqyKJ46siV+WXKFfllyiV5XUqaOdsLOPmgDD06IEyJ+pCOjDqXzpJ7N5AUuz8QJHuA0ia7iBIEfHpTxrxBVDg899Y6PP4WCH3V2Mo92tjDfsCcBL7DnD///9/////fwHw8IQO8OyEVuPciGvj1Yje2B6M99gWjOjP7Y4E0OSOAshskSDIY5HdwLWT+8Crk0K615Vfus2VarAvmUGyRpeEqlmapKxgmJeoppqXqKaaq6J1nKuidZycnE6enJxOnkmWO6BJljugi49KoouPSqIyiIekMoiHpGWBmqZlgZqm")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_8ajir")
+shadow_mesh = SubResource("ArrayMesh_ibeu8")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8xw6w"]
 transparency = 1
@@ -507,7 +506,7 @@ amount = 1
 lifetime = 1.25
 one_shot = true
 process_material = SubResource("ParticleProcessMaterial_5qdsp")
-draw_pass_1 = SubResource("ArrayMesh_yo7an")
+draw_pass_1 = SubResource("ArrayMesh_8ajir")
 
 [node name="hitbox" type="Node3D" parent="thunderParticles"]
 transform = Transform3D(0.544333, 0, 0, 0, 0.72, 0, 0, 0, 0.627605, 0, 1.44, 0)
