@@ -1,0 +1,23 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://br3g2to4mj3gg"]
+
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_7gl0g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gl0g"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w2by4"]
+texture = ExtResource("1_7gl0g")
+modulate_color = Color(0.553, 0.326, 0.531, 0.42)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sn6te"]
+texture = ExtResource("1_7gl0g")
+modulate_color = Color(0.429, 0.217, 0.304, 0.503)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0lru2"]
+texture = ExtResource("1_7gl0g")
+modulate_color = Color(0.38946, 0.130294, 0.150849, 0.641)
+
+[resource]
+Button/styles/focus = SubResource("StyleBoxEmpty_7gl0g")
+Button/styles/hover = SubResource("StyleBoxTexture_w2by4")
+Button/styles/normal = SubResource("StyleBoxTexture_sn6te")
+Button/styles/pressed = SubResource("StyleBoxTexture_0lru2")

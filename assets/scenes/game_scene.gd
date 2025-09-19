@@ -29,10 +29,9 @@ func _ready() -> void:
 		_selectGameMode();
 	
 	userPreferences = UserPreferences.loadOrCreate();
-	$OptionsUI/Options/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
-	$OptionsUI/Options/music/musicSlider.value = userPreferences.musicVolume;
-	$OptionsUI/Options/sounds/soundsSlider.value = userPreferences.soundsVolume;
-	
+	$OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
+	$OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider.value = userPreferences.musicVolume;
+	$OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider.value = userPreferences.soundsVolume;
 	spawnPlayers();
 	
 func _process(_delta: float) -> void:
@@ -356,9 +355,6 @@ func _endGameScreen(_teamThatHasWon):
 
 func _on_shop_button_pressed() -> void:
 	PlayerFunc.shopToggle(myCharacter);
-
-func _on_exit_pressed() -> void:
-	PlayerFunc.optionsToggle();
 
 func _on_save_and_exit_pressed() -> void:
 	PlayerFunc.optionsToggle();
