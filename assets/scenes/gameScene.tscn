@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=32 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
@@ -14,6 +14,7 @@
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="11_o0ehx"]
 [ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="12_4a3ho"]
 [ext_resource type="Script" uid="uid://luo8kcd41hvg" path="res://assets/scenes/minimap.gd" id="14_7678e"]
+[ext_resource type="Script" uid="uid://boiww7d2pjin" path="res://assets/scenes/options_ui.gd" id="15_e2iu4"]
 [ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="15_eny81"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
@@ -1003,6 +1004,7 @@ offset_right = -48.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("15_e2iu4")
 
 [node name="bottomRect" type="ColorRect" parent="OptionsUI"]
 light_mask = 0
@@ -1143,7 +1145,7 @@ layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="wasdText" type="RichTextLabel" parent="OptionsUI/ScrollContainer/VBoxContainer/controls"]
+[node name="WasdText" type="RichTextLabel" parent="OptionsUI/ScrollContainer/VBoxContainer/controls"]
 z_index = 6
 layout_mode = 1
 anchors_preset = 6
@@ -1200,15 +1202,42 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.25, 0.242, 0.369, 0.298)
 
-[node name="primaryKey" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+[node name="qText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
 layout_mode = 0
-offset_left = 16.0
+offset_left = 8.0
+offset_top = -10.0
+offset_right = 75.0
+offset_bottom = 39.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 9
+text = "Primary ability"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="primary" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 8.0
 offset_top = 24.0
-offset_right = 83.0
+offset_right = 75.0
 offset_bottom = 83.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/primary"]
+layout_mode = 0
+offset_right = 67.0
+offset_bottom = 59.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 30
-text = "Q"
+editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
@@ -1219,15 +1248,58 @@ middle_mouse_paste_enabled = false
 empty_selection_clipboard_enabled = false
 wrap_mode = 1
 
-[node name="secondaryKey" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/primary"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "q"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="wText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
 layout_mode = 0
-offset_left = 96.0
+offset_left = 83.0
+offset_top = -10.0
+offset_right = 158.0
+offset_bottom = 39.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 9
+text = "Secondary ability"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="secondary" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 88.0
 offset_top = 24.0
-offset_right = 163.0
+offset_right = 155.0
 offset_bottom = 83.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/secondary"]
+layout_mode = 0
+offset_right = 67.0
+offset_bottom = 59.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 30
-text = "Q"
+editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
@@ -1238,15 +1310,58 @@ middle_mouse_paste_enabled = false
 empty_selection_clipboard_enabled = false
 wrap_mode = 1
 
-[node name="tertiaryKey" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/secondary"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "q"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="eText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
 layout_mode = 0
-offset_left = 176.0
+offset_left = 164.0
+offset_top = -10.0
+offset_right = 239.0
+offset_bottom = 39.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 9
+text = "Tertiary ability"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="tertiary" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 168.0
 offset_top = 24.0
-offset_right = 243.0
+offset_right = 235.0
 offset_bottom = 83.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/tertiary"]
+layout_mode = 0
+offset_right = 67.0
+offset_bottom = 59.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 30
-text = "Q"
+editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
@@ -1257,15 +1372,58 @@ middle_mouse_paste_enabled = false
 empty_selection_clipboard_enabled = false
 wrap_mode = 1
 
-[node name="ultimateKey" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/tertiary"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "q"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="rText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
 layout_mode = 0
-offset_left = 256.0
+offset_left = 244.0
+offset_top = -10.0
+offset_right = 319.0
+offset_bottom = 39.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 9
+text = "Ultimate ability"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="ultimate" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 248.0
 offset_top = 24.0
-offset_right = 323.0
+offset_right = 315.0
 offset_bottom = 83.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/ultimate"]
+layout_mode = 0
+offset_right = 67.0
+offset_bottom = 59.0
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 30
-text = "Q"
+editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
@@ -1275,6 +1433,286 @@ virtual_keyboard_enabled = false
 middle_mouse_paste_enabled = false
 empty_selection_clipboard_enabled = false
 wrap_mode = 1
+
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/ultimate"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "q"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="aText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
+layout_mode = 0
+offset_left = 320.0
+offset_top = 38.0
+offset_right = 395.0
+offset_bottom = 87.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "Auto attack"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="autoBasic" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 328.0
+offset_top = 69.0
+offset_right = 387.0
+offset_bottom = 104.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/autoBasic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+wrap_mode = 1
+scroll_past_end_of_file = true
+
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/autoBasic"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="sText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
+layout_mode = 0
+offset_left = 384.0
+offset_top = 38.0
+offset_right = 459.0
+offset_bottom = 87.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "Cancel"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="stop_movement" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 392.0
+offset_top = 69.0
+offset_right = 451.0
+offset_bottom = 104.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/stop_movement"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+wrap_mode = 1
+scroll_past_end_of_file = true
+
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/stop_movement"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="spaceText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
+layout_mode = 0
+offset_left = 320.0
+offset_top = -16.0
+offset_right = 395.0
+offset_bottom = 33.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "Center camera"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="space" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 328.0
+offset_top = 15.0
+offset_right = 387.0
+offset_bottom = 50.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/space"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+wrap_mode = 1
+scroll_past_end_of_file = true
+
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/space"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
+
+[node name="pText" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+modulate = Color(1, 1, 1, 0.635)
+layout_mode = 0
+offset_left = 384.0
+offset_top = -16.0
+offset_right = 459.0
+offset_bottom = 33.0
+theme_override_colors/font_shadow_color = Color(0.111, 0.118, 0.172, 0.784)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 8
+text = "Shop"
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="shop" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection"]
+self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
+offset_left = 392.0
+offset_top = 15.0
+offset_right = 451.0
+offset_bottom = 50.0
+
+[node name="Decoration" type="TextEdit" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/shop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 0
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+wrap_mode = 1
+scroll_past_end_of_file = true
+
+[node name="ActionLabel" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer/controls/ControlSection/shop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "W"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+justification_flags = 131
+clip_text = true
+uppercase = true
 
 [node name="spacing2" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -1401,9 +1839,9 @@ value = 1.0
 [node name="Divider2" type="ColorRect" parent="OptionsUI/ScrollContainer/VBoxContainer/music"]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 121.0
+offset_top = 145.0
 offset_right = 468.0
-offset_bottom = 123.0
+offset_bottom = 147.0
 color = Color(0.097, 0.134, 0.198, 0.586)
 
 [node name="spacing3" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
@@ -1459,6 +1897,31 @@ layout_mode = 2
 text = "
 
 
+"
+
+[node name="reset" type="Control" parent="OptionsUI/ScrollContainer/VBoxContainer"]
+z_index = 3
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ResetDefaults" type="Button" parent="OptionsUI/ScrollContainer/VBoxContainer/reset"]
+modulate = Color(1, 0.5, 0.5, 1)
+z_index = 6
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -74.0
+offset_top = 42.0
+offset_right = 150.0
+offset_bottom = 78.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 2
+text = "Reset default settings"
+
+[node name="spacing6" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "
 
 
 "
@@ -1697,6 +2160,7 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e
 [connection signal="toggled" from="OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox" to="." method="_on_check_box_toggled"]
 [connection signal="value_changed" from="OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider" to="." method="_on_sounds_slider_value_changed"]
+[connection signal="button_up" from="OptionsUI/ScrollContainer/VBoxContainer/reset/ResetDefaults" to="." method="_on_reset_defaults"]
 [connection signal="pressed" from="OptionsUI/Footer/SaveAndExit" to="." method="_on_save_and_exit_pressed"]
 [connection signal="pressed" from="OptionsUI/Footer/QuitGame" to="." method="_on_save_and_exit_pressed"]
 [connection signal="pressed" from="OptionsUI/Exit" to="." method="_on_save_and_exit_pressed"]

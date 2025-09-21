@@ -25,11 +25,14 @@ var gameStarted = false;
 var roundStarted = false;
 
 var lobbyScene: Control = null;
+var userPreferences: UserPreferences;
 
 var DEBUG = true;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
+	userPreferences = UserPreferences.loadOrCreate()
+	_loadSettings();
 
 func _process(delta: float) -> void:
 	if not (connected):
@@ -43,6 +46,21 @@ func _process(delta: float) -> void:
 	timer += delta;
 	if (int(round(timer * 100)) % 32 == 0):
 		rpc("syncData", multiplayerPeer.get_unique_id(), username, curTeam, curCharacter);
+
+func _loadSettings():
+	if not (userPreferences):
+		return;
+	
+	var controls = userPreferences.controls;
+	for action in controls:
+		var event = controls[action];
+		if (event == null):
+			print("%s is NULL" % action);
+			continue;
+		
+		print("adding %s with %s event" % [action, event]);
+		InputMap.action_erase_events(action);
+		InputMap.action_add_event(action, event);
 
 func _on_name_input(new_text: String) -> void:
 	username = new_text;

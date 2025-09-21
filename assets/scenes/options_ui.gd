@@ -1,0 +1,42 @@
+extends Control
+
+var buttonRemapping: Button = null;
+var userPreferences: UserPreferences;
+
+func _ready() -> void:
+	userPreferences = UserPreferences.loadOrCreate();
+
+func setup():
+	var controlsUI = $ScrollContainer/VBoxContainer/controls/ControlSection;
+	
+	for element in controlsUI.get_children():
+		if not (element is Button):
+			continue;
+		
+		var button: Button = element;
+		var action = InputMap.action_get_events(button.name);
+		var label = button.get_node("ActionLabel");
+		label.text = action[0].as_text().trim_suffix(" (Physical)");
+		
+		button.pressed.connect(func():
+			_onButtonPressed(button);
+		);
+
+func _onButtonPressed(button: Button):
+	buttonRemapping = button;
+
+func _input(event: InputEvent) -> void:
+	if not (buttonRemapping):
+		return;
+	
+	if (event is InputEventKey):
+		InputMap.action_erase_events(buttonRemapping.name);
+		InputMap.action_add_event(buttonRemapping.name, event);
+		
+		if (userPreferences):
+			userPreferences.controls[buttonRemapping.name] = event;
+			print(userPreferences.controls);
+			userPreferences.save();
+		
+		buttonRemapping = null;
+	setup();

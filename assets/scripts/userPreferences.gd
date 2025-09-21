@@ -4,7 +4,16 @@ class_name UserPreferences extends Resource
 @export_range(0, 1, 0.05) var soundsVolume: float = 1.0;
 @export var wasdMovement: bool = false;
 @export var dontShowCreateWarning: bool = false;
-@export var actionEvents: Dictionary = {};
+@export var controls: Dictionary = {
+	"primary" = null,
+	"secondary" = null,
+	"tertiary" = null,
+	"ultimate" = null,
+	"space" = null,
+	"shop" = null,
+	"autoBasic" = null,
+	"stop_movement" = null
+};
 
 func save():
 	print("SAVING SETTINGS!");
@@ -17,3 +26,6 @@ static func loadOrCreate():
 		res = UserPreferences.new();
 	
 	return res;
+
+static func resetToDefaults():
+	print("RESETING TO DEFAULT SETTINGS");

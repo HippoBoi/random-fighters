@@ -919,6 +919,7 @@ func optionsToggle():
 	
 	optionsOpen = !optionsOpen;
 	optionsUI.visible = optionsOpen;
+	optionsUI.setup();
 	
 	_applyUserPreferences();
 

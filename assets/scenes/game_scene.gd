@@ -32,6 +32,7 @@ func _ready() -> void:
 	$OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
 	$OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider.value = userPreferences.musicVolume;
 	$OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider.value = userPreferences.soundsVolume;
+	
 	spawnPlayers();
 	
 func _process(_delta: float) -> void:
@@ -373,3 +374,6 @@ func _on_music_slider_value_changed(value: float) -> void:
 func _on_sounds_slider_value_changed(value: float) -> void:
 	if (userPreferences):
 		userPreferences.soundsVolume = value;
+
+func _on_reset_defaults() -> void:
+	userPreferences.resetToDefaults();
