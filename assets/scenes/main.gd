@@ -55,10 +55,8 @@ func _loadSettings():
 	for action in controls:
 		var event = controls[action];
 		if (event == null):
-			print("%s is NULL" % action);
 			continue;
 		
-		print("adding %s with %s event" % [action, event]);
 		InputMap.action_erase_events(action);
 		InputMap.action_add_event(action, event);
 

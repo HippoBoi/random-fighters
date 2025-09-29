@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://bqqrsgkx6enps"]
+
+[ext_resource type="PackedScene" uid="uid://c67b1ynuo1arx" path="res://assets/characters/rio/rio.glb" id="1_kl43q"]
+[ext_resource type="Texture2D" uid="uid://bvsoxc7kyalvv" path="res://assets/sprites/character_icons/rio_icon.png" id="2_hbss5"]
+[ext_resource type="Script" uid="uid://x6bucsrtqkmu" path="res://assets/characters/rio/rio_char.gd" id="2_ttctk"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="3_ttctk"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kl43q"]
+radius = 1.06153
+height = 6.66703
+
+[node name="rio" instance=ExtResource("1_kl43q")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("2_ttctk")
+
+[node name="rio_armature" parent="." index="0"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 1.99295, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.21271, 0)
+shape = SubResource("CapsuleShape3D_kl43q")
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="2"]
+transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
+top_level = true
+visible = false
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("2_hbss5")
+script = ExtResource("3_ttctk")

@@ -574,10 +574,10 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 [node name="nephi" type="Control" parent="Characters"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 83.0
-offset_top = 48.0
-offset_right = 163.0
-offset_bottom = 118.0
+offset_left = 46.0
+offset_top = 56.0
+offset_right = 126.0
+offset_bottom = 126.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/nephi"]
@@ -638,10 +638,10 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 [node name="ale" type="Control" parent="Characters"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 173.0
-offset_top = 48.0
-offset_right = 253.0
-offset_bottom = 118.0
+offset_left = 131.0
+offset_top = 56.0
+offset_right = 211.0
+offset_bottom = 126.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/ale"]
@@ -702,10 +702,10 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 [node name="mystery" type="Control" parent="Characters"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 263.0
-offset_top = 48.0
-offset_right = 343.0
-offset_bottom = 118.0
+offset_left = 223.0
+offset_top = 56.0
+offset_right = 303.0
+offset_bottom = 126.0
 size_flags_horizontal = 0
 
 [node name="CharacterSplash" type="TextureRect" parent="Characters/mystery"]
@@ -746,6 +746,70 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="Characters/mystery"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -35.0
+offset_right = 35.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+
+[node name="rio" type="Control" parent="Characters"]
+layout_mode = 2
+anchors_preset = 0
+offset_left = 311.0
+offset_top = 56.0
+offset_right = 391.0
+offset_bottom = 126.0
+size_flags_horizontal = 0
+
+[node name="CharacterSplash" type="TextureRect" parent="Characters/rio"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -36.0
+offset_top = -31.0
+offset_right = 34.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qrbhw")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterName" type="RichTextLabel" parent="Characters/rio"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -49.5
+offset_right = 37.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Rio"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Characters/rio"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
