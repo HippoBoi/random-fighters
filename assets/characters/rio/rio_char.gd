@@ -20,13 +20,13 @@ const W_MAX_RANGE = 5.5;
 const R_MAX_RANGE = 8.2;
 
 var primaryDesc = ""
-var primaryIcon = "";
+var primaryIcon = "res://icon.svg";
 var secondaryDesc = "";
-var secondaryIcon = "";
+var secondaryIcon = "res://icon.svg";
 var tertiaryDesc = "";
-var tertiaryIcon = "";
+var tertiaryIcon = "res://icon.svg";
 var ultiDesc = "";
-var ultiIcon = "";
+var ultiIcon = "res://icon.svg";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -65,13 +65,14 @@ var basicAttackTimer = 0;
 var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.9;
 var onAction = false;
 var overrideBasic = false;
+var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
+var usingUlti = false;
 var primaryTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultiTimer = 0;
-var usingUlti = false;
 var ultiTarget = null;
 var playingUltiSound = false;
 var bufferedTarget = null;
@@ -136,8 +137,8 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_action_just_pressed("rightClick")):
 			PlayerFunc.onRightClick(self);
 	
-		# if (Input.is_action_just_pressed("stop_movement") and not (onAction or stunned)):
-			# PlayerFunc.stopKeyPressed(self, animPlayer);
+		if (Input.is_action_just_pressed("stop_movement") and not (onAction or stunned)):
+			PlayerFunc.stopKeyPressed(self, animPlayer);
 		
 		if (Input.is_action_just_pressed("shop")):
 			PlayerFunc.shopToggle(self);
@@ -173,20 +174,36 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (primaryTimer > 0):
-		pass;
+		primaryTimer -= delta;
+		moveTo = global_position;
 	else:
-		pass;
+		if (usingPrimary):
+			usingPrimary = false;
+			onAction = false;
 	
-	if (usingSecondary == true):
-		pass;
-	
-	if (usingUlti):
-		pass;
+	if (secondaryTimer > 0):
+		secondaryTimer -= delta;
+		moveTo = global_position;
+	else:
+		if (usingSecondary):
+			usingSecondary = false;
+			onAction = false;
 		
 	if (tertiaryTimer > 0):
-		pass;
+		tertiaryTimer -= delta;
+		moveTo = global_position;
 	else:
-		pass;
+		if (usingTertiary):
+			usingTertiary = false;
+			onAction = false;
+	
+	if (ultiTimer > 0):
+		ultiTimer -= delta;
+		moveTo = global_position;
+	else:
+		if (usingUlti):
+			usingUlti = false;
+			onAction = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -201,12 +218,12 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	#if (velocity != Vector3.ZERO):
-		#if not (animPlayer.current_animation == "run"):
-			# animPlayer.play("run");
-	#else:
-		#if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
-			# animPlayer.play("idle");
+	if (velocity != Vector3.ZERO):
+		if not (animPlayer.current_animation == "run"):
+			animPlayer.play("run");
+	else:
+		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
+			animPlayer.play("idle");
 	
 func updateHealthSize():
 	var UILoaded = has_node("CharacterUI");
@@ -233,32 +250,47 @@ func playBasicAttack():
 		basicAnimPos = 0;
 
 func _setup_primary():
-	pass;
+	rpc("primary_ability");
 
 @rpc("call_local", "reliable")
 func primary_ability():
-	pass;
+	usingPrimary = true;
+	onAction = true;
+	primaryTimer = 2.0;
+	animPlayer.play("q_ability");
+	qTimer = Q_COOLDOWN;
 
 func _setup_secondary():
-	pass;
+	rpc("secondary_ability");
 
 @rpc("call_local", "reliable")
-func secondary_ability(_moveTo, _global_pos):
-	pass;
+func secondary_ability():
+	usingSecondary = true;
+	onAction = true;
+	secondaryTimer = 2.0;
+	animPlayer.play("w_action");
+	wTimer = W_COOLDOWN;
 	
 func _setup_tertiary():
-	pass;
+	rpc("tertiary_ability");
 
 @rpc("call_local", "reliable")
-func tertiary_ability(_mousePos):
-	pass;
+func tertiary_ability():
+	usingTertiary = true;
+	onAction = true;
+	tertiaryTimer = 2.0;
+	animPlayer.play("e_ability");
+	eTimer = E_COOLDOWN;
 
 func _setup_ultimate():
-	pass;
+	rpc("ultimate_ability");
 
 @rpc("call_local", "reliable")
-func ultimate_ability(_moveTo, _global_pos):
-	pass;
+func ultimate_ability():
+	usingUlti = true;
+	onAction = true;
+	ultiTimer = 2.0;
+	rTimer = R_COOLDOWN;
 
 @rpc("call_local")
 func cancelSecondary():
