@@ -5,13 +5,13 @@
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="3_4agkw"]
 [ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_cmwfe"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8at84"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4agkw"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8at84"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmwfe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4agkw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cygf"]
 
@@ -58,8 +58,8 @@ offset_right = 294.0
 offset_bottom = -17.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 text = "Multiplayer"
 alignment = 0
 
@@ -71,10 +71,10 @@ offset_right = 294.0
 offset_bottom = 33.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 text = "Options"
 alignment = 0
 
@@ -86,10 +86,10 @@ offset_right = 294.0
 offset_bottom = 83.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 text = "Credits"
 alignment = 0
 
@@ -101,8 +101,8 @@ offset_right = 294.0
 offset_bottom = 133.0
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 text = "Exit"
 alignment = 0
 
@@ -207,10 +207,10 @@ offset_bottom = 90.0
 scale = Vector2(1.1, 1.1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/shadow_offset_x = 8
 theme_override_constants/shadow_outline_size = 10
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 48
 text = "Random"
 
@@ -223,10 +223,10 @@ offset_bottom = 153.0
 scale = Vector2(1.1, 1.1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/shadow_offset_x = 8
 theme_override_constants/shadow_outline_size = 10
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 48
 text = "Fighters"
 

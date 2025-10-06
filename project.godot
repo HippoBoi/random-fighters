@@ -14,7 +14,7 @@ config/name="Random Fighters"
 config/description="A MOBA that changes each round."
 config/version="0.9.8"
 run/main_scene="res://assets/scenes/mainMenu.tscn"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="uid://dnw5kc1itnjw3"
 
 [autoload]

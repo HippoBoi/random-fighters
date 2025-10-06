@@ -54,7 +54,7 @@ texture_type = 1
 
 [resource]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_front, diffuse_lambert, specular_toon;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_front, diffuse_lambert, specular_toon;
 
 uniform sampler2D tex_frg_2 : source_color;
 uniform sampler2D tex_frg_7 : source_color;

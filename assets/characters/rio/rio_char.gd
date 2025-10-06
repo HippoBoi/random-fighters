@@ -10,10 +10,8 @@ extends CharacterBody3D
 @export var cooldownReduction = 0;
 var shield = 0;
 
-@onready var slashHitbox = $slashHitbox;
-
-const BASIC_ATTACK_COOLDOWN = 300;
-const CHARACTER_NAME = "Rhay";
+const BASIC_ATTACK_COOLDOWN = 280;
+const CHARACTER_NAME = "Rio";
 const Q_COOLDOWN = 6.5;
 const W_COOLDOWN = 10.0;
 const E_COOLDOWN = 8.0;
@@ -99,7 +97,7 @@ var basicAnimPos = 0;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
-# @onready var animPlayer = $AnimationPlayer
+@onready var animPlayer = $AnimationPlayer
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -227,22 +225,12 @@ func basicAttack():
 
 @rpc("call_local", "any_peer", "reliable")
 func playBasicAttack():
-	if (overrideBasic == false):
-		basicAttacking = true;
-		basicAttackTimer = BASIC_ATTACK_COOLDOWN;
-		#animPlayer.play(basicAnimList[basicAnimPos]);
-		basicAnimPos += 1;
-		if (basicAnimPos >= basicAnimList.size()):
-			basicAnimPos = 0;
-	else:
-		var sound = preload("res://assets/sounds/characters/rhay/rhay_big_hit.ogg");
-		PlayerFunc.playSound(self, sound);
-		
-		dmgOffset = 0;
-		overrideBasic = false;
-		basicAttacking = true;
-		basicAttackTimer = BASIC_ATTACK_COOLDOWN * 0.5;
-		#animPlayer.play("e_ability");
+	basicAttacking = true;
+	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
+	animPlayer.play(basicAnimList[basicAnimPos]);
+	basicAnimPos += 1;
+	if (basicAnimPos >= basicAnimList.size()):
+		basicAnimPos = 0;
 
 func _setup_primary():
 	pass;
