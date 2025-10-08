@@ -1,14 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bri46gnck15vi"]
+[gd_scene load_steps=6 format=3 uid="uid://bri46gnck15vi"]
 
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="1_xlf65"]
-[ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="2_woy5s"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oaqk5"]
-render_priority = 0
-shader = ExtResource("2_woy5s")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/gradient_1_slider = -0.225
-shader_parameter/gradient_2_slider = 0.2
+[ext_resource type="Material" uid="uid://bqnujf5jw4fk2" path="res://assets/effects/slash_2_shader.tres" id="2_woy5s"]
 
 [sub_resource type="Animation" id="Animation_r1nbt"]
 length = 0.001
@@ -74,7 +67,7 @@ _data = {
 
 [node name="Slash" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_xlf65")
-surface_material_override/0 = SubResource("ShaderMaterial_oaqk5")
+surface_material_override/0 = ExtResource("2_woy5s")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

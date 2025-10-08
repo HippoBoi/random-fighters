@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bqnujf5jw4fk2"]
+
+[ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="1_ftewm"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ftewm")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/gradient_1_slider = 0.65
+shader_parameter/gradient_2_slider = -1.075

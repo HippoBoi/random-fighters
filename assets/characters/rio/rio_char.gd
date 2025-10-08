@@ -96,6 +96,9 @@ var assistedInKill = [];
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
+var playedSecondaryOutline = false;
+var playedSecondaryCircle = false;
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
 @onready var animPlayer = $AnimationPlayer
@@ -158,7 +161,7 @@ func _physics_process(delta: float) -> void:
 			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0):
 				action = Callable(self, "_setup_ultimate");
 			
-			if (action):
+			if (action) and not (usingSecondary):
 				if not (onAction or stunned or dead):
 					action.call();
 				else:
@@ -173,6 +176,12 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (usingSecondary):
+		speed -= 2.0;
+		speed = max(0, speed);
+		
+		updateCirclePositions();
+	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
@@ -183,11 +192,20 @@ func _physics_process(delta: float) -> void:
 	
 	if (secondaryTimer > 0):
 		secondaryTimer -= delta;
-		moveTo = global_position;
+		
+		if not (playedSecondaryOutline):
+			playedSecondaryOutline = true;
+			$RiotOuterCircle/animPlayer.play("outline");
+		
+		if (secondaryTimer <= 0.7 and not playedSecondaryCircle):
+			playedSecondaryCircle = true;
+			$RioWCircle/animPlayer.play("slash");
 	else:
 		if (usingSecondary):
 			usingSecondary = false;
 			onAction = false;
+			playedSecondaryCircle = false;
+			playedSecondaryOutline = false;
 		
 	if (tertiaryTimer > 0):
 		tertiaryTimer -= delta;
@@ -218,13 +236,21 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	if (velocity != Vector3.ZERO):
-		if not (animPlayer.current_animation == "run"):
-			animPlayer.play("run");
-	else:
-		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
-			animPlayer.play("idle");
+	if not (usingSecondary):
+		if (velocity != Vector3.ZERO):
+			if not (animPlayer.current_animation == "run"):
+				animPlayer.play("run");
+		else:
+			if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
+				animPlayer.play("idle");
+
+func updateCirclePositions():
+	$RioWCircle.global_position.x = global_position.x;
+	$RioWCircle.global_position.z = global_position.z;
 	
+	$RiotOuterCircle.global_position.x = global_position.x;
+	$RiotOuterCircle.global_position.z = global_position.z;
+
 func updateHealthSize():
 	var UILoaded = has_node("CharacterUI");
 	if not (UILoaded):
@@ -265,11 +291,11 @@ func _setup_secondary():
 
 @rpc("call_local", "reliable")
 func secondary_ability():
-	usingSecondary = true;
-	onAction = true;
-	secondaryTimer = 2.0;
-	animPlayer.play("w_action");
 	wTimer = W_COOLDOWN;
+	secondaryTimer = 1.8;
+	usingSecondary = true;
+	
+	animPlayer.play("w_action");
 	
 func _setup_tertiary():
 	rpc("tertiary_ability");
