@@ -1156,45 +1156,6 @@ shader_parameter/color = Color(2.4325802, 0.38911328, 1.0576206, 1)
 shader_parameter/gradient_1_slider = 0.725
 shader_parameter/gradient_2_slider = -0.275
 
-[sub_resource type="Animation" id="Animation_hdtch"]
-resource_name = "slash"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_1_slider")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.6333333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.725, 1.13, 1.5150000000000001, 1.65]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_2_slider")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.6333333, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.935, 0.065, -0.67, -0.775]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.13333333, 0.4666667, 0.76666665),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 1.134464, 0), Vector3(0, 3.3824482, 0), Vector3(0, 4.0317106, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_aa3jh"]
 length = 0.001
 tracks/0/type = "value"
@@ -1232,6 +1193,45 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hdtch"]
+resource_name = "slash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_1_slider")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6333333, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.725, 1.13, 1.515, 1.65]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_2_slider")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6333333, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.935, 0.065, -0.67, -0.775]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.13333333, 0.4666667, 0.76666665),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 1.134464, 0), Vector3(0, 3.3824482, 0), Vector3(0, 4.0317106, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1vpjo"]
@@ -1399,45 +1399,6 @@ shader_parameter/color = Color(1.7034391, 0.71932274, 1.0052567, 1)
 shader_parameter/gradient_1_slider = 0.725
 shader_parameter/gradient_2_slider = -0.275
 
-[sub_resource type="Animation" id="Animation_2c6mm"]
-resource_name = "outline"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_1_slider")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.010000005, 0.06666667, 0.20333335, 0.53333336, 0.9666667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.725, 0.725, 0.95, 1.19, 1.6600000000000001]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_2_slider")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.06666667, 0.20000002, 0.53662336, 0.8000001),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [-0.168, -0.168, -0.143, -0.483, -0.683]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.25396982, 1.0000001),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0.21816616, 0), Vector3(0, 2.258456, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_jau8h"]
 length = 0.001
 tracks/0/type = "value"
@@ -1477,6 +1438,45 @@ tracks/2/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_2c6mm"]
+resource_name = "outline"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_1_slider")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.010000005, 0.06666667, 0.20333335, 0.53333336, 0.9666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.725, 0.725, 0.95, 1.19, 1.66]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:surface_material_override/0:shader_parameter/gradient_2_slider")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.20000002, 0.53662336, 0.8000001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.168, -0.168, -0.143, -0.483, -0.683]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25396982, 1.0000001),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.21816616, 0), Vector3(0, 2.258456, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_57ip6"]
 _data = {
 &"RESET": SubResource("Animation_jau8h"),
@@ -1491,22 +1491,22 @@ script = ExtResource("2_ttctk")
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 1.99295, 0)
 
 [node name="Skeleton3D" parent="rio_armature" index="0"]
-bones/0/position = Vector3(0, -0.7663611, 0)
-bones/1/rotation = Quaternion(0.35183966, -0.3372755, 0.011965272, 0.8731043)
-bones/2/rotation = Quaternion(0.049678493, -0.17263332, 0.14286964, 0.97330266)
-bones/4/rotation = Quaternion(0.517996, 0.090194896, 0.0071482295, 0.85058457)
-bones/5/rotation = Quaternion(-0.55320954, -7.752282e-09, -1.3010118e-07, 0.83304214)
-bones/6/rotation = Quaternion(6.953023e-09, -7.0178148e-09, 0.6407475, 0.7677518)
-bones/7/rotation = Quaternion(0.045418, 0.32790735, 0.6035804, 0.72533077)
-bones/8/rotation = Quaternion(0.08539555, 0.05200082, 0.17261155, 0.9799025)
-bones/10/rotation = Quaternion(0.13423322, -0.09620973, -0.6449282, 0.7461855)
-bones/11/rotation = Quaternion(4.1909516e-09, 1.0826621e-08, -1.0113239e-17, 1)
-bones/12/position = Vector3(-1.117587e-08, -0.7663612, -2.220446e-15)
-bones/13/rotation = Quaternion(-0.4560981, 0.53901476, 0.24664442, 0.6637802)
-bones/14/rotation = Quaternion(0.04997109, -0.037469905, -0.6610235, 0.7477612)
-bones/15/position = Vector3(1.117587e-08, -0.7663612, -2.220446e-15)
-bones/16/rotation = Quaternion(-0.4649879, -0.5080802, -0.18664888, 0.7005733)
-bones/17/rotation = Quaternion(0.024040619, 0.14393362, 0.5753059, 0.80481565)
+bones/0/position = Vector3(0, 0.087302655, -0.1772917)
+bones/1/rotation = Quaternion(0, -0.47470033, 0, 0.8801476)
+bones/2/rotation = Quaternion(0.14145996, 0.03128732, -0.050625995, 0.98815346)
+bones/4/rotation = Quaternion(0.3693861, 1.0869257e-07, 3.9196365e-08, 0.929276)
+bones/5/rotation = Quaternion(-0.55320954, -1.1056335e-08, -1.2413385e-07, 0.83304214)
+bones/6/rotation = Quaternion(9.689505e-09, 1.3312479e-09, 0.6407475, 0.7677518)
+bones/7/rotation = Quaternion(-2.5681771e-08, 3.6428215e-08, 0.089805625, 0.99595934)
+bones/8/rotation = Quaternion(2.7939677e-09, 3.7252943e-09, 1.0113244e-17, 1)
+bones/10/rotation = Quaternion(-0.023941811, -0.36819112, -0.6491507, 0.66518074)
+bones/11/rotation = Quaternion(7.683411e-09, 7.916238e-09, 3.0267984e-09, 1)
+bones/12/position = Vector3(7.888934e-11, 0.087302655, -0.1772917)
+bones/13/rotation = Quaternion(-0.38928425, 0.6211465, 0.32276866, 0.59871125)
+bones/14/rotation = Quaternion(-0.09078395, 0.06430982, -0.025058875, 0.99347603)
+bones/15/position = Vector3(-7.888934e-11, 0.087302655, -0.1772917)
+bones/16/rotation = Quaternion(-0.60487145, -0.16494761, 0.13930416, 0.76649666)
+bones/17/rotation = Quaternion(0.05209021, 0.022973228, 0.13701804, 0.98893124)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.21271, 0)

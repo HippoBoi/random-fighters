@@ -753,8 +753,14 @@ func onRightClick(character: CharacterBody3D):
 func syncMovement(character):
 	if (character.moveTo != character.lastPos):
 		character.lastPos = character.moveTo;
-		character.rotateChar(character.moveTo);
+		
 		character.rpc("simulateMove", character.moveTo, Vector3.ZERO);
+		
+		# very specific scenario..!
+		if (character.CHARACTER_NAME == "Rhay" and character.usingTertiary):
+			return;
+		
+		character.rotateChar(character.moveTo);
 
 func stopCharacter(character, stopTarget = true):
 	character.velocity = Vector3.ZERO;

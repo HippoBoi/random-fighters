@@ -12,19 +12,18 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 280;
 const CHARACTER_NAME = "Rio";
-const Q_COOLDOWN = 6.5;
-const W_COOLDOWN = 10.0;
-const E_COOLDOWN = 8.0;
-const R_COOLDOWN = 1.0;
-const W_MAX_RANGE = 5.5;
-const R_MAX_RANGE = 8.2;
+const Q_COOLDOWN = 6.0;
+const W_COOLDOWN = 12.0;
+const E_COOLDOWN = 9.0;
+const R_COOLDOWN = 50.0;
+const Q_MAX_RANGE = 8.0;
 
 var primaryDesc = ""
-var primaryIcon = "res://icon.svg";
+var primaryIcon = "res://assets/sprites/rio_abilities/rio_primary.png";
 var secondaryDesc = "";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/rio_abilities/rio_secondary.png";
 var tertiaryDesc = "";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/rio_abilities/rio_tertiary.png";
 var ultiDesc = "";
 var ultiIcon = "res://icon.svg";
 
@@ -70,6 +69,7 @@ var usingSecondary = false;
 var usingTertiary = false;
 var usingUlti = false;
 var primaryTimer = 0;
+var primaryAnimationTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultiTimer = 0;
@@ -98,6 +98,7 @@ var basicAnimPos = 0;
 
 var playedSecondaryOutline = false;
 var playedSecondaryCircle = false;
+var primaryMoveToTarget: Vector3;
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
@@ -182,13 +183,18 @@ func _physics_process(delta: float) -> void:
 		
 		updateCirclePositions();
 	
-	if (primaryTimer > 0):
+	if (usingPrimary):
 		primaryTimer -= delta;
 		moveTo = global_position;
-	else:
-		if (usingPrimary):
-			usingPrimary = false;
-			onAction = false;
+		
+		if (primaryTimer < 0.45):
+			moveTo = primaryMoveToTarget;
+			
+			if (moveTo == null or target or primaryTimer <= 0):
+				cancelSecondary();
+	
+	if (primaryAnimationTimer):
+		primaryAnimationTimer -= delta;
 	
 	if (secondaryTimer > 0):
 		secondaryTimer -= delta;
@@ -236,7 +242,7 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	if not (usingSecondary):
+	if not (usingSecondary) and not (primaryAnimationTimer > 0):
 		if (velocity != Vector3.ZERO):
 			if not (animPlayer.current_animation == "run"):
 				animPlayer.play("run");
@@ -268,6 +274,9 @@ func basicAttack():
 
 @rpc("call_local", "any_peer", "reliable")
 func playBasicAttack():
+	if (usingSecondary):
+		return;
+	
 	basicAttacking = true;
 	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 	animPlayer.play(basicAnimList[basicAnimPos]);
@@ -276,15 +285,28 @@ func playBasicAttack():
 		basicAnimPos = 0;
 
 func _setup_primary():
-	rpc("primary_ability");
+	if not (mousePos):
+		return;
+	
+	rpc("primary_ability", mousePos.position, global_position);
 
 @rpc("call_local", "reliable")
-func primary_ability():
+func primary_ability(_moveTo, _global_pos):
+	var direction = (_moveTo - _global_pos).normalized();
+	primaryTimer = 0.75;
+	primaryAnimationTimer = primaryTimer + 0.4;
 	usingPrimary = true;
 	onAction = true;
-	primaryTimer = 2.0;
+	
+	primaryMoveToTarget = _global_pos + direction * Q_MAX_RANGE;
+	primaryMoveToTarget.y = _global_pos.y;
+	moveTo = primaryMoveToTarget;
+	
+	qTimer = Q_COOLDOWN - cooldownReduction;
+	speedOffset = 7.5;
+	
 	animPlayer.play("q_ability");
-	qTimer = Q_COOLDOWN;
+	syncRotation(moveTo);
 
 func _setup_secondary():
 	rpc("secondary_ability");
@@ -320,7 +342,7 @@ func ultimate_ability():
 
 @rpc("call_local")
 func cancelSecondary():
-	usingSecondary = false;
+	usingPrimary = false;
 	onAction = false;
 	speedOffset = 0;
 

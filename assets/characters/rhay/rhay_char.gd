@@ -198,7 +198,7 @@ func _physics_process(delta: float) -> void:
 		
 	if (tertiaryTimer > 0):
 		tertiaryTimer -= delta;
-		moveTo = global_position;
+		# moveTo = global_position;
 		
 		if (tertiaryTimer <= 0.55 and not $e_slash/AnimationPlayer.is_playing()):
 			var sound = preload("res://assets/sounds/characters/rhay/rhay_slash.ogg");
@@ -335,10 +335,9 @@ func tertiary_ability(_mousePos):
 	dmgOffset = 0;
 	eTimer = E_COOLDOWN - cooldownReduction;
 	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
-	tertiaryTimer = 0.7;
+	tertiaryTimer = 0.5;
 	target = null;
 	usingTertiary = true;
-	onAction = true;
 	animPlayer.play("q_ability");
 	
 	simulateMove(null, global_position);
@@ -450,7 +449,10 @@ func simulateMove(newPos, _global_pos = Vector3.ZERO):
 		moveTo = _global_pos;
 		return;
 	
-	rotateChar(newPos);
+	print(usingTertiary)
+	if not (usingTertiary):
+		rotateChar(newPos);
+	
 	moveTo = newPos;
 
 @rpc("any_peer", "call_local")
