@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bwot4d2uehph0"]
+[gd_scene load_steps=16 format=3 uid="uid://bwot4d2uehph0"]
 
 [ext_resource type="Script" uid="uid://saovm28vxhs2" path="res://assets/maps/arena.gd" id="1_20fq5"]
 [ext_resource type="PackedScene" uid="uid://b3awqtuov202k" path="res://assets/mapAssets/arena/mesh_arena.tscn" id="1_s7spj"]
@@ -39,6 +39,10 @@ size = Vector3(28.0651, 0.9104, 2.64343)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4uk01"]
 radius = 2.60111
 height = 31.5761
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oryw2"]
+radius = 2.60111
+height = 30.545391
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yfobj"]
 radius = 2.65906
@@ -141,6 +145,16 @@ transform = Transform3D(-2.82432e-08, -0.702929, 2.39545, 2.49645, -1.09093e-07,
 shape = SubResource("CapsuleShape3D_20fq5")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
 
+[node name="CollissionBox7" type="Node3D" parent="."]
+transform = Transform3D(-0.9730824, 0, 0.23045743, 0, 1, 0, -0.23045743, 0, -0.9730824, -5.175662, 2, -3.5290186)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollissionBox7"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox7/StaticBody3D"]
+transform = Transform3D(-2.82432e-08, -0.702929, 2.39545, 2.49645, -1.09093e-07, -2.57854e-09, 1.05405e-07, 2.39545, 0.702929, 1.05273, -1.88875, 4.1522)
+shape = SubResource("CapsuleShape3D_20fq5")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
 [node name="CollissionBox11" type="Node3D" parent="."]
 transform = Transform3D(-0.316229, 0, 0.948683, 0, 1, 0, -0.948683, 0, -0.316229, 53.3895, 2, 5.98184)
 
@@ -171,12 +185,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9958, 0.994537, -10.365)
 shape = SubResource("BoxShape3D_4uk01")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
 
+[node name="CollisionRectangle9" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.9261, -0.146869, 50.403)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle9"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle9/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9958, 0.994537, -10.365)
+shape = SubResource("BoxShape3D_4uk01")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
 [node name="CollisionRectangle5" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -14.6105, 12.8531, 39.9574)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle5"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle5/StaticBody3D"]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 12.9958, -9.14779, -10.679)
+shape = SubResource("CapsuleShape3D_4uk01")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
+[node name="CollisionRectangle10" type="Node3D" parent="."]
+transform = Transform3D(-4.366327e-08, 0.9991867, 0.04032362, -1, -4.3545064e-08, -3.8096992e-09, -2.0507063e-09, -0.04032362, 0.9991867, -13.6105, 12.8531, -19.506847)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle10"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle10/StaticBody3D"]
+transform = Transform3D(-1, -8.7422805e-08, -2.220446e-16, 8.74228e-08, -1, 0, -6.594725e-14, 0, 1, 12.9958, -9.69146, -9.97751)
+shape = SubResource("CapsuleShape3D_oryw2")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
+[node name="CollisionRectangle11" type="Node3D" parent="."]
+transform = Transform3D(-4.309787e-08, 0.99676347, -0.0803903, -1, -4.3545064e-08, -3.8096992e-09, -7.2979693e-09, 0.0803903, 0.99676347, 33.091248, 12.8531, -17.506845)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle11"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle11/StaticBody3D"]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 12.9958, -9.14779, -10.679)
 shape = SubResource("CapsuleShape3D_4uk01")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
@@ -208,6 +252,26 @@ transform = Transform3D(-1.5308e-08, 0.350207, -0.936672, -1, -4.37114e-08, 0, -
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle8/StaticBody3D"]
 transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 12.9959, -2.23274, -11.1246)
+shape = SubResource("CapsuleShape3D_yfobj")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
+[node name="CollisionRectangle12" type="Node3D" parent="."]
+transform = Transform3D(1.5308004e-08, -0.3502071, 0.9366719, -1, -4.37114e-08, 0, 4.0943203e-08, -0.9366719, -0.3502071, 18.860579, 12.8531, -42.052784)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle12"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle12/StaticBody3D"]
+transform = Transform3D(-1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0, 1, 12.9959, -2.23274, -11.1246)
+shape = SubResource("CapsuleShape3D_yfobj")
+debug_color = Color(0.768246, 0, 0.251039, 0.939)
+
+[node name="CollisionRectangle13" type="Node3D" parent="."]
+transform = Transform3D(-1.8126823e-08, 0.4146932, 0.90996075, -1, -4.37114e-08, 0, 3.9775607e-08, -0.90996075, 0.4146932, 2.5814419, 12.8531, -33.462418)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="CollisionRectangle13"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionRectangle13/StaticBody3D"]
+transform = Transform3D(-1, -8.7422805e-08, -1.7763568e-15, 8.7422805e-08, -1, -8.940697e-08, 0, -8.940697e-08, 1, 12.9959, -2.7311363, -10.778846)
 shape = SubResource("CapsuleShape3D_yfobj")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
 

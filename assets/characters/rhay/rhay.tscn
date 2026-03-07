@@ -910,7 +910,7 @@ shader_parameter/hitTexture = ExtResource("7_inplr")
 _data = [Vector2(0, 0.361868), 0.0, 0.0, 0, 0, Vector2(0.545918, 1), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_j7kkc"]
+[sub_resource type="CurveTexture" id="CurveTexture_ycejn"]
 curve = SubResource("Curve_es27p")
 
 [sub_resource type="Curve" id="Curve_n8gvt"]
@@ -918,13 +918,13 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -133.483), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_jlqnf"]
+[sub_resource type="CurveTexture" id="CurveTexture_muese"]
 curve = SubResource("Curve_n8gvt")
 
 [sub_resource type="Gradient" id="Gradient_voxx8"]
 colors = PackedColorArray(2, 0.577, 0.475, 1, 0.808998, 0.808998, 0.808998, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_if8pf"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_msvpl"]
 gradient = SubResource("Gradient_voxx8")
 use_hdr = true
 
@@ -932,22 +932,22 @@ use_hdr = true
 _data = [Vector2(0, 0.842697), 0.0, 0.0, 0, 0, Vector2(0.313433, 0.235955), 0.0, 0.0, 0, 0, Vector2(0.686567, 0.101124), -1.11285, -1.11285, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="CurveTexture" id="CurveTexture_u6w30"]
+[sub_resource type="CurveTexture" id="CurveTexture_4qtsf"]
 curve = SubResource("Curve_365l8")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u3jr2"]
 angle_min = 1.07288e-05
 angle_max = 1.00001
-angle_curve = SubResource("CurveTexture_jlqnf")
+angle_curve = SubResource("CurveTexture_muese")
 initial_velocity_min = 0.1
 initial_velocity_max = 2.0
 gravity = Vector3(0, 0, 0)
 scale_min = 1.8
 scale_max = 2.2
-scale_curve = SubResource("CurveTexture_u6w30")
+scale_curve = SubResource("CurveTexture_4qtsf")
 color = Color(1, 1, 6, 1)
-color_ramp = SubResource("GradientTexture1D_if8pf")
-alpha_curve = SubResource("CurveTexture_j7kkc")
+color_ramp = SubResource("GradientTexture1D_msvpl")
+alpha_curve = SubResource("CurveTexture_ycejn")
 
 [sub_resource type="QuadMesh" id="QuadMesh_hs5xv"]
 

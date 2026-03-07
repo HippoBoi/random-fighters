@@ -233,4 +233,5 @@ text = "Fighters"
 [connection signal="pressed" from="UI/Menu/menuButtons/multiplayerButton" to="." method="onFindMatch"]
 [connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host" binds= [8890, "unnamed", "0"]]
 [connection signal="pressed" from="UI/Menu/menuButtons/creditsButton" to="." method="_joinPressed"]
+[connection signal="pressed" from="UI/Menu/menuButtons/exitButton" to="." method="_on_exit_pressed"]
 [connection signal="text_changed" from="UI/Menu/nameInput" to="." method="_on_name_input"]

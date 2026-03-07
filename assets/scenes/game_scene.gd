@@ -81,6 +81,10 @@ func startGameMode(gameMode: String):
 		newMap = preload("res://assets/maps/trainwreck.tscn").instantiate();
 		minimapCamera.size = 45.0;
 	
+	elif (gameMode.to_lower() == "heaven"):
+		newMap = preload("res://assets/maps/heaven.tscn").instantiate();
+		minimapCamera.size = 65.0;
+	
 	$Map.add_child(newMap);
 	
 	await get_tree().create_timer(0.5).timeout;
@@ -169,6 +173,8 @@ func _getModeDescription(gameMode: String):
 		description = "Stay in the area!"
 	elif (gameMode.to_lower() == "trainwreck"):
 		description = "Look both ways...!"
+	elif (gameMode.to_lower() == "heaven"):
+		description = "Eliminate the other team!"
 	
 	return description;
 

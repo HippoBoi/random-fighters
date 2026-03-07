@@ -709,7 +709,11 @@ func updateGlobally(character: CharacterBody3D, _delta):
 		
 		if (character.basicAttackTimer <= 0):
 			character.basicAttacking = false;
-	
+
+func specificScenarios(character: CharacterBody3D): # lol!
+	if (character.CHARACTER_NAME == "Rio" and character.movingToGrabbed):
+		return true;
+
 func onRightClick(character: CharacterBody3D):
 	if not (gameStarted):
 		return;
@@ -756,7 +760,7 @@ func syncMovement(character):
 		
 		character.rpc("simulateMove", character.moveTo, Vector3.ZERO);
 		
-		# very specific scenario..!
+		# very specific scenario.. !
 		if (character.CHARACTER_NAME == "Rhay" and character.usingTertiary):
 			return;
 		

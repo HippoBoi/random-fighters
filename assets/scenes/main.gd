@@ -500,3 +500,6 @@ func teamHasWon(_teamThatHasWon: int):
 	if (isScene):
 		var gameScene = get_node("Game");
 		gameScene.endGame(_teamThatHasWon);
+
+func _on_exit_pressed() -> void:
+	get_tree().quit();

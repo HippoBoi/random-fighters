@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=25 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="1_qrbhw"]
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
@@ -14,6 +14,7 @@
 [ext_resource type="Shader" uid="uid://c7crpvx38smj" path="res://assets/scenes/UI_outline_solid.gdshader" id="10_0h5le"]
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
+[ext_resource type="Texture2D" uid="uid://dqdpwunesijl2" path="res://assets/sprites/rio.png" id="13_dmdnx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vvea"]
 shader = ExtResource("2_70d5h")
@@ -40,7 +41,7 @@ shader_parameter/speed = 3.0
 shader_parameter/radius = 1.0
 shader_parameter/line_thickness = 0.5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsrkv"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wsrkv"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_wsrkv"]
 
@@ -48,7 +49,7 @@ shader_parameter/line_thickness = 0.5
 texture = SubResource("ImageTexture_wsrkv")
 modulate_color = Color(0, 0.592157, 0.592157, 0.470588)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wsrkv"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsrkv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tnaqc"]
 shader = ExtResource("10_0h5le")
@@ -314,7 +315,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="rhay" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 84.0
 offset_top = -32.0
@@ -376,12 +376,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="ramon" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 172.0
 offset_top = -32.0
@@ -439,12 +438,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="clean" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 259.0
 offset_top = -32.0
@@ -503,12 +501,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="shugo" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 348.0
 offset_top = -32.0
@@ -567,12 +564,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="nephi" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 46.0
 offset_top = 56.0
@@ -631,12 +627,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="ale" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 131.0
 offset_top = 56.0
@@ -695,12 +690,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="mystery" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 223.0
 offset_top = 56.0
@@ -759,12 +753,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="rio" type="Control" parent="Characters"]
-layout_mode = 2
 anchors_preset = 0
 offset_left = 311.0
 offset_top = 56.0
@@ -779,15 +772,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -36.0
+offset_left = -41.0
 offset_top = -31.0
-offset_right = 34.0
+offset_right = 38.0
 offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_qrbhw")
+texture = ExtResource("13_dmdnx")
 expand_mode = 1
-stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/rio"]
 layout_mode = 1
@@ -823,9 +815,9 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="BlackTeamText" type="RichTextLabel" parent="."]
 layout_mode = 0
@@ -879,7 +871,7 @@ grow_vertical = 2
 visible = false
 self_modulate = Color(0.396889, 0.396889, 0.396889, 1)
 clip_contents = true
-layout_mode = 2
+layout_mode = 0
 offset_left = -80.0
 offset_top = 20.0
 offset_right = -5.0
@@ -953,10 +945,10 @@ offset_top = 4.0
 offset_right = 87.5
 offset_bottom = 57.0
 grow_horizontal = 2
-theme_override_constants/outline_size = 6
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 6
 theme_override_font_sizes/normal_font_size = 38
 text = "60"
 horizontal_alignment = 1

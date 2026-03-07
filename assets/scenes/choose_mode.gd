@@ -75,6 +75,8 @@ func _getModeImage(gamemode: String):
 		image = preload("res://assets/mapAssets/arena/fancy-scaled-gold_roughness.png").duplicate();
 	elif (gamemode.to_lower() == "trainwreck"):
 		image = preload("res://assets/textures/HQ_Noise_LowEndClamp.jpg").duplicate();
+	elif (gamemode.to_lower() == "heaven"):
+		image = preload("res://rf_icon.png").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();

@@ -12,17 +12,17 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 280;
 const CHARACTER_NAME = "Rio";
-const Q_COOLDOWN = 6.0;
-const W_COOLDOWN = 12.0;
-const E_COOLDOWN = 9.0;
+const Q_COOLDOWN = 7.5;
+const W_COOLDOWN = 13.0;
+const E_COOLDOWN = 6.0;
 const R_COOLDOWN = 50.0;
-const Q_MAX_RANGE = 8.0;
+const Q_MAX_RANGE = 12.0;
 
-var primaryDesc = ""
+var primaryDesc = "Jump forward dealing 85% of your PHYSICAL DAMAGE to nearby enemies."
 var primaryIcon = "res://assets/sprites/rio_abilities/rio_primary.png";
-var secondaryDesc = "";
+var secondaryDesc = "Cast for 1.5 seconds and deal 100% of your PHYSICAL DAMAGE in a circle around you.";
 var secondaryIcon = "res://assets/sprites/rio_abilities/rio_secondary.png";
-var tertiaryDesc = "";
+var tertiaryDesc = "Throw a spider web in the direction of your mouse. You'll dash into the direction the first enemy hit stunning them for 0.75 seconds.";
 var tertiaryIcon = "res://assets/sprites/rio_abilities/rio_tertiary.png";
 var ultiDesc = "";
 var ultiIcon = "res://icon.svg";
@@ -100,9 +100,21 @@ var playedSecondaryOutline = false;
 var playedSecondaryCircle = false;
 var primaryMoveToTarget: Vector3;
 
+var shaderTimer = 0;
+var shaderAcc = 0;
+
+var web: MeshInstance3D = null;
+var isWebSpawned = false;
+var grabbedPlayerPos: Vector3;
+
+var movingToGrabbed = false;
+var movingToGrabbedTimer = 0;
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
 @onready var animPlayer = $AnimationPlayer
+@onready var slashForward = $q_slash_forward/Cube;
+@onready var slashBackwards = $q_slash_backwards/Cube;
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -163,7 +175,7 @@ func _physics_process(delta: float) -> void:
 				action = Callable(self, "_setup_ultimate");
 			
 			if (action) and not (usingSecondary):
-				if not (onAction or stunned or dead):
+				if not (onAction or stunned or dead or movingToGrabbed):
 					action.call();
 				else:
 					bufferedInput = action;
@@ -177,21 +189,51 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (usingPrimary):
+		speed += 11.0;
+		
 	if (usingSecondary):
 		speed -= 2.0;
 		speed = max(0, speed);
 		
 		updateCirclePositions();
+		
+	if (movingToGrabbed and not usingPrimary):
+		speed += 13.0;
 	
-	if (usingPrimary):
+	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
 		
-		if (primaryTimer < 0.45):
+		shaderTimer -= (delta * 16 - shaderAcc);
+		shaderAcc += delta * 0.25;
+		
+		_updateSlashAnimation();
+		
+		if (primaryTimer < 0.7):
+			$qCircleParticles.emitting = true;
+		
+		if (primaryTimer < 0.5):
+			if (movingToGrabbed):
+				cancelGrab();
+				
 			moveTo = primaryMoveToTarget;
 			
+			slashForward.visible = true;
+			slashBackwards.visible = true;
+			$qParticles.emitting = true;
+			$q_hitbox/MeshInstance3D/Area3D.monitoring = true;
+			
 			if (moveTo == null or target or primaryTimer <= 0):
-				cancelSecondary();
+				cancelDash();
+	else:
+		shaderTimer = 20;
+		shaderAcc = 0;
+		$qParticles.emitting = false;
+		$q_hitbox/MeshInstance3D/Area3D.monitoring = false;
+		usingPrimary = false;
+		slashForward.visible = false;
+		slashBackwards.visible = false;
 	
 	if (primaryAnimationTimer):
 		primaryAnimationTimer -= delta;
@@ -215,11 +257,41 @@ func _physics_process(delta: float) -> void:
 		
 	if (tertiaryTimer > 0):
 		tertiaryTimer -= delta;
+		
+		if not (isWebSpawned):
+			var webScene: PackedScene = load("res://assets/characters/rio/rio_e_web.tscn");
+			web = webScene.instantiate();
+			web.setup(self, team);
+			web.grabbed.connect(onWebGrabbed);
+			
+			add_child(web);
+			web.global_position = $eWebPosition.global_position;
+			web.scale.z = 1.0;
+			
+			isWebSpawned = true;
+		
+		if not (web):
+			return;
+		
+		if (tertiaryTimer < 0.4 and tertiaryTimer > 0.3):
+			web.visible = true;
+			web.scale.z += delta + 6;
+			web.global_position += web.global_transform.basis.z * (delta + 0.05);
+			
+		elif (tertiaryTimer <= 0.3 and tertiaryTimer > 0.1):
+			web.scale.y -= delta * 0.5;
+			web.scale.z -= delta * 0.5;
+			web.scale.y = max(0.01, web.scale.y);
+			web.scale.z = max(0.01, web.scale.z);
+		elif (tertiaryTimer <= 0.1):
+			web.global_position += web.global_transform.basis.z * (delta + 0.025);
+			web.scale.z += delta - 2.5;
+			web.scale.z = max(0.01, web.scale.z);
+		
 		moveTo = global_position;
 	else:
-		if (usingTertiary):
-			usingTertiary = false;
-			onAction = false;
+		if (usingTertiary and movingToGrabbed == false):
+			cancelGrab();
 	
 	if (ultiTimer > 0):
 		ultiTimer -= delta;
@@ -228,6 +300,24 @@ func _physics_process(delta: float) -> void:
 		if (usingUlti):
 			usingUlti = false;
 			onAction = false;
+	
+	if (movingToGrabbed):
+		movingToGrabbedTimer -= delta;
+		moveTo = global_position;
+		
+		if (movingToGrabbedTimer < 0.85):
+			var distanceToGrabbed = global_position.distance_to(grabbedPlayerPos);
+			moveTo = grabbedPlayerPos;
+			
+			if (web):
+				web.queue_free();
+				web = null;
+				isWebSpawned = false;
+			
+			if (moveTo == null or movingToGrabbedTimer <= 0 or distanceToGrabbed < 1):
+				movingToGrabbed = false;
+				onAction = false;
+				usingTertiary = false;
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -242,13 +332,19 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
-	if not (usingSecondary) and not (primaryAnimationTimer > 0):
+	if not (usingSecondary) and not (primaryAnimationTimer > 0) and not (movingToGrabbed):
 		if (velocity != Vector3.ZERO):
 			if not (animPlayer.current_animation == "run"):
 				animPlayer.play("run");
 		else:
 			if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 				animPlayer.play("idle");
+
+func _updateSlashAnimation():
+	var materialForward: ShaderMaterial = slashForward.get_surface_override_material(0);
+	var materialBackwards: ShaderMaterial = slashBackwards.get_surface_override_material(0);
+	materialForward.set_shader_parameter("gradient_2_slider", shaderTimer);
+	materialBackwards.set_shader_parameter("gradient_2_slider", (shaderTimer - 40) * 0.5);
 
 func updateCirclePositions():
 	$RioWCircle.global_position.x = global_position.x;
@@ -267,6 +363,22 @@ func updateHealthSize():
 	var shieldBar = charUI.get_node("HealthUI/SubViewport/emptyBar/shieldBar");
 	healthBar.scale.x = hp / maxHp;
 	shieldBar.scale.x = shield / maxHp;
+
+func onWebGrabbed(_otherPos: Vector3):
+	if (movingToGrabbed):
+		return;
+	
+	$qCircleParticles.emitting = true;
+	if (web):
+		web.get_node("Area3D").monitoring = false;
+		web.top_level = true;
+	
+	movingToGrabbed = true;
+	usingTertiary = false;
+	onAction = false;
+	grabbedPlayerPos = _otherPos;
+	movingToGrabbedTimer = 1.0;
+	tertiaryTimer = 0;
 
 func basicAttack():
 	basicDamageDealt = false;
@@ -291,19 +403,19 @@ func _setup_primary():
 	rpc("primary_ability", mousePos.position, global_position);
 
 @rpc("call_local", "reliable")
-func primary_ability(_moveTo, _global_pos):
-	var direction = (_moveTo - _global_pos).normalized();
+func primary_ability(_moveTo, _globalPos):
+	var direction = (_moveTo - _globalPos).normalized();
 	primaryTimer = 0.75;
 	primaryAnimationTimer = primaryTimer + 0.4;
 	usingPrimary = true;
 	onAction = true;
+	target = null;
 	
-	primaryMoveToTarget = _global_pos + direction * Q_MAX_RANGE;
-	primaryMoveToTarget.y = _global_pos.y;
+	primaryMoveToTarget = _globalPos + direction * Q_MAX_RANGE;
+	primaryMoveToTarget.y = _globalPos.y;
 	moveTo = primaryMoveToTarget;
 	
 	qTimer = Q_COOLDOWN - cooldownReduction;
-	speedOffset = 7.5;
 	
 	animPlayer.play("q_ability");
 	syncRotation(moveTo);
@@ -320,15 +432,20 @@ func secondary_ability():
 	animPlayer.play("w_action");
 	
 func _setup_tertiary():
-	rpc("tertiary_ability");
+	if not (mousePos):
+		return;
+		
+	rpc("tertiary_ability", mousePos.position, global_position);
 
 @rpc("call_local", "reliable")
-func tertiary_ability():
+func tertiary_ability(_mousePos, _globalPos):
 	usingTertiary = true;
 	onAction = true;
-	tertiaryTimer = 2.0;
+	tertiaryTimer = 0.75;
 	animPlayer.play("e_ability");
 	eTimer = E_COOLDOWN;
+	
+	syncRotation(_mousePos);
 
 func _setup_ultimate():
 	rpc("ultimate_ability");
@@ -341,10 +458,23 @@ func ultimate_ability():
 	rTimer = R_COOLDOWN;
 
 @rpc("call_local")
-func cancelSecondary():
+func cancelDash():
 	usingPrimary = false;
 	onAction = false;
 	speedOffset = 0;
+
+@rpc("call_local", "reliable")
+func cancelGrab():
+	if (web):
+		web.queue_free();
+		web = null;
+	
+	isWebSpawned = false;
+	movingToGrabbed = false;
+	usingTertiary = false;
+	onAction = false;
+	movingToGrabbedTimer = 0;
+	grabbedPlayerPos = Vector3.ZERO;
 
 @rpc("call_local")
 func cancelUlti():
@@ -454,3 +584,10 @@ func _onSlashTouched(other) -> void:
 		if (other.team != team):
 			qTimer = 0;
 			PlayerFunc.dealDamage(self, other, (dmg + 0.5));
+
+func _on_q_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = (dmg + 10) * 0.85;
+		if (other.team != team):
+			PlayerFunc.dealDamage(self, other, totalDmg);
