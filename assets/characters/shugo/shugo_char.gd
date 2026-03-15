@@ -17,9 +17,9 @@ const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 11.0;
 const ALT_W_COOLDOWN = 10.0;
 const E_COOLDOWN = 7.0;
-const ALT_E_COOLDOWN = 13.0;
+const ALT_E_COOLDOWN = 12.0;
 const R_COOLDOWN = 6.0;
-const Q_MAX_RANGE = 6.5;
+const Q_MAX_RANGE = 7.05;
 const ALT_Q_MAX_RANGE = 7.2;
 
 var primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
@@ -149,22 +149,22 @@ func rotateChar(newPos) -> void:
 func _updateAbilityDescriptions():
 	if (humanForm):
 		primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
-		primaryIcon = "res://icon.svg";
+		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_primary.png";
 		secondaryDesc = "Hit the ground creating a rift, dealing 75% of your PHYSICAL DAMAGE and stunning enemies.";
-		secondaryIcon = "res://icon.svg";
+		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_secondary.png";
 		tertiaryDesc = "Short slash that deals 100% of your PHYSICAL DAMAGE.";
-		tertiaryIcon = "res://icon.svg";
+		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_tertiary.png";
 		ultiDesc = "Transform into your smaller form. Gain DAMAGE and SPEED but lose ARMOR.";
-		ultiIcon = "res://icon.svg";
+		ultiIcon = "res://assets/sprites/shugo_abilities/shugo_ultimate.png";
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
-		primaryIcon = "res://icon.svg";
+		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_primary.png";
 		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE";
-		secondaryIcon = "res://icon.svg";
+		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_secondary.png";
 		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
-		tertiaryIcon = "res://icon.svg";
+		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_tertiary.png";
 		ultiDesc = "Transform into your taller form. Gain ARMOR but lose DAMAGE and SPEED.";
-		ultiIcon = "res://icon.svg";
+		ultiIcon = "res://assets/sprites/shugo_abilities/shugo_ultimate.png";
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
@@ -217,20 +217,20 @@ func _physics_process(delta: float) -> void:
 		if (usingPrimary == true and not humanForm):
 			if (moveTo == null or target):
 				var distance = global_position.distance_to(primaryTarget.global_position);
-				if (distance < 4):
-					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.85);
+				if (distance < 5):
+					PlayerFunc.dealDamage(self, primaryTarget, dmg * 1.15);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
 	_updateAbilityDescriptions();
 	
 	if (humanForm):
-		baseArmor = 24;
-		baseAttackRange = 3.0;
+		baseArmor = 26;
+		baseAttackRange = 3.15;
 		attackSpeedOffset = 0.0;
 	else:
 		baseArmor = 13;
-		baseAttackRange = 2.25;
+		baseAttackRange = 2.15;
 		attackSpeedOffset = 2.5;
 	
 	if (usingPrimary == true):
@@ -466,7 +466,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 		moveTo.y = _global_pos.y;
 		qTimer = Q_COOLDOWN - cooldownReduction;
 		primaryTimer = 0.5;
-		speedOffset = 5.5;
+		speedOffset = 7.0;
 		onAction = true;
 		animPlayer.play("q_ability");
 		
@@ -493,7 +493,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 				primaryTimer = 0.5;
 			
 			qTimer = Q_COOLDOWN - cooldownReduction;
-			speedOffset = 10;
+			speedOffset = 15;
 			onAction = true;
 			
 			kirbyAnimPlayer.play("q_ability");
@@ -690,7 +690,7 @@ func _on_q_touched(other: Node3D) -> void:
 	if (isCharacter):
 		var totalDmg = dmg + 15.0;
 		if (other.team != team):
-			PlayerFunc.dealDamage(self, other, totalDmg * 0.3);
+			PlayerFunc.dealDamage(self, other, totalDmg * 0.4);
 			PlayerFunc.moveTarget(other, 1.0, global_position + Vector3(0, 0, -1), 8);
 
 func _on_e_touched(other: Node3D) -> void:
@@ -706,6 +706,6 @@ func _on_e_spin_hit(other: Node3D) -> void:
 		var wasHitBefore = alreadyHit.has(other);
 		if not (wasHitBefore):
 			alreadyHit.insert(len(alreadyHit), other);
-			var totalDmg = dmg * 0.21;
+			var totalDmg = dmg * 0.25;
 			if (other.team != team):
 				PlayerFunc.dealDamage(self, other, totalDmg);
