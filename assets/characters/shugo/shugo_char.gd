@@ -149,13 +149,13 @@ func rotateChar(newPos) -> void:
 func _updateAbilityDescriptions():
 	if (humanForm):
 		primaryDesc = "Dash towards your mouse position damaging and displacing enemies."
-		primaryIcon = "res://icon.svg";
+		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_primary.png";
 		secondaryDesc = "Hit the ground creating a rift, dealing 75% of your PHYSICAL DAMAGE and stunning enemies.";
-		secondaryIcon = "res://icon.svg";
+		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_secondary.png";
 		tertiaryDesc = "Short slash that deals 100% of your PHYSICAL DAMAGE.";
-		tertiaryIcon = "res://icon.svg";
+		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_tertiary.png";
 		ultiDesc = "Transform into your smaller form. Gain DAMAGE and SPEED but lose ARMOR.";
-		ultiIcon = "res://icon.svg";
+		ultiIcon = "res://assets/sprites/shugo_abilities/shugo_ultimate.png";
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
 		primaryIcon = "res://icon.svg";
