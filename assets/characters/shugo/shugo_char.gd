@@ -158,13 +158,13 @@ func _updateAbilityDescriptions():
 		ultiIcon = "res://assets/sprites/shugo_abilities/shugo_ultimate.png";
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
-		primaryIcon = "res://icon.svg";
+		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_primary.png";
 		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE";
-		secondaryIcon = "res://icon.svg";
+		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_secondary.png";
 		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
-		tertiaryIcon = "res://icon.svg";
+		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_tertiary.png";
 		ultiDesc = "Transform into your taller form. Gain ARMOR but lose DAMAGE and SPEED.";
-		ultiIcon = "res://icon.svg";
+		ultiIcon = "res://assets/sprites/shugo_abilities/shugo_ultimate.png";
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
