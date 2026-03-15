@@ -6,8 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dmuun3wigxfe6" path="res://assets/sprites/character_icons/ramon_icon.png" id="4_ynh7j"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="5_k4x2y"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n05ms"]
-size = Vector3(1.50684, 6.13483, 1)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ynh7j"]
+radius = 0.79345703
+height = 6.028076
 
 [sub_resource type="Animation" id="Animation_85qjt"]
 resource_name = "basic_01"
@@ -1229,8 +1230,8 @@ layers = 2
 layers = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
-shape = SubResource("BoxShape3D_n05ms")
+transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999976, 0.052246094, 2.990501, 0)
+shape = SubResource("CapsuleShape3D_ynh7j")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="2"]
 libraries = {
