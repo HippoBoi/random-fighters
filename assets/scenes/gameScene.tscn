@@ -1,7 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=33 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
+[ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="3_5xj4x"]
 [ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="3_7678e"]
 [ext_resource type="PackedScene" uid="uid://bmg8t7dg4xk3d" path="res://assets/scenes/shop_ui.tscn" id="3_tkgy1"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="4_4y838"]
@@ -128,6 +129,30 @@ offset_bottom = -63.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
+
+[node name="templates" type="Control" parent="InGameUI/playerList"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="playerIcon" type="TextureRect" parent="InGameUI/playerList/templates"]
+visible = false
+layout_mode = 0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 55.0
+offset_bottom = 50.0
+texture = ExtResource("3_5xj4x")
+expand_mode = 1
+
+[node name="playerLabel" type="Label" parent="InGameUI/playerList/templates"]
+visible = false
+layout_mode = 0
+offset_left = 60.0
+offset_top = 20.0
+offset_right = 141.0
+offset_bottom = 43.0
+text = "persona jij"
 
 [node name="livesText" type="RichTextLabel" parent="InGameUI"]
 visible = false

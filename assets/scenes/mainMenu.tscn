@@ -121,6 +121,7 @@ offset_bottom = 169.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "..."
+max_length = 16
 
 [node name="nameInputText" type="RichTextLabel" parent="UI/Menu"]
 layout_mode = 1

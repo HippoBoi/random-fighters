@@ -194,14 +194,14 @@ func addCharacter(player, _playerId):
 
 	if not (spawnLocations):
 		print("[WARNING]: spawn locations not found");
-		return;
+		return null;
 	
 	var character = player.charInstance;
 	var charInstance = character.instantiate();
 	
 	if (addedCharacters.find(charInstance) != -1):
 		print("player %s already spawned character" % player.username);
-		return;
+		return null;
 	
 	addedCharacters.insert(len(addedCharacters), charInstance);
 	
@@ -228,17 +228,70 @@ func updatePlayerList():
 	totalPlayers = 0;
 	
 	for oldPlayer in $InGameUI/playerList.get_children():
+		if (oldPlayer.name == "templates"):
+			continue ;
+		
 		oldPlayer.queue_free();
-		
+	
+	var team0 = [];
+	var team1 = [];
+
 	for playerID in Server.playersInfo:
-		totalPlayers += 1;
+		var player = Server.playersInfo[playerID];
+		if (player.team == 0):
+			team0.append(playerID);
+		else:
+			team1.append(playerID);
+
+	var sortedPlayers = team0 + team1;
+	var index = 0;
+
+	for playerID in sortedPlayers:
+		index += 1;
 		
-		var newText = Label.new();
+		var playerList = $InGameUI/playerList;
+		var templates = playerList.get_node("templates");
+		var playerLabel = templates.get_node_or_null("playerLabel");
+		var playerIcon = templates.get_node_or_null("playerIcon");
+		
+		if not (playerLabel and playerIcon):
+			push_warning("player ID: %s failed to update in player list" % playerID);
+			continue ;
+		
+		var newText = playerLabel.duplicate();
+		var newIcon = playerIcon.duplicate();
 		var newPlayer = Server.playersInfo[playerID];
+		var characterIcon = load("res://assets/sprites/character_icons/%s_icon.png" % newPlayer.character);
+
+		var yDistance = 25;
+		var yPos = 10 + (index - 1) * yDistance;
+	
+		var bg = ColorRect.new();
+		bg.position = Vector2(10, yPos - 2);
+		bg.size.x = playerList.size.x
+		bg.size.y = 24
+		bg.position.y = yPos - 2
+		bg.position.x = 0
+		
+		if (newPlayer.team == 0):
+			bg.color = Color(0.1, 0.4, 1.0, 0.25);
+		else:
+			bg.color = Color(1.0, 0.2, 0.1, 0.25);
+		
+		playerList.add_child(bg);
+
+		if (characterIcon):
+			newIcon.texture = characterIcon;
+			newIcon.position = Vector2(20, yPos - 7);
+			newIcon.visible = true;
+			playerList.add_child(newIcon);
+
 		newText.name = newPlayer.username;
 		newText.text = newPlayer.username;
-		newText.position = Vector2(20, 20 + (totalPlayers - 1) * 25);
-		$InGameUI/playerList.add_child(newText);
+		newText.position = Vector2(60, yPos);
+		newText.visible = true;
+
+		playerList.add_child(newText);
 
 func _playRoundEndAnimation(winnerTeam: int):
 	var ggText: Label = $RoundEndUI/GG;
