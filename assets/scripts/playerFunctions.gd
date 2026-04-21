@@ -1,4 +1,4 @@
-extends Node	
+extends Node
 
 const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
@@ -95,7 +95,7 @@ func _cameraMovement(character: CharacterBody3D, delta):
 		
 		currentCamera.global_position.x = clamp(currentCamera.global_position.x, margins[0][0], margins[0][1]);
 		currentCamera.global_position.z = clamp(currentCamera.global_position.z, margins[1][0], margins[1][1]);
-		return;
+		return ;
 	
 	var moveMargin = 25;
 	var cameraSpeed = 25;
@@ -233,7 +233,7 @@ func _updateGameUI(character: CharacterBody3D):
 		var primAbility = abilityUI.get_node("primaryAbility");
 		var secondAbility = abilityUI.get_node("secondaryAbility");
 		var tertAbility = abilityUI.get_node("tertiaryAbility");
-		var ultAbility = abilityUI.get_node("ultiAbility"); 
+		var ultAbility = abilityUI.get_node("ultiAbility");
 		var UIlevel = abilityUI.get_node("level");
 		var UIrespawningText = abilityUI.get_node("respawningText");
 		var UIrespawnTimer = abilityUI.get_node("respawnTimer");
@@ -305,12 +305,12 @@ func _autoBasic(character):
 	var hitbox: Area3D = basicArea.get_node("area");
 	hitbox.body_entered.connect(func(other: Node3D):
 		if (other == self or other.visible == false):
-			return;
+			return ;
 		
 		var isCharacter = "CHARACTER_NAME" in other;
 		if (isCharacter):
 			if (other.dead):
-				return;
+				return ;
 			
 			if (other.team != character.team):
 				character.target = other;
@@ -483,7 +483,7 @@ func checkTeamLives(character: CharacterBody3D):
 
 func killCharacter(character: CharacterBody3D):
 	if (character.dead or character.CHARACTER_NAME == "SERVER"):
-		return;
+		return ;
 	
 	character.dead = true;
 	character.visible = false;
@@ -495,22 +495,29 @@ func killCharacter(character: CharacterBody3D):
 	var scene = character.get_parent();
 	if (scene.name != "Game"):
 		print("[WARNING]: game node not found");
-		return;
+		return ;
+
+	var victimPlayerId = character.get_multiplayer_authority();
+	if (Server.playersInfo.has(victimPlayerId)):
+		Server.playersInfo[victimPlayerId].deaths += 1;
+	elif (Server.playersInfo.has(str(victimPlayerId))):
+		Server.playersInfo[str(victimPlayerId)].deaths += 1;
 	
 	var invertedAssistsArray: Array = character.assistedInKill;
 	invertedAssistsArray.reverse();
 	
 	var index = 0;
-	for playerId in character.assistedInKill:
+	for playerId in invertedAssistsArray:
 		if (scene.name != "Game"):
 			print("[WARNING]: game node not found");
-			return;
+			return ;
 		
-		var tokenReward = 0;
-		if (index == 0):
-			tokenReward = 10;
-		elif (index == 1):
+		var isAssist = false;
+		var tokenReward = 10;
+
+		if (index == 1):
 			tokenReward = 5;
+			isAssist = true;
 		
 		var player: CharacterBody3D = scene.get_character_by_id(playerId);
 		if (player and player != character):
@@ -518,8 +525,25 @@ func killCharacter(character: CharacterBody3D):
 			
 			if (player == myCharacter):
 				_takedownAnim(scene);
-			
+		
+		var playersInfoKey = playerId;
+		if not (Server.playersInfo.has(playersInfoKey)):
+			var parsedPlayerId = int(str(playerId));
+			if (str(parsedPlayerId) == str(playerId) and Server.playersInfo.has(parsedPlayerId)):
+				playersInfoKey = parsedPlayerId;
+		
+		if (Server.playersInfo.has(playersInfoKey)):
+			if not (isAssist):
+				Server.playersInfo[playersInfoKey].kills += 1;
+			else:
+				Server.playersInfo[playersInfoKey].assists += 1;
+		else:
+			push_warning("[killCharacter]: player ID %s not found in Server.playersInfo" % str(playerId));
+		
 		index += 1;
+
+	if (scene.has_method("updatePlayerList")):
+		scene.updatePlayerList();
 	
 	var particles = preload("res://assets/characters/dead_particles.tscn").instantiate();
 	character.get_parent().add_child(particles);
@@ -552,7 +576,7 @@ func spawnCharacter(character: CharacterBody3D):
 		
 		if not (spawns):
 			print("[WARNING PLAYER FUNC]: spawn locations not found");
-			return;
+			return ;
 		
 		var whiteTeam: Node3D = spawns.get_node("whiteTeam");
 		var blackTeam: Node3D = spawns.get_node("blackTeam");
@@ -566,7 +590,7 @@ func spawnCharacter(character: CharacterBody3D):
 	
 func respawnCharacter(character: CharacterBody3D):
 	if (character.dead == false):
-		return;
+		return ;
 	
 	character.hp = character.maxHp;
 	character.dead = false;
@@ -582,7 +606,7 @@ func respawnCharacter(character: CharacterBody3D):
 		
 		if not (spawns):
 			print("[WARNING PLAYER FUNC]: spawn locations not found");
-			return;
+			return ;
 		
 		var whiteTeam: Node3D = spawns.get_node("whiteTeam");
 		var blackTeam: Node3D = spawns.get_node("blackTeam");
@@ -716,11 +740,11 @@ func specificScenarios(character: CharacterBody3D): # lol!
 
 func onRightClick(character: CharacterBody3D):
 	if not (gameStarted):
-		return;
+		return ;
 	
 	var mousePos = character.mousePos;
 	if (mousePos.is_empty()):
-		return;
+		return ;
 	
 	if not (character.onAction):
 		character.target = null;
@@ -731,10 +755,10 @@ func onRightClick(character: CharacterBody3D):
 		else:
 			character.bufferedTarget = character.hovering;
 			character.rpc("syncBufferedInputs", null, character.bufferedTarget);
-		return;
+		return ;
 	
 	if (wasdMovement):
-		return;
+		return ;
 	
 	var particles = preload("res://assets/particles/click_particles.tscn").instantiate();
 	particles.transform.origin = mousePos.position;
@@ -762,7 +786,7 @@ func syncMovement(character):
 		
 		# very specific scenario.. !
 		if (character.CHARACTER_NAME == "Rhay" and character.usingTertiary):
-			return;
+			return ;
 		
 		character.rotateChar(character.moveTo);
 
@@ -802,7 +826,7 @@ func displaceChar(character, delta: float, posToMove: Vector3):
 
 func _inBasicRange(character, target):
 	if (target.team == character.team):
-		return;
+		return ;
 	
 	var distance = character.global_position.distance_to(target.global_position);
 	if (distance < character.attackRange):
@@ -813,7 +837,7 @@ func _inBasicRange(character, target):
 func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 	if not (target) or (target.dead):
 		print("[dealDamage]: no target found");
-		return;
+		return ;
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
@@ -832,7 +856,7 @@ func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 			target.rpc("onParry");
 			dealDamage(target, character, dmg, effect);
 			stunTarget(character, 1.5);
-			return;
+			return ;
 	
 	if (totalDmg > 0):
 		target.hp -= totalDmg;
@@ -850,7 +874,7 @@ func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 func grantShield(character, target, shield, effect := ""):
 	if not (target):
 		print("[grantShield]: no target found");
-		return;
+		return ;
 	
 	target.shield += shield;
 	target.shield = clamp(target.shield, 0, target.maxHp);
@@ -863,7 +887,7 @@ func grantShield(character, target, shield, effect := ""):
 func stunTarget(target, duration, effect := ""):
 	var canParry = "usingParry" in target;
 	if (canParry and target.usingParry):
-		return;
+		return ;
 	
 	target.stunned = true;
 	target.stunTimer = duration;
@@ -922,7 +946,7 @@ func shopToggle(character: CharacterBody3D, forceClose = false):
 
 func optionsToggle():
 	if not (myCharacter):
-		return;
+		return ;
 	
 	var scene = myCharacter.get_parent();
 	var optionsUI = scene.get_node("OptionsUI");
@@ -1034,7 +1058,7 @@ func _hadTokensChanged(character: CharacterBody3D):
 	
 func _calculateHealthBars(character: CharacterBody3D):
 	if not (_hasMaxHpChanged(character)):
-		return;
+		return ;
 	
 	var charUI = character.get_node("CharacterUI");
 	var emptyBar = charUI.get_node("HealthUI/SubViewport/emptyBar");
@@ -1063,7 +1087,7 @@ func _calculateHealthBars(character: CharacterBody3D):
 func updateHealthSize(character: CharacterBody3D, damaged = false):
 	var UILoaded = character.has_node("CharacterUI");
 	if not (UILoaded):
-		return;
+		return ;
 	
 	var myTeamColor = Color(0.073, 0.509, 0.6);
 	var enemyTeamColor = Color(0.769, 0.17, 0.182);

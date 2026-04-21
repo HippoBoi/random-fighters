@@ -131,9 +131,12 @@ grow_vertical = 2
 color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
 
 [node name="templates" type="Control" parent="InGameUI/playerList"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="playerIcon" type="TextureRect" parent="InGameUI/playerList/templates"]
 visible = false
@@ -153,6 +156,53 @@ offset_top = 20.0
 offset_right = 141.0
 offset_bottom = 43.0
 text = "persona jij"
+
+[node name="kdaLabel" type="Label" parent="InGameUI/playerList/templates"]
+visible = false
+layout_mode = 0
+offset_left = 206.0
+offset_top = 19.0
+offset_right = 287.0
+offset_bottom = 53.0
+theme_override_colors/font_color = Color(0.92314893, 0.9260749, 1, 1)
+theme_override_colors/font_outline_color = Color(0.30748522, 0.11774104, 0.25278953, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 20
+text = "0 / 0 / 0"
+horizontal_alignment = 1
+autowrap_trim_flags = 0
+justification_flags = 0
+
+[node name="items" type="Control" parent="InGameUI/playerList/templates"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="separation1" type="ColorRect" parent="InGameUI/playerList/templates"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 174.0
+offset_right = -297.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
+
+[node name="separation2" type="ColorRect" parent="InGameUI/playerList/templates"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 316.0
+offset_right = -155.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
 
 [node name="livesText" type="RichTextLabel" parent="InGameUI"]
 visible = false

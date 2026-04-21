@@ -253,6 +253,7 @@ func updatePlayerList():
 		var templates = playerList.get_node("templates");
 		var playerLabel = templates.get_node_or_null("playerLabel");
 		var playerIcon = templates.get_node_or_null("playerIcon");
+		var kdaLabel = templates.get_node_or_null("kdaLabel");
 		
 		if not (playerLabel and playerIcon):
 			push_warning("player ID: %s failed to update in player list" % playerID);
@@ -260,6 +261,7 @@ func updatePlayerList():
 		
 		var newText = playerLabel.duplicate();
 		var newIcon = playerIcon.duplicate();
+		var newKda = kdaLabel.duplicate();
 		var newPlayer = Server.playersInfo[playerID];
 		var characterIcon = load("res://assets/sprites/character_icons/%s_icon.png" % newPlayer.character);
 
@@ -286,11 +288,16 @@ func updatePlayerList():
 			newIcon.visible = true;
 			playerList.add_child(newIcon);
 
+		newKda.text = "%d / %d / %d" % [newPlayer.kills, newPlayer.deaths, newPlayer.assists];
+		newKda.position = Vector2(204, yPos - 4);
+		newKda.visible = true;
+
 		newText.name = newPlayer.username;
 		newText.text = newPlayer.username;
 		newText.position = Vector2(60, yPos);
 		newText.visible = true;
 
+		playerList.add_child(newKda);
 		playerList.add_child(newText);
 
 func _playRoundEndAnimation(winnerTeam: int):
