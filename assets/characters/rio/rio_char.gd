@@ -110,11 +110,14 @@ var grabbedPlayerPos: Vector3;
 var movingToGrabbed = false;
 var movingToGrabbedTimer = 0;
 
+var alreadyHitByW = {};
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
 @onready var animPlayer = $AnimationPlayer
 @onready var slashForward = $q_slash_forward/Cube;
 @onready var slashBackwards = $q_slash_backwards/Cube;
+@onready var wHitboxes = $wHitboxes;
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -247,7 +250,17 @@ func _physics_process(delta: float) -> void:
 		
 		if (secondaryTimer <= 0.7 and not playedSecondaryCircle):
 			playedSecondaryCircle = true;
-			$RioWCircle/animPlayer.play("slash");
+			$RioWCircle/animPlayer.play("slash")
+		
+		if (secondaryTimer > 0.1 and secondaryTimer <= 0.5):
+			for hitboxMesh in wHitboxes.get_children():
+				var area3D: Area3D = hitboxMesh.get_child(0);
+				area3D.monitoring = true;
+		
+		if (secondaryTimer <= 0.1):
+			for hitboxMesh in wHitboxes.get_children():
+				var area3D: Area3D = hitboxMesh.get_child(0);
+				area3D.monitoring = false;
 	else:
 		if (usingSecondary):
 			usingSecondary = false;
@@ -429,6 +442,7 @@ func secondary_ability():
 	secondaryTimer = 1.8;
 	usingSecondary = true;
 	
+	alreadyHitByW = {};
 	animPlayer.play("w_action");
 	
 func _setup_tertiary():
@@ -591,3 +605,14 @@ func _on_q_touched(other: Node3D) -> void:
 		var totalDmg = (dmg + 10) * 0.85;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
+
+func _on_w_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = (dmg + 10) * 1.05;
+		
+		if (other.team != team and not alreadyHitByW.has(other)):
+			PlayerFunc.dealDamage(self, other, totalDmg);
+			PlayerFunc.slowTarget(other, 0.35, "slow_effect_02");
+			
+			alreadyHitByW[other] = true;
