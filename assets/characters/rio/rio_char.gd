@@ -24,8 +24,8 @@ var secondaryDesc = "Cast for 1.5 seconds and deal 100% of your PHYSICAL DAMAGE 
 var secondaryIcon = "res://assets/sprites/rio_abilities/rio_secondary.png";
 var tertiaryDesc = "Throw a spider web in the direction of your mouse. You'll dash into the direction the first enemy hit stunning them for 0.75 seconds.";
 var tertiaryIcon = "res://assets/sprites/rio_abilities/rio_tertiary.png";
-var ultiDesc = "";
-var ultiIcon = "res://icon.svg";
+var ultiDesc = "Make yourself invisible for 5 seconds and gain movement speed. Using any ability will cancel this ability.";
+var ultiIcon = "res://assets/sprites/rio_abilities/rio_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -359,6 +359,15 @@ func _updateSlashAnimation():
 	materialForward.set_shader_parameter("gradient_2_slider", shaderTimer);
 	materialBackwards.set_shader_parameter("gradient_2_slider", (shaderTimer - 40) * 0.5);
 
+func _toggle_invis_shader(enable: bool):
+	if (enable):
+		for child: MeshInstance3D in $rio_armature/Skeleton3D.get_children():
+			var shader = preload("res://assets/characters/rio/invis_material.tres");
+			child.set_surface_override_material(0, shader);
+	else:
+		for child: MeshInstance3D in $clean/Skeleton3D.get_children():
+			child.set_surface_override_material(0, null);
+
 func updateCirclePositions():
 	$RioWCircle.global_position.x = global_position.x;
 	$RioWCircle.global_position.z = global_position.z;
@@ -470,6 +479,8 @@ func ultimate_ability():
 	onAction = true;
 	ultiTimer = 2.0;
 	rTimer = R_COOLDOWN;
+	
+	_toggle_invis_shader(true);
 
 @rpc("call_local")
 func cancelDash():

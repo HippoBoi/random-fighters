@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfnx830sfbjmr"
-path="res://.godot/imported/rhay_ultimate.png-0ede2eaf32a0505c2acc05880213ab41.ctex"
+uid="uid://cjhebgfmauqm0"
+path="res://.godot/imported/ale_secondary.png-31e2edc2f69d33edad6e78cf13aca050.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/rio_abilities/rhay_ultimate.png"
-dest_files=["res://.godot/imported/rhay_ultimate.png-0ede2eaf32a0505c2acc05880213ab41.ctex"]
+source_file="res://assets/sprites/ale_abilities/ale_secondary.png"
+dest_files=["res://.godot/imported/ale_secondary.png-31e2edc2f69d33edad6e78cf13aca050.ctex"]
 
 [params]
 

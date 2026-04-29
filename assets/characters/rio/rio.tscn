@@ -1,4 +1,4 @@
-[gd_scene load_steps=127 format=4 uid="uid://bqqrsgkx6enps"]
+[gd_scene load_steps=134 format=4 uid="uid://bqqrsgkx6enps"]
 
 [ext_resource type="PackedScene" uid="uid://c67b1ynuo1arx" path="res://assets/characters/rio/rio.glb" id="1_kl43q"]
 [ext_resource type="Texture2D" uid="uid://bvsoxc7kyalvv" path="res://assets/sprites/character_icons/rio_icon.png" id="2_hbss5"]
@@ -2030,6 +2030,49 @@ alpha_curve = SubResource("CurveTexture_biwfa")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2a1j7"]
 
+[sub_resource type="Gradient" id="Gradient_me532"]
+offsets = PackedFloat32Array(0.009803922, 1)
+colors = PackedColorArray(0.95795196, 0, 0.12123967, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jstbi"]
+gradient = SubResource("Gradient_me532")
+
+[sub_resource type="Curve" id="Curve_me532"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.4375, 0.82022476), 1.3625072, 1.3625072, 0, 0, Vector2(0.703125, 0.52808994), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jstbi"]
+curve = SubResource("Curve_me532")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gspga"]
+emission_shape_scale = Vector3(4, 1, 4)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 7.0
+initial_velocity_max = 14.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -6.0
+radial_accel_max = -2.23517e-06
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_jstbi")
+color = Color(2.2582724, 2.048962, 2.4325802, 0.52400005)
+color_ramp = SubResource("GradientTexture1D_jstbi")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gspga"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.584314, 0.584314, 0.584314, 0.717647)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_edtkn"]
+material = SubResource("StandardMaterial3D_gspga")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
+
 [node name="rio" instance=ExtResource("1_kl43q")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 6
@@ -2273,6 +2316,17 @@ monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D6/Area3D" index="0"]
 shape = SubResource("BoxShape3D_2a1j7")
+
+[node name="trailSmoke" type="GPUParticles3D" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01947403)
+emitting = false
+amount = 32
+lifetime = 1.26
+one_shot = true
+explosiveness = 0.72
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_gspga")
+draw_pass_1 = SubResource("CapsuleMesh_edtkn")
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="wHitboxes/MeshInstance3D/Area3D" to="." method="_on_w_touched"]
