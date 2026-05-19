@@ -159,7 +159,6 @@ func _enterMatchLobby(matchData):
 	_buildLobbyPlayerList(matchData);
 
 func _leaveMatchLobby():
-	print("leaving match!");
 	currentLobbyId = "";
 	
 	$LobbyContainer.visible = false;
@@ -185,8 +184,6 @@ func _buildLobbyPlayerList(matchData):
 		print("CURRENT OWNER ID: ", currentOwnerId);
 	
 	for player in matchPlayers:
-		print(player);
-		
 		var button = Button.new();
 		button.text = "%s" % player.username;
 		

@@ -110,6 +110,11 @@ var grabbedPlayerPos: Vector3;
 var movingToGrabbed = false;
 var movingToGrabbedTimer = 0;
 
+var usingInvisShaders = false;
+var isInvisible = false;
+var invisTimer = 0;
+var invisDuration = 5.0;
+
 var alreadyHitByW = {};
 
 @onready var camera = get_viewport().get_camera_3d();
@@ -308,11 +313,26 @@ func _physics_process(delta: float) -> void:
 	
 	if (ultiTimer > 0):
 		ultiTimer -= delta;
-		moveTo = global_position;
+		
+		if (ultiTimer < 0.2):
+			moveTo = global_position;
+			isInvisible = true;
+			
+			if not (usingInvisShaders):
+				_toggle_invis_shader(true);
 	else:
 		if (usingUlti):
 			usingUlti = false;
 			onAction = false;
+	
+	if not (isInvisible):
+		if (usingInvisShaders):
+			_toggle_invis_shader(false);
+	
+	if (invisTimer >= invisDuration):
+		isInvisible = false;
+	else:
+		invisTimer += delta;
 	
 	if (movingToGrabbed):
 		movingToGrabbedTimer -= delta;
@@ -365,8 +385,10 @@ func _toggle_invis_shader(enable: bool):
 			var shader = preload("res://assets/characters/rio/invis_material.tres");
 			child.set_surface_override_material(0, shader);
 	else:
-		for child: MeshInstance3D in $clean/Skeleton3D.get_children():
+		for child: MeshInstance3D in $rio_armature/Skeleton3D.get_children():
 			child.set_surface_override_material(0, null);
+	
+	usingInvisShaders = enable;
 
 func updateCirclePositions():
 	$RioWCircle.global_position.x = global_position.x;
@@ -471,16 +493,27 @@ func tertiary_ability(_mousePos, _globalPos):
 	syncRotation(_mousePos);
 
 func _setup_ultimate():
-	rpc("ultimate_ability");
+	if not (mousePos):
+		return;
+	
+	rpc("ultimate_ability", mousePos.position);
 
 @rpc("call_local", "reliable")
-func ultimate_ability():
+func ultimate_ability(_mousePos: Vector3):
 	usingUlti = true;
 	onAction = true;
-	ultiTimer = 2.0;
+	ultiTimer = 0.5;
+	invisTimer = 0;
 	rTimer = R_COOLDOWN;
+
+	var sound = preload("res://assets/sounds/characters/clean/clean_empower.ogg");
+	PlayerFunc.playSound(self, sound);
 	
-	_toggle_invis_shader(true);
+	$rParticles.emitting = true;
+	
+	animPlayer.play("e_ability");
+	simulateMove(null, global_position);
+	rpc("syncRotation", _mousePos);
 
 @rpc("call_local")
 func cancelDash():

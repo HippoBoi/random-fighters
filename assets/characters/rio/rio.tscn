@@ -2317,7 +2317,7 @@ monitoring = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D6/Area3D" index="0"]
 shape = SubResource("BoxShape3D_2a1j7")
 
-[node name="trailSmoke" type="GPUParticles3D" parent="." index="13"]
+[node name="rParticles" type="GPUParticles3D" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01947403)
 emitting = false
 amount = 32

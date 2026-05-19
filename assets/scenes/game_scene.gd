@@ -378,7 +378,6 @@ func get_character_by_id(_playerId: String):
 func endGame(_teamThatHasWon: int):
 	gameOver = true;
 	teamThatHasWon = _teamThatHasWon;
-	print("THIS TEAM: %s HAS WON THE GAAEEMMM" % _teamThatHasWon);
 
 func _endGameScreen(_teamThatHasWon):
 	var character = get_character_by_id(str(playerId));
