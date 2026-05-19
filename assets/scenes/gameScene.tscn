@@ -2237,5 +2237,5 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e
 [connection signal="value_changed" from="OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider" to="." method="_on_sounds_slider_value_changed"]
 [connection signal="button_up" from="OptionsUI/ScrollContainer/VBoxContainer/reset/ResetDefaults" to="." method="_on_reset_defaults"]
 [connection signal="pressed" from="OptionsUI/Footer/SaveAndExit" to="." method="_on_save_and_exit_pressed"]
-[connection signal="pressed" from="OptionsUI/Footer/QuitGame" to="." method="_on_save_and_exit_pressed"]
+[connection signal="pressed" from="OptionsUI/Footer/QuitGame" to="." method="_on_quit_game_pressed"]
 [connection signal="pressed" from="OptionsUI/Exit" to="." method="_on_save_and_exit_pressed"]

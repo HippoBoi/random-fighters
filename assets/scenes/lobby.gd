@@ -6,6 +6,7 @@ var currentLobbyId = "";
 var currentOwnerId = ""; # lobby owner ID
 var currentTeam = "1";
 var fakeUser = {};
+var mappedUPnPPort: int = -1;
 
 const LOADING_COLOR = Color(1.0, 1.0, 0.5);
 const ONLINE_COLOR = Color(0.0, 1.0, 0.5);
@@ -43,22 +44,22 @@ signal startHost(port, username, team, isLocal);
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	dontShowAgain = userPreferences.dontShowCreateWarning;
-	
+
 	print("attempting server connection");
 	playerUsername.text = fakeUser.username;
 	$MatchesContainer.visible = true;
 	$CreateMatchContainer.visible = false;
 	$LobbyContainer.visible = false;
-	
+
 	_updateServerStatus();
 	_connectToMatchmakingServer();
 
 func _updateServerStatus():
 	serverText.text = "LOADING";
 	serverIcon.modulate = LOADING_COLOR;
-	
+
 	var response = await testConnection();
-	
+
 	if (response == OK):
 		serverText.text = "ONLINE";
 		serverIcon.modulate = ONLINE_COLOR;
@@ -69,11 +70,11 @@ func _updateServerStatus():
 func testConnection():
 	var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
 	var PORT = 8890;
-	
+
 	var response = await Noray.connect_to_host(ADDRESS, PORT);
 	if (response != OK):
 		return response;
-	
+
 	return response;
 
 func _connectToMatchmakingServer():
@@ -94,17 +95,17 @@ func _onWebSocketConnectionClose():
 func _processRecievedMessage(message):
 	if (typeof(message) != TYPE_STRING):
 		return;
-	
+
 	var responseMsg = str_to_var(message);
 	if not (responseMsg):
 		return;
 	if not (responseMsg.op):
 		return;
-		
+
 	print("process msg: %s" % responseMsg.op);
 	if (responseMsg.op == REQUEST_MATCHES):
 		print(" --------------------- REQUEST_MATCHES -----------------------");
-		
+
 		var matches = responseMsg.response;
 		if (matches and matches.size() > 0):
 			statusText.text = "Join a Lobby";
@@ -113,45 +114,45 @@ func _processRecievedMessage(message):
 			statusText.text = "No matches found!";
 	elif (responseMsg.op == MATCH_PLAYERS):
 		print("----------------------- MATCH_PLAYERS -----------------------");
-		
+
 		_enterMatchLobby(responseMsg.response);
 	elif (responseMsg.op == PLAYER_JOINED):
 		print("----------------------- PLAYER_JOINED -----------------------");
-		
+
 		var matchData = responseMsg.response;
 		_buildLobbyPlayerList(matchData);
 	elif (responseMsg.op == PLAYER_DROPPED):
 		print("----------------------- PLAYER_DROPPED -----------------------");
-		
+
 		var matchData = responseMsg.response;
 		print("player %s dropped from match" % matchData.disconnectedUserId);
 		_buildLobbyPlayerList(matchData);
 	elif (responseMsg.op == MATCH_READY):
 		print("------------------------ MATCH_READY -------------------------");
-		
+
 		if (currentOwnerId == fakeUser.playerId):
 			print(fakeUser.playerId, " YOU ARE OWNER!!!!, closing!!");
 			return;
-			
+
 		print("connecting to: %s, %s" % [responseMsg.response.ip, responseMsg.response.port]);
-		
+
 		statusText.text = "Starting game...";
-		
+
 		var ip = responseMsg.response.ip;
 		var port = responseMsg.response.port;
 		var gameId = responseMsg.response.gameId;
 		var useUPnP = responseMsg.response.useUPnP;
 		startClient.emit(ip, port, gameId, fakeUser.username, currentTeam, useUPnP);
-		
+
 		_client.close(1000, "game started normally!");
 
 func _enterMatchLobby(matchData):
 	print("entered match!");
 	print(matchData);
-	
+
 	currentLobbyId = matchData.matchInfo.matchId;
 	print("lobby ID: %s" % currentLobbyId);
-	
+
 	$MatchesContainer.visible = false;
 	$CreateMatchContainer.visible = false;
 	$LobbyContainer.visible = true;
@@ -160,7 +161,7 @@ func _enterMatchLobby(matchData):
 
 func _leaveMatchLobby():
 	currentLobbyId = "";
-	
+
 	$LobbyContainer.visible = false;
 	$MatchesContainer.visible = true;
 	$MatchesContainer/AvailableMatches.visible = true;
@@ -171,31 +172,31 @@ func _buildLobbyPlayerList(matchData):
 		team_player.queue_free();
 	for team_player in $LobbyContainer/Teams/WhiteTeam.get_children():
 		team_player.queue_free();
-	
+
 	var matchPlayers = matchData.users;
 	var ownerId = matchData.matchInfo.ownerId;
-	
+
 	if (ownerId):
 		if (ownerId == fakeUser.playerId):
 			$LobbyContainer/Teams/Ready.visible = true;
 			print(fakeUser.playerId, " YOU ARE OWNER!!!!!!!!!!!!!!!!!");
-		
+
 		currentOwnerId = ownerId;
 		print("CURRENT OWNER ID: ", currentOwnerId);
-	
+
 	for player in matchPlayers:
 		var button = Button.new();
 		button.text = "%s" % player.username;
-		
+
 		var userId: String = player.userId;
 		var tagId = userId.right(3);
 		var isPlayer = tagId == fakeUser.playerId;
 		if (isPlayer):
 			fakeUser.username = player.username;
 			currentTeam = player.team;
-		
+
 		print("%s: my team is: %s" % [player.username, player.team]);
-		
+
 		if (player.team == BLACK_TEAM):
 			$LobbyContainer/Teams/BlackTeam.add_child(button);
 			if (isPlayer):
@@ -215,20 +216,20 @@ func _buildLobbyPlayerList(matchData):
 func _updateMatchesList(matches):
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
 		lobby_button.queue_free();
-	
+
 	for i in range(matches.size()):
 		var curMatch = matches[i];
 		var button = Button.new();
 		button.text = "%s || %s" % [curMatch.matchName, curMatch.ownerName];
 		button.pressed.connect(self._joinMatch.bind(curMatch));
-		
+
 		$MatchesContainer/AvailableMatches.add_child(button);
 		print(curMatch);
 
 func _joinMatch(game):
 	$MatchesContainer/AvailableMatches.visible = false;
 	statusText.text = "Joining match...";
-	
+
 	var join_request = {
 		"op": JOIN_MATCH,
 		"matchId": game.matchId,
@@ -236,16 +237,16 @@ func _joinMatch(game):
 		"rank": fakeUser.rank,
 		"username": fakeUser.username,
 	};
-	
+
 	_sendMessage(join_request);
 
 func _loadMatches():
 	statusText.text = "Loading matches...";
 	$MatchesContainer/CreateMatchButton.disabled = false;
-	
+
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
 		lobby_button.queue_free();
-	
+
 	var requestMatches = {
 		"op": REQUEST_MATCHES
 	}
@@ -268,16 +269,16 @@ func _on_create_match_pressed() -> void:
 	if not (dontShowAgain):
 		$WarningContainer.visible = true;
 		_tween_warning();
-	
+
 	statusText.text = "Create your Match";
 	$MatchesContainer.visible = false;
 	$CreateMatchContainer.visible = true;
 	$CreateMatchContainer/matchInput.text = "";
 	$CreateMatchContainer/maxPlayersInput.value = 10.0;
-	
+
 	var newSound = AudioStreamPlayer.new();
 	add_child(newSound);
-	
+
 	newSound.stream = preload("res://assets/sounds/menuClick.ogg");
 	newSound.pitch_scale = randf();
 	newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
@@ -291,7 +292,7 @@ func _onCreateMatch() -> void:
 	var maxPlayers = $CreateMatchContainer/maxPlayersInput;
 	if (matchInput.text.is_empty()):
 		return;
-	
+
 	$CreateMatchContainer/CreateMatch.disabled = true;
 	var request = {
 		"op": CREATE_MATCHES,
@@ -305,7 +306,7 @@ func _onCreateMatch() -> void:
 func _close_creating_match(secondsToWait: float = 0.5):
 	var newSound = AudioStreamPlayer.new();
 	add_child(newSound);
-	
+
 	newSound.stream = preload("res://assets/sounds/menuReturn.ogg");
 	newSound.pitch_scale = randf();
 	newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
@@ -313,50 +314,71 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	newSound.finished.connect(func():
 		newSound.queue_free();
 	);
-	
+
 	$CreateMatchContainer.visible = false;
 	$MatchesContainer.visible = true;
-	
+
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
 		lobby_button.queue_free()
-	
+
 	await get_tree().create_timer(secondsToWait).timeout;
 	_loadMatches();
 
 func getUPnPAddress(_port = 8890):
 	print("GETTING UPNP ADDRESS");
-	
+
 	var upnp = UPNP.new();
 	var discoverResult = upnp.discover();
-	
+
 	if (discoverResult == UPNP.UPNP_RESULT_SUCCESS):
 		if (upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
 			var _delete_map_result = upnp.delete_port_mapping(_port);
-			
+
 			var mapResultUDP = upnp.add_port_mapping(_port, 0, "udp-godot", "UDP");
 			var mapResultTCP = upnp.add_port_mapping(_port, 0, "tcp-godot", "TCP");
-			
-			if not (mapResultUDP):
+
+			if (mapResultUDP != OK):
 				mapResultUDP = upnp.add_port_mapping(_port, 0, "", "UDP");
-			if not (mapResultTCP):
+			if (mapResultTCP != OK):
 				mapResultTCP = upnp.add_port_mapping(_port, 0, "", "TCP");
-	
+
+			if (mapResultUDP == OK or mapResultTCP == OK):
+				mappedUPnPPort = _port;
+
 	# startHost.emit(_port, fakeUser.username, currentTeam);
-	
+
 	var external_ip = upnp.query_external_address();
 	return external_ip;
 
+func cleanupUPnPMapping():
+	if (mappedUPnPPort < 0):
+		return;
+
+	var upnp = UPNP.new();
+	var discoverResult = upnp.discover();
+	if (discoverResult != UPNP.UPNP_RESULT_SUCCESS):
+		print("[lobby][WARNING]: failed to discover UPnP gateway for cleanup: %s" % discoverResult);
+		mappedUPnPPort = -1;
+		return;
+
+	var deleteUDPResult = upnp.delete_port_mapping(mappedUPnPPort, "UDP");
+	var deleteTCPResult = upnp.delete_port_mapping(mappedUPnPPort, "TCP");
+	if (deleteUDPResult != OK or deleteTCPResult != OK):
+		print("[lobby][WARNING]: failed to clean UPnP mappings UDP:%s TCP:%s" % [deleteUDPResult, deleteTCPResult]);
+
+	mappedUPnPPort = -1;
+
 func hostMatch(_matchIp: String, _port: int, _gameOid: String, _useUPnP: bool):
 	print("ATTEMPTING TO HOST MATCH, ip: %s, gameId: %s" % [_matchIp, _gameOid]);
-	
+
 	if (_matchIp.is_empty()):
 		print("FAILED: couldn't host match");
 		return;
-	
+
 	if (_useUPnP):
 		_matchIp = getUPnPAddress(_port);
 		print("NEW UPNP MATCH IP: %s" % _matchIp);
-	
+
 	var request = {
 		"op": MATCH_READY,
 		"matchId": currentLobbyId,
@@ -366,17 +388,17 @@ func hostMatch(_matchIp: String, _port: int, _gameOid: String, _useUPnP: bool):
 		"GAME_ID": _gameOid,
 		"USE_UPNP": _useUPnP,
 	};
-	
+
 	_sendMessage(request);
 
 func _adminStartMatch() -> void:
 	if (currentLobbyId.is_empty()):
 		return;
-	
+
 	var matchIp = EnvLoader.get_env("NORAY_ADDRESS");
 	var port = 8890;
 	print("matchIp: ", matchIp);
-	
+
 	startHost.emit(port, fakeUser.username, currentTeam, false);
 
 func _on_refresh() -> void:
@@ -388,9 +410,9 @@ func _on_leave_match() -> void:
 		"matchId": currentLobbyId,
 		"playerId": fakeUser.playerId,
 	};
-	
+
 	_sendMessage(request);
-	
+
 	_leaveMatchLobby();
 
 func _onMatchInputChanged(_lines_edited, _idk) -> void:
@@ -402,7 +424,7 @@ func _onMatchInputChanged(_lines_edited, _idk) -> void:
 
 func _on_team_join(team: String) -> void:
 	print("%s attempting to join team %s" % [fakeUser.username, team]);
-	
+
 	var request = {
 		"op": SWITCH_TEAM,
 		"matchId": currentLobbyId,
@@ -411,25 +433,25 @@ func _on_team_join(team: String) -> void:
 		"username": fakeUser.username,
 		"newTeam": team
 	};
-	
+
 	_sendMessage(request);
 
 func _on_return_pressed() -> void:
 	var newSound = AudioStreamPlayer.new();
 	add_child(newSound);
-	
+
 	newSound.stream = preload("res://assets/sounds/menuReturn.ogg");
 	newSound.play();
 	newSound.finished.connect(func():
 		newSound.queue_free();
 	);
-	
+
 	returnToLobby.emit();
 
 func _on_return_hovered() -> void:
 	var newSound = AudioStreamPlayer.new();
 	add_child(newSound);
-	
+
 	newSound.stream = preload("res://assets/sounds/menuHover.ogg");
 	newSound.pitch_scale = randf();
 	newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
@@ -444,9 +466,9 @@ func _on_warning_close() -> void:
 func _on_check_box_toggled(toggled_on: bool) -> void:
 	if (toggled_on):
 		$WarningContainer/CheckBox.material = null;
-	
+
 	dontShowAgain = toggled_on;
-	
+
 	if (userPreferences):
 		userPreferences.dontShowCreateWarning = toggled_on;
 		userPreferences.save();
