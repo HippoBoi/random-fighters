@@ -36,6 +36,11 @@ var tokensStored = {};
 
 var userPreferences: UserPreferences;
 
+func _getHealthBarColor(character: CharacterBody3D) -> Color:
+	var myTeamColor = Color(0.073, 0.509, 0.6);
+	var enemyTeamColor = Color(0.769, 0.17, 0.182);
+	return myTeamColor if character.team == myTeam else enemyTeamColor;
+
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	
@@ -1035,6 +1040,7 @@ func showCharactersUI(character):
 		charUI.get_node("PlayerName/SubViewport/Label").text = player.username;
 		healthBar.color = Color(0, 0, 0);
 		player.charInstance.add_child(charUI);
+		updateHealthSize(player.charInstance);
 	
 	character.showingUIs = true;
 
@@ -1089,8 +1095,6 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	if not (UILoaded):
 		return ;
 	
-	var myTeamColor = Color(0.073, 0.509, 0.6);
-	var enemyTeamColor = Color(0.769, 0.17, 0.182);
 	var charUI = character.get_node("CharacterUI");
 	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 	var shieldBar = charUI.get_node("HealthUI/SubViewport/emptyBar/shieldBar");
@@ -1110,14 +1114,14 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	_calculateHealthBars(character);
 	
 	if (healthBar.color == Color(0, 0, 0)):
-		healthBar.color = myTeamColor if character.team == myTeam else enemyTeamColor;
+		healthBar.color = _getHealthBarColor(character);
 	
 	# adjust shield position so it moves right to left
 	var base_width := 110;
 	shieldBar.position.x = base_width * (1.0 - shieldBar.scale.x)
 	
 	if (damaged):
-		var defaultColor = myTeamColor if character.team == myTeam else enemyTeamColor;
+		var defaultColor = _getHealthBarColor(character);
 		var duration = 0.1;
 		var damagedColor = Color(1, 0.65, 0.45);
 		if (character.shield > 0):
