@@ -123,10 +123,16 @@ func _cameraMovement(character: CharacterBody3D, delta):
 
 func _cameraShake(period: float = 1.0, magnitude: float = 1.0): # stolen from reddit
 	var currentCamera = get_viewport().get_camera_3d();
+	if not (is_instance_valid(currentCamera)):
+		return ;
+
 	var startPos = currentCamera.transform;
 	var elapsedTime = 0.0;
 
 	while (elapsedTime < period):
+		if not (is_instance_valid(currentCamera)):
+			return ;
+
 		var magnitudeOffset = magnitude - elapsedTime;
 		magnitudeOffset = clamp(magnitudeOffset, 0.0, 1.0);
 		var offset = Vector3(
@@ -138,9 +144,14 @@ func _cameraShake(period: float = 1.0, magnitude: float = 1.0): # stolen from re
 		elapsedTime += get_process_delta_time();
 		await get_tree().process_frame;
 
+	if not (is_instance_valid(currentCamera)):
+		return ;
 	currentCamera.transform = startPos;
 
 func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
+	if not (is_instance_valid(character) and is_instance_valid(inGameUI) and is_instance_valid(deadOverlay)):
+		return ;
+
 	_cameraShake(0.8, 0.7);
 	playedLivesAnimation = true;
 	
@@ -165,6 +176,9 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 		livesContainer.add_child(newLive);
 	
 	await get_tree().create_timer(0.225).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+
 	var tween = get_tree().create_tween().set_parallel();
 	tween.tween_property(livesText, "modulate", Color(1, 1, 1, 1), 0.25);
 	tween.tween_property(livesContainer, "modulate", Color(1, 1, 1, 1), 0.25);
@@ -175,19 +189,39 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 		lastLive = live;
 	
 	await get_tree().create_timer(2.0).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+	if not (is_instance_valid(lastLive)):
+		return ;
+
 	tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
 	tween.tween_property(lastLive, "modulate", Color(1, 1, 1, 0), 0.45);
 	
 	await get_tree().create_timer(1.75).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+
 	tween = get_tree().create_tween().set_parallel();
 	tween.tween_property(livesText, "modulate", Color(1, 1, 1, 0), 0.75);
 	tween.tween_property(livesContainer, "modulate", Color(1, 1, 1, 0), 0.75);
 	await get_tree().create_timer(1.0).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
 	
 	if (livesContainer.get_children().size() > 1):
-		lastLive.queue_free();
+		if (is_instance_valid(lastLive)):
+			lastLive.queue_free();
 	else:
 		print("this is last life");
+
+func _canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer) -> bool:
+	return (
+		is_instance_valid(character)
+		and is_instance_valid(inGameUI)
+		and is_instance_valid(deadOverlay)
+		and is_instance_valid(livesText)
+		and is_instance_valid(livesContainer)
+	);
 
 func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
 	var tokensUI = _getTokensUI(character);
