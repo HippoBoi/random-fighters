@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=4 uid="uid://bqqrsgkx6enps"]
+[gd_scene load_steps=134 format=4 uid="uid://bqqrsgkx6enps"]
 
 [ext_resource type="PackedScene" uid="uid://c67b1ynuo1arx" path="res://assets/characters/rio/rio.glb" id="1_kl43q"]
 [ext_resource type="Texture2D" uid="uid://bvsoxc7kyalvv" path="res://assets/sprites/character_icons/rio_icon.png" id="2_hbss5"]
@@ -7,6 +7,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bychei0xcxvyu" path="res://assets/characters/rio/rio_w_circle.obj" id="5_ab8vc"]
 [ext_resource type="Material" uid="uid://5i1ak8q32qln" path="res://assets/materials/gradient_material.tres" id="6_pj1es"]
 [ext_resource type="Texture2D" uid="uid://cedf5ox6ou3ic" path="res://assets/textures/fx/T_flare81.png" id="7_61rq6"]
+[ext_resource type="Material" uid="uid://cpxrdjqho0rya" path="res://assets/materials/transparent.tres" id="8_me532"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kl43q"]
 radius = 1.06153
@@ -2011,6 +2012,67 @@ alpha_curve = SubResource("CurveTexture_biwfa")
 
 [sub_resource type="QuadMesh" id="QuadMesh_2c6mm"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_me532"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jstbi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gspga"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_edtkn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n7404"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27m3t"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rgxvm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uyy1l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2a1j7"]
+
+[sub_resource type="Gradient" id="Gradient_me532"]
+offsets = PackedFloat32Array(0.009803922, 1)
+colors = PackedColorArray(0.95795196, 0, 0.12123967, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jstbi"]
+gradient = SubResource("Gradient_me532")
+
+[sub_resource type="Curve" id="Curve_me532"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.4375, 0.82022476), 1.3625072, 1.3625072, 0, 0, Vector2(0.703125, 0.52808994), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jstbi"]
+curve = SubResource("Curve_me532")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gspga"]
+emission_shape_scale = Vector3(4, 1, 4)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 7.0
+initial_velocity_max = 14.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -6.0
+radial_accel_max = -2.23517e-06
+scale_min = 4.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_jstbi")
+color = Color(2.2582724, 2.048962, 2.4325802, 0.52400005)
+color_ramp = SubResource("GradientTexture1D_jstbi")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gspga"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.584314, 0.584314, 0.584314, 0.717647)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_edtkn"]
+material = SubResource("StandardMaterial3D_gspga")
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
+
 [node name="rio" instance=ExtResource("1_kl43q")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 6
@@ -2020,25 +2082,25 @@ script = ExtResource("2_ttctk")
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 1.99295, 0)
 
 [node name="Skeleton3D" parent="rio_armature" index="0"]
-bones/0/position = Vector3(0, 0.04724177, 0)
-bones/0/rotation = Quaternion(0.50715023, 0, 0, 0.86185765)
-bones/1/rotation = Quaternion(0.116320066, 0, 0, 0.9932118)
-bones/2/rotation = Quaternion(-0.044453792, 0, 0, 0.9990115)
-bones/4/rotation = Quaternion(0.019536318, 8.82603e-08, 8.013097e-08, 0.99980915)
-bones/5/rotation = Quaternion(-0.55320954, 2.0018546e-14, -1.3189542e-07, 0.83304214)
-bones/6/rotation = Quaternion(9.802454e-09, 9.916876e-09, 0.6407475, 0.7677518)
-bones/7/rotation = Quaternion(0.20756643, 0.9069475, 0.32894626, 0.16173074)
-bones/8/rotation = Quaternion(0.3060539, -0.65183383, 0.19569561, 0.6656928)
-bones/10/rotation = Quaternion(0.14465667, -0.92594635, -0.34884974, 0.0013619644)
-bones/11/rotation = Quaternion(0.40742707, 0.88936126, -0.19821832, 0.061231412)
-bones/12/position = Vector3(4.842874e-09, 0.04724168, -9.984732e-09)
-bones/12/rotation = Quaternion(0.21462911, -0.167058, -0.6870893, -0.6737465)
-bones/13/rotation = Quaternion(-0.6671578, -0.092104994, -0.09643734, 0.7328826)
-bones/14/rotation = Quaternion(-0.011861739, -0.0015866715, -0.13255638, 0.99110323)
-bones/15/position = Vector3(-4.842874e-09, 0.04724168, -9.984732e-09)
-bones/15/rotation = Quaternion(0.21462911, 0.167058, 0.6870893, -0.6737465)
-bones/16/rotation = Quaternion(-0.6720492, 0.03984424, 0.04171824, 0.73825604)
-bones/17/rotation = Quaternion(-0.011687922, 0.0025713895, 0.21483426, 0.9765772)
+bones/0/position = Vector3(1.00651576e-07, 1.0347229, -1.7486997e-07)
+bones/0/rotation = Quaternion(0.22987272, -0.41880348, 0.05539879, 0.87675154)
+bones/1/rotation = Quaternion(-0.07901468, 0.45611987, -0.21746756, 0.85931337)
+bones/2/rotation = Quaternion(0.2637242, -0.0069841766, 0.13889323, 0.9545206)
+bones/4/rotation = Quaternion(0.14307871, 0.100187406, -0.013921115, 0.98452896)
+bones/5/rotation = Quaternion(-0.5562175, -0.12848024, -0.057857826, 0.81900394)
+bones/6/rotation = Quaternion(0.077363364, -0.07155407, 0.6445641, 0.75725305)
+bones/7/rotation = Quaternion(-0.36236557, 0.49697256, 0.31076762, 0.72466063)
+bones/8/rotation = Quaternion(-0.015094458, 0.43876812, 0.3346461, 0.83382654)
+bones/10/rotation = Quaternion(-0.050796557, 0.050992794, 0.13195536, 0.9886391)
+bones/11/rotation = Quaternion(0.10418849, 0.35141507, 0.15095994, 0.91807586)
+bones/12/position = Vector3(-1.545996e-08, 1.0347234, 2.0554391e-07)
+bones/12/rotation = Quaternion(0.6103975, -0.14874582, -0.22681479, -0.7442074)
+bones/13/rotation = Quaternion(-0.6343264, 0.66600406, -0.1379996, 0.36745715)
+bones/14/rotation = Quaternion(0.12135923, -0.4147218, -0.12458445, 0.8931721)
+bones/15/position = Vector3(1.545996e-08, 1.0347234, 2.0554391e-07)
+bones/15/rotation = Quaternion(0.16422087, 0.55694014, 0.7850143, -0.21587439)
+bones/16/rotation = Quaternion(-0.2924923, -0.48089525, 0.404111, 0.7210287)
+bones/17/rotation = Quaternion(-0.057586394, -0.28526554, -0.11272562, 0.9500528)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.21271, 0)
@@ -2140,4 +2202,140 @@ draw_pass_1 = SubResource("QuadMesh_2c6mm")
 [node name="eWebPosition" type="Node3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9377455, 2.765522, 10.281386)
 
+[node name="wHitboxes" type="Node3D" parent="." index="12"]
+transform = Transform3D(0.92994076, 0, 0, 0, 1, 0, 0, 0, 1.0203313, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="wHitboxes" index="0"]
+transform = Transform3D(2.5182912, 0, 0, 0, 2.2326894, 0, 0, 0, 14.747392, -12.05179, 1.856875, 0)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D/Area3D" index="0"]
+shape = SubResource("BoxShape3D_jstbi")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="wHitboxes" index="1"]
+transform = Transform3D(-1.10078005e-07, 0, -17.69687, 0, 2.2326891, 0, 2.518291, 0, -7.7355475e-07, 0.30468178, 1.8568747, -11.33757)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D7" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D7/Area3D" index="0"]
+shape = SubResource("BoxShape3D_gspga")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="wHitboxes" index="2"]
+transform = Transform3D(-1.10078005e-07, 0, -17.69687, 0, 2.2326891, 0, 2.518291, 0, -7.7355475e-07, 0.30468178, 1.8568747, 11.33757)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D8" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D8/Area3D" index="0"]
+shape = SubResource("BoxShape3D_edtkn")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="wHitboxes" index="3"]
+transform = Transform3D(2.5182912, 0, 0, 0, 2.2326894, 0, 0, 0, 14.747392, 12.084881, 1.856875, 0)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D4" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D4/Area3D" index="0"]
+shape = SubResource("BoxShape3D_n7404")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="wHitboxes" index="4"]
+transform = Transform3D(2.1809042, 0, 4.0470634, 0, 2.2326891, 0, -1.2591455, 0, 7.009719, -10.022126, 1.8568747, 7.8538313)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D2" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D2/Area3D" index="0"]
+shape = SubResource("BoxShape3D_27m3t")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="wHitboxes" index="5"]
+transform = Transform3D(2.1809042, 0, 3.3725526, 0, 2.2326891, 0, -1.2591455, 0, 5.841432, 10.192202, 1.8568747, -7.6246543)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D5" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D5/Area3D" index="0"]
+shape = SubResource("BoxShape3D_rgxvm")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="wHitboxes" index="6"]
+transform = Transform3D(1.7807007, 0, -4.7695093, 0, 2.232689, 0, 1.7807009, 0, 4.7695093, -9.359595, 1.8568747, -8.496322)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D3" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D3/Area3D" index="0"]
+shape = SubResource("BoxShape3D_uyy1l")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="wHitboxes" index="7"]
+transform = Transform3D(1.7807007, 0, -5.7234116, 0, 2.232689, 0, 1.7807009, 0, 5.7234116, 9.97469, 1.8568747, 8.238801)
+material_override = ExtResource("8_me532")
+mesh = SubResource("BoxMesh_me532")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="wHitboxes/MeshInstance3D6" index="0"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D6/Area3D" index="0"]
+shape = SubResource("BoxShape3D_2a1j7")
+
+[node name="rParticles2" type="GPUParticles3D" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01947403)
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+preprocess = 0.5
+speed_scale = 1.5
+explosiveness = 0.72
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_gspga")
+draw_pass_1 = SubResource("CapsuleMesh_edtkn")
+
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D7/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D8/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D4/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D2/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D5/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D3/Area3D" to="." method="_on_w_touched"]
+[connection signal="body_entered" from="wHitboxes/MeshInstance3D6/Area3D" to="." method="_on_w_touched"]

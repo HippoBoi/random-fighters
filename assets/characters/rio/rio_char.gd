@@ -15,7 +15,7 @@ const CHARACTER_NAME = "Rio";
 const Q_COOLDOWN = 7.5;
 const W_COOLDOWN = 13.0;
 const E_COOLDOWN = 6.0;
-const R_COOLDOWN = 50.0;
+const R_COOLDOWN = 10.0; # 60.0
 const Q_MAX_RANGE = 12.0;
 
 var primaryDesc = "Jump forward dealing 85% of your PHYSICAL DAMAGE to nearby enemies."
@@ -24,8 +24,8 @@ var secondaryDesc = "Cast for 1.5 seconds and deal 100% of your PHYSICAL DAMAGE 
 var secondaryIcon = "res://assets/sprites/rio_abilities/rio_secondary.png";
 var tertiaryDesc = "Throw a spider web in the direction of your mouse. You'll dash into the direction the first enemy hit stunning them for 0.75 seconds.";
 var tertiaryIcon = "res://assets/sprites/rio_abilities/rio_tertiary.png";
-var ultiDesc = "";
-var ultiIcon = "res://icon.svg";
+var ultiDesc = "Make yourself invisible for 5 seconds and gain movement speed. Using any ability will cancel this ability.";
+var ultiIcon = "res://assets/sprites/rio_abilities/rio_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -110,11 +110,19 @@ var grabbedPlayerPos: Vector3;
 var movingToGrabbed = false;
 var movingToGrabbedTimer = 0;
 
+var usingInvisShaders = false;
+var isInvisible = false;
+var invisTimer = 0;
+var invisDuration = 5.0;
+
+var alreadyHitByW = {};
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $rio_armature
 @onready var animPlayer = $AnimationPlayer
 @onready var slashForward = $q_slash_forward/Cube;
 @onready var slashBackwards = $q_slash_backwards/Cube;
+@onready var wHitboxes = $wHitboxes;
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -201,6 +209,9 @@ func _physics_process(delta: float) -> void:
 	if (movingToGrabbed and not usingPrimary):
 		speed += 13.0;
 	
+	if (isInvisible):
+		speed += 2.75;
+	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
@@ -247,7 +258,17 @@ func _physics_process(delta: float) -> void:
 		
 		if (secondaryTimer <= 0.7 and not playedSecondaryCircle):
 			playedSecondaryCircle = true;
-			$RioWCircle/animPlayer.play("slash");
+			$RioWCircle/animPlayer.play("slash")
+		
+		if (secondaryTimer > 0.1 and secondaryTimer <= 0.5):
+			for hitboxMesh in wHitboxes.get_children():
+				var area3D: Area3D = hitboxMesh.get_child(0);
+				area3D.monitoring = true;
+		
+		if (secondaryTimer <= 0.1):
+			for hitboxMesh in wHitboxes.get_children():
+				var area3D: Area3D = hitboxMesh.get_child(0);
+				area3D.monitoring = false;
 	else:
 		if (usingSecondary):
 			usingSecondary = false;
@@ -295,11 +316,27 @@ func _physics_process(delta: float) -> void:
 	
 	if (ultiTimer > 0):
 		ultiTimer -= delta;
-		moveTo = global_position;
+		
+		if (ultiTimer < 0.2):
+			moveTo = global_position;
+			isInvisible = true;
+			
+			if not (usingInvisShaders):
+				_toggle_invis_shader(true);
 	else:
 		if (usingUlti):
 			usingUlti = false;
 			onAction = false;
+	
+	if not (isInvisible):
+		if (usingInvisShaders):
+			$rParticles2.emitting = true;
+			_toggle_invis_shader(false);
+	
+	if (invisTimer >= invisDuration):
+		isInvisible = false;
+	else:
+		invisTimer += delta;
 	
 	if (movingToGrabbed):
 		movingToGrabbedTimer -= delta;
@@ -346,6 +383,17 @@ func _updateSlashAnimation():
 	materialForward.set_shader_parameter("gradient_2_slider", shaderTimer);
 	materialBackwards.set_shader_parameter("gradient_2_slider", (shaderTimer - 40) * 0.5);
 
+func _toggle_invis_shader(enable: bool):
+	if (enable):
+		for child: MeshInstance3D in $rio_armature/Skeleton3D.get_children():
+			var shader = preload("res://assets/characters/rio/invis_material.tres");
+			child.set_surface_override_material(0, shader);
+	else:
+		for child: MeshInstance3D in $rio_armature/Skeleton3D.get_children():
+			child.set_surface_override_material(0, null);
+	
+	usingInvisShaders = enable;
+
 func updateCirclePositions():
 	$RioWCircle.global_position.x = global_position.x;
 	$RioWCircle.global_position.z = global_position.z;
@@ -380,7 +428,20 @@ func onWebGrabbed(_otherPos: Vector3):
 	movingToGrabbedTimer = 1.0;
 	tertiaryTimer = 0;
 
+func _cancel_invisibility():
+	if not (isInvisible):
+		return;
+	
+	$rParticles2.emitting = true;
+	
+	isInvisible = false;
+	ultiTimer = 0;
+	invisTimer = invisDuration;
+	if (usingInvisShaders):
+		_toggle_invis_shader(false);
+
 func basicAttack():
+	_cancel_invisibility();
 	basicDamageDealt = false;
 	basicAttacking = true;
 
@@ -389,6 +450,7 @@ func playBasicAttack():
 	if (usingSecondary):
 		return;
 	
+	_cancel_invisibility();
 	basicAttacking = true;
 	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 	animPlayer.play(basicAnimList[basicAnimPos]);
@@ -417,6 +479,8 @@ func primary_ability(_moveTo, _globalPos):
 	
 	qTimer = Q_COOLDOWN - cooldownReduction;
 	
+	_cancel_invisibility();
+	
 	animPlayer.play("q_ability");
 	syncRotation(moveTo);
 
@@ -429,6 +493,9 @@ func secondary_ability():
 	secondaryTimer = 1.8;
 	usingSecondary = true;
 	
+	_cancel_invisibility();
+	
+	alreadyHitByW = {};
 	animPlayer.play("w_action");
 	
 func _setup_tertiary():
@@ -439,6 +506,7 @@ func _setup_tertiary():
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos, _globalPos):
+	isInvisible = false;
 	usingTertiary = true;
 	onAction = true;
 	tertiaryTimer = 0.75;
@@ -448,14 +516,31 @@ func tertiary_ability(_mousePos, _globalPos):
 	syncRotation(_mousePos);
 
 func _setup_ultimate():
-	rpc("ultimate_ability");
+	if not (mousePos):
+		return;
+	
+	rpc("ultimate_ability", mousePos.position);
 
 @rpc("call_local", "reliable")
-func ultimate_ability():
+func ultimate_ability(_mousePos: Vector3):
 	usingUlti = true;
 	onAction = true;
-	ultiTimer = 2.0;
+	ultiTimer = 0.5;
+	invisTimer = 0;
 	rTimer = R_COOLDOWN;
+
+	var particles = preload("res://assets/characters/rio/r_particles.tscn").instantiate();
+	get_parent().add_child(particles);
+	
+	particles.global_position = global_position;
+	particles.emitting = true;
+	
+	var sound = preload("res://assets/sounds/characters/clean/clean_empower.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	animPlayer.play("e_ability");
+	simulateMove(null, global_position);
+	rpc("syncRotation", _mousePos);
 
 @rpc("call_local")
 func cancelDash():
@@ -560,6 +645,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	global_position = newPos;
 	hp = newHp;
 	dead = false;
+	isInvisible = false;
 	visible = true;
 
 @rpc("call_local", "any_peer")
@@ -591,3 +677,14 @@ func _on_q_touched(other: Node3D) -> void:
 		var totalDmg = (dmg + 10) * 0.85;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
+
+func _on_w_touched(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other;
+	if (isCharacter):
+		var totalDmg = (dmg + 10) * 1.05;
+		
+		if (other.team != team and not alreadyHitByW.has(other)):
+			PlayerFunc.dealDamage(self, other, totalDmg);
+			PlayerFunc.slowTarget(other, 0.35, "slow_effect_02");
+			
+			alreadyHitByW[other] = true;

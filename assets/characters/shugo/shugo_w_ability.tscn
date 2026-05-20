@@ -56,12 +56,12 @@ scale_min = 4.0
 scale_max = 4.0
 scale_curve = SubResource("CurveTexture_26juw")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55lk0"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pp0g8"]
 transparency = 1
 albedo_color = Color(0.584314, 0.584314, 0.584314, 0.717647)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ol65v"]
-material = SubResource("StandardMaterial3D_55lk0")
+material = SubResource("StandardMaterial3D_pp0g8")
 radius = 0.25
 height = 0.5
 radial_segments = 4

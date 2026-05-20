@@ -36,6 +36,11 @@ var tokensStored = {};
 
 var userPreferences: UserPreferences;
 
+func _getHealthBarColor(character: CharacterBody3D) -> Color:
+	var myTeamColor = Color(0.073, 0.509, 0.6);
+	var enemyTeamColor = Color(0.769, 0.17, 0.182);
+	return myTeamColor if character.team == myTeam else enemyTeamColor;
+
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	
@@ -118,10 +123,16 @@ func _cameraMovement(character: CharacterBody3D, delta):
 
 func _cameraShake(period: float = 1.0, magnitude: float = 1.0): # stolen from reddit
 	var currentCamera = get_viewport().get_camera_3d();
+	if not (is_instance_valid(currentCamera)):
+		return ;
+
 	var startPos = currentCamera.transform;
 	var elapsedTime = 0.0;
 
 	while (elapsedTime < period):
+		if not (is_instance_valid(currentCamera)):
+			return ;
+
 		var magnitudeOffset = magnitude - elapsedTime;
 		magnitudeOffset = clamp(magnitudeOffset, 0.0, 1.0);
 		var offset = Vector3(
@@ -133,9 +144,14 @@ func _cameraShake(period: float = 1.0, magnitude: float = 1.0): # stolen from re
 		elapsedTime += get_process_delta_time();
 		await get_tree().process_frame;
 
+	if not (is_instance_valid(currentCamera)):
+		return ;
 	currentCamera.transform = startPos;
 
 func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
+	if not (is_instance_valid(character) and is_instance_valid(inGameUI) and is_instance_valid(deadOverlay)):
+		return ;
+
 	_cameraShake(0.8, 0.7);
 	playedLivesAnimation = true;
 	
@@ -160,6 +176,9 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 		livesContainer.add_child(newLive);
 	
 	await get_tree().create_timer(0.225).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+
 	var tween = get_tree().create_tween().set_parallel();
 	tween.tween_property(livesText, "modulate", Color(1, 1, 1, 1), 0.25);
 	tween.tween_property(livesContainer, "modulate", Color(1, 1, 1, 1), 0.25);
@@ -170,30 +189,53 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 		lastLive = live;
 	
 	await get_tree().create_timer(2.0).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+	if not (is_instance_valid(lastLive)):
+		return ;
+
 	tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
 	tween.tween_property(lastLive, "modulate", Color(1, 1, 1, 0), 0.45);
 	
 	await get_tree().create_timer(1.75).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
+
 	tween = get_tree().create_tween().set_parallel();
 	tween.tween_property(livesText, "modulate", Color(1, 1, 1, 0), 0.75);
 	tween.tween_property(livesContainer, "modulate", Color(1, 1, 1, 0), 0.75);
 	await get_tree().create_timer(1.0).timeout;
+	if not (_canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer)):
+		return ;
 	
 	if (livesContainer.get_children().size() > 1):
-		lastLive.queue_free();
+		if (is_instance_valid(lastLive)):
+			lastLive.queue_free();
 	else:
 		print("this is last life");
 
+func _canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, livesContainer) -> bool:
+	return (
+		is_instance_valid(character)
+		and is_instance_valid(inGameUI)
+		and is_instance_valid(deadOverlay)
+		and is_instance_valid(livesText)
+		and is_instance_valid(livesContainer)
+	);
+
 func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
-	var scene = character.get_parent();
-	var UI = scene.get_node("InGameUI");
-	var tokensUI = UI.get_node("abilitiesUI/tokens");
+	var tokensUI = _getTokensUI(character);
+	if not (is_instance_valid(tokensUI)):
+		return ;
+
 	var tokensAmount = int(tokensUI.text);
 	var timeToWait = 0.025;
 	var netGain = _newTokens - tokensAmount;
 	
 	if (tokensAmount < _newTokens):
-		_tokensAnimation(scene, netGain);
+		var scene = character.get_parent();
+		if (is_instance_valid(scene)):
+			_tokensAnimation(scene, netGain);
 		await get_tree().create_timer(1.0).timeout;
 	
 	while (tokensAmount < _newTokens):
@@ -207,10 +249,30 @@ func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
 		
 		tokensAmount += 1;
 		
+		tokensUI = _getTokensUI(character);
+		if not (is_instance_valid(tokensUI)):
+			return ;
 		tokensUI.text = str(tokensAmount);
 		await get_tree().create_timer(timeToWait).timeout;
 	
+	tokensUI = _getTokensUI(character);
+	if not (is_instance_valid(tokensUI)):
+		return ;
 	tokensUI.text = str(_newTokens);
+
+func _getTokensUI(character: CharacterBody3D):
+	if not (is_instance_valid(character) and character.is_inside_tree()):
+		return null;
+
+	var scene = character.get_parent();
+	if not (is_instance_valid(scene) and scene.has_node("InGameUI")):
+		return null;
+
+	var UI = scene.get_node("InGameUI");
+	if not (is_instance_valid(UI)):
+		return null;
+
+	return UI.get_node_or_null("abilitiesUI/tokens");
 
 func _updateLivesInUI(character: CharacterBody3D, livesContainer: HBoxContainer):
 	for oldLive in livesContainer.get_children():
@@ -304,7 +366,7 @@ func _autoBasic(character):
 	
 	var hitbox: Area3D = basicArea.get_node("area");
 	hitbox.body_entered.connect(func(other: Node3D):
-		if (other == self or other.visible == false):
+		if (other == character or _canSeeCharacter(other) == false):
 			return ;
 		
 		var isCharacter = "CHARACTER_NAME" in other;
@@ -382,7 +444,7 @@ func updateState(character: CharacterBody3D, delta):
 	
 		var mousePos = character.mousePos;
 		if not (mousePos.is_empty()):
-			if ("team" in mousePos.collider and not mousePos.collider.dead):
+			if ("team" in mousePos.collider and not mousePos.collider.dead and _canSeeCharacter(mousePos.collider)):
 				var target = mousePos.collider;
 				var otherTeam = target.team;
 				var strength = 4.0;
@@ -401,7 +463,7 @@ func updateState(character: CharacterBody3D, delta):
 				Cursor.changeCursor(Constants.CursorTypes.cursor);
 		
 		# handle target and auto attacking (basic attacking)
-		if (not character.dead and character.target and "dead" in character.target and not character.target.dead):
+		if (not character.dead and character.target and "dead" in character.target and not character.target.dead and _canSeeCharacter(character.target)):
 			if (_inBasicRange(character, character.target)):
 				basicAttack(character);
 			else:
@@ -487,6 +549,7 @@ func killCharacter(character: CharacterBody3D):
 	
 	character.dead = true;
 	character.visible = false;
+	character.isInvisible = false;
 	character.lives -= 1;
 	character.respawnTimer = maxRespawnTimer;
 	character.moveTo = character.global_position;
@@ -560,6 +623,7 @@ func spawnCharacter(character: CharacterBody3D):
 	character.dead = false;
 	character.visible = true;
 	character.inFog = false;
+	character.isInvisible = false;
 	character.lives = 2;
 	character.fogInstances = [];
 	
@@ -596,6 +660,7 @@ func respawnCharacter(character: CharacterBody3D):
 	character.dead = false;
 	character.visible = true;
 	character.inFog = false;
+	character.isInvisible = false;
 	character.fogInstances = [];
 	
 	var scene = character.get_parent();
@@ -619,7 +684,13 @@ func respawnCharacter(character: CharacterBody3D):
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
 func _tokensAnimation(scene, _tokens):
+	if not (is_instance_valid(scene) and scene.has_node("InGameUI")):
+		return false;
+
 	var UI = scene.get_node("InGameUI");
+	if not (is_instance_valid(UI)):
+		return false;
+
 	var tokensObtainedUI = UI.get_node("abilitiesUI/tokensObtained").duplicate();
 	var startPos = Vector2(535.0, 210.0);
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT).set_parallel(false);
@@ -630,12 +701,16 @@ func _tokensAnimation(scene, _tokens):
 	
 	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y - 5), 0.4);
 	await get_tree().create_timer(0.5).timeout;
+	if not (is_instance_valid(tokensObtainedUI)):
+		return false;
+
 	tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
 	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y + 30), 0.75);
 	tween.tween_property(tokensObtainedUI, "modulate:a", 0.0, 0.75);
 	
 	await get_tree().create_timer(0.75).timeout;
-	tokensObtainedUI.queue_free();
+	if (is_instance_valid(tokensObtainedUI)):
+		tokensObtainedUI.queue_free();
 	
 	return true;
 	
@@ -658,23 +733,41 @@ func enterFog(character, fogInstance):
 func leaveFog(character, _fogInstance):
 	character.inFog = false;
 
+func _canSeeCharacter(character) -> bool:
+	if not ("CHARACTER_NAME" in character):
+		return true;
+
+	if ("dead" in character and character.dead):
+		return false;
+
+	var revealedByAction = false;
+	if ("onAction" in character and character.onAction):
+		revealedByAction = true;
+	if ("basicAttacking" in character and character.basicAttacking):
+		revealedByAction = true;
+
+	if ("inFog" in character and character.inFog):
+		var revealedByFog = revealedByAction;
+		if ("fogInstances" in character and character.fogInstances.size() > 0 and myFogInstances.size() > 0):
+			if (character.fogInstances[0] == myFogInstances[0]):
+				revealedByFog = true;
+
+		if (revealedByFog == false):
+			return false;
+	else:
+		if ("fogInstances" in character and character.fogInstances.size() > 0):
+			character.fogInstances = [];
+
+	if ("isInvisible" in character and character.isInvisible and character.team != myTeam):
+		return revealedByAction;
+
+	return true;
+
 func updateGlobally(character: CharacterBody3D, _delta):
 	if (character.CHARACTER_NAME != "SERVER"):
 		character.global_position.y = 0;
-	
-	if (character.inFog):
-		character.visible = false;
-		
-		if (character.onAction or character.basicAttacking):
-			character.visible = true;
-		
-		if (character.fogInstances.size() > 0 and myFogInstances.size() > 0 and character.dead == false):
-			if (character.fogInstances[0] == myFogInstances[0]):
-				character.visible = true;
-	else:
-		if (character.fogInstances.size() > 0):
-			character.visible = true;
-			character.fogInstances = [];
+
+	character.visible = _canSeeCharacter(character);
 	if (character.hp <= 0):
 		killCharacter(character);
 	
@@ -749,7 +842,7 @@ func onRightClick(character: CharacterBody3D):
 	if not (character.onAction):
 		character.target = null;
 	
-	if (character.hovering and not character.hovering.dead):
+	if (character.hovering and not character.hovering.dead and _canSeeCharacter(character.hovering)):
 		if not (character.onAction or character.stunned):
 			character.target = character.hovering;
 		else:
@@ -826,6 +919,8 @@ func displaceChar(character, delta: float, posToMove: Vector3):
 
 func _inBasicRange(character, target):
 	if (target.team == character.team):
+		return ;
+	if (_canSeeCharacter(target) == false):
 		return ;
 	
 	var distance = character.global_position.distance_to(target.global_position);
@@ -1035,6 +1130,7 @@ func showCharactersUI(character):
 		charUI.get_node("PlayerName/SubViewport/Label").text = player.username;
 		healthBar.color = Color(0, 0, 0);
 		player.charInstance.add_child(charUI);
+		updateHealthSize(player.charInstance);
 	
 	character.showingUIs = true;
 
@@ -1089,8 +1185,6 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	if not (UILoaded):
 		return ;
 	
-	var myTeamColor = Color(0.073, 0.509, 0.6);
-	var enemyTeamColor = Color(0.769, 0.17, 0.182);
 	var charUI = character.get_node("CharacterUI");
 	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 	var shieldBar = charUI.get_node("HealthUI/SubViewport/emptyBar/shieldBar");
@@ -1110,14 +1204,14 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	_calculateHealthBars(character);
 	
 	if (healthBar.color == Color(0, 0, 0)):
-		healthBar.color = myTeamColor if character.team == myTeam else enemyTeamColor;
+		healthBar.color = _getHealthBarColor(character);
 	
 	# adjust shield position so it moves right to left
 	var base_width := 110;
 	shieldBar.position.x = base_width * (1.0 - shieldBar.scale.x)
 	
 	if (damaged):
-		var defaultColor = myTeamColor if character.team == myTeam else enemyTeamColor;
+		var defaultColor = _getHealthBarColor(character);
 		var duration = 0.1;
 		var damagedColor = Color(1, 0.65, 0.45);
 		if (character.shield > 0):

@@ -1702,7 +1702,7 @@ keep_scale = true
 
 [sub_resource type="VisualShader" id="VisualShader_j2nur"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D hitTexture : source_color;
 
@@ -1836,7 +1836,7 @@ keep_scale = true
 
 [sub_resource type="VisualShader" id="VisualShader_w1k1x"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D hitTexture : source_color;
 

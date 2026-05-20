@@ -27,13 +27,13 @@ const R_STAMINA = 30;
 const BASIC_STAMINA = 20;
 
 var primaryDesc = "Big forward slash that stuns enemies dealing 124% of your PHYSICAL DAMAGE."
-var primaryIcon = "res://icon.svg";
+var primaryIcon = "res://assets/sprites/ale_abilities/ale_primary.png";
 var secondaryDesc = "Parry attacks with your sword. If any attack hits you during PARRY the attacker will be stunned and recieve the incoming damage.";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/ale_abilities/ale_secondary.png";
 var tertiaryDesc = "Roll towards your mouse position.";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/ale_abilities/ale_tertiary.png";
 var ultiDesc = "Slash three times where your mouse is facing dealing 140% of your PHYSICAL DAMAGE per hit and stunning enemies.";
-var ultiIcon = "res://icon.svg";
+var ultiIcon = "res://assets/sprites/ale_abilities/ale_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -90,6 +90,7 @@ var stunnedParts = null;
 var stunTimer = 0;
 var dead = false;
 var inFog = false;
+var isInvisible = false;
 var enemyTeamVision = false;
 var fogInstances = [];
 
@@ -101,7 +102,7 @@ var respawnTimer = 0;
 var assistedInKill = [];
 
 var staminaRecover = 0.1;
-var maxStaminaRecover = 20.0;
+var maxStaminaRecover = 12.0;
 var wParticlesEmitting = false;
 var usingParry = false;
 
@@ -196,7 +197,7 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	staminaRecover += 4 * delta;
+	staminaRecover += 2 * delta;
 	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
 	stamina += (staminaRecover * delta);
 	
@@ -512,6 +513,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	global_position = newPos;
 	hp = newHp;
 	dead = false;
+	isInvisible = false;
 	visible = true;
 
 @rpc("call_local", "any_peer")

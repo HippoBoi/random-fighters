@@ -1,0 +1,49 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://d01v5mswtfw6v"]
+
+[sub_resource type="Shader" id="Shader_2iuwe"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_always, cull_disabled, diffuse_toon, specular_toon;
+
+uniform vec4 albedo: source_color;
+uniform sampler2D color_gradient;
+uniform sampler2D fresnel_gradient;
+uniform float opacity : hint_range(0.0, 1.0) = 1.0;
+
+float fresnel(float amount, vec3 normal, vec3 view) {
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0)), amount);
+}
+
+void fragment() {
+	float basic_fresnel = fresnel(4.0, NORMAL, VIEW);
+	ALBEDO = albedo.rgb + (basic_fresnel * texture(fresnel_gradient, vec2(basic_fresnel, 0.0)).rgb);
+
+	ALPHA = opacity;
+}
+
+void light() {
+	float dot_product = clamp(dot(NORMAL, LIGHT), -0.9, 0.9);
+	float sample = clamp((dot_product + 1.0) * ATTENUATION / 2.1, 0.05, 0.95);
+	vec4 shaded = texture(color_gradient, vec2(sample, 0.0));
+
+	DIFFUSE_LIGHT += clamp((shaded.rgb * LIGHT_COLOR), 0.0, 1.0);
+}"
+
+[sub_resource type="Gradient" id="Gradient_dm4op"]
+colors = PackedColorArray(0, 0, 0, 1, 0.48899934, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kdabp"]
+gradient = SubResource("Gradient_dm4op")
+
+[sub_resource type="Gradient" id="Gradient_ov23i"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0.932373, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ohlot"]
+gradient = SubResource("Gradient_ov23i")
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_2iuwe")
+shader_parameter/albedo = Color(0.60911363, 0.013142968, 0.25517914, 1)
+shader_parameter/color_gradient = SubResource("GradientTexture1D_kdabp")
+shader_parameter/fresnel_gradient = SubResource("GradientTexture1D_ohlot")
+shader_parameter/opacity = 0.522000024795

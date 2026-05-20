@@ -3242,7 +3242,7 @@ parameter_name = "speed"
 
 [sub_resource type="VisualShader" id="VisualShader_fnemj"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
 
 uniform vec2 speed;
 uniform sampler2D auraTexture : source_color;
@@ -3415,7 +3415,7 @@ keep_scale = true
 
 [sub_resource type="VisualShader" id="VisualShader_7lf62"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D hitTexture : source_color;
 
@@ -3571,7 +3571,7 @@ parameter_name = "speed"
 
 [sub_resource type="VisualShader" id="VisualShader_n56d4"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
 
 uniform vec2 speed;
 uniform sampler2D auraTexture : source_color;
@@ -3794,7 +3794,7 @@ operator = 2
 
 [sub_resource type="VisualShader" id="VisualShader_0tdrq"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec4 markColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -3896,7 +3896,7 @@ texture = SubResource("GradientTexture1D_l805s")
 
 [sub_resource type="VisualShader" id="VisualShader_yru8n"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D tex_frg_2;
 uniform sampler2D tex_frg_9;
@@ -4020,7 +4020,7 @@ default_value_enabled = true
 
 [sub_resource type="VisualShader" id="VisualShader_khm2g"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 waveColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -4068,7 +4068,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-497.209, 177.164)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(540, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_bq125")
@@ -4208,28 +4207,28 @@ script = ExtResource("2_kqcgl")
 transform = Transform3D(1.62, 0, 0, 0, 1.62, 0, 0, 0, 1.62, 0, 1.14277, 0)
 
 [node name="Skeleton3D" parent="ale_armature" index="0"]
-bones/0/position = Vector3(0, 0.312799, 0)
-bones/0/rotation = Quaternion(-0.0903202, 0, 0, 0.995913)
-bones/1/rotation = Quaternion(-0.0615968, 0.00249061, 0.0170928, 0.997952)
-bones/3/rotation = Quaternion(0.350257, 0.0896972, 0.174512, 0.915871)
-bones/4/rotation = Quaternion(0.433839, 0.455882, -0.294525, 0.719173)
-bones/5/position = Vector3(0.0717452, 0.630906, 0.318756)
-bones/5/rotation = Quaternion(0.672044, 0.235455, 0.104775, 0.694219)
+bones/0/position = Vector3(0, -0.243807, 0)
+bones/0/rotation = Quaternion(0.17827709, -0.14003906, -0.016324908, 0.9738275)
+bones/1/rotation = Quaternion(-0.250321, -0.10245, 0.0838692, 0.959067)
+bones/3/rotation = Quaternion(0.24093492, -0.6842398, 0.28949496, 0.6244669)
+bones/4/rotation = Quaternion(-0.060171884, -0.19474399, -0.5839031, 0.78581893)
+bones/5/position = Vector3(-0.01836443, 0.583883, -0.140446)
+bones/5/rotation = Quaternion(0.4157081, 0.45621714, 0.16294104, -0.7697422)
 bones/5/scale = Vector3(1.00001, 1, 1)
-bones/6/rotation = Quaternion(-3.15486e-08, -6.79238e-08, 1.45155e-09, 1)
+bones/6/rotation = Quaternion(-6.13509e-08, -6.41985e-08, -3.20506e-09, 1)
 bones/6/scale = Vector3(1, 1, 1)
-bones/7/position = Vector3(0.0717452, 0.630906, 0.318756)
-bones/7/rotation = Quaternion(-0.628949, 0.451212, -0.378477, 0.50753)
-bones/9/rotation = Quaternion(-0.136552, 0.147565, -0.498325, 0.843356)
-bones/10/rotation = Quaternion(0.00373522, 0.0342059, -0.279608, 0.959498)
-bones/11/position = Vector3(-4.77396e-15, 0.312799, -3.4972e-15)
-bones/11/rotation = Quaternion(-0.583619, 0.399235, 0.583619, 0.399235)
-bones/12/rotation = Quaternion(-0.497244, 1.69946e-07, -7.0086e-08, 0.867611)
-bones/13/rotation = Quaternion(-0.0764383, -5.23352e-08, -2.21719e-08, 0.997074)
-bones/14/position = Vector3(4.77396e-15, 0.312799, -3.4972e-15)
-bones/14/rotation = Quaternion(0.583619, 0.399235, 0.583619, -0.399235)
-bones/15/rotation = Quaternion(-0.494448, -1.70021e-07, 6.99926e-08, 0.869207)
-bones/16/rotation = Quaternion(-0.0764383, 5.23352e-08, 2.21719e-08, 0.997074)
+bones/7/position = Vector3(-0.018364549, 0.583883, -0.140446)
+bones/7/rotation = Quaternion(0.14120002, 0.20867302, 0.88474613, 0.39210004)
+bones/9/rotation = Quaternion(0.174887, -0.630044, -0.35391802, 0.66873103)
+bones/10/rotation = Quaternion(-0.5375468, -0.18965194, 0.124829955, 0.81209177)
+bones/11/position = Vector3(2.98024e-08, -0.243807, 1.69035e-07)
+bones/11/rotation = Quaternion(-0.5836192, 0.39923513, 0.5836192, 0.39923516)
+bones/12/rotation = Quaternion(-0.46418694, 0.0378282, -0.012977897, 0.8848339)
+bones/13/rotation = Quaternion(-0.07634984, -0.01895461, -0.044226523, 0.99591947)
+bones/14/position = Vector3(-2.98024e-08, -0.243807, 1.69035e-07)
+bones/14/rotation = Quaternion(0.5836192, 0.39923513, 0.5836192, -0.39923516)
+bones/15/rotation = Quaternion(-0.46296516, -0.07228022, -0.083185725, 0.87949926)
+bones/16/rotation = Quaternion(-0.075515114, 0.023815507, 0.15310705, 0.98503226)
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="2"]
 libraries = {
@@ -4385,7 +4384,7 @@ light_color = Color(2, 0.5, 0.5, 1)
 omni_range = 0.0
 
 [node name="GPUTrail3D" type="GPUParticles3D" parent="." index="9"]
-transform = Transform3D(0.205228, -1.71234, 0, 0.765931, 0.458814, 0, 0, 0, 1, 5.12771, -0.214687, -1.8966)
+transform = Transform3D(0.20522806, -1.7123399, 0, 0.76593107, 0.4588144, 0, 0, 0, 1, 5.12771, -0.214687, -1.8966)
 amount = 1
 explosiveness = 1.0
 fixed_fps = 60
@@ -4393,7 +4392,7 @@ process_material = SubResource("ShaderMaterial_h0mhy")
 draw_pass_1 = SubResource("QuadMesh_lit7t")
 script = ExtResource("9_22ed4")
 length = 1
-length_seconds = 0.0166667
+length_seconds = 0.016666666666666666
 texture = ExtResource("4_6jegx")
 color_ramp = SubResource("GradientTexture1D_7abcr")
 curve = SubResource("CurveTexture_j5m4y")
@@ -4409,7 +4408,7 @@ process_material = SubResource("ShaderMaterial_h0mhy")
 draw_pass_1 = SubResource("QuadMesh_lit7t")
 script = ExtResource("9_22ed4")
 length = 1
-length_seconds = 0.0166667
+length_seconds = 0.016666666666666666
 texture = ExtResource("4_6jegx")
 color_ramp = SubResource("GradientTexture1D_7abcr")
 curve = SubResource("CurveTexture_j5m4y")
