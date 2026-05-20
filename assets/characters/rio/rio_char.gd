@@ -209,6 +209,9 @@ func _physics_process(delta: float) -> void:
 	if (movingToGrabbed and not usingPrimary):
 		speed += 13.0;
 	
+	if (isInvisible):
+		speed += 2.75;
+	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 		moveTo = global_position;
@@ -327,6 +330,7 @@ func _physics_process(delta: float) -> void:
 	
 	if not (isInvisible):
 		if (usingInvisShaders):
+			$rParticles2.emitting = true;
 			_toggle_invis_shader(false);
 	
 	if (invisTimer >= invisDuration):
@@ -425,6 +429,11 @@ func onWebGrabbed(_otherPos: Vector3):
 	tertiaryTimer = 0;
 
 func _cancel_invisibility():
+	if not (isInvisible):
+		return;
+	
+	$rParticles2.emitting = true;
+	
 	isInvisible = false;
 	ultiTimer = 0;
 	invisTimer = invisDuration;
@@ -520,10 +529,14 @@ func ultimate_ability(_mousePos: Vector3):
 	invisTimer = 0;
 	rTimer = R_COOLDOWN;
 
+	var particles = preload("res://assets/characters/rio/r_particles.tscn").instantiate();
+	get_parent().add_child(particles);
+	
+	particles.global_position = global_position;
+	particles.emitting = true;
+	
 	var sound = preload("res://assets/sounds/characters/clean/clean_empower.ogg");
 	PlayerFunc.playSound(self, sound);
-	
-	$rParticles.emitting = true;
 	
 	animPlayer.play("e_ability");
 	simulateMove(null, global_position);
