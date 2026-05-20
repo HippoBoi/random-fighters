@@ -301,7 +301,6 @@ func _onSyncTeamWins(blackTeamWins: int, whiteTeamWins: int):
 
 func _onTeamWonGame(_teamThatWon: int):
 	rpc("teamHasWon", _teamThatWon);
-	rpc("forceDisconnectMatchNetwork", "match_ended");
 
 func _onReturnToLobby():
 	_returnFromMatchToLobby("manual_return");
@@ -623,12 +622,6 @@ func teamHasWon(_teamThatHasWon: int):
 	if (isScene):
 		var gameScene = get_node("Game");
 		gameScene.endGame(_teamThatHasWon);
-
-@rpc("reliable", "call_local")
-func forceDisconnectMatchNetwork(reason: String = "match_ended"):
-	matchHasEnded = true;
-	await get_tree().process_frame;
-	_disconnectMatchNetwork(reason);
 
 func _on_exit_pressed() -> void:
 	get_tree().quit();
