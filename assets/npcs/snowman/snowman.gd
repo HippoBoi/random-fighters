@@ -54,6 +54,7 @@ var stunTimer = 0;
 var dead = false;
 var reallyReallyDead = false;
 var inFog = false;
+var isInvisible = false;
 var enemyTeamVision = false;
 var fogInstances = [];
 
@@ -386,6 +387,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	global_position = newPos;
 	hp = newHp;
 	dead = false;
+	isInvisible = false;
 	visible = true;
 
 @rpc("call_local")

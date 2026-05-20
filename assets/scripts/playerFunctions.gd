@@ -309,7 +309,7 @@ func _autoBasic(character):
 	
 	var hitbox: Area3D = basicArea.get_node("area");
 	hitbox.body_entered.connect(func(other: Node3D):
-		if (other == self or other.visible == false):
+		if (other == character or _canSeeCharacter(other) == false):
 			return ;
 		
 		var isCharacter = "CHARACTER_NAME" in other;
@@ -387,7 +387,7 @@ func updateState(character: CharacterBody3D, delta):
 	
 		var mousePos = character.mousePos;
 		if not (mousePos.is_empty()):
-			if ("team" in mousePos.collider and not mousePos.collider.dead):
+			if ("team" in mousePos.collider and not mousePos.collider.dead and _canSeeCharacter(mousePos.collider)):
 				var target = mousePos.collider;
 				var otherTeam = target.team;
 				var strength = 4.0;
@@ -406,7 +406,7 @@ func updateState(character: CharacterBody3D, delta):
 				Cursor.changeCursor(Constants.CursorTypes.cursor);
 		
 		# handle target and auto attacking (basic attacking)
-		if (not character.dead and character.target and "dead" in character.target and not character.target.dead):
+		if (not character.dead and character.target and "dead" in character.target and not character.target.dead and _canSeeCharacter(character.target)):
 			if (_inBasicRange(character, character.target)):
 				basicAttack(character);
 			else:
@@ -492,6 +492,7 @@ func killCharacter(character: CharacterBody3D):
 	
 	character.dead = true;
 	character.visible = false;
+	character.isInvisible = false;
 	character.lives -= 1;
 	character.respawnTimer = maxRespawnTimer;
 	character.moveTo = character.global_position;
@@ -565,6 +566,7 @@ func spawnCharacter(character: CharacterBody3D):
 	character.dead = false;
 	character.visible = true;
 	character.inFog = false;
+	character.isInvisible = false;
 	character.lives = 2;
 	character.fogInstances = [];
 	
@@ -601,6 +603,7 @@ func respawnCharacter(character: CharacterBody3D):
 	character.dead = false;
 	character.visible = true;
 	character.inFog = false;
+	character.isInvisible = false;
 	character.fogInstances = [];
 	
 	var scene = character.get_parent();
@@ -663,23 +666,41 @@ func enterFog(character, fogInstance):
 func leaveFog(character, _fogInstance):
 	character.inFog = false;
 
+func _canSeeCharacter(character) -> bool:
+	if not ("CHARACTER_NAME" in character):
+		return true;
+
+	if ("dead" in character and character.dead):
+		return false;
+
+	var revealedByAction = false;
+	if ("onAction" in character and character.onAction):
+		revealedByAction = true;
+	if ("basicAttacking" in character and character.basicAttacking):
+		revealedByAction = true;
+
+	if ("inFog" in character and character.inFog):
+		var revealedByFog = revealedByAction;
+		if ("fogInstances" in character and character.fogInstances.size() > 0 and myFogInstances.size() > 0):
+			if (character.fogInstances[0] == myFogInstances[0]):
+				revealedByFog = true;
+
+		if (revealedByFog == false):
+			return false;
+	else:
+		if ("fogInstances" in character and character.fogInstances.size() > 0):
+			character.fogInstances = [];
+
+	if ("isInvisible" in character and character.isInvisible and character.team != myTeam):
+		return revealedByAction;
+
+	return true;
+
 func updateGlobally(character: CharacterBody3D, _delta):
 	if (character.CHARACTER_NAME != "SERVER"):
 		character.global_position.y = 0;
-	
-	if (character.inFog):
-		character.visible = false;
-		
-		if (character.onAction or character.basicAttacking):
-			character.visible = true;
-		
-		if (character.fogInstances.size() > 0 and myFogInstances.size() > 0 and character.dead == false):
-			if (character.fogInstances[0] == myFogInstances[0]):
-				character.visible = true;
-	else:
-		if (character.fogInstances.size() > 0):
-			character.visible = true;
-			character.fogInstances = [];
+
+	character.visible = _canSeeCharacter(character);
 	if (character.hp <= 0):
 		killCharacter(character);
 	
@@ -754,7 +775,7 @@ func onRightClick(character: CharacterBody3D):
 	if not (character.onAction):
 		character.target = null;
 	
-	if (character.hovering and not character.hovering.dead):
+	if (character.hovering and not character.hovering.dead and _canSeeCharacter(character.hovering)):
 		if not (character.onAction or character.stunned):
 			character.target = character.hovering;
 		else:
@@ -831,6 +852,8 @@ func displaceChar(character, delta: float, posToMove: Vector3):
 
 func _inBasicRange(character, target):
 	if (target.team == character.team):
+		return ;
+	if (_canSeeCharacter(target) == false):
 		return ;
 	
 	var distance = character.global_position.distance_to(target.global_position);

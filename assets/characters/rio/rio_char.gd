@@ -15,7 +15,7 @@ const CHARACTER_NAME = "Rio";
 const Q_COOLDOWN = 7.5;
 const W_COOLDOWN = 13.0;
 const E_COOLDOWN = 6.0;
-const R_COOLDOWN = 50.0;
+const R_COOLDOWN = 10.0; # 60.0
 const Q_MAX_RANGE = 12.0;
 
 var primaryDesc = "Jump forward dealing 85% of your PHYSICAL DAMAGE to nearby enemies."
@@ -424,7 +424,15 @@ func onWebGrabbed(_otherPos: Vector3):
 	movingToGrabbedTimer = 1.0;
 	tertiaryTimer = 0;
 
+func _cancel_invisibility():
+	isInvisible = false;
+	ultiTimer = 0;
+	invisTimer = invisDuration;
+	if (usingInvisShaders):
+		_toggle_invis_shader(false);
+
 func basicAttack():
+	_cancel_invisibility();
 	basicDamageDealt = false;
 	basicAttacking = true;
 
@@ -433,6 +441,7 @@ func playBasicAttack():
 	if (usingSecondary):
 		return;
 	
+	_cancel_invisibility();
 	basicAttacking = true;
 	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 	animPlayer.play(basicAnimList[basicAnimPos]);
@@ -461,6 +470,8 @@ func primary_ability(_moveTo, _globalPos):
 	
 	qTimer = Q_COOLDOWN - cooldownReduction;
 	
+	_cancel_invisibility();
+	
 	animPlayer.play("q_ability");
 	syncRotation(moveTo);
 
@@ -473,6 +484,8 @@ func secondary_ability():
 	secondaryTimer = 1.8;
 	usingSecondary = true;
 	
+	_cancel_invisibility();
+	
 	alreadyHitByW = {};
 	animPlayer.play("w_action");
 	
@@ -484,6 +497,7 @@ func _setup_tertiary():
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos, _globalPos):
+	isInvisible = false;
 	usingTertiary = true;
 	onAction = true;
 	tertiaryTimer = 0.75;
@@ -618,6 +632,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	global_position = newPos;
 	hp = newHp;
 	dead = false;
+	isInvisible = false;
 	visible = true;
 
 @rpc("call_local", "any_peer")
