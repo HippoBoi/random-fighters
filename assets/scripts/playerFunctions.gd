@@ -190,15 +190,18 @@ func _playLivesAnimation(character, inGameUI: Control, deadOverlay: ColorRect):
 		print("this is last life");
 
 func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
-	var scene = character.get_parent();
-	var UI = scene.get_node("InGameUI");
-	var tokensUI = UI.get_node("abilitiesUI/tokens");
+	var tokensUI = _getTokensUI(character);
+	if not (is_instance_valid(tokensUI)):
+		return ;
+
 	var tokensAmount = int(tokensUI.text);
 	var timeToWait = 0.025;
 	var netGain = _newTokens - tokensAmount;
 	
 	if (tokensAmount < _newTokens):
-		_tokensAnimation(scene, netGain);
+		var scene = character.get_parent();
+		if (is_instance_valid(scene)):
+			_tokensAnimation(scene, netGain);
 		await get_tree().create_timer(1.0).timeout;
 	
 	while (tokensAmount < _newTokens):
@@ -212,10 +215,30 @@ func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
 		
 		tokensAmount += 1;
 		
+		tokensUI = _getTokensUI(character);
+		if not (is_instance_valid(tokensUI)):
+			return ;
 		tokensUI.text = str(tokensAmount);
 		await get_tree().create_timer(timeToWait).timeout;
 	
+	tokensUI = _getTokensUI(character);
+	if not (is_instance_valid(tokensUI)):
+		return ;
 	tokensUI.text = str(_newTokens);
+
+func _getTokensUI(character: CharacterBody3D):
+	if not (is_instance_valid(character) and character.is_inside_tree()):
+		return null;
+
+	var scene = character.get_parent();
+	if not (is_instance_valid(scene) and scene.has_node("InGameUI")):
+		return null;
+
+	var UI = scene.get_node("InGameUI");
+	if not (is_instance_valid(UI)):
+		return null;
+
+	return UI.get_node_or_null("abilitiesUI/tokens");
 
 func _updateLivesInUI(character: CharacterBody3D, livesContainer: HBoxContainer):
 	for oldLive in livesContainer.get_children():
@@ -627,7 +650,13 @@ func respawnCharacter(character: CharacterBody3D):
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
 func _tokensAnimation(scene, _tokens):
+	if not (is_instance_valid(scene) and scene.has_node("InGameUI")):
+		return false;
+
 	var UI = scene.get_node("InGameUI");
+	if not (is_instance_valid(UI)):
+		return false;
+
 	var tokensObtainedUI = UI.get_node("abilitiesUI/tokensObtained").duplicate();
 	var startPos = Vector2(535.0, 210.0);
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT).set_parallel(false);
@@ -638,12 +667,16 @@ func _tokensAnimation(scene, _tokens):
 	
 	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y - 5), 0.4);
 	await get_tree().create_timer(0.5).timeout;
+	if not (is_instance_valid(tokensObtainedUI)):
+		return false;
+
 	tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
 	tween.tween_property(tokensObtainedUI, "position", Vector2(startPos.x, startPos.y + 30), 0.75);
 	tween.tween_property(tokensObtainedUI, "modulate:a", 0.0, 0.75);
 	
 	await get_tree().create_timer(0.75).timeout;
-	tokensObtainedUI.queue_free();
+	if (is_instance_valid(tokensObtainedUI)):
+		tokensObtainedUI.queue_free();
 	
 	return true;
 	
