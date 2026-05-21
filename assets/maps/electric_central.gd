@@ -60,14 +60,15 @@ func _handleTimers(delta: float):
 func _willThunderAttack():
 	var RNG = randi_range(0, 2);
 	var focusPlayer = true if RNG == 0 else false;
-	var randPos: Vector3; 
+	
+	var randX = randi_range(-30, 30);
+	var randZ = randi_range(-30, 30);
+	var randPos = Vector3(randX, 0, randZ);
+		
 	if (focusPlayer):
 		var character = _getRandomCharacter();
-		randPos = character.global_position;
-	else:
-		var randX = randi_range(-30, 30);
-		var randZ = randi_range(-30, 30);
-		randPos = Vector3(randX, 0, randZ);
+		if (character):
+			randPos = character.global_position;
 	
 	thunderTimer = 2.0 + randi_range(1, 4);
 	willBot.rpc("createThunder", randPos);
@@ -76,6 +77,9 @@ func _getRandomCharacter():
 	var playersId = [];
 	for playerId in Server.playersInfo:
 		playersId.append(playerId);
+	
+	if (len(playersId) <= 0):
+		return null;
 	
 	playersId.shuffle();
 	var randPlayerId = playersId[0];

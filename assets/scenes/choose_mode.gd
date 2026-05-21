@@ -62,21 +62,21 @@ func _getModeName(gamemode: String):
 func _getModeImage(gamemode: String):
 	var image;
 	if (gamemode.to_lower() == "free_for_all"):
-		image = preload("res://assets/textures/Grass001_1K-JPG_Color.jpg").duplicate();
+		image = preload("res://assets/sprites/map_images/battlefield_image.png").duplicate();
 	elif (gamemode.to_lower() == "foggy_vision"):
-		image = preload("res://assets/mapAssets/dark_forest/TCom_Sand_Muddy2_2x2_1K_albedo.png").duplicate();
+		image = preload("res://assets/sprites/map_images/dark_forest_image.png").duplicate();
 	elif (gamemode.to_lower() == "hippo_capture"):
-		image = preload("res://assets/textures/gameMap_TCom_Rock_CliffLayered_1.5x1.png").duplicate();
+		image = preload("res://assets/sprites/map_images/lake_image.png").duplicate();
 	elif (gamemode.to_lower() == "doom_bot"):
-		image = preload("res://assets/textures/61SLCkmPE8L._AC_UF894,1000_QL80_DpWeblab_.jpg").duplicate();
+		image = preload("res://assets/sprites/map_images/electric_central_image.png").duplicate();
 	elif (gamemode.to_lower() == "snowmen"):
-		image = preload("res://assets/textures/Kris_Overworld_b.webp").duplicate();
+		image = preload("res://assets/sprites/map_images/snowmen_image.png").duplicate();
 	elif (gamemode.to_lower() == "arena"):
-		image = preload("res://assets/mapAssets/arena/fancy-scaled-gold_roughness.png").duplicate();
+		image = preload("res://assets/sprites/map_images/arena_image.png").duplicate();
 	elif (gamemode.to_lower() == "trainwreck"):
-		image = preload("res://assets/textures/HQ_Noise_LowEndClamp.jpg").duplicate();
+		image = preload("res://assets/sprites/map_images/trainwreck_image.png").duplicate();
 	elif (gamemode.to_lower() == "heaven"):
-		image = preload("res://rf_icon.png").duplicate();
+		image = preload("res://assets/sprites/map_images/heaven_image.png").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();
