@@ -32,7 +32,7 @@ var activeConnectionMode: String = "";
 var lobbyScene: Control = null;
 var userPreferences: UserPreferences;
 
-var DEBUG = true;
+var DEBUG = false;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
