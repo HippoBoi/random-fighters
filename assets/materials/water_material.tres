@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://cwvvscvyselx"]
+
+[ext_resource type="Shader" uid="uid://b46nd44qgxcg" path="res://assets/scripts/shaders/water_shader.gdshader" id="1_dt00y"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dt00y"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yow7o"]
+noise = SubResource("FastNoiseLite_dt00y")
+seamless = true
+seamless_blend_skirt = 0.465
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wvs3o"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_81duy"]
+noise = SubResource("FastNoiseLite_wvs3o")
+seamless = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_dt00y")
+shader_parameter/waterColor = Color(0.6015608, 0.8072856, 1, 1)
+shader_parameter/roughness = 0.05
+shader_parameter/normalmap_a = SubResource("NoiseTexture2D_yow7o")
+shader_parameter/normalmap_b = SubResource("NoiseTexture2D_81duy")
+shader_parameter/normalmap_a_strength = 0.5
+shader_parameter/normalmap_b_strength = 0.11
+shader_parameter/moveDirection = Vector2(0.1, 0.1)
+shader_parameter/moveStrength = 0.45
+shader_parameter/uvScale = 1.2
+shader_parameter/fresnelValue = 3.0
