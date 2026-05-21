@@ -64,7 +64,7 @@ const items = [
 		"name": "Speed Boots",
 		"price": 15,
 		"stats": {
-			"speed": 5
+			"speed": 3
 		},
 		"texture": "res://assets/textures/items/boots.png"
 	},
@@ -79,13 +79,13 @@ const items = [
 	},
 	{
 		"name": "Divino",
-		"price": 60,
+		"price": 55,
 		"stats": {
-			"hp": 4,
-			"dmg": 4,
+			"hp": 45,
+			"dmg": 5,
 			"attackSpeed": 4,
 			"cooldownReduction": 4,
-			"speed": 4
+			"speed": 3
 		},
 		"texture": "res://assets/textures/looping_background.png"
 	}
