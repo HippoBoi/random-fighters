@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdmegexu6xnch"]
+[gd_scene load_steps=3 format=3 uid="uid://caocju5ugw8xp"]
 
-[ext_resource type="Material" path="res://assets/materials/water_material.tres" id="1_nt3ku"]
+[ext_resource type="Material" uid="uid://cwvvscvyselx" path="res://assets/materials/water_material.tres" id="1_nt3ku"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_nt3ku"]
 material = ExtResource("1_nt3ku")
