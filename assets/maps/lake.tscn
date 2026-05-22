@@ -128,5 +128,5 @@ shape = SubResource("CapsuleShape3D_smvvh")
 transform = Transform3D(0.184037, 0, 0.518296, 0, 0.55, 0, -0.518296, 0, 0.184037, -0.539642, 4.61405, -0.000790596)
 
 [node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(86.60249, 0, 0, 0, 1, 0, 0, 0, 64.41507, -28.733274, -19.658766, -16.261627)
+transform = Transform3D(86.60249, 0, 0, 0, 1, 0, 0, 0, 64.41507, -28.733274, -16.986982, -16.261627)
 mesh = SubResource("PlaneMesh_0ydox")
