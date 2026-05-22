@@ -929,10 +929,35 @@ func _inBasicRange(character, target):
 	
 	return false;
 
+func _canReceiveDamage(target) -> bool:
+	var requiredVars = ["armor", "shield", "maxHp", "hp"];
+	
+	for variableName in requiredVars:
+		if not (variableName in target):
+			print("[dealDamage]: target missing " + variableName);
+			return false;
+	
+	return true;
+
+func _canBeStunned(target) -> bool:
+	var requiredVars = ["stunned", "stunTimer"];
+	
+	for variableName in requiredVars:
+		if not (variableName in target):
+			print("[dealDamage]: stun target missing " + variableName);
+			return false;
+	
+	return true;
+
 func dealDamage(character, target, dmg, effect := "", trueDamage := false):
-	if not (target) or (target.dead):
+	if not (target):
 		print("[dealDamage]: no target found");
-		return ;
+		return null;
+	if not (_canReceiveDamage(target)):
+		return null;
+	if ("dead" in target and target.dead):
+		print("[dealDamage]: no target found");
+		return null;
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
@@ -950,7 +975,8 @@ func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 		if (target.usingParry == true):
 			target.rpc("onParry");
 			dealDamage(target, character, dmg, effect);
-			stunTarget(character, 1.5);
+			if (_canBeStunned(character)):
+				stunTarget(character, 1.5);
 			return ;
 	
 	if (totalDmg > 0):

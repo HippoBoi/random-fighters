@@ -450,7 +450,6 @@ func simulateMove(newPos, _global_pos = Vector3.ZERO):
 		moveTo = _global_pos;
 		return;
 	
-	print(usingTertiary)
 	if not (usingTertiary):
 		rotateChar(newPos);
 	
