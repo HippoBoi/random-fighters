@@ -9,8 +9,8 @@ signal chat_message_submitted(message);
 @onready var chatMessages = $chatPanel/messages;
 @onready var chatInput = $chatPanel/chatInput;
 
-const MAX_CHAT_MESSAGES = 5;
-const MAX_CHAT_MESSAGE_LENGTH = 120;
+const MAX_CHAT_MESSAGES = 4;
+const MAX_CHAT_MESSAGE_LENGTH = 30;
 const CHAT_VISIBLE_SECONDS = 4.0;
 const CHAT_FADE_SECONDS = 0.45;
 
@@ -74,7 +74,7 @@ func add_chat_message(senderName: String, message: String) -> void:
 	messageLabel.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9));
 	messageLabel.add_theme_constant_override("shadow_offset_x", 1);
 	messageLabel.add_theme_constant_override("shadow_offset_y", 1);
-	messageLabel.add_theme_font_size_override("font_size", 11);
+	messageLabel.add_theme_font_size_override("font_size", 9);
 	messageLabel.text = "%s: %s" % [senderName, _sanitize_message(message)];
 	chatMessages.add_child(messageLabel);
 
