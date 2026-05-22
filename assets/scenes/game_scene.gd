@@ -428,8 +428,9 @@ func onRoundVictory(winnerTeam: int):
 func get_character_by_id(_playerId: String):
 	var charLookingFor = null;
 	for character in addedCharacters:
-		if (character.name == _playerId):
-			charLookingFor = character;
+		if is_instance_valid(character):
+			if (character.name == _playerId):
+				charLookingFor = character;
 
 	if not (charLookingFor):
 		print("(gameScene)[WARNING]: couldn't find character");
