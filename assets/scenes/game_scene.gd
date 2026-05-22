@@ -25,6 +25,8 @@ signal teamWonGame(teamThatHasWon);
 signal returnToLobby;
 
 func _ready() -> void:
+	$InGameUI.chat_message_submitted.connect(send_chat_message);
+
 	if (currentGameMode.is_empty()):
 		_selectGameMode();
 
@@ -36,13 +38,73 @@ func _ready() -> void:
 	spawnPlayers();
 
 func _process(_delta: float) -> void:
-	if (Input.is_action_pressed("tab")):
+	if ($InGameUI.is_chat_open()):
+		$InGameUI/playerList.visible = false;
+	elif (Input.is_action_pressed("tab")):
 		$InGameUI/playerList.visible = true;
 	else:
 		$InGameUI/playerList.visible = false;
 
-	if (Input.is_action_just_pressed("closeMenu")):
+	if (Input.is_action_just_pressed("closeMenu") and not $InGameUI.is_chat_open()):
 		PlayerFunc.optionsToggle();
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not (event is InputEventKey):
+		return;
+
+	if not (event.pressed) or event.echo:
+		return;
+
+	if ($InGameUI.is_chat_open() and event.is_action_pressed("closeMenu")):
+		$InGameUI.close_chat(true);
+		get_viewport().set_input_as_handled();
+		return;
+
+	if (event.is_action_pressed("enter") and not $InGameUI.is_chat_open()):
+		$InGameUI.open_chat();
+		get_viewport().set_input_as_handled();
+
+func send_chat_message(message: String) -> void:
+	var senderName = _get_player_username(playerId);
+	if (multiplayer.is_server()):
+		rpc("receive_chat_message", playerId, senderName, message);
+	else:
+		rpc_id(1, "request_chat_message", senderName, message);
+
+@rpc("any_peer", "reliable")
+func request_chat_message(senderName: String, message: String) -> void:
+	if not (multiplayer.is_server()):
+		return;
+
+	var senderId = multiplayer.get_remote_sender_id();
+	var displayName = _get_player_username(senderId);
+	if (displayName.begins_with("Player ") and not senderName.strip_edges().is_empty()):
+		displayName = senderName.strip_edges();
+
+	rpc("receive_chat_message", senderId, displayName, message);
+
+@rpc("authority", "call_local", "reliable")
+func receive_chat_message(senderId: int, senderName: String, message: String) -> void:
+	var displayName = senderName.strip_edges();
+	if (displayName.is_empty()):
+		displayName = _get_player_username(senderId);
+
+	$InGameUI.add_chat_message(displayName, message);
+
+func _get_player_username(_playerId: int) -> String:
+	var playersInfoKey = _playerId;
+	if not (Server.playersInfo.has(playersInfoKey)):
+		var stringKey = str(_playerId);
+		if (Server.playersInfo.has(stringKey)):
+			playersInfoKey = stringKey;
+
+	if (Server.playersInfo.has(playersInfoKey)):
+		var player = Server.playersInfo[playersInfoKey];
+		var username = str(player.username).strip_edges();
+		if not (username.is_empty()):
+			return username;
+
+	return "Player %s" % _playerId;
 
 func startGameMode(gameMode: String):
 	var newMap = null;
@@ -366,8 +428,9 @@ func onRoundVictory(winnerTeam: int):
 func get_character_by_id(_playerId: String):
 	var charLookingFor = null;
 	for character in addedCharacters:
-		if (character.name == _playerId):
-			charLookingFor = character;
+		if is_instance_valid(character):
+			if (character.name == _playerId):
+				charLookingFor = character;
 
 	if not (charLookingFor):
 		print("(gameScene)[WARNING]: couldn't find character");
