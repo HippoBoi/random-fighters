@@ -13,7 +13,6 @@ var wasdMovement = false;
 var keepBasicAttacking = false;
 var shopOpen = false;
 var optionsOpen = false;
-var chatOpen = false;
 
 var activeBasicArea: MeshInstance3D = null;
 var lastHpValue = 0;
@@ -413,18 +412,18 @@ func updateState(character: CharacterBody3D, delta):
 	if (gameStarted):
 		_cameraMovement(character, delta);
 		
-		if (not chatOpen and Input.is_action_just_pressed("lockCamera")):
+		if (Input.is_action_just_pressed("lockCamera")):
 			freeCam = not freeCam;
 			
-		if (not chatOpen and Input.is_action_pressed("space")):
+		if (Input.is_action_pressed("space")):
 			freeCam = false;
-		if (not chatOpen and Input.is_action_just_released("space")):
+		if (Input.is_action_just_released("space")):
 			freeCam = true;
 		
-		if (not chatOpen and Input.is_action_just_pressed("autoBasic") and wasdMovement == false):
+		if (Input.is_action_just_pressed("autoBasic") and wasdMovement == false):
 			_autoBasic(character);
 		
-		if (not chatOpen and wasdMovement and Input.is_anything_pressed()):
+		if (wasdMovement and Input.is_anything_pressed()):
 			var newPos = character.global_position;
 			if (Input.is_action_pressed("W")):
 				newPos += Vector3(-0.1, 0, -0.1);

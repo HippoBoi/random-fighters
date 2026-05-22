@@ -9,10 +9,14 @@ signal chat_message_submitted(message);
 @onready var chatMessages = $chatPanel/messages;
 @onready var chatInput = $chatPanel/chatInput;
 
-const MAX_CHAT_MESSAGES = 10;
+const MAX_CHAT_MESSAGES = 5;
 const MAX_CHAT_MESSAGE_LENGTH = 120;
+const CHAT_VISIBLE_SECONDS = 4.0;
+const CHAT_FADE_SECONDS = 0.45;
 
 var chatOpen = false;
+var chatFadeVersion = 0;
+var chatFadeTween: Tween = null;
 
 var primaryDesc = "";
 var primaryIcon = "";
@@ -32,10 +36,11 @@ func is_chat_open() -> bool:
 func open_chat() -> void:
 	chatOpen = true;
 	chatPanel.visible = true;
+	chatPanel.modulate.a = 1.0;
 	chatInput.visible = true;
 	chatInput.grab_focus();
 	chatInput.caret_column = chatInput.text.length();
-	PlayerFunc.chatOpen = true;
+	_cancel_chat_fade();
 
 func close_chat(clearText := false) -> void:
 	chatOpen = false;
@@ -44,7 +49,9 @@ func close_chat(clearText := false) -> void:
 	chatInput.release_focus();
 	if (clearText):
 		chatInput.text = "";
-	PlayerFunc.chatOpen = false;
+
+	if (chatPanel.visible):
+		_restart_chat_fade_timer();
 
 func submit_chat_message() -> void:
 	var message = _sanitize_message(chatInput.text);
@@ -58,6 +65,7 @@ func submit_chat_message() -> void:
 
 func add_chat_message(senderName: String, message: String) -> void:
 	chatPanel.visible = true;
+	chatPanel.modulate.a = 1.0;
 
 	var messageLabel = Label.new();
 	messageLabel.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART;
@@ -66,6 +74,7 @@ func add_chat_message(senderName: String, message: String) -> void:
 	messageLabel.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9));
 	messageLabel.add_theme_constant_override("shadow_offset_x", 1);
 	messageLabel.add_theme_constant_override("shadow_offset_y", 1);
+	messageLabel.add_theme_font_size_override("font_size", 11);
 	messageLabel.text = "%s: %s" % [senderName, _sanitize_message(message)];
 	chatMessages.add_child(messageLabel);
 
@@ -73,6 +82,37 @@ func add_chat_message(senderName: String, message: String) -> void:
 		var oldMessage = chatMessages.get_child(0);
 		chatMessages.remove_child(oldMessage);
 		oldMessage.queue_free();
+
+	_restart_chat_fade_timer();
+
+func _restart_chat_fade_timer() -> void:
+	if (chatOpen):
+		return;
+
+	_cancel_chat_fade();
+	chatFadeVersion += 1;
+	var currentVersion = chatFadeVersion;
+
+	await get_tree().create_timer(CHAT_VISIBLE_SECONDS).timeout;
+
+	if (chatOpen or currentVersion != chatFadeVersion or chatMessages.get_child_count() == 0):
+		return;
+
+	chatFadeTween = get_tree().create_tween();
+	chatFadeTween.tween_property(chatPanel, "modulate:a", 0.0, CHAT_FADE_SECONDS);
+	await chatFadeTween.finished;
+
+	if (chatOpen or currentVersion != chatFadeVersion):
+		return;
+
+	chatPanel.visible = false;
+	chatPanel.modulate.a = 1.0;
+
+func _cancel_chat_fade() -> void:
+	chatFadeVersion += 1;
+	if (chatFadeTween):
+		chatFadeTween.kill();
+		chatFadeTween = null;
 
 func _sanitize_message(message: String) -> String:
 	var cleanMessage = message.replace("\n", " ").replace("\r", " ").strip_edges();

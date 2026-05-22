@@ -141,8 +141,6 @@ func _physics_process(delta: float) -> void:
 			rpc("syncTarget", target);
 		
 		PlayerFunc.updateState(self, delta);
-		if (PlayerFunc.chatOpen):
-			return;
 		
 		if (Input.is_action_just_pressed("rightClick")):
 			PlayerFunc.onRightClick(self);
