@@ -36,4 +36,5 @@ shader_parameter/uvScale = 1.0
 shader_parameter/fresnelValue = 3.0
 shader_parameter/depthDistance = 4.0
 shader_parameter/beersLaw = 12.0
-shader_parameter/waterTransparency = 0.68999998457712
+shader_parameter/waterTransparency = 0.749999983236
+shader_parameter/refractionStrength = 0.0999999977648
