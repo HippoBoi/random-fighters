@@ -81,6 +81,49 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
 
+[node name="chatPanel" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -222.0
+offset_right = 376.0
+offset_bottom = -44.0
+grow_vertical = 0
+mouse_filter = 1
+color = Color(0.026, 0.032, 0.04, 0.62)
+
+[node name="messages" type="VBoxContainer" parent="chatPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="chatInput" type="LineEdit" parent="chatPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -30.0
+offset_right = -8.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+placeholder_text = "Type a message..."
+max_length = 120
+context_menu_enabled = false
+
 [node name="livesText" type="RichTextLabel" parent="."]
 visible = false
 layout_mode = 1
@@ -682,3 +725,4 @@ expand_mode = 1
 [connection signal="mouse_exited" from="abilitiesUI/tertiaryAbility" to="." method="_on_tertiary_mouse_exit"]
 [connection signal="mouse_entered" from="abilitiesUI/ultiAbility" to="." method="_on_ulti_mouse_hover"]
 [connection signal="mouse_exited" from="abilitiesUI/ultiAbility" to="." method="_on_ulti_mouse_exit"]
+[connection signal="text_submitted" from="chatPanel/chatInput" to="." method="_on_chat_input_text_submitted"]

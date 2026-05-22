@@ -1,8 +1,18 @@
 extends Control
 
+signal chat_message_submitted(message);
+
 @onready var abilityDescNode = $abilityDesc;
 @onready var descriptionText = $abilityDesc/descText;
 @onready var descriptionImage = $abilityDesc/descImage;
+@onready var chatPanel = $chatPanel;
+@onready var chatMessages = $chatPanel/messages;
+@onready var chatInput = $chatPanel/chatInput;
+
+const MAX_CHAT_MESSAGES = 10;
+const MAX_CHAT_MESSAGE_LENGTH = 120;
+
+var chatOpen = false;
 
 var primaryDesc = "";
 var primaryIcon = "";
@@ -12,6 +22,64 @@ var tertiaryDesc = "";
 var tertiaryIcon = "";
 var ultiDesc = "";
 var ultiIcon = "";
+
+func _ready() -> void:
+	close_chat();
+
+func is_chat_open() -> bool:
+	return chatOpen;
+
+func open_chat() -> void:
+	chatOpen = true;
+	chatPanel.visible = true;
+	chatInput.visible = true;
+	chatInput.grab_focus();
+	chatInput.caret_column = chatInput.text.length();
+	PlayerFunc.chatOpen = true;
+
+func close_chat(clearText := false) -> void:
+	chatOpen = false;
+	chatPanel.visible = chatMessages.get_child_count() > 0;
+	chatInput.visible = false;
+	chatInput.release_focus();
+	if (clearText):
+		chatInput.text = "";
+	PlayerFunc.chatOpen = false;
+
+func submit_chat_message() -> void:
+	var message = _sanitize_message(chatInput.text);
+	chatInput.text = "";
+	close_chat();
+
+	if (message.is_empty()):
+		return;
+
+	chat_message_submitted.emit(message);
+
+func add_chat_message(senderName: String, message: String) -> void:
+	chatPanel.visible = true;
+
+	var messageLabel = Label.new();
+	messageLabel.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART;
+	messageLabel.size_flags_horizontal = Control.SIZE_EXPAND_FILL;
+	messageLabel.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.92));
+	messageLabel.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9));
+	messageLabel.add_theme_constant_override("shadow_offset_x", 1);
+	messageLabel.add_theme_constant_override("shadow_offset_y", 1);
+	messageLabel.text = "%s: %s" % [senderName, _sanitize_message(message)];
+	chatMessages.add_child(messageLabel);
+
+	while (chatMessages.get_child_count() > MAX_CHAT_MESSAGES):
+		var oldMessage = chatMessages.get_child(0);
+		chatMessages.remove_child(oldMessage);
+		oldMessage.queue_free();
+
+func _sanitize_message(message: String) -> String:
+	var cleanMessage = message.replace("\n", " ").replace("\r", " ").strip_edges();
+	if (cleanMessage.length() > MAX_CHAT_MESSAGE_LENGTH):
+		cleanMessage = cleanMessage.substr(0, MAX_CHAT_MESSAGE_LENGTH);
+
+	return cleanMessage;
 
 func _on_primary_mouse_hover() -> void:
 	var image = load(primaryIcon);
@@ -58,3 +126,6 @@ func updateIcons():
 	$abilitiesUI/secondaryAbility.texture = load(secondaryIcon);
 	$abilitiesUI/tertiaryAbility.texture = load(tertiaryIcon);
 	$abilitiesUI/ultiAbility.texture = load(ultiIcon);
+
+func _on_chat_input_text_submitted(_new_text: String) -> void:
+	submit_chat_message();

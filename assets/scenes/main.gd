@@ -367,6 +367,7 @@ func _clearRoundData():
 	PlayerFunc.freeCam = false;
 	PlayerFunc.shopOpen = false;
 	PlayerFunc.optionsOpen = false;
+	PlayerFunc.chatOpen = false;
 	PlayerFunc.myCharacter = null;
 	PlayerFunc.myFogInstances = [];
 	PlayerFunc.maxHpStored = {};
