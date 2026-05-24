@@ -249,7 +249,6 @@ visible = false
 mesh = SubResource("ArrayMesh_5sjv8")
 
 [node name="CollisisionBoxes" type="Node3D" parent="."]
-visible = false
 
 [node name="CollissionBox" type="Node3D" parent="CollisisionBoxes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 24.1242)
