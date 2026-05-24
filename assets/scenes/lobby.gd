@@ -168,11 +168,6 @@ func _leaveMatchLobby():
 	_loadMatches();
 
 func _buildLobbyPlayerList(matchData):
-	# TODO:
-	# check everytime if the lobby owner left
-	# if so close the match locally because it must already have been closed from server side
-	# could also send a message from server to client
-	
 	for team_player in $LobbyContainer/Teams/BlackTeam.get_children():
 		team_player.queue_free();
 	for team_player in $LobbyContainer/Teams/WhiteTeam.get_children():
@@ -180,11 +175,12 @@ func _buildLobbyPlayerList(matchData):
 
 	var matchPlayers = matchData.users;
 	var ownerId = matchData.matchInfo.ownerId;
+	var foundOwner = false;
 
 	if (ownerId):
 		if (ownerId == fakeUser.playerId):
+			foundOwner = true;
 			$LobbyContainer/Teams/Ready.visible = true;
-			print(fakeUser.playerId, " YOU ARE OWNER!!!!!!!!!!!!!!!!!");
 
 		currentOwnerId = ownerId;
 		print("CURRENT OWNER ID: ", currentOwnerId);
@@ -195,10 +191,14 @@ func _buildLobbyPlayerList(matchData):
 
 		var userId: String = player.userId;
 		var tagId = userId.right(3);
+		var isOwner = tagId == ownerId;
 		var isPlayer = tagId == fakeUser.playerId;
 		if (isPlayer):
 			fakeUser.username = player.username;
 			currentTeam = player.team;
+		
+		if (isOwner):
+			foundOwner = true;
 
 		print("%s: my team is: %s" % [player.username, player.team]);
 
@@ -217,6 +217,11 @@ func _buildLobbyPlayerList(matchData):
 				$LobbyContainer/Teams/BlackTeamJoin.visible = true;
 				$LobbyContainer/Teams/WhiteTeamJoin.visible = true;
 			print("%s: - - - - player has no team - - - -" % player.username);
+	
+	if (ownerId and not foundOwner):
+		# force to leave if owner wasn't found in the game
+		# a better solution is to implement this server side LOL
+		_leaveMatchLobby();
 
 func _updateMatchesList(matches):
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
