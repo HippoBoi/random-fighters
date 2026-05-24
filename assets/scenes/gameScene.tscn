@@ -10,13 +10,15 @@
 [ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="5_e2iu4"]
 [ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="6_5xj4x"]
 [ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="7_5t5vp"]
-[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="8_4emlq"]
 [ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="9_xb6nb"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="11_o0ehx"]
 [ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="12_4a3ho"]
 [ext_resource type="Script" uid="uid://luo8kcd41hvg" path="res://assets/scenes/minimap.gd" id="14_7678e"]
 [ext_resource type="Script" uid="uid://boiww7d2pjin" path="res://assets/scenes/options_ui.gd" id="15_e2iu4"]
 [ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="15_eny81"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e2iu4"]
+load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
 font_size = 24
@@ -419,7 +421,7 @@ offset_right = -76.0
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("8_4emlq")
+texture = SubResource("CompressedTexture2D_e2iu4")
 expand_mode = 1
 
 [node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/primaryAbility"]
@@ -453,7 +455,7 @@ offset_right = -6.0
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("8_4emlq")
+texture = SubResource("CompressedTexture2D_e2iu4")
 expand_mode = 1
 
 [node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/secondaryAbility"]
@@ -485,7 +487,7 @@ offset_right = 64.0
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("8_4emlq")
+texture = SubResource("CompressedTexture2D_e2iu4")
 expand_mode = 1
 
 [node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/tertiaryAbility"]
@@ -517,7 +519,7 @@ offset_right = 134.0
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("8_4emlq")
+texture = SubResource("CompressedTexture2D_e2iu4")
 expand_mode = 1
 
 [node name="cooldown" type="TextureRect" parent="InGameUI/abilitiesUI/ultiAbility"]

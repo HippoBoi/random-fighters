@@ -1,12 +1,12 @@
 extends CharacterBody3D
 
-@export var maxHp = 200.0;
-@export var hp = 200.0;
-@export var baseArmor = 14.5;
-@export var baseDmg = 17.0;
+@export var maxHp = 190.0;
+@export var hp = 190.0;
+@export var baseArmor = 14.0;
+@export var baseDmg = 15.5;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
-@export var baseSpeed = 6.0;
+@export var baseSpeed = 6.25;
 @export var cooldownReduction = 0;
 var shield = 0;
 
@@ -14,9 +14,9 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
-const Q_COOLDOWN = 6.5;
-const W_COOLDOWN = 8.0;
-const E_COOLDOWN = 8.5;
+const Q_COOLDOWN = 8.5;
+const W_COOLDOWN = 7.5;
+const E_COOLDOWN = 13.0;
 const R_COOLDOWN = 1.0;
 const W_MAX_RANGE = 7.5;
 const R_MAX_RANGE = 9.25;
@@ -25,7 +25,7 @@ var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMA
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash towards your mouse position.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
-var tertiaryDesc = "Slash that deals 100% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
+var tertiaryDesc = "Slash that deals 95% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
 var ultiDesc = "Dash towards an enemy target.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
@@ -502,4 +502,4 @@ func _onSlashTouched(other) -> void:
 	if (isCharacter):
 		if (other.team != team):
 			qTimer = 0;
-			PlayerFunc.dealDamage(self, other, (dmg + 0.5));
+			PlayerFunc.dealDamage(self, other, (dmg * 0.95 + 0.5));

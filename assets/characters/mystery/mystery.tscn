@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
 [ext_resource type="Shader" uid="uid://dmdskevb2pxeb" path="res://assets/characters/mystery/mystery_shader.gdshader" id="3_wllyx"]
 [ext_resource type="Texture2D" uid="uid://bt25gy2xsanyi" path="res://assets/characters/mystery/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="4_emb01"]
-[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="5_h2vus"]
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="5_h2vus"]
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="6_6yj01"]
 [ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="7_erqts"]
 [ext_resource type="ArrayMesh" uid="uid://begwk4a68nxu2" path="res://assets/characters/mystery/mystery_circle.obj" id="8_erqts"]

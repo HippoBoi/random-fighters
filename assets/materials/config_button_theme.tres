@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://br3g2to4mj3gg"]
 
-[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_7gl0g"]
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_7gl0g"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gl0g"]
 
