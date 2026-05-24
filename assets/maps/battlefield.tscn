@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://eutptos8bewb"]
+[gd_scene load_steps=9 format=3 uid="uid://eutptos8bewb"]
 
 [ext_resource type="PackedScene" uid="uid://b2nrmuihinq3n" path="res://assets/mapAssets/battlefield/heaven_battlefield_map_v2.tscn" id="1_qrnna"]
 
@@ -19,6 +19,10 @@ ambient_light_source = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4t2fk"]
 size = Vector3(0.224869, 68.929474, 2.49158)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o8odc"]
+subdivide_width = 200
+subdivide_depth = 200
 
 [node name="battlefield" type="Node3D"]
 
@@ -85,3 +89,8 @@ transform = Transform3D(1, 0, 1.0658141e-14, 0, 1, 0, -1.0658141e-14, 0, 1, -25.
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollissionBox4/StaticBody3D"]
 transform = Transform3D(1, 0, 2.1175824e-22, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.785118, 0.18691994, 2.2434769)
 shape = SubResource("BoxShape3D_4t2fk")
+
+[node name="grassSurface" type="MeshInstance3D" parent="."]
+transform = Transform3D(30.6, 0, 0, 0, 1, 0, 0, 0, 34.04, 0, -0.2455926, 0)
+mesh = SubResource("PlaneMesh_o8odc")
+skeleton = NodePath("")
