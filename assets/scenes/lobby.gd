@@ -218,7 +218,7 @@ func _buildLobbyPlayerList(matchData):
 				$LobbyContainer/Teams/WhiteTeamJoin.visible = true;
 			print("%s: - - - - player has no team - - - -" % player.username);
 	
-	if not (foundOwner):
+	if (ownerId and not foundOwner):
 		# force to leave if owner wasn't found in the game
 		# a better solution is to implement this server side LOL
 		_leaveMatchLobby();
