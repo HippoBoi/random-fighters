@@ -26,6 +26,7 @@ signal returnToLobby;
 
 func _ready() -> void:
 	$InGameUI.chat_message_submitted.connect(send_chat_message);
+	$OptionsUI.controls_changed.connect($InGameUI.update_ability_keybind_labels);
 
 	if (currentGameMode.is_empty()):
 		_selectGameMode();
@@ -512,3 +513,8 @@ func _on_sounds_slider_value_changed(value: float) -> void:
 
 func _on_reset_defaults() -> void:
 	userPreferences.resetToDefaults();
+	$OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
+	$OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider.value = userPreferences.musicVolume;
+	$OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider.value = userPreferences.soundsVolume;
+	$OptionsUI.update_control_labels();
+	$InGameUI.update_ability_keybind_labels();

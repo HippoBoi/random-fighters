@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://ysdddut54uvw"]
+[gd_scene load_steps=13 format=3 uid="uid://ysdddut54uvw"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_6tsn0"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_2cgkr"]
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="3_4agkw"]
 [ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_cmwfe"]
+[ext_resource type="Texture2D" uid="uid://dwlwdckb1s4s8" path="res://assets/sprites/random.png" id="5_0cygf"]
+[ext_resource type="Texture2D" uid="uid://c1ibuefw3763v" path="res://assets/sprites/fighters.png" id="6_fk7uv"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
 
@@ -199,37 +201,23 @@ offset_bottom = 367.0
 mouse_filter = 2
 color = Color(0.0798956, 0.105834, 0.141231, 1)
 
-[node name="Title1" type="RichTextLabel" parent="UI"]
+[node name="Title1" type="TextureRect" parent="UI"]
 layout_mode = 0
-offset_left = 27.0
-offset_top = 18.0
-offset_right = 233.0
-offset_bottom = 90.0
-scale = Vector2(1.1, 1.1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 10
-theme_override_constants/shadow_offset_x = 8
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 48
-text = "Random"
+offset_left = 20.0
+offset_top = -24.0
+offset_right = 340.0
+offset_bottom = 136.0
+texture = ExtResource("5_0cygf")
+expand_mode = 1
 
-[node name="Title2" type="RichTextLabel" parent="UI"]
+[node name="Title2" type="TextureRect" parent="UI"]
 layout_mode = 0
-offset_left = 73.0
-offset_top = 77.0
-offset_right = 306.0
-offset_bottom = 153.0
-scale = Vector2(1.1, 1.1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 10
-theme_override_constants/shadow_offset_x = 8
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 48
-text = "Fighters"
+offset_left = 50.0
+offset_top = 17.0
+offset_right = 402.0
+offset_bottom = 212.0
+texture = ExtResource("6_fk7uv")
+expand_mode = 1
 
 [connection signal="pressed" from="UI/Menu/menuButtons/multiplayerButton" to="." method="onFindMatch"]
 [connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_host" binds= [8890, "unnamed", "0"]]

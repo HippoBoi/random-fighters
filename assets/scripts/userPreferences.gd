@@ -16,7 +16,6 @@ class_name UserPreferences extends Resource
 };
 
 func save():
-	print("SAVING SETTINGS!");
 	ResourceSaver.save(self, "user://settings.tres");
 
 static func loadOrCreate():
@@ -27,5 +26,20 @@ static func loadOrCreate():
 	
 	return res;
 
-static func resetToDefaults():
-	print("RESETING TO DEFAULT SETTINGS");
+func resetToDefaults():
+	musicVolume = 1.0;
+	soundsVolume = 1.0;
+	wasdMovement = false;
+	controls = {
+		"primary" = null,
+		"secondary" = null,
+		"tertiary" = null,
+		"ultimate" = null,
+		"space" = null,
+		"shop" = null,
+		"autoBasic" = null,
+		"stop_movement" = null
+	};
+
+	InputMap.load_from_project_settings();
+	save();

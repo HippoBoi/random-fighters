@@ -20,10 +20,10 @@ func playIntro():
 	tween.tween_property(bottomRect, "position", Vector2(0, 0), 0.5);
 	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 1), 0.5);
 	
-	tween.tween_property(RANDOM_text, "position", Vector2(26, 18), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(1.1, 1.1), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(73, 77), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(1.1, 1.1), 0.5);
+	tween.tween_property(RANDOM_text, "position", Vector2(16, -25), 0.5);
+	tween.tween_property(RANDOM_text, "scale", Vector2(1.0, 1.0), 0.5);
+	tween.tween_property(FIGHTERS_text, "position", Vector2(42, 24), 0.5);
+	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.975, 0.975), 0.5);
 	tween.tween_property(loopingBG, "modulate", Color(0.336, 0.39, 0.434, 1), 0.5);
 	
 	$Menu/nameInput.visible = true;
@@ -51,10 +51,10 @@ func playLeave():
 	tween.tween_property(bottomRect, "position", Vector2(-100, -450), 0.5);
 	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 0), 0.5);
 	
-	tween.tween_property(RANDOM_text, "position", Vector2(26, 18), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(0.6, 0.6), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(65, 47), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.55, 0.55), 0.5);
+	tween.tween_property(RANDOM_text, "position", Vector2(30, 18), 0.5);
+	tween.tween_property(RANDOM_text, "scale", Vector2(0.35, 0.35), 0.5);
+	tween.tween_property(FIGHTERS_text, "position", Vector2(56, 32), 0.5);
+	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.35, 0.35), 0.5);
 	tween.tween_property(loopingBG, "modulate", Color(1, 1, 1, 0.05), 0.5);
 	
 	$Menu/nameInput.visible = false;
