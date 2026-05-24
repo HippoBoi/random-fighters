@@ -130,50 +130,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
 
-[node name="chatPanel" type="ColorRect" parent="InGameUI"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -164.0
-offset_right = 260.0
-offset_bottom = -78.0
-grow_vertical = 0
-mouse_filter = 1
-color = Color(0.026, 0.032, 0.04, 0.62)
-
-[node name="messages" type="VBoxContainer" parent="InGameUI/chatPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 5.0
-offset_right = -8.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="chatInput" type="LineEdit" parent="InGameUI/chatPanel"]
-visible = false
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 4.0
-offset_right = -8.0
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 10
-placeholder_text = "Type a message..."
-max_length = 30
-context_menu_enabled = false
-
 [node name="templates" type="Control" parent="InGameUI/playerList"]
 layout_mode = 1
 anchors_preset = 15
@@ -247,6 +203,49 @@ offset_right = -155.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0685044, 0.110854, 0.11474, 0.458824)
+
+[node name="chatPanel" type="ColorRect" parent="InGameUI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -164.0
+offset_right = 260.0
+offset_bottom = -78.0
+grow_vertical = 0
+mouse_filter = 1
+color = Color(0.026, 0.032, 0.04, 0.62)
+
+[node name="messages" type="VBoxContainer" parent="InGameUI/chatPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = -8.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="chatInput" type="LineEdit" parent="InGameUI/chatPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 10
+placeholder_text = "Type a message..."
+max_length = 30
+context_menu_enabled = false
 
 [node name="livesText" type="RichTextLabel" parent="InGameUI"]
 visible = false
@@ -2267,6 +2266,7 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.95399e-14, 1, 1.3027e
 [node name="blackTeam" type="Node3D" parent="Map/placeHolder/spawnLocations"]
 transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e-15, 8.74228e-08, -5.62093e-28, -1, 17.5455, 0.591752, -0.0339885)
 
+[connection signal="text_submitted" from="InGameUI/chatPanel/chatInput" to="InGameUI" method="_on_chat_input_text_submitted"]
 [connection signal="mouse_entered" from="InGameUI/abilitiesUI/primaryAbility" to="InGameUI" method="_on_primary_mouse_hover"]
 [connection signal="mouse_exited" from="InGameUI/abilitiesUI/primaryAbility" to="InGameUI" method="_on_primary_mouse_exit"]
 [connection signal="mouse_entered" from="InGameUI/abilitiesUI/secondaryAbility" to="InGameUI" method="_on_secondary_mouse_hover"]
@@ -2275,7 +2275,6 @@ transform = Transform3D(-1, -6.05845e-28, -8.74228e-08, -1.06581e-14, 1, 1.3027e
 [connection signal="mouse_exited" from="InGameUI/abilitiesUI/tertiaryAbility" to="InGameUI" method="_on_tertiary_mouse_exit"]
 [connection signal="mouse_entered" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_hover"]
 [connection signal="mouse_exited" from="InGameUI/abilitiesUI/ultiAbility" to="InGameUI" method="_on_ulti_mouse_exit"]
-[connection signal="text_submitted" from="InGameUI/chatPanel/chatInput" to="InGameUI" method="_on_chat_input_text_submitted"]
 [connection signal="pressed" from="InGameUI/abilitiesUI/shopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox" to="." method="_on_check_box_toggled"]
 [connection signal="value_changed" from="OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider" to="." method="_on_music_slider_value_changed"]
