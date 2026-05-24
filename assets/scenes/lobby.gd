@@ -168,6 +168,11 @@ func _leaveMatchLobby():
 	_loadMatches();
 
 func _buildLobbyPlayerList(matchData):
+	# TODO:
+	# check everytime if the lobby owner left
+	# if so close the match locally because it must already have been closed from server side
+	# could also send a message from server to client
+	
 	for team_player in $LobbyContainer/Teams/BlackTeam.get_children():
 		team_player.queue_free();
 	for team_player in $LobbyContainer/Teams/WhiteTeam.get_children():
@@ -325,8 +330,6 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	_loadMatches();
 
 func getUPnPAddress(_port = 8890):
-	print("GETTING UPNP ADDRESS");
-
 	var upnp = UPNP.new();
 	var discoverResult = upnp.discover();
 

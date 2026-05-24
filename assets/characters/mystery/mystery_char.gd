@@ -25,14 +25,14 @@ var R_COOLDOWN = 55.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
-var primaryDesc = ""
-var primaryIcon = "res://icon.svg";
-var secondaryDesc = "";
-var secondaryIcon = "res://icon.svg";
-var tertiaryDesc = "";
-var tertiaryIcon = "res://icon.svg";
-var ultiDesc = "";
-var ultiIcon = "res://icon.svg";
+var primaryDesc = "Cast for 1.5 seconds and fire a small projectile dealing 170% of your DAMAGE."
+var primaryIcon = "res://assets/sprites/mystery_abilities/mistery_primary.png";
+var secondaryDesc = "Spawn a storm in the position of your mouse. Enemies will be hit and slowed by 11% every second";
+var secondaryIcon = "res://assets/sprites/mystery_abilities/mistery_secondary.png";
+var tertiaryDesc = "Damage an enemy by 75% of your DAMAGE or shield an ally by 50% of your DAMAGE. Target anyone regardless of distance";
+var tertiaryIcon = "res://assets/sprites/mystery_abilities/mistery_tertiary.png";
+var ultiDesc = "Replace all your abilities for a strong projectile that stuns and damages two times for a total of 175% of your DAMAGE";
+var ultiIcon = "res://assets/sprites/mystery_abilities/mistery_ultimate.png";
 
 var qTimer = 0;
 var wTimer = 0;
