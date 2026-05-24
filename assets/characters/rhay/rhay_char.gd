@@ -15,11 +15,11 @@ var shield = 0;
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
 const Q_COOLDOWN = 6.5;
-const W_COOLDOWN = 10.0;
-const E_COOLDOWN = 8.0;
+const W_COOLDOWN = 8.0;
+const E_COOLDOWN = 8.5;
 const R_COOLDOWN = 1.0;
-const W_MAX_RANGE = 5.5;
-const R_MAX_RANGE = 8.2;
+const W_MAX_RANGE = 7.5;
+const R_MAX_RANGE = 9.25;
 
 var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
@@ -314,7 +314,7 @@ func secondary_ability(_moveTo, _global_pos):
 		moveTo = _moveTo;
 	moveTo.y = _global_pos.y;
 	wTimer = W_COOLDOWN - cooldownReduction;
-	speedOffset = 7.5;
+	speedOffset = 8.5;
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
@@ -376,7 +376,7 @@ func ultimate_ability(_moveTo, _global_pos):
 			ultiTimer = 0.5;
 		
 		rTimer = R_COOLDOWN;
-		speedOffset = 15;
+		speedOffset = 17;
 		onAction = true;
 		
 		$w_dash_particles/sparkParticle.emitting = true;

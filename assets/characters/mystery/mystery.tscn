@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://chsuri7n1cwcg"]
+[gd_scene load_steps=45 format=3 uid="uid://chsuri7n1cwcg"]
 
 [ext_resource type="PackedScene" uid="uid://cd4qwltvi8kxa" path="res://assets/characters/mystery/mystery.glb" id="1_sh7qi"]
 [ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
@@ -9,6 +9,8 @@
 [ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="7_erqts"]
 [ext_resource type="ArrayMesh" uid="uid://begwk4a68nxu2" path="res://assets/characters/mystery/mystery_circle.obj" id="8_erqts"]
 [ext_resource type="Shader" uid="uid://bwj4uly1w7xsx" path="res://assets/characters/mystery/magic_circle.tres" id="9_l16uc"]
+[ext_resource type="Texture2D" uid="uid://cgeucr66tfh2x" path="res://assets/sprites/character_icons/mystery_icon.png" id="10_itf3g"]
+[ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="11_fqjyq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mf77p"]
 render_priority = 0
@@ -2495,3 +2497,13 @@ lifetime = 1.57
 randomness = 1.0
 process_material = SubResource("ParticleProcessMaterial_158rh")
 draw_pass_1 = ExtResource("8_erqts")
+
+[node name="Sprite3D" type="Sprite3D" parent="." index="8"]
+transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
+top_level = true
+visible = false
+layers = 1024
+pixel_size = 0.075
+no_depth_test = true
+texture = ExtResource("10_itf3g")
+script = ExtResource("11_fqjyq")

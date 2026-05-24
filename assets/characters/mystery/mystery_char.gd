@@ -21,7 +21,7 @@ const MAX_R_SLASH_COOLDOWN = 1.75;
 var Q_COOLDOWN = 5.5;
 var W_COOLDOWN = 18.0;
 var E_COOLDOWN = 8.0;
-var R_COOLDOWN = 15.0;
+var R_COOLDOWN = 55.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
@@ -190,7 +190,6 @@ func _physics_process(delta: float) -> void:
 					if (usingUltimate == false):
 						action.call();
 					else:
-						print("ULTI SLASH")
 						_setup_ulti_slash();
 				else:
 					bufferedInput = action;
