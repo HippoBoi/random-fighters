@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://w22wqv5ex5na"]
+
+[ext_resource type="Shader" uid="uid://4qwlgrj7npx3" path="res://assets/scripts/shaders/grass_shader.gdshader" id="1_nth34"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_nth34")
+shader_parameter/color = Color(0.5038665, 0.59560037, 0.17041147, 1)
+shader_parameter/secondaryColor = Color(0.31660601, 0.12603813, 0.34810472, 1)
+shader_parameter/noiseScale = 20.0
+shader_parameter/windDirection = Vector2(1, 0.25)
+shader_parameter/windStrength = 0.35
+shader_parameter/windSpeed = 1.75
+shader_parameter/windScale = 3.0
+shader_parameter/tipInfluence = 2.0
