@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://eutptos8bewb"]
+[gd_scene load_steps=10 format=3 uid="uid://eutptos8bewb"]
 
 [ext_resource type="PackedScene" uid="uid://b2nrmuihinq3n" path="res://assets/mapAssets/battlefield/heaven_battlefield_map_v2.tscn" id="1_qrnna"]
 [ext_resource type="ArrayMesh" uid="uid://bwu7g8kwf155m" path="res://assets/mapAssets/grassMeshV2.res" id="2_4t2fk"]
@@ -20,8 +20,6 @@ ambient_light_source = 3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4t2fk"]
 size = Vector3(0.224869, 68.929474, 2.49158)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_o8odc"]
 
 [sub_resource type="MultiMesh" id="MultiMesh_4t2fk"]
 transform_format = 1
@@ -95,13 +93,6 @@ transform = Transform3D(1, 0, 1.0658141e-14, 0, 1, 0, -1.0658141e-14, 0, 1, -25.
 transform = Transform3D(1, 0, 2.1175824e-22, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.785118, 0.18691994, 2.2434769)
 shape = SubResource("BoxShape3D_4t2fk")
 
-[node name="grassSurface" type="MeshInstance3D" parent="."]
-transform = Transform3D(21.414158, 0, 0, 0, 1, 0, 0, 0, 34.04, 2, -0.044432163, 0)
-visible = false
-cast_shadow = 0
-mesh = SubResource("PlaneMesh_o8odc")
-skeleton = NodePath("")
-
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.055972576, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.20725012, 0)
 multimesh = SubResource("MultiMesh_4t2fk")
