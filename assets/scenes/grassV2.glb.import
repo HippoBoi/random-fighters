@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://867nho3sapke"
-path="res://.godot/imported/grass.glb-57ae9c056bfb9abde9d594260564c6a4.scn"
+uid="uid://cru5af2yxcrf0"
+path="res://.godot/imported/grassV2.glb-2c9504ba34d0d4b89a18c5bd2b8624b2.scn"
 
 [deps]
 
-source_file="res://assets/scenes/grass.glb"
-dest_files=["res://.godot/imported/grass.glb-57ae9c056bfb9abde9d594260564c6a4.scn"]
+source_file="res://assets/scenes/grassV2.glb"
+dest_files=["res://.godot/imported/grassV2.glb-2c9504ba34d0d4b89a18c5bd2b8624b2.scn"]
 
 [params]
 
@@ -39,14 +39,14 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "meshes": {
-"grass_Cube_001": {
+"grassV2_Plane": {
 "generate/lightmap_uv": 0,
 "generate/lods": 0,
 "generate/shadow_meshes": 0,
 "lods/normal_merge_angle": 20.0,
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://assets/mapAssets/grassMesh.res",
-"save_to_file/path": "uid://x36p2dv51krl"
+"save_to_file/fallback_path": "res://assets/mapAssets/grassMeshV2.res",
+"save_to_file/path": "uid://gmi4l1vuds"
 }
 }
 }
