@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bfqbbcs826hlp"
-path="res://.godot/imported/LTFuzz-Regular.ttf-6e21b9a507b364eb69afa0fbc6b67bae.fontdata"
+uid="uid://0lodjd6o1k8f"
+path="res://.godot/imported/TT Mussels Trial Bold.otf-22aa6574c08727871cb4fedc61dece6d.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/LTFuzz-Regular.ttf"
-dest_files=["res://.godot/imported/LTFuzz-Regular.ttf-6e21b9a507b364eb69afa0fbc6b67bae.fontdata"]
+source_file="res://addons/fonts/tl_mussels/TT Mussels Trial Bold.otf"
+dest_files=["res://.godot/imported/TT Mussels Trial Bold.otf-22aa6574c08727871cb4fedc61dece6d.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=4
 keep_rounding_remainders=true

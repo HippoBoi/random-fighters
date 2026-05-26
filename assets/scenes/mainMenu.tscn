@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ysdddut54uvw"]
+[gd_scene load_steps=14 format=3 uid="uid://ysdddut54uvw"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_6tsn0"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_2cgkr"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_cmwfe"]
 [ext_resource type="Texture2D" uid="uid://dwlwdckb1s4s8" path="res://assets/sprites/random.png" id="5_0cygf"]
 [ext_resource type="Texture2D" uid="uid://c1ibuefw3763v" path="res://assets/sprites/fighters.png" id="6_fk7uv"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
 
@@ -59,6 +60,7 @@ offset_top = -62.0
 offset_right = 294.0
 offset_bottom = -17.0
 theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
@@ -72,6 +74,7 @@ offset_top = -12.0
 offset_right = 294.0
 offset_bottom = 33.0
 theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
@@ -87,6 +90,7 @@ offset_top = 38.0
 offset_right = 294.0
 offset_bottom = 83.0
 theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
@@ -102,6 +106,7 @@ offset_top = 88.0
 offset_right = 294.0
 offset_bottom = 133.0
 theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
@@ -139,6 +144,7 @@ offset_bottom = 138.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 14
 text = "Username:"
 horizontal_alignment = 1

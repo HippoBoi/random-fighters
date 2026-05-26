@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=35 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
@@ -11,16 +11,18 @@
 [ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="6_5xj4x"]
 [ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="7_5t5vp"]
 [ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="9_xb6nb"]
+[ext_resource type="FontFile" uid="uid://0lodjd6o1k8f" path="res://addons/fonts/tl_mussels/TT Mussels Trial Bold.otf" id="11_5t5vp"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="11_o0ehx"]
 [ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="12_4a3ho"]
 [ext_resource type="Script" uid="uid://luo8kcd41hvg" path="res://assets/scenes/minimap.gd" id="14_7678e"]
 [ext_resource type="Script" uid="uid://boiww7d2pjin" path="res://assets/scenes/options_ui.gd" id="15_e2iu4"]
 [ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="15_eny81"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_e2iu4"]
-load_path = "res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
+font = ExtResource("99_mussels")
 font_size = 24
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
@@ -157,6 +159,7 @@ offset_left = 60.0
 offset_top = 20.0
 offset_right = 141.0
 offset_bottom = 43.0
+theme_override_fonts/font = ExtResource("99_mussels")
 text = "persona jij"
 
 [node name="kdaLabel" type="Label" parent="InGameUI/playerList/templates"]
@@ -172,6 +175,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 4
 theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 20
 text = "0 / 0 / 0"
 horizontal_alignment = 1
@@ -267,6 +271,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 2
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Lives"
 horizontal_alignment = 1
 
@@ -548,10 +553,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -147.0
-offset_top = -33.0
-offset_right = -107.0
-offset_bottom = 1.0
+offset_left = -146.0
+offset_top = -27.0
+offset_right = -106.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -571,9 +576,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -78.0
-offset_top = -31.0
+offset_top = -26.0
 offset_right = -38.0
-offset_bottom = 40.0
+offset_bottom = 45.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -594,9 +599,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -8.0
-offset_top = -31.0
+offset_top = -26.0
 offset_right = 32.0
-offset_bottom = 3.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -616,9 +621,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 61.0
-offset_top = -31.0
+offset_top = -26.0
 offset_right = 101.0
-offset_bottom = 3.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -636,12 +641,14 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -632.0
-offset_top = -25.0
+offset_top = -24.0
 offset_right = -470.0
-offset_bottom = -2.0
+offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 18
 text = "Lives:"
 fit_content = true
 scroll_active = false
@@ -681,6 +688,7 @@ offset_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "LVL:"
 
 [node name="level" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
@@ -698,6 +706,7 @@ offset_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "0"
 horizontal_alignment = 1
 
@@ -719,7 +728,9 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/outline_size = 8
-theme_override_font_sizes/bold_font_size = 18
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_fonts/bold_font = ExtResource("11_5t5vp")
+theme_override_font_sizes/bold_font_size = 20
 bbcode_enabled = true
 text = "[b]+10 TKNS[b]"
 fit_content = true
@@ -736,14 +747,16 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -99.0
-offset_top = -126.0
-offset_right = -20.0
-offset_bottom = -100.0
+offset_left = -100.0
+offset_top = -124.0
+offset_right = -21.0
+offset_bottom = -98.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 18
 text = "TOKENS:"
 
 [node name="tokens" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
@@ -755,14 +768,16 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -23.0
-offset_top = -126.0
-offset_right = 12.0
-offset_bottom = -100.0
+offset_left = -25.0
+offset_top = -124.0
+offset_right = 10.0
+offset_bottom = -98.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 18
 text = "0
 "
 
@@ -773,13 +788,15 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -69.0
+offset_left = -64.0
 offset_top = -82.0
-offset_right = 74.0
+offset_right = 79.0
 offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/outline_size = 7
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 18
 text = "Respawning in"
 
 [node name="respawnTimer" type="RichTextLabel" parent="InGameUI/abilitiesUI"]
@@ -789,14 +806,15 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 49.0
-offset_top = -86.0
-offset_right = 109.0
-offset_bottom = -56.0
+offset_left = 51.0
+offset_top = -85.0
+offset_right = 111.0
+offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/outline_size = 7
-theme_override_font_sizes/normal_font_size = 20
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 22
 theme_override_font_sizes/bold_font_size = 20
 text = "10..."
 
@@ -860,6 +878,7 @@ offset_right = 118.5
 offset_bottom = 45.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 14
 text = "hola esta habilidad es muy buena muuy buena la habilidad"
 fit_content = true
@@ -933,7 +952,8 @@ theme_override_constants/shadow_outline_size = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = -3
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/normal_font_size = 30
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 32
 text = "Objetive"
 horizontal_alignment = 1
 
@@ -962,9 +982,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -112.0
-offset_top = -24.0
+offset_top = -32.0
 offset_right = 120.0
-offset_bottom = 28.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -972,7 +992,8 @@ theme_override_constants/shadow_outline_size = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/normal_font_size = 14
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 16
 text = "description goes here uhh...,,"
 fit_content = true
 horizontal_alignment = 1
@@ -1009,6 +1030,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 50
 text = "GG"
 horizontal_alignment = 1
@@ -1032,6 +1054,7 @@ theme_override_constants/shadow_outline_size = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 16
 text = "{X} team wins this round!!!"
 fit_content = true
@@ -1233,6 +1256,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 8
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/bold_font_size = 30
 bbcode_enabled = true
 text = "[b]OPTIONS[b]"
@@ -1257,6 +1281,7 @@ layout_mode = 2
 
 [node name="spacing" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 
 [node name="controls" type="Control" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 z_index = 2
@@ -1284,6 +1309,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "Controls"
 fit_content = true
@@ -1334,6 +1360,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 9
 text = "Primary ability"
 horizontal_alignment = 1
@@ -1375,6 +1402,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 30
 text = "q"
 horizontal_alignment = 1
@@ -1396,6 +1424,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 9
 text = "Secondary ability"
 horizontal_alignment = 1
@@ -1437,6 +1466,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 30
 text = "q"
 horizontal_alignment = 1
@@ -1458,6 +1488,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 9
 text = "Tertiary ability"
 horizontal_alignment = 1
@@ -1499,6 +1530,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 30
 text = "q"
 horizontal_alignment = 1
@@ -1520,6 +1552,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 9
 text = "Ultimate ability"
 horizontal_alignment = 1
@@ -1561,6 +1594,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 30
 text = "q"
 horizontal_alignment = 1
@@ -1582,6 +1616,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 8
 text = "Auto attack"
 horizontal_alignment = 1
@@ -1627,6 +1662,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 11
 text = "W"
 horizontal_alignment = 1
@@ -1648,6 +1684,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 8
 text = "Cancel"
 horizontal_alignment = 1
@@ -1693,6 +1730,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 11
 text = "W"
 horizontal_alignment = 1
@@ -1714,6 +1752,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 8
 text = "Center camera"
 horizontal_alignment = 1
@@ -1759,6 +1798,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 11
 text = "W"
 horizontal_alignment = 1
@@ -1780,6 +1820,7 @@ theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 4
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 8
 text = "Shop"
 horizontal_alignment = 1
@@ -1825,6 +1866,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 11
 text = "W"
 horizontal_alignment = 1
@@ -1836,6 +1878,7 @@ uppercase = true
 
 [node name="spacing2" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 text = "
 
 
@@ -1869,6 +1912,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "Use WASD movement"
 fit_content = true
@@ -1910,6 +1954,7 @@ color = Color(0.097, 0.134, 0.198, 0.586)
 
 [node name="spacing5" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 
 [node name="music" type="Control" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 z_index = 3
@@ -1932,6 +1977,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "Music Volume"
 fit_content = true
@@ -1966,6 +2012,7 @@ color = Color(0.097, 0.134, 0.198, 0.586)
 
 [node name="spacing3" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 
 [node name="sounds" type="Control" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 z_index = 3
@@ -1988,6 +2035,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "Sounds Volume"
 fit_content = true
@@ -2014,6 +2062,7 @@ value = 1.0
 
 [node name="spacing4" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 text = "
 
 
@@ -2041,6 +2090,7 @@ text = "Reset default settings"
 
 [node name="spacing6" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("99_mussels")
 text = "
 
 

@@ -1,4 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://by3jto66up0ev"]
+[gd_scene load_steps=15 format=3 uid="uid://by3jto66up0ev"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [ext_resource type="Script" uid="uid://bnt703t7rjxc7" path="res://assets/scenes/choosing_mode.gd" id="1_aidr7"]
 [ext_resource type="Script" uid="uid://bvfyx5dby45fb" path="res://assets/scenes/choose_mode.gd" id="1_awl5g"]
@@ -86,6 +88,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 97.0
 offset_bottom = 33.0
@@ -124,6 +127,7 @@ texture = ExtResource("4_whmpy")
 expand_mode = 4
 
 [node name="WinText" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.536)
 layout_mode = 0
 offset_left = -2.0
@@ -163,6 +167,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 97.0
 offset_bottom = 33.0
@@ -201,6 +206,7 @@ texture = ExtResource("4_whmpy")
 expand_mode = 4
 
 [node name="WinText" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.536)
 layout_mode = 0
 offset_left = -2.0
@@ -269,6 +275,7 @@ texture = ExtResource("2_tkvfe")
 expand_mode = 1
 
 [node name="modeName" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -291,6 +298,7 @@ text = "Game Mode"
 horizontal_alignment = 1
 
 [node name="loopingModeName" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(0.64, 0.653, 0.661, 0.5)
 z_index = -1
 layout_mode = 1
@@ -314,6 +322,7 @@ text = "Game Mode"
 vertical_alignment = 1
 
 [node name="statusText" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -332,6 +341,7 @@ text = "Choosing next mode"
 horizontal_alignment = 1
 
 [node name="statusDots" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
