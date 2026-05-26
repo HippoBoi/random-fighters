@@ -1,9 +1,9 @@
 [gd_scene load_steps=18 format=3 uid="uid://c4k24b64j1bo7"]
 
 [ext_resource type="Script" uid="uid://cjqtijaknfjhp" path="res://assets/npcs/snowman/snowball.gd" id="1_bhpsp"]
-[ext_resource type="Shader" uid="uid://bxyhdnmgvm4xv" path="res://GPUTrail-main/shaders/trail.gdshader" id="1_tufjw"]
-[ext_resource type="Shader" uid="uid://cebg18bd2qbca" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="2_bhpsp"]
-[ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://GPUTrail-main/GPUTrail3D.gd" id="3_ncks7"]
+[ext_resource type="Shader" uid="uid://bxyhdnmgvm4xv" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="1_tufjw"]
+[ext_resource type="Shader" uid="uid://cebg18bd2qbca" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="2_bhpsp"]
+[ext_resource type="Script" uid="uid://qaiudhsklp0m" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="3_ncks7"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_qaok5"]
 radius = 0.25
