@@ -30,9 +30,10 @@ var enetSignalsConnected = false;
 var activeConnectionMode: String = "";
 
 var lobbyScene: Control = null;
+var mainMenuOptionsUI = null;
 var userPreferences: UserPreferences;
 
-var DEBUG = true;
+var DEBUG = false;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
@@ -70,6 +71,87 @@ func _on_name_input(new_text: String) -> void:
 
 func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
+
+func _on_options_pressed(_port: int, _username: String, _team: String) -> void:
+	if (DEBUG):
+		_on_host(_port, _username, _team);
+		return;
+
+	if not (mainMenuOptionsUI and is_instance_valid(mainMenuOptionsUI)):
+		mainMenuOptionsUI = preload("res://assets/scenes/options_ui.tscn").instantiate();
+		add_child(mainMenuOptionsUI);
+		mainMenuOptionsUI.setup();
+		_connectMainMenuOptionsUI(mainMenuOptionsUI);
+	else:
+		mainMenuOptionsUI.update_control_labels();
+
+	_syncMainMenuOptionsUI();
+	mainMenuOptionsUI.visible = true;
+
+func _connectMainMenuOptionsUI(optionsUI: Control) -> void:
+	var saveButton: Button = optionsUI.get_node_or_null("Footer/SaveAndExit") as Button;
+	if (saveButton):
+		saveButton.pressed.connect(_on_main_menu_options_save_and_exit_pressed);
+
+	var quitButton: Button = optionsUI.get_node_or_null("Footer/QuitGame") as Button;
+	if (quitButton):
+		quitButton.pressed.connect(_on_main_menu_options_save_and_exit_pressed);
+
+	var exitButton: Button = optionsUI.get_node_or_null("Exit") as Button;
+	if (exitButton):
+		exitButton.pressed.connect(_on_main_menu_options_save_and_exit_pressed);
+
+	var wasdCheckBox: CheckBox = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/wasd/CheckBox") as CheckBox;
+	if (wasdCheckBox):
+		wasdCheckBox.toggled.connect(_on_main_menu_options_wasd_toggled);
+
+	var musicSlider: HSlider = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/music/musicSlider") as HSlider;
+	if (musicSlider):
+		musicSlider.value_changed.connect(_on_main_menu_options_music_slider_value_changed);
+
+	var soundsSlider: HSlider = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/sounds/soundsSlider") as HSlider;
+	if (soundsSlider):
+		soundsSlider.value_changed.connect(_on_main_menu_options_sounds_slider_value_changed);
+
+	var resetButton: Button = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/reset/ResetDefaults") as Button;
+	if (resetButton):
+		resetButton.pressed.connect(_on_main_menu_options_reset_defaults);
+
+func _syncMainMenuOptionsUI() -> void:
+	if not (userPreferences and mainMenuOptionsUI and is_instance_valid(mainMenuOptionsUI)):
+		return;
+
+	mainMenuOptionsUI.get_node("ScrollContainer/VBoxContainer/wasd/CheckBox").button_pressed = userPreferences.wasdMovement;
+	mainMenuOptionsUI.get_node("ScrollContainer/VBoxContainer/music/musicSlider").value = userPreferences.musicVolume;
+	mainMenuOptionsUI.get_node("ScrollContainer/VBoxContainer/sounds/soundsSlider").value = userPreferences.soundsVolume;
+	mainMenuOptionsUI.update_control_labels();
+
+func _on_main_menu_options_save_and_exit_pressed() -> void:
+	if (userPreferences):
+		userPreferences.save();
+
+	if (mainMenuOptionsUI and is_instance_valid(mainMenuOptionsUI)):
+		mainMenuOptionsUI.visible = false;
+
+func _on_main_menu_options_wasd_toggled(toggled_on: bool) -> void:
+	if (userPreferences):
+		userPreferences.wasdMovement = toggled_on;
+
+func _on_main_menu_options_music_slider_value_changed(value: float) -> void:
+	if (userPreferences):
+		userPreferences.musicVolume = value;
+
+func _on_main_menu_options_sounds_slider_value_changed(value: float) -> void:
+	if (userPreferences):
+		userPreferences.soundsVolume = value;
+
+func _on_main_menu_options_reset_defaults() -> void:
+	if not (userPreferences):
+		return;
+
+	userPreferences.resetToDefaults();
+	_loadSettings();
+	_syncMainMenuOptionsUI();
 
 func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> void:
 	var useUPnP: bool = false;
