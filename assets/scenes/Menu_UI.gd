@@ -8,6 +8,23 @@ extends Control
 @onready var FIGHTERS_text = $Title2;
 @onready var loopingBG = $loopingBG;
 
+const TITLE_ROTATION_DURATION: float = 2.0;
+const ROTATION = 2;
+
+func animateTitles():
+	RANDOM_text.pivot_offset = RANDOM_text.size * 0.5;
+	FIGHTERS_text.pivot_offset = FIGHTERS_text.size * 0.5;
+	RANDOM_text.rotation_degrees = ROTATION * -1;
+	FIGHTERS_text.rotation_degrees = ROTATION;
+
+	var randomTween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT);
+	randomTween.tween_property(RANDOM_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION);
+	randomTween.tween_property(RANDOM_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION);
+
+	var fightersTween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT);
+	fightersTween.tween_property(FIGHTERS_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION);
+	fightersTween.tween_property(FIGHTERS_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION);
+
 func playIntro():
 	RANDOM_text.position = Vector2(26, 10);
 	RANDOM_text.scale = Vector2(0.75, 0.75);
@@ -20,10 +37,10 @@ func playIntro():
 	tween.tween_property(bottomRect, "position", Vector2(0, 0), 0.5);
 	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 1), 0.5);
 	
-	tween.tween_property(RANDOM_text, "position", Vector2(26, 18), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(1.1, 1.1), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(73, 77), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(1.1, 1.1), 0.5);
+	tween.tween_property(RANDOM_text, "position", Vector2(16, -25), 0.5);
+	tween.tween_property(RANDOM_text, "scale", Vector2(1.0, 1.0), 0.5);
+	tween.tween_property(FIGHTERS_text, "position", Vector2(42, 24), 0.5);
+	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.975, 0.975), 0.5);
 	tween.tween_property(loopingBG, "modulate", Color(0.336, 0.39, 0.434, 1), 0.5);
 	
 	$Menu/nameInput.visible = true;
@@ -51,10 +68,10 @@ func playLeave():
 	tween.tween_property(bottomRect, "position", Vector2(-100, -450), 0.5);
 	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 0), 0.5);
 	
-	tween.tween_property(RANDOM_text, "position", Vector2(26, 18), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(0.6, 0.6), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(65, 47), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.55, 0.55), 0.5);
+	tween.tween_property(RANDOM_text, "position", Vector2(-44, -24), 0.5);
+	tween.tween_property(RANDOM_text, "scale", Vector2(0.35, 0.35), 0.5);
+	tween.tween_property(FIGHTERS_text, "position", Vector2(-30, -22), 0.5);
+	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.35, 0.35), 0.5);
 	tween.tween_property(loopingBG, "modulate", Color(1, 1, 1, 0.05), 0.5);
 	
 	$Menu/nameInput.visible = false;
@@ -69,6 +86,7 @@ func playLeave():
 func _ready() -> void:
 	_setupButtons();
 	playIntro();
+	animateTitles();
 
 func _setupButtons():
 	var buttons = menu.get_node("menuButtons");

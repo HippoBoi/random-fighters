@@ -175,11 +175,12 @@ func _buildLobbyPlayerList(matchData):
 
 	var matchPlayers = matchData.users;
 	var ownerId = matchData.matchInfo.ownerId;
+	var foundOwner = false;
 
 	if (ownerId):
 		if (ownerId == fakeUser.playerId):
+			foundOwner = true;
 			$LobbyContainer/Teams/Ready.visible = true;
-			print(fakeUser.playerId, " YOU ARE OWNER!!!!!!!!!!!!!!!!!");
 
 		currentOwnerId = ownerId;
 		print("CURRENT OWNER ID: ", currentOwnerId);
@@ -190,10 +191,14 @@ func _buildLobbyPlayerList(matchData):
 
 		var userId: String = player.userId;
 		var tagId = userId.right(3);
+		var isOwner = tagId == ownerId;
 		var isPlayer = tagId == fakeUser.playerId;
 		if (isPlayer):
 			fakeUser.username = player.username;
 			currentTeam = player.team;
+		
+		if (isOwner):
+			foundOwner = true;
 
 		print("%s: my team is: %s" % [player.username, player.team]);
 
@@ -212,6 +217,11 @@ func _buildLobbyPlayerList(matchData):
 				$LobbyContainer/Teams/BlackTeamJoin.visible = true;
 				$LobbyContainer/Teams/WhiteTeamJoin.visible = true;
 			print("%s: - - - - player has no team - - - -" % player.username);
+	
+	if (ownerId and not foundOwner):
+		# force to leave if owner wasn't found in the game
+		# a better solution is to implement this server side LOL
+		_leaveMatchLobby();
 
 func _updateMatchesList(matches):
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
@@ -325,8 +335,6 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	_loadMatches();
 
 func getUPnPAddress(_port = 8890):
-	print("GETTING UPNP ADDRESS");
-
 	var upnp = UPNP.new();
 	var discoverResult = upnp.discover();
 

@@ -2,6 +2,13 @@ extends Control
 
 signal chat_message_submitted(message);
 
+const ABILITY_KEYBIND_LABELS = {
+	"primary": "primaryKeybind",
+	"secondary": "secondaryKeybind",
+	"tertiary": "tertiaryKeybind",
+	"ultimate": "ultiKeybind"
+};
+
 @onready var abilityDescNode = $abilityDesc;
 @onready var descriptionText = $abilityDesc/descText;
 @onready var descriptionImage = $abilityDesc/descImage;
@@ -13,6 +20,7 @@ const MAX_CHAT_MESSAGES = 4;
 const MAX_CHAT_MESSAGE_LENGTH = 30;
 const CHAT_VISIBLE_SECONDS = 4.0;
 const CHAT_FADE_SECONDS = 0.45;
+const CHAT_FONT = preload("res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf");
 
 var chatOpen = false;
 var chatFadeVersion = 0;
@@ -29,6 +37,16 @@ var ultiIcon = "";
 
 func _ready() -> void:
 	close_chat();
+	update_ability_keybind_labels();
+
+func update_ability_keybind_labels(_changed_action := "") -> void:
+	for action in ABILITY_KEYBIND_LABELS:
+		var input_events = InputMap.action_get_events(action);
+		if (input_events.is_empty()):
+			continue;
+
+		var label = $abilitiesUI.get_node(ABILITY_KEYBIND_LABELS[action]);
+		label.text = input_events[0].as_text().trim_suffix(" (Physical)");
 
 func is_chat_open() -> bool:
 	return chatOpen;
@@ -74,6 +92,7 @@ func add_chat_message(senderName: String, message: String) -> void:
 	messageLabel.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9));
 	messageLabel.add_theme_constant_override("shadow_offset_x", 1);
 	messageLabel.add_theme_constant_override("shadow_offset_y", 1);
+	messageLabel.add_theme_font_override("font", CHAT_FONT);
 	messageLabel.add_theme_font_size_override("font_size", 9);
 	messageLabel.text = "%s: %s" % [senderName, _sanitize_message(message)];
 	chatMessages.add_child(messageLabel);

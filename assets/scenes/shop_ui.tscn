@@ -1,4 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://bmg8t7dg4xk3d"]
+[gd_scene load_steps=15 format=3 uid="uid://bmg8t7dg4xk3d"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [ext_resource type="Script" uid="uid://d172rxc2oke1c" path="res://assets/scenes/shop.gd" id="1_8mshb"]
 [ext_resource type="Texture2D" uid="uid://bmsln1pifbvs6" path="res://assets/textures/fx/hit_02_effect.jpg" id="2_lhdqg"]
@@ -152,6 +154,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer/itemTemplate"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -210,6 +213,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer2/itemTemplate"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -268,6 +272,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Price" type="RichTextLabel" parent="Shop/ItemsContainer3/itemTemplate"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -325,6 +330,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1gwi2")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Shop/CloseShop"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -347,6 +353,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="stat1" type="RichTextLabel" parent="Shop"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 0
 offset_left = 117.0
@@ -361,6 +368,7 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="stat2" type="RichTextLabel" parent="Shop"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 0
 offset_left = 117.0
@@ -375,6 +383,7 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="stat3" type="RichTextLabel" parent="Shop"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 0
 offset_left = 117.0
@@ -389,6 +398,7 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="itemName" type="RichTextLabel" parent="Shop"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 modulate = Color(0.8, 0.749, 0.974, 1)
 layout_mode = 0

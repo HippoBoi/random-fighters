@@ -17,7 +17,7 @@ const CHARACTER_NAME = "Ale";
 const Q_COOLDOWN = 7.0;
 const W_COOLDOWN = 9.0;
 const E_COOLDOWN = 2.0;
-const R_COOLDOWN = 2.0;
+const R_COOLDOWN = 45.0;
 const E_MAX_RANGE = 6.0;
 const R_MAX_RANGE = 10.0;
 const Q_STAMINA = 22;
@@ -207,6 +207,7 @@ func _physics_process(delta: float) -> void:
 		
 		if (primaryTimer > 0.25 and primaryTimer <= 0.5):
 			_setHitbox($q_hitbox/MeshInstance3D/Area3D, true);
+			$q_end_particles.emitting = true;
 		else:
 			_setHitbox($q_hitbox/MeshInstance3D/Area3D, false);
 	else:
@@ -329,6 +330,8 @@ func primary_ability(_mousePos):
 	usingPrimary = true;
 	onAction = true;
 	animPlayer.play("q_ability");
+	$q_hit_warning.visible = true;
+	$q_hit_warning/Cube/AnimationPlayer.play("warning");
 	
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);

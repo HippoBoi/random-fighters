@@ -1,4 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://brp3pa1tri68o"]
+[gd_scene load_steps=6 format=3 uid="uid://brp3pa1tri68o"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_bwqgb"]
 viewport_path = NodePath("HealthUI/SubViewport")
@@ -9,6 +11,7 @@ viewport_path = NodePath("HealthUI/SubViewport")
 viewport_path = NodePath("PlayerName/SubViewport")
 
 [sub_resource type="LabelSettings" id="LabelSettings_2h7y8"]
+font = ExtResource("99_mussels")
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
@@ -137,6 +140,7 @@ grow_vertical = 2
 theme = SubResource("Theme_i6x1h")
 
 [node name="levelText" type="RichTextLabel" parent="HealthUI/SubViewport/levelPanel"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5

@@ -1,4 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://cgkuuqd0peuxk"]
+[gd_scene load_steps=13 format=3 uid="uid://cgkuuqd0peuxk"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [ext_resource type="Script" uid="uid://c77ydiooaiofh" path="res://assets/scenes/end_game.gd" id="1_bktvi"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="3_ajo2i"]
@@ -86,6 +88,7 @@ color = Color(0.296, 0.296, 0.296, 1)
 script = SubResource("GDScript_j35p6")
 
 [node name="statusText" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 0.25, 0, 1)
 z_index = 1
 layout_mode = 1
@@ -137,6 +140,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="Winners"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -2.0
 offset_top = 198.0
@@ -148,6 +152,7 @@ text = "<winner> Team"
 horizontal_alignment = 1
 
 [node name="WinsText" type="RichTextLabel" parent="Winners"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -4.0
 offset_top = 225.0
@@ -179,6 +184,7 @@ theme_override_constants/separation = -5
 alignment = 1
 
 [node name="Template" type="RichTextLabel" parent="Winners/WinnersContainer"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -212,6 +218,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="loopingStatus" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(0.64, 0.653, 0.661, 0.5)
 z_index = -1
 layout_mode = 1

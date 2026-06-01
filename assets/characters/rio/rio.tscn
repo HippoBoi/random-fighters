@@ -993,12 +993,12 @@ default_input_values = [0, Vector2(0, 0), 1, Vector2(1, 1)]
 op_type = 0
 operator = 2
 
-[sub_resource type="Gradient" id="Gradient_f2tm8"]
+[sub_resource type="Gradient" id="Gradient_jstbi"]
 offsets = PackedFloat32Array(0, 0.216667, 0.408333, 0.641667)
 colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_qakdt"]
-gradient = SubResource("Gradient_f2tm8")
+gradient = SubResource("Gradient_jstbi")
 fill_to = Vector2(0, 1)
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_me532"]
@@ -1017,12 +1017,12 @@ operator = 2
 [sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_n7404"]
 parameter_name = "color"
 
-[sub_resource type="Gradient" id="Gradient_qgmkd"]
+[sub_resource type="Gradient" id="Gradient_gspga"]
 offsets = PackedFloat32Array(0, 0.186047, 0.488372, 0.643411)
 colors = PackedColorArray(0, 0, 0, 1, 0.622881, 0.622881, 0.622881, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_xrrng"]
-gradient = SubResource("Gradient_qgmkd")
+gradient = SubResource("Gradient_gspga")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_27m3t"]
 texture = SubResource("GradientTexture1D_xrrng")
@@ -1333,7 +1333,7 @@ _data = {
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gy2ja"]
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_06l2l"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_edtkn"]
 _surfaces = [{
 "aabb": AABB(-1.7179755, -0.074435495, -2.0414398, 3.4359508, 0.18802698, 2.8205574),
 "format": 34896613377,
@@ -1363,56 +1363,56 @@ _surfaces = [{
 "vertex_data": PackedByteArray("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")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_06l2l")
+shadow_mesh = SubResource("ArrayMesh_edtkn")
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_me532"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_n7404"]
 default_input_values = [1, Vector2(1, 0.5), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_jstbi"]
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_rgxvm"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(1, 1)]
 op_type = 0
 operator = 2
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gspga"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_2a1j7"]
 texture = SubResource("GradientTexture2D_qakdt")
 
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_rgxvm"]
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_qnuaj"]
 default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
 op_type = 2
 operator = 2
-
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_uyy1l"]
-default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
-op_type = 2
-operator = 2
-
-[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_2a1j7"]
-parameter_name = "color"
-
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_qnuaj"]
-texture = SubResource("GradientTexture1D_xrrng")
-
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_biwfa"]
-input_name = "uv"
-
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_jph5t"]
-default_input_values = [1, Vector2(1, 0), 2, Vector2(0, 0)]
-
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_xd388"]
-parameter_name = "gradient_1_slider"
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_0kgoc"]
+default_input_values = [0, Quaternion(0, 0, 0, 0), 1, Quaternion(0, 0, 0, 0)]
+op_type = 2
+operator = 2
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_hdtch"]
+parameter_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_aa3jh"]
+texture = SubResource("GradientTexture1D_xrrng")
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1vpjo"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_2c6mm"]
+default_input_values = [1, Vector2(1, 0), 2, Vector2(0, 0)]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jau8h"]
+parameter_name = "gradient_1_slider"
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_57ip6"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0.25, 1)]
 op_type = 0
 operator = 2
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_hdtch"]
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_dx674"]
 parameter_name = "gradient_2_slider"
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_aa3jh"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_b1nrj"]
 input_name = "uv"
 
-[sub_resource type="VisualShader" id="VisualShader_1vpjo"]
+[sub_resource type="VisualShader" id="VisualShader_c54fs"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
 
@@ -1489,37 +1489,37 @@ void fragment() {
 }
 "
 nodes/fragment/0/position = Vector2(700, 140)
-nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_qnuaj")
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_aa3jh")
 nodes/fragment/2/position = Vector2(40, 180)
-nodes/fragment/3/node = SubResource("VisualShaderNodeInput_biwfa")
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_1vpjo")
 nodes/fragment/3/position = Vector2(-680, 160)
-nodes/fragment/4/node = SubResource("VisualShaderNodeUVFunc_jph5t")
+nodes/fragment/4/node = SubResource("VisualShaderNodeUVFunc_2c6mm")
 nodes/fragment/4/position = Vector2(-160, 180)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_xd388")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatParameter_jau8h")
 nodes/fragment/5/position = Vector2(-400, 340)
-nodes/fragment/6/node = SubResource("VisualShaderNodeVectorOp_0kgoc")
+nodes/fragment/6/node = SubResource("VisualShaderNodeVectorOp_57ip6")
 nodes/fragment/6/position = Vector2(-380, 140)
-nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_hdtch")
+nodes/fragment/8/node = SubResource("VisualShaderNodeFloatParameter_dx674")
 nodes/fragment/8/position = Vector2(-460, 720)
-nodes/fragment/9/node = SubResource("VisualShaderNodeInput_aa3jh")
+nodes/fragment/9/node = SubResource("VisualShaderNodeInput_b1nrj")
 nodes/fragment/9/position = Vector2(-740, 520)
-nodes/fragment/10/node = SubResource("VisualShaderNodeUVFunc_me532")
+nodes/fragment/10/node = SubResource("VisualShaderNodeUVFunc_n7404")
 nodes/fragment/10/position = Vector2(-180, 520)
-nodes/fragment/11/node = SubResource("VisualShaderNodeVectorOp_jstbi")
+nodes/fragment/11/node = SubResource("VisualShaderNodeVectorOp_rgxvm")
 nodes/fragment/11/position = Vector2(-440, 500)
-nodes/fragment/12/node = SubResource("VisualShaderNodeTexture_gspga")
+nodes/fragment/12/node = SubResource("VisualShaderNodeTexture_2a1j7")
 nodes/fragment/12/position = Vector2(0, 460)
-nodes/fragment/13/node = SubResource("VisualShaderNodeVectorOp_rgxvm")
+nodes/fragment/13/node = SubResource("VisualShaderNodeVectorOp_qnuaj")
 nodes/fragment/13/position = Vector2(320, 260)
-nodes/fragment/14/node = SubResource("VisualShaderNodeVectorOp_uyy1l")
+nodes/fragment/14/node = SubResource("VisualShaderNodeVectorOp_0kgoc")
 nodes/fragment/14/position = Vector2(460, 60)
-nodes/fragment/15/node = SubResource("VisualShaderNodeColorParameter_2a1j7")
+nodes/fragment/15/node = SubResource("VisualShaderNodeColorParameter_hdtch")
 nodes/fragment/15/position = Vector2(220, -20)
 nodes/fragment/connections = PackedInt32Array(4, 0, 2, 0, 5, 0, 4, 2, 3, 0, 6, 0, 6, 0, 4, 0, 8, 0, 10, 2, 9, 0, 11, 0, 11, 0, 10, 0, 10, 0, 12, 0, 2, 0, 13, 0, 13, 0, 0, 1, 12, 0, 13, 1, 13, 0, 14, 1, 14, 0, 0, 0, 15, 0, 14, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2c6mm"]
 render_priority = 0
-shader = SubResource("VisualShader_1vpjo")
+shader = SubResource("VisualShader_c54fs")
 shader_parameter/color = Color(3.2944162, 1.7507038, 2.2266746, 1)
 shader_parameter/gradient_1_slider = 0.0
 shader_parameter/gradient_2_slider = 0.0

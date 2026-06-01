@@ -1,7 +1,7 @@
 [gd_scene load_steps=39 format=4 uid="uid://b6ji7bx646es0"]
 
 [ext_resource type="Texture2D" uid="uid://bxwm27a7krtgw" path="res://assets/mapAssets/dark_forest/dark_forest_terrain_mask.png" id="1_4do5b"]
-[ext_resource type="Shader" uid="uid://c48kl3bh4etlf" path="res://terrain_texture.tres" id="2_jfu77"]
+[ext_resource type="Shader" uid="uid://c48kl3bh4etlf" path="res://assets/mapAssets/dark_forest/terrain_texture.tres" id="2_jfu77"]
 [ext_resource type="Material" uid="uid://ddk4j76qdqjs5" path="res://assets/materials/dark_tree_material.tres" id="3_2osxg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1u8a"]

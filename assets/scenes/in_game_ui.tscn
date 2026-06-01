@@ -1,4 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://cs5f0x4jchyj2"]
+[gd_scene load_steps=20 format=3 uid="uid://cs5f0x4jchyj2"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="1_grbm3"]
@@ -13,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="11_rl4ok"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
+font = ExtResource("99_mussels")
 font_size = 24
 outline_size = 10
 outline_color = Color(0, 0, 0, 1)
@@ -125,6 +128,7 @@ max_length = 30
 context_menu_enabled = false
 
 [node name="livesText" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -495,6 +499,7 @@ horizontal_alignment = 1
 uppercase = true
 
 [node name="livesText" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 3
@@ -532,6 +537,7 @@ texture = ExtResource("1_l0sqe")
 stretch_mode = 3
 
 [node name="LVText" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 3
@@ -549,6 +555,7 @@ theme_override_constants/outline_size = 8
 text = "LVL:"
 
 [node name="level" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 3
@@ -567,6 +574,7 @@ text = "0"
 horizontal_alignment = 1
 
 [node name="tokensText" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.591)
 z_index = 1
 layout_mode = 1
@@ -586,6 +594,7 @@ theme_override_constants/outline_size = 8
 text = "TOKENS:"
 
 [node name="tokens" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.591)
 z_index = 1
 layout_mode = 1
@@ -606,6 +615,7 @@ text = "0
 "
 
 [node name="respawningText" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -622,6 +632,7 @@ theme_override_constants/outline_size = 7
 text = "Respawning in"
 
 [node name="respawnTimer" type="RichTextLabel" parent="abilitiesUI"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -685,6 +696,7 @@ grow_vertical = 2
 color = Color(0.216919, 0.205183, 0.222576, 1)
 
 [node name="descText" type="RichTextLabel" parent="abilityDesc"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

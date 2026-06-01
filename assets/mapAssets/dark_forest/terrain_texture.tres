@@ -1,9 +1,9 @@
 [gd_resource type="VisualShader" load_steps=17 format=3 uid="uid://c48kl3bh4etlf"]
 
-[ext_resource type="Texture2D" uid="uid://b47w5ttlko1t3" path="res://assets/mapAssets/dark_forest/TCom_Sand_Muddy2_2x2_1K_albedo.png" id="1_yhc8m"]
-[ext_resource type="Texture2D" uid="uid://ct8kr4kiclaeu" path="res://assets/mapAssets/dark_forest/Poliigon_GrassPatchyGround_4585_BaseColor.jpg" id="2_q1csh"]
-[ext_resource type="Texture2D" uid="uid://bhs0ci0bcxcrg" path="res://assets/mapAssets/dark_forest/GroundDirtWeedsPatchy004_COL_1K.jpg" id="3_tcfwj"]
-[ext_resource type="Texture2D" uid="uid://bxwm27a7krtgw" path="res://assets/mapAssets/dark_forest/dark_forest_terrain_mask.png" id="4_je0gj"]
+[ext_resource type="Texture2D" uid="uid://b47w5ttlko1t3" path="res://assets/mapAssets/dark_forest/TCom_Sand_Muddy2_2x2_1K_albedo.png" id="1_vlyk5"]
+[ext_resource type="Texture2D" uid="uid://ct8kr4kiclaeu" path="res://assets/mapAssets/dark_forest/Poliigon_GrassPatchyGround_4585_BaseColor.jpg" id="2_jaaib"]
+[ext_resource type="Texture2D" uid="uid://bhs0ci0bcxcrg" path="res://assets/mapAssets/dark_forest/GroundDirtWeedsPatchy004_COL_1K.jpg" id="3_h7gp5"]
+[ext_resource type="Texture2D" uid="uid://bxwm27a7krtgw" path="res://assets/mapAssets/dark_forest/dark_forest_terrain_mask.png" id="4_oqjn8"]
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_4grqf"]
 default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5, 0.5, 0.5)]
@@ -17,7 +17,7 @@ default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(8, 10, 8)]
 operator = 2
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_8xmm8"]
-texture = ExtResource("1_yhc8m")
+texture = ExtResource("1_vlyk5")
 texture_type = 1
 
 [sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_cw6j1"]
@@ -25,7 +25,7 @@ default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.5
 op_type = 3
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_3xt7l"]
-texture = ExtResource("2_q1csh")
+texture = ExtResource("2_jaaib")
 texture_type = 1
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_wd32f"]
@@ -44,12 +44,12 @@ operator = 2
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_jsu34"]
 expanded_output_ports = [0]
-texture = ExtResource("3_tcfwj")
+texture = ExtResource("3_h7gp5")
 texture_type = 1
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_nosb0"]
 expanded_output_ports = [0]
-texture = ExtResource("4_je0gj")
+texture = ExtResource("4_oqjn8")
 texture_type = 1
 
 [resource]

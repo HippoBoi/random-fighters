@@ -1,4 +1,6 @@
-[gd_scene load_steps=25 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=26 format=3 uid="uid://cyymvk7nsgj5t"]
+
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="1_qrbhw"]
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
@@ -342,6 +344,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/rhay"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -405,6 +408,7 @@ texture = ExtResource("3_r2fdo")
 expand_mode = 1
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/ramon"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -468,6 +472,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/clean"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -531,6 +536,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/shugo"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -594,6 +600,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/nephi"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -657,6 +664,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/ale"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -720,6 +728,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/mystery"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -782,6 +791,7 @@ texture = ExtResource("13_dmdnx")
 expand_mode = 1
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/rio"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -820,6 +830,7 @@ theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="BlackTeamText" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -77.0
 offset_top = -13.0
@@ -844,6 +855,7 @@ offset_bottom = 130.0
 grow_vertical = 2
 
 [node name="WhiteTeamText" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = 479.0
 offset_top = -14.0
@@ -897,6 +909,7 @@ texture = ExtResource("1_qrbhw")
 expand_mode = 1
 
 [node name="PlayerUsername" type="RichTextLabel" parent="PlayerTemplate"]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 75.0
 offset_bottom = 20.0
@@ -917,6 +930,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="StatusText" type="Label" parent="."]
+theme_override_fonts/font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -935,6 +949,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="secondsRemaining" type="RichTextLabel" parent="."]
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 z_index = 1
 layout_mode = 1
 anchors_preset = 5

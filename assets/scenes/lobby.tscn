@@ -1,12 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://c4ojgswfdm5s3"]
+[gd_scene load_steps=17 format=3 uid="uid://c4ojgswfdm5s3"]
 
 [ext_resource type="Script" uid="uid://2wk7nxsiem53" path="res://assets/scenes/lobby.gd" id="1_ra0n6"]
 [ext_resource type="Script" uid="uid://be5a7kvcyybhp" path="res://assets/scenes/web_socket_client.gd" id="1_vfkro"]
 [ext_resource type="Texture2D" uid="uid://brdci3je8xyyy" path="res://assets/textures/gameMap_TCom_Wall_Stone3_2x2_512_albedo.png" id="2_e80kb"]
 [ext_resource type="Shader" uid="uid://dhm0x2q73b616" path="res://assets/scripts/shaders/scroll_shader.gdshader" id="2_oo8yk"]
-[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="3_87ruf"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="4_6ddyr"]
 [ext_resource type="Texture2D" uid="uid://bgxdrts1u2nww" path="res://assets/sprites/circle.png" id="4_mh50d"]
 [ext_resource type="Texture2D" uid="uid://cwomrtxwutbck" path="res://assets/sprites/432352.webp" id="4_ydlbi"]
+[ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="6_mh50d"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="6_qe23s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qe23s"]
@@ -21,9 +22,9 @@ shader_parameter/speed = 2.0
 shader_parameter/radius = 1.0
 shader_parameter/line_thickness = 0.03
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mh50d"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oo8yk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mh50d"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_87ruf"]
 
@@ -78,9 +79,11 @@ offset_top = 13.0
 offset_right = 640.0
 offset_bottom = 39.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
+theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
 text = "Lobby"
 fit_content = true
@@ -100,10 +103,11 @@ offset_top = 33.0
 offset_right = 572.0
 offset_bottom = 59.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_outline_size = 4
-theme_override_font_sizes/normal_font_size = 13
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "Server Status: "
 fit_content = true
@@ -118,10 +122,11 @@ offset_top = 28.0
 offset_right = 452.0
 offset_bottom = 64.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_outline_size = 4
-theme_override_font_sizes/normal_font_size = 13
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
+theme_override_font_sizes/normal_font_size = 14
 bbcode_enabled = true
 text = "ONLINE"
 fit_content = true
@@ -167,7 +172,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_87ruf")
+texture = ExtResource("6_mh50d")
 expand_mode = 3
 
 [node name="UserInfo" type="Panel" parent="."]
@@ -188,11 +193,12 @@ offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/outline_size = 3
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 1
 theme_override_font_sizes/bold_italics_font_size = 1
 theme_override_font_sizes/italics_font_size = 1
 theme_override_font_sizes/mono_font_size = 2
-theme_override_font_sizes/normal_font_size = 12
-theme_override_font_sizes/bold_font_size = 1
 bbcode_enabled = true
 text = "noname"
 fit_content = true
@@ -244,6 +250,7 @@ offset_top = -2.0
 offset_right = 100.0
 offset_bottom = 32.0
 grow_horizontal = 2
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 text = "Matches"
 horizontal_alignment = 1
 
@@ -272,6 +279,8 @@ offset_right = 56.0
 offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_fonts/font = ExtResource("4_6ddyr")
+theme_override_font_sizes/font_size = 18
 disabled = true
 text = "Create Match"
 
@@ -299,9 +308,10 @@ offset_top = 251.0
 offset_right = 27.0
 offset_bottom = 304.0
 theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 32
-theme_override_styles/focus = SubResource("StyleBoxEmpty_mh50d")
+theme_override_fonts/font = ExtResource("4_6ddyr")
+theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxEmpty_oo8yk")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mh50d")
 text = "Return"
 
 [node name="decoRect" type="ColorRect" parent="MatchesContainer"]
@@ -378,9 +388,10 @@ offset_top = 51.0
 offset_right = 246.0
 offset_bottom = 91.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = -1
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 theme_override_font_sizes/normal_font_size = 20
 text = "Match Name:"
 horizontal_alignment = 1
@@ -402,9 +413,10 @@ offset_top = 108.0
 offset_right = 246.0
 offset_bottom = 148.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = -1
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = -1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 theme_override_font_sizes/normal_font_size = 20
 text = "Max Players:"
 horizontal_alignment = 1
@@ -462,6 +474,7 @@ offset_left = 5.0
 offset_top = 5.0
 offset_right = 115.0
 offset_bottom = 45.0
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 text = "Black Team"
 
 [node name="BlackTeam" type="VBoxContainer" parent="LobbyContainer/Teams"]
@@ -490,6 +503,7 @@ offset_top = 5.0
 offset_right = 94.0
 offset_bottom = 45.0
 grow_horizontal = 2
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 text = "White Team"
 
 [node name="WhiteTeam" type="VBoxContainer" parent="LobbyContainer/Teams"]
@@ -580,6 +594,7 @@ offset_right = 89.5
 offset_bottom = 120.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 text = "WARNING"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -595,6 +610,7 @@ offset_right = 177.0
 offset_bottom = 197.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 text = "In order to host a private match you must have UPnP enabled on your router."
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -610,6 +626,7 @@ offset_right = 105.0
 offset_bottom = 252.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 6
+theme_override_fonts/normal_font = ExtResource("4_6ddyr")
 theme_override_font_sizes/normal_font_size = 14
 text = "Don't show again"
 horizontal_alignment = 1
