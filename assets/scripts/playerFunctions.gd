@@ -833,11 +833,12 @@ func updateGlobally(character: CharacterBody3D, _delta):
 			character.target = character.bufferedTarget;
 			character.bufferedTarget = null;
 	
-	if (character.basicAttacking):
+	if (character.basicAttackTimer > 0):
 		character.basicAttackTimer -= character.attackSpeed;
-		
-		if (character.basicAttackTimer <= 0):
-			character.basicAttacking = false;
+		character.basicAttackTimer = max(0, character.basicAttackTimer);
+
+	if (character.basicAttacking and character.basicAttackTimer <= 0):
+		character.basicAttacking = false;
 
 func specificScenarios(character: CharacterBody3D): # lol!
 	if (character.CHARACTER_NAME == "Rio" and character.movingToGrabbed):
@@ -909,7 +910,6 @@ func stopKeyPressed(character: CharacterBody3D, animPlayer: AnimationPlayer = nu
 			animPlayer.stop();
 	
 	character.basicAttacking = false;
-	character.basicAttackTimer = 0;
 	stopCharacter(character, stopTarget);
 
 func moveChar(character: CharacterBody3D, delta: float, posToMove: Vector3):
@@ -1049,7 +1049,7 @@ func moveTarget(target, duration, finalPos, moveSpeed = 20, effect := ""): # bad
 
 func basicAttack(character):
 	stopCharacter(character, false);
-	if not (character.onAction or character.basicAttacking) and (character.target):
+	if not (character.onAction or character.basicAttacking) and character.basicAttackTimer <= 0 and (character.target):
 		character.basicAttacking = true;
 		character.basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 		character.rpc("syncRotation", character.target.global_position);
