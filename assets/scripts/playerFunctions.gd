@@ -380,6 +380,14 @@ func _autoBasic(character):
 	
 	activeBasicArea = basicArea;
 
+func _isWASDMovementPressed() -> bool:
+	return (
+		Input.is_action_pressed("W")
+		or Input.is_action_pressed("A")
+		or Input.is_action_pressed("S")
+		or Input.is_action_pressed("D")
+	);
+
 func tweenCameraToChar(startingPos: Vector3):
 	var character: CharacterBody3D = myCharacter;
 	var scene = myCharacter.get_parent();
@@ -423,7 +431,11 @@ func updateState(character: CharacterBody3D, delta):
 		if (Input.is_action_just_pressed("autoBasic") and wasdMovement == false):
 			_autoBasic(character);
 		
-		if (wasdMovement and Input.is_anything_pressed()):
+		var isWASDMovementPressed = _isWASDMovementPressed();
+		if (wasdMovement and isWASDMovementPressed):
+			if (character.basicAttacking):
+				stopKeyPressed(character);
+
 			var newPos = character.global_position;
 			if (Input.is_action_pressed("W")):
 				newPos += Vector3(-0.1, 0, -0.1);
@@ -821,11 +833,12 @@ func updateGlobally(character: CharacterBody3D, _delta):
 			character.target = character.bufferedTarget;
 			character.bufferedTarget = null;
 	
-	if (character.basicAttacking):
+	if (character.basicAttackTimer > 0):
 		character.basicAttackTimer -= character.attackSpeed;
-		
-		if (character.basicAttackTimer <= 0):
-			character.basicAttacking = false;
+		character.basicAttackTimer = max(0, character.basicAttackTimer);
+
+	if (character.basicAttacking and character.basicAttackTimer <= 0):
+		character.basicAttacking = false;
 
 func specificScenarios(character: CharacterBody3D): # lol!
 	if (character.CHARACTER_NAME == "Rio" and character.movingToGrabbed):
@@ -897,7 +910,6 @@ func stopKeyPressed(character: CharacterBody3D, animPlayer: AnimationPlayer = nu
 			animPlayer.stop();
 	
 	character.basicAttacking = false;
-	character.basicAttackTimer = 0;
 	stopCharacter(character, stopTarget);
 
 func moveChar(character: CharacterBody3D, delta: float, posToMove: Vector3):
@@ -1037,7 +1049,7 @@ func moveTarget(target, duration, finalPos, moveSpeed = 20, effect := ""): # bad
 
 func basicAttack(character):
 	stopCharacter(character, false);
-	if not (character.onAction or character.basicAttacking) and (character.target):
+	if not (character.onAction or character.basicAttacking) and character.basicAttackTimer <= 0 and (character.target):
 		character.basicAttacking = true;
 		character.basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 		character.rpc("syncRotation", character.target.global_position);
@@ -1067,7 +1079,7 @@ func shopToggle(character: CharacterBody3D, forceClose = false):
 
 func optionsToggle():
 	if not (myCharacter):
-		return ;
+		return;
 	
 	var scene = myCharacter.get_parent();
 	var optionsUI = scene.get_node("OptionsUI");
