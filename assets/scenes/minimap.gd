@@ -1,6 +1,6 @@
 extends ColorRect
 
-func _process(delta):
+func _process(_delta):
 	pass;
 	"""
 	var global_mouse_pos = get_global_mouse_position();

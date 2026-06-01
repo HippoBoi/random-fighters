@@ -248,10 +248,12 @@ func _physics_process(delta: float) -> void:
 			var sound = load("res://assets/sounds/characters/mystery/mystery_spell_curse.ogg");
 			PlayerFunc.playSound(self, sound);
 			
-			if (shieldTargetIsEnemy):
-				PlayerFunc.dealDamage(self, shieldTarget, 15 + (dmg * 0.75), "hit_02");
-			else:
-				PlayerFunc.grantShield(self, shieldTarget, 5 + (dmg * 0.5), "heal_01");
+			if (is_instance_valid(shieldTarget)):
+				if (shieldTargetIsEnemy):
+					PlayerFunc.dealDamage(self, shieldTarget, 15 + (dmg * 0.75), "hit_02");
+				else:
+					_show_shield_model(shieldTarget);
+					PlayerFunc.grantShield(self, shieldTarget, 6 + (dmg * 0.55), "heal_01");
 	else:
 		if (usingTertiary):
 			onAction = false;
@@ -387,6 +389,31 @@ func _spawn_r_projectile(_mousePos):
 	
 	usedUltiProjectile = true;
 
+func _show_shield_model(_target: CharacterBody3D):
+	if not (is_instance_valid(_target)):
+		return;
+
+	var existingShield = _target.get_node_or_null("MysteryShieldEffect");
+	if (existingShield):
+		return;
+
+	var shieldModel = preload("res://assets/characters/mystery/mystery_shield.tscn").instantiate();
+	shieldModel.name = "MysteryShieldEffect";
+	shieldModel.position = Vector3(0, 1.65, 0);
+	_target.add_child(shieldModel);
+
+	var lifetimeTimer = Timer.new();
+	lifetimeTimer.wait_time = 0.1;
+	lifetimeTimer.autostart = true;
+	lifetimeTimer.timeout.connect(func():
+		if not (is_instance_valid(_target) and is_instance_valid(shieldModel)):
+			return;
+
+		if (_target.shield <= 0 or _target.dead):
+			shieldModel.queue_free();
+	);
+	shieldModel.add_child(lifetimeTimer);
+
 func basicAttack():
 	if not (target):
 		return;
@@ -418,10 +445,8 @@ func _setup_tertiary():
 		return;
 	
 	shieldTarget = hovering;
-	if (shieldTarget.team != team):
-		shieldTargetIsEnemy = true;
 	
-	rpc("tertiary_ability", shieldTarget);
+	rpc("tertiary_ability", shieldTarget.get_multiplayer_authority());
 
 func _setup_ultimate():
 	rpc("ultimate_ability");
@@ -468,7 +493,16 @@ func secondary_ability(_mousePos, _usingStorm):
 		usingStorm = false;
 
 @rpc("call_local", "reliable")
-func tertiary_ability(_target: CharacterBody3D):
+func tertiary_ability(_targetId: int):
+	var gameScene = get_parent();
+	if not (gameScene.has_method("get_character_by_id")):
+		return;
+
+	shieldTarget = gameScene.get_character_by_id(str(_targetId));
+	if not (is_instance_valid(shieldTarget)):
+		return;
+
+	shieldTargetIsEnemy = shieldTarget.team != team;
 	eTimer = E_COOLDOWN - cooldownReduction;
 	eTimer = clamp(eTimer, 4.0, E_COOLDOWN);
 	tertiaryTimer = 0.8;
@@ -481,7 +515,7 @@ func tertiary_ability(_target: CharacterBody3D):
 	PlayerFunc.playSound(self, sound);
 	
 	animPlayer.play("e_ability");
-	rpc("syncRotation", _target.global_position);
+	rpc("syncRotation", shieldTarget.global_position);
 
 @rpc("call_local", "reliable")
 func ultimate_ability():
