@@ -33,7 +33,7 @@ var lobbyScene: Control = null;
 var mainMenuOptionsUI = null;
 var userPreferences: UserPreferences;
 
-var DEBUG = false;
+var DEBUG = true;
 
 func _ready() -> void:
 	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");

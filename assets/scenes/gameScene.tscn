@@ -1902,9 +1902,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -87.0
-offset_top = -10.0
+offset_top = 6.0
 offset_right = 137.0
-offset_bottom = 26.0
+offset_bottom = 42.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -1926,9 +1926,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -51.0
-offset_top = -7.0
+offset_top = 5.0
 offset_right = -27.0
-offset_bottom = 17.0
+offset_bottom = 29.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5xj4x")
@@ -1938,18 +1938,18 @@ z_index = 6
 material = SubResource("ShaderMaterial_e2iu4")
 layout_mode = 0
 offset_left = 349.0
-offset_top = -7.0
+offset_top = 5.0
 offset_right = 373.0
-offset_bottom = 17.0
+offset_bottom = 29.0
 mouse_filter = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5xj4x")
 
 [node name="Divider" type="ColorRect" parent="OptionsUI/ScrollContainer/VBoxContainer/wasd"]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 20.0
+offset_top = 31.0
 offset_right = 465.0
-offset_bottom = 22.0
+offset_bottom = 33.0
 color = Color(0.097, 0.134, 0.198, 0.586)
 
 [node name="spacing5" type="Label" parent="OptionsUI/ScrollContainer/VBoxContainer"]
