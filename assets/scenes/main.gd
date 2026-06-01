@@ -89,7 +89,9 @@ func _on_options_pressed(_port: int, _username: String, _team: String) -> void:
 	mainMenuOptionsUI.visible = true;
 
 func _connectMainMenuOptionsUI(optionsUI: Control) -> void:
-	var saveButton: Button = optionsUI.get_node_or_null("Footer/SaveAndExit") as Button;
+	var saveButton: Button = optionsUI.get_node_or_null("Footer/Save") as Button;
+	if not (saveButton):
+		saveButton = optionsUI.get_node_or_null("Footer/SaveAndExit") as Button;
 	if (saveButton):
 		saveButton.pressed.connect(_on_main_menu_options_save_and_exit_pressed);
 

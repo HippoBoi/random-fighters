@@ -42,7 +42,6 @@ shader_parameter/radius = 1.0
 shader_parameter/line_thickness = 0.1
 
 [node name="OptionsUI" type="Control"]
-visible = false
 z_index = 10
 layout_mode = 3
 anchors_preset = 15
@@ -809,9 +808,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -87.0
-offset_top = -10.0
+offset_top = 4.0
 offset_right = 137.0
-offset_bottom = 26.0
+offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -833,9 +832,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -51.0
-offset_top = -7.0
+offset_top = 3.0
 offset_right = -27.0
-offset_bottom = 17.0
+offset_bottom = 27.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5xj4x")
@@ -845,18 +844,18 @@ z_index = 6
 material = SubResource("ShaderMaterial_e2iu4")
 layout_mode = 0
 offset_left = 349.0
-offset_top = -7.0
+offset_top = 3.0
 offset_right = 373.0
-offset_bottom = 17.0
+offset_bottom = 27.0
 mouse_filter = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5xj4x")
 
 [node name="Divider" type="ColorRect" parent="ScrollContainer/VBoxContainer/wasd"]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 20.0
+offset_top = 28.0
 offset_right = 465.0
-offset_bottom = 22.0
+offset_bottom = 30.0
 color = Color(0.097, 0.134, 0.198, 0.586)
 
 [node name="spacing5" type="Label" parent="ScrollContainer/VBoxContainer"]
@@ -1017,58 +1016,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="SaveAndExit" type="Button" parent="Footer"]
-z_index = 8
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -132.5
-offset_top = -29.0
-offset_right = -41.5
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 0
-theme = ExtResource("5_ea4ku")
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "Save
-"
-
-[node name="CoolLine" type="ColorRect" parent="Footer"]
-z_index = 4
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -132.5
-offset_top = -3.0
-offset_right = -41.5
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.378744, 0.392682, 0.528682, 0.525)
-
-[node name="CoolLine3" type="ColorRect" parent="Footer"]
-z_index = 4
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -134.5
-offset_top = -29.0
-offset_right = -132.5
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.378744, 0.392682, 0.528682, 0.525)
-
 [node name="CoolLine5" type="ColorRect" parent="Footer"]
 z_index = 4
 layout_mode = 1
@@ -1101,39 +1048,7 @@ grow_horizontal = 2
 grow_vertical = 0
 color = Color(0.378744, 0.392682, 0.528682, 0.525)
 
-[node name="CoolLine4" type="ColorRect" parent="Footer"]
-z_index = 4
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -41.5
-offset_top = -29.0
-offset_right = -39.5
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.378744, 0.392682, 0.528682, 0.525)
-
-[node name="shadow2" type="ColorRect" parent="Footer"]
-modulate = Color(0.164439, 0.180477, 0.317174, 1)
-z_index = 4
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 104.0
-offset_top = 232.0
-offset_right = -278.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.585, 0.585, 0.585, 0.602)
-
-[node name="QuitGame" type="Button" parent="Footer"]
+[node name="Save" type="Button" parent="Footer"]
 z_index = 8
 layout_mode = 1
 anchors_preset = 7
@@ -1150,7 +1065,7 @@ grow_vertical = 0
 theme = ExtResource("5_ea4ku")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
-text = "Quit game"
+text = "Save"
 
 [node name="CoolLine2" type="ColorRect" parent="Footer"]
 z_index = 4

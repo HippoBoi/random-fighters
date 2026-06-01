@@ -27,6 +27,7 @@ signal returnToLobby;
 func _ready() -> void:
 	$InGameUI.chat_message_submitted.connect(send_chat_message);
 	$OptionsUI.controls_changed.connect($InGameUI.update_ability_keybind_labels);
+	_connect_options_ui();
 
 	if (currentGameMode.is_empty()):
 		_selectGameMode();
@@ -37,6 +38,39 @@ func _ready() -> void:
 	$OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider.value = userPreferences.soundsVolume;
 
 	spawnPlayers();
+
+func _connect_options_ui() -> void:
+	var optionsUI = $OptionsUI;
+
+	var saveButton: Button = optionsUI.get_node_or_null("Footer/SaveAndExit") as Button;
+	if not (saveButton):
+		saveButton = optionsUI.get_node_or_null("Footer/Save") as Button;
+	if (saveButton and not saveButton.pressed.is_connected(_on_save_and_exit_pressed)):
+		saveButton.pressed.connect(_on_save_and_exit_pressed);
+
+	var quitButton: Button = optionsUI.get_node_or_null("Footer/QuitGame") as Button;
+	if (quitButton and not quitButton.pressed.is_connected(_on_quit_game_pressed)):
+		quitButton.pressed.connect(_on_quit_game_pressed);
+
+	var exitButton: Button = optionsUI.get_node_or_null("Exit") as Button;
+	if (exitButton and not exitButton.pressed.is_connected(_on_save_and_exit_pressed)):
+		exitButton.pressed.connect(_on_save_and_exit_pressed);
+
+	var wasdCheckBox: CheckBox = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/wasd/CheckBox") as CheckBox;
+	if (wasdCheckBox and not wasdCheckBox.toggled.is_connected(_on_check_box_toggled)):
+		wasdCheckBox.toggled.connect(_on_check_box_toggled);
+
+	var musicSlider: HSlider = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/music/musicSlider") as HSlider;
+	if (musicSlider and not musicSlider.value_changed.is_connected(_on_music_slider_value_changed)):
+		musicSlider.value_changed.connect(_on_music_slider_value_changed);
+
+	var soundsSlider: HSlider = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/sounds/soundsSlider") as HSlider;
+	if (soundsSlider and not soundsSlider.value_changed.is_connected(_on_sounds_slider_value_changed)):
+		soundsSlider.value_changed.connect(_on_sounds_slider_value_changed);
+
+	var resetButton: Button = optionsUI.get_node_or_null("ScrollContainer/VBoxContainer/reset/ResetDefaults") as Button;
+	if (resetButton and not resetButton.pressed.is_connected(_on_reset_defaults)):
+		resetButton.pressed.connect(_on_reset_defaults);
 
 func _process(_delta: float) -> void:
 	if ($InGameUI.is_chat_open()):
