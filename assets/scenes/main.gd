@@ -197,7 +197,7 @@ func _hostWithUPnP(_port):
 	multiplayerPeer.create_server(_port);
 	multiplayer.multiplayer_peer = multiplayerPeer;
 
-func _joinPressed(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
+func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
 	_resetConnectionState();
 	username = _username;
 	curTeam = int(_team);
@@ -225,6 +225,14 @@ func _joinPressed(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username
 	_connectEnetSignals();
 	updateUI("Client");
 
+# this "joinPressed" function will double as the "singleplayer" button
+# this sucks yes but i don't wanna change it's name since it is also used
+# in the multiplayer logic
+func _joinPressed(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
+	if (DEBUG):
+		_joinGame(ip, port, _gameId, _username, _team, _useUPnP);
+		return;
+
 func startHost(port: int, _username: String, _team: String, _isLocal: bool):
 	print("CALL TO HOST ON PORT: %s" % port);
 	_on_host(port, _username, _team, _isLocal);
@@ -233,7 +241,7 @@ func startHost(port: int, _username: String, _team: String, _isLocal: bool):
 
 func startClient(ip: String, port: int, _gameId: String, _username: String, _team: String, _useUPnP: bool):
 	print("client joining: %s:%s, gameId: %s, useUPnP: %s" % [ip, port, _gameId, _useUPnP]);
-	_joinPressed(ip, port, _gameId, _username, _team, _useUPnP);
+	_joinGame(ip, port, _gameId, _username, _team, _useUPnP);
 
 	get_node("Lobby").visible = false;
 

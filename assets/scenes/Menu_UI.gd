@@ -43,9 +43,6 @@ func playIntro():
 	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.975, 0.975), 0.5);
 	tween.tween_property(loopingBG, "modulate", Color(0.336, 0.39, 0.434, 1), 0.5);
 	
-	$Menu/nameInput.visible = true;
-	$Menu/nameInputText.visible = true;
-	
 	var buttons = menu.get_node("menuButtons");
 	for button in buttons.get_children():
 		button.position.y = 360;
@@ -61,8 +58,8 @@ func playIntro():
 
 func playLeave():
 	var tween = get_tree().create_tween();
-	tween.set_trans(Tween.TRANS_BACK)
-	tween.set_ease(Tween.EASE_IN)
+	tween.set_trans(Tween.TRANS_BACK);
+	tween.set_ease(Tween.EASE_IN);
 	tween.set_parallel();
 	tween.tween_property(topRect, "position", Vector2(300, 550), 0.5);
 	tween.tween_property(bottomRect, "position", Vector2(-100, -450), 0.5);
