@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://dsybrf7iret6q"]
+
+[ext_resource type="PackedScene" uid="uid://bcrbwylws45dg" path="res://assets/mapAssets/seaweeds/mesh_seaweeds.tscn" id="1_o773m"]
+[ext_resource type="Texture2D" uid="uid://hmaod7556x45" path="res://assets/mapAssets/seaweeds/red_laterite_soil_stones_diff_4k.png" id="2_4a4kb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hu8jq"]
+size = Vector3(140, 0.260262, 115)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o773m"]
+
+[sub_resource type="Sky" id="Sky_smvvh"]
+sky_material = SubResource("ProceduralSkyMaterial_o773m")
+
+[sub_resource type="Environment" id="Environment_4a4kb"]
+background_mode = 2
+sky = SubResource("Sky_smvvh")
+ssao_enabled = true
+sdfgi_use_occlusion = true
+glow_enabled = true
+glow_intensity = 1.17
+glow_strength = 1.36
+glow_bloom = 0.05
+fog_light_color = Color(0.224951, 0.175314, 0.412629, 1)
+fog_density = 0.025
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_gmr6k"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gmr6k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0trjh"]
+albedo_texture = ExtResource("2_4a4kb")
+
+[node name="seaweeds" type="Node3D"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="spawnLocations" type="Node3D" parent="."]
+transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.824443e-07, -0.36144504, -1.0160884)
+
+[node name="whiteTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.04996e-28, -8.74228e-08, -2.30926e-14, 1, 0, 8.74228e-08, -6.05845e-28, -1, 0.90910244, 0.591751, 44.7125)
+
+[node name="blackTeam" type="Node3D" parent="spawnLocations"]
+transform = Transform3D(-1, -6.04996e-28, -8.74228e-08, -2.30926e-14, 1, 0, 8.74228e-08, -6.05845e-28, -1, 0.54549813, 0.591754, -40.034)
+
+[node name="floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.4957943e-07, 0.24462906, -0.978203)
+collision_layer = 5
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
+transform = Transform3D(1, -2.7600388e-22, 0, -2.7600388e-22, 1, 0, 0, 0, 1, -0.22266065, -0.356785, -3.9999416)
+shape = SubResource("BoxShape3D_hu8jq")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.7960923, 0.6049671, -0.015871376, 0.26797032, 0.3288721, -0.90555775, -0.54261315, -0.72516125, -0.42392552, 1.73113, 28.9331, -19.1028)
+light_color = Color(0.800178, 0.763048, 0.742369, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4a4kb")
+camera_attributes = SubResource("CameraAttributesPractical_gmr6k")
+
+[node name="SeaweedsMap" parent="." instance=ExtResource("1_o773m")]
+transform = Transform3D(-2.832498e-08, 0, -0.64799994, 0, 0.9, 0, 0.64799994, 0, -2.832498e-08, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(48.738415, 0, 0, 0, 1, 0, 0, 0, 42.768005, 0, -0.09985578, -2.1566505)
+mesh = SubResource("PlaneMesh_gmr6k")
+surface_material_override/0 = SubResource("StandardMaterial3D_0trjh")

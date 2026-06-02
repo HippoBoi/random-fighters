@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hmaod7556x45"
-path.s3tc="res://.godot/imported/red_laterite_soil_stones_diff_4k.png-205f66b5647dc13c52fedc5c320c776f.s3tc.ctex"
+uid="uid://dw2ukuknvm0p4"
+path.s3tc="res://.godot/imported/coast_sand_rocks_02_diff_4k.png-8c487bdec268a7bc6339e5b9ec0758f8.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/mapAssets/seaweeds/red_laterite_soil_stones_diff_4k.png"
-dest_files=["res://.godot/imported/red_laterite_soil_stones_diff_4k.png-205f66b5647dc13c52fedc5c320c776f.s3tc.ctex"]
+source_file="res://assets/mapAssets/seaweeds/coast_sand_rocks_02_diff_4k.png"
+dest_files=["res://.godot/imported/coast_sand_rocks_02_diff_4k.png-8c487bdec268a7bc6339e5b9ec0758f8.s3tc.ctex"]
 
 [params]
 

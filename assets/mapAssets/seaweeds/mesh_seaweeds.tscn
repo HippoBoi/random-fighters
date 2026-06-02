@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://bcrbwylws45dg"]
+[gd_scene load_steps=7 format=4 uid="uid://bcrbwylws45dg"]
 
 [ext_resource type="Texture2D" uid="uid://cd071eb706uc7" path="res://assets/mapAssets/seaweeds/seaweeds_underwater_terrain_mask.png" id="1_uvpyy"]
+[ext_resource type="Shader" uid="uid://brfx0tqsk1dk2" path="res://assets/mapAssets/seaweeds/seaweeds_map_shader.tres" id="2_ksx64"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3brwb"]
 resource_name = "terrain"
@@ -42,6 +43,10 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_sot6o")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfnwa"]
+render_priority = 0
+shader = ExtResource("2_ksx64")
+
 [node name="SeaweedsMap" type="Node3D"]
 
 [node name="seaweeds" type="Node3D" parent="."]
@@ -50,3 +55,4 @@ shadow_mesh = SubResource("ArrayMesh_sot6o")
 transform = Transform3D(-100.80272, 0, 0, 0, -100.80272, 0, 0, 0, -100.80272, 0, 0, 0)
 mesh = SubResource("ArrayMesh_y5cg1")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_bfnwa")

@@ -13,7 +13,8 @@ enum GameModes {
 	Snowmen,
 	Arena,
 	Trainwreck,
-	Heaven
+	Heaven,
+	Seaweeds
 }
 
 const items = [

@@ -6,7 +6,7 @@ var playerId: int;
 var alreadySelected = [];
 var selectedGameMode = "Unknown";
 var selectedMode = false;
-var forceMode = "";
+var forceMode = "seaweeds";
 
 var blackTeamWins = 0;
 var whiteTeamWins = 0;
@@ -76,6 +76,8 @@ func _getModeImage(gamemode: String):
 	elif (gamemode.to_lower() == "trainwreck"):
 		image = preload("res://assets/sprites/map_images/trainwreck_image.png").duplicate();
 	elif (gamemode.to_lower() == "heaven"):
+		image = preload("res://assets/sprites/map_images/heaven_image.png").duplicate();
+	elif (gamemode.to_lower() == "seaweeds"):
 		image = preload("res://assets/sprites/map_images/heaven_image.png").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);

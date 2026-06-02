@@ -86,6 +86,10 @@ func _getMapMargins(_gameMode: String) -> Array:
 		xMargins = [-13, 16];
 		zMargins = [-28, 29];
 	
+	if (gameMode.to_lower() == "seaweeds"):
+		xMargins = [-36, 49];
+		zMargins = [-45, 45.5];
+	
 	return [xMargins, zMargins];
 
 func _cameraMovement(character: CharacterBody3D, delta):
@@ -100,7 +104,7 @@ func _cameraMovement(character: CharacterBody3D, delta):
 		
 		currentCamera.global_position.x = clamp(currentCamera.global_position.x, margins[0][0], margins[0][1]);
 		currentCamera.global_position.z = clamp(currentCamera.global_position.z, margins[1][0], margins[1][1]);
-		return ;
+		return;
 	
 	var moveMargin = 25;
 	var cameraSpeed = 25;

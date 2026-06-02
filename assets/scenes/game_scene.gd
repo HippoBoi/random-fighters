@@ -152,15 +152,15 @@ func startGameMode(gameMode: String):
 
 	if (gameMode.to_lower() == "free_for_all"):
 		newMap = preload("res://assets/maps/battlefield.tscn").instantiate();
-		minimapCamera.size = 55.0;
+		minimapCamera.size = 65.0;
 
 	elif (gameMode.to_lower() == "foggy_vision"):
 		newMap = preload("res://assets/maps/dark_forest.tscn").instantiate();
-		minimapCamera.size = 47.938;
+		minimapCamera.size = 50.95;
 
 	elif (gameMode.to_lower() == "hippo_capture"):
 		newMap = preload("res://assets/maps/lake.tscn").instantiate();
-		minimapCamera.size = 75.0;
+		minimapCamera.size = 76.0;
 
 	elif (gameMode.to_lower() == "doom_bot"):
 		newMap = preload("res://assets/maps/electric_central.tscn").instantiate();
@@ -181,6 +181,10 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "heaven"):
 		newMap = preload("res://assets/maps/heaven.tscn").instantiate();
 		minimapCamera.size = 65.0;
+	
+	elif (gameMode.to_lower() == "seaweeds"):
+		newMap = preload("res://assets/maps/seaweeds.tscn").instantiate();
+		minimapCamera.size = 95.0;
 
 	$Map.add_child(newMap);
 
@@ -272,6 +276,8 @@ func _getModeDescription(gameMode: String):
 		description = "Look both ways...!"
 	elif (gameMode.to_lower() == "heaven"):
 		description = "Eliminate the other team!"
+	elif (gameMode.to_lower() == "seaweeds"):
+		description = "Take it slow..."
 
 	return description;
 
