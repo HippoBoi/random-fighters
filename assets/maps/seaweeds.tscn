@@ -9,7 +9,7 @@
 size = Vector3(140, 0.260262, 115)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o773m"]
-sky_energy_multiplier = 1.25
+sky_energy_multiplier = 1.45
 ground_bottom_color = Color(0.20535186, 0.3116782, 0.5854398, 1)
 ground_horizon_color = Color(0.555226, 0.74707574, 0.9564504, 1)
 
@@ -31,9 +31,8 @@ fog_density = 0.025
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_gmr6k"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gmr6k"]
-radius = 8.609375
-height = 42.633938
+[sub_resource type="BoxShape3D" id="BoxShape3D_1r7o7"]
+size = Vector3(13.038712, 35.24568, 8.69043)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mwejg"]
 radius = 7.7646484
@@ -80,6 +79,7 @@ size = Vector3(163.79137, 2.90771, 5.49695)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0trjh"]
 albedo_texture = ExtResource("2_4a4kb")
+uv1_scale = Vector3(7, 7, 7)
 
 [sub_resource type="MultiMesh" id="MultiMesh_0trjh"]
 transform_format = 1
@@ -112,10 +112,10 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0
 transform = Transform3D(1.58932e-08, -2.75286e-21, -1, 2.98023e-08, 1, 2.98023e-08, 1, 2.75286e-21, -1.03316e-07, -4.824443e-07, -0.36144504, -1.0160884)
 
 [node name="whiteTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.0499623e-28, -8.74228e-08, -2.3092637e-14, 1, 0, 8.74228e-08, -6.0584518e-28, -1, 0.90910244, 0.5917508, 44.65889)
+transform = Transform3D(-1, -6.0499623e-28, -8.74228e-08, -2.3092637e-14, 1, 0, 8.74228e-08, -6.0584518e-28, -1, 0.90910214, 0.5917504, 42.699867)
 
 [node name="blackTeam" type="Node3D" parent="spawnLocations"]
-transform = Transform3D(-1, -6.0499623e-28, -8.74228e-08, -2.3092637e-14, 1, 0, 8.74228e-08, -6.0584518e-28, -1, 0.54549766, 0.59175396, -43.625725)
+transform = Transform3D(-1, -6.0499623e-28, -8.74228e-08, -2.3092637e-14, 1, 0, 8.74228e-08, -6.0584518e-28, -1, 0.54549783, 0.5917539, -42.625725)
 
 [node name="floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, -2.98024e-08, 5.96046e-08, 2.98024e-08, 1, -2.85422e-15, -5.96046e-08, 4.63058e-15, 1, -9.4957943e-07, 0.24462906, -0.978203)
@@ -128,7 +128,7 @@ shape = SubResource("BoxShape3D_hu8jq")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.7960923, 0.6049671, -0.015871376, 0.26797032, 0.3288721, -0.90555775, -0.54261315, -0.72516125, -0.42392552, 1.73113, 28.9331, -19.1028)
-light_color = Color(0.800178, 0.763048, 0.742369, 1)
+light_color = Color(0.75787973, 0.83124816, 0.87332964, 1)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_4a4kb")
@@ -139,7 +139,6 @@ transform = Transform3D(-2.832498e-08, 0, -0.64799994, 0, 0.9, 0, 0.64799994, 0,
 
 [node name="Collisions" type="Node3D" parent="."]
 transform = Transform3D(-2.8324981e-08, 0, -0.64799994, 0, 0.9, 0, 0.64799994, 0, -2.8324981e-08, 0, 0, 0)
-visible = false
 
 [node name="CollissionBox1" type="Node3D" parent="Collisions"]
 transform = Transform3D(1, 0, 3.5527137e-14, 0, 1, 0, -3.5527137e-14, 0, 1, -13.116809, -3.8162723, 8.999998)
@@ -147,8 +146,8 @@ transform = Transform3D(1, 0, 3.5527137e-14, 0, 1, 0, -3.5527137e-14, 0, 1, -13.
 [node name="StaticBody3D" type="StaticBody3D" parent="Collisions/CollissionBox1"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/CollissionBox1/StaticBody3D"]
-transform = Transform3D(1, -2.842171e-14, -1.7660637e-19, 0, -4.3711392e-08, 1, -2.842171e-14, -1, -4.371139e-08, -8.456847, -0.92016196, -8.32822)
-shape = SubResource("CapsuleShape3D_gmr6k")
+transform = Transform3D(1, -2.842171e-14, -1.7660637e-19, 0, -4.3711392e-08, 1, -2.842171e-14, -1, -4.371139e-08, -8.481826, 2.9250531, -9.324159)
+shape = SubResource("BoxShape3D_1r7o7")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
 
 [node name="CollissionBox6" type="Node3D" parent="Collisions"]
@@ -372,12 +371,7 @@ shape = SubResource("BoxShape3D_mwejg")
 debug_color = Color(0.768246, 0, 0.251039, 0.939)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(48.738415, 0, 0, 0, 1, 0, 0, 0, 42.768005, 0, -0.09985578, -2.1566505)
-mesh = SubResource("PlaneMesh_gmr6k")
-surface_material_override/0 = SubResource("StandardMaterial3D_0trjh")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(13.159371, 0, -5.684342e-14, 0, 1, 0, -5.684342e-14, 0, 11.290752, 1.7494107, -0.09985578, 0.36131564)
+transform = Transform3D(192.61426, 0, 9.094947e-13, 0, 1, 0, 0, 0, 300.23138, -29.000002, -0.09985578, -22.6573)
 mesh = SubResource("PlaneMesh_gmr6k")
 surface_material_override/0 = SubResource("StandardMaterial3D_0trjh")
 

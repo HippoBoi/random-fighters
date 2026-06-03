@@ -24,6 +24,8 @@ signal syncTeamWins(blackTeamWins, whiteTeamWins);
 signal teamWonGame(teamThatHasWon);
 signal returnToLobby;
 
+@onready var underwaterShaderPlane = $MainCamera/UnderwaterCameraPlane;
+
 func _ready() -> void:
 	$InGameUI.chat_message_submitted.connect(send_chat_message);
 	$OptionsUI.controls_changed.connect($InGameUI.update_ability_keybind_labels);
@@ -145,6 +147,8 @@ func startGameMode(gameMode: String):
 	var newMap = null;
 	var minimapCamera: Camera3D = $MinimapUI/SubViewport/Camera3D;
 
+	underwaterShaderPlane.visible = false;
+
 	currentGameMode = gameMode;
 	PlayerFunc.gameMode = gameMode;
 
@@ -185,6 +189,7 @@ func startGameMode(gameMode: String):
 	elif (gameMode.to_lower() == "seaweeds"):
 		newMap = preload("res://assets/maps/seaweeds.tscn").instantiate();
 		minimapCamera.size = 95.0;
+		underwaterShaderPlane.visible = true;
 
 	$Map.add_child(newMap);
 
