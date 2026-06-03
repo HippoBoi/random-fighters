@@ -93,7 +93,7 @@ func add_chat_message(senderName: String, message: String) -> void:
 	messageLabel.add_theme_constant_override("shadow_offset_x", 1);
 	messageLabel.add_theme_constant_override("shadow_offset_y", 1);
 	messageLabel.add_theme_font_override("font", CHAT_FONT);
-	messageLabel.add_theme_font_size_override("font_size", 9);
+	messageLabel.add_theme_font_size_override("font_size", 10);
 	messageLabel.text = "%s: %s" % [senderName, _sanitize_message(message)];
 	chatMessages.add_child(messageLabel);
 
