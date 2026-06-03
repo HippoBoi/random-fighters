@@ -15,7 +15,7 @@ const CHARACTER_NAME = "Rio";
 const Q_COOLDOWN = 7.5;
 const W_COOLDOWN = 13.0;
 const E_COOLDOWN = 6.0;
-const R_COOLDOWN = 10.0; # 60.0
+const R_COOLDOWN = 45.0;
 const Q_MAX_RANGE = 12.0;
 
 var primaryDesc = "Jump forward dealing 85% of your PHYSICAL DAMAGE to nearby enemies."
@@ -477,7 +477,7 @@ func primary_ability(_moveTo, _globalPos):
 	primaryMoveToTarget.y = _globalPos.y;
 	moveTo = primaryMoveToTarget;
 	
-	qTimer = Q_COOLDOWN - cooldownReduction;
+	qTimer = max(Q_COOLDOWN - cooldownReduction, 1.25);
 	
 	_cancel_invisibility();
 	

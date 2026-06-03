@@ -78,7 +78,7 @@ func _getModeImage(gamemode: String):
 	elif (gamemode.to_lower() == "heaven"):
 		image = preload("res://assets/sprites/map_images/heaven_image.png").duplicate();
 	elif (gamemode.to_lower() == "seaweeds"):
-		image = preload("res://assets/sprites/map_images/heaven_image.png").duplicate();
+		image = preload("res://assets/sprites/map_images/seaweeds_image.png").duplicate();
 	else:
 		print("[WARNING]: couldn't find image for gamemode: %s" % gamemode);
 		image = preload("res://assets/textures/looping_background.png").duplicate();
