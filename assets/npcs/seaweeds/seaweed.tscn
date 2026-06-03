@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://chwhvcmu520e6"]
+
+[ext_resource type="Material" uid="uid://w22wqv5ex5na" path="res://assets/materials/grass_wind_shader_material.tres" id="1_m3om6"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_0trjh"]
+
+[node name="MeshInstance3D2" type="MeshInstance3D"]
+transform = Transform3D(0.66, 0, 0, 0, 5.28, 0, 1.7763568e-15, 0, 0.528, 0, 0, 0)
+mesh = SubResource("PrismMesh_0trjh")
+surface_material_override/0 = ExtResource("1_m3om6")
