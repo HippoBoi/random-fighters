@@ -13,7 +13,8 @@ enum GameModes {
 	Snowmen,
 	Arena,
 	Trainwreck,
-	Heaven
+	Heaven,
+	Seaweeds
 }
 
 const items = [
@@ -36,7 +37,7 @@ const items = [
 	},
 	{
 		"name": "Epic Rod",
-		"price": 15,
+		"price": 0,
 		"stats": {
 			"dmg": 2,
 			"cooldownReduction": 3

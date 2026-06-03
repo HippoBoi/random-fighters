@@ -12,16 +12,16 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Mystery";
-const MAX_Q_COOLDOWN = 5.5;
-const MAX_W_COOLDOWN = 18.0;
-const MAX_E_COOLDOWN = 8.0;
-const MAX_R_COOLDOWN = 15.0;
+const MAX_Q_COOLDOWN = 6.0;
+const MAX_W_COOLDOWN = 18.5;
+const MAX_E_COOLDOWN = 9.5;
+const MAX_R_COOLDOWN = 75.0;
 const MAX_R_SLASH_COOLDOWN = 1.75;
 
-var Q_COOLDOWN = 5.5;
-var W_COOLDOWN = 18.0;
-var E_COOLDOWN = 8.0;
-var R_COOLDOWN = 55.0;
+var Q_COOLDOWN = 6.0;
+var W_COOLDOWN = 18.5;
+var E_COOLDOWN = 9.5;
+var R_COOLDOWN = 75.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 

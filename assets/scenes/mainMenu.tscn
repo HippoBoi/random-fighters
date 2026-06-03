@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ysdddut54uvw"]
+[gd_scene load_steps=16 format=3 uid="uid://ysdddut54uvw"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_6tsn0"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_2cgkr"]
@@ -6,21 +6,31 @@
 [ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_cmwfe"]
 [ext_resource type="Texture2D" uid="uid://dwlwdckb1s4s8" path="res://assets/sprites/random.png" id="5_0cygf"]
 [ext_resource type="Texture2D" uid="uid://c1ibuefw3763v" path="res://assets/sprites/fighters.png" id="6_fk7uv"]
+[ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="8_gmlb3"]
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2cgkr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cygf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4agkw"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8at84"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmwfe"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4agkw"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cygf"]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0cygf"]
 shader = ExtResource("3_4agkw")
 shader_parameter/MOVE_SPEED = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f1sm1"]
+shader = ExtResource("8_gmlb3")
+shader_parameter/color = Color(0.6538066, 0.7917869, 0.90281796, 0.64100003)
+shader_parameter/direction = -1.0
+shader_parameter/frequency = 2.0000000298024
+shader_parameter/speed = 1.5
+shader_parameter/radius = 0.749999983236
+shader_parameter/line_thickness = 0.00999999977648
 
 [node name="MainMenu" type="Node3D"]
 script = ExtResource("1_6tsn0")
@@ -53,12 +63,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="singleplayerButton" type="Button" parent="UI/Menu/menuButtons"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = -66.0
+offset_right = 294.0
+offset_bottom = -21.0
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("99_mussels")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
+theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
+text = "Singleplayer"
+alignment = 0
+
 [node name="multiplayerButton" type="Button" parent="UI/Menu/menuButtons"]
 layout_mode = 0
 offset_left = 105.0
-offset_top = -62.0
+offset_top = -14.0
 offset_right = 294.0
-offset_bottom = -17.0
+offset_bottom = 31.0
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
@@ -70,9 +96,9 @@ alignment = 0
 [node name="optionsButton" type="Button" parent="UI/Menu/menuButtons"]
 layout_mode = 0
 offset_left = 105.0
-offset_top = -12.0
+offset_top = 36.0
 offset_right = 294.0
-offset_bottom = 33.0
+offset_bottom = 81.0
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 32
@@ -81,22 +107,6 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_cmwfe")
 theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
 text = "Options"
-alignment = 0
-
-[node name="creditsButton" type="Button" parent="UI/Menu/menuButtons"]
-layout_mode = 0
-offset_left = 105.0
-offset_top = 38.0
-offset_right = 294.0
-offset_bottom = 83.0
-theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("99_mussels")
-theme_override_font_sizes/font_size = 32
-theme_override_styles/normal = SubResource("StyleBoxEmpty_2cgkr")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_0cygf")
-theme_override_styles/disabled_mirrored = SubResource("StyleBoxEmpty_4agkw")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_8at84")
-text = "Credits"
 alignment = 0
 
 [node name="exitButton" type="Button" parent="UI/Menu/menuButtons"]
@@ -114,6 +124,7 @@ text = "Exit"
 alignment = 0
 
 [node name="nameInput" type="LineEdit" parent="UI/Menu"]
+visible = false
 z_index = -1
 layout_mode = 1
 anchors_preset = 8
@@ -131,6 +142,7 @@ placeholder_text = "..."
 max_length = 16
 
 [node name="nameInputText" type="RichTextLabel" parent="UI/Menu"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -225,8 +237,24 @@ offset_bottom = 212.0
 texture = ExtResource("6_fk7uv")
 expand_mode = 1
 
+[node name="coolOutline" type="ColorRect" parent="UI"]
+material = SubResource("ShaderMaterial_f1sm1")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -326.0
+offset_top = -362.0
+offset_right = 325.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[connection signal="pressed" from="UI/Menu/menuButtons/singleplayerButton" to="." method="_joinPressed"]
 [connection signal="pressed" from="UI/Menu/menuButtons/multiplayerButton" to="." method="onFindMatch"]
 [connection signal="pressed" from="UI/Menu/menuButtons/optionsButton" to="." method="_on_options_pressed" binds= [8890, "unnamed", "0"]]
-[connection signal="pressed" from="UI/Menu/menuButtons/creditsButton" to="." method="_joinPressed"]
 [connection signal="pressed" from="UI/Menu/menuButtons/exitButton" to="." method="_on_exit_pressed"]
 [connection signal="text_changed" from="UI/Menu/nameInput" to="." method="_on_name_input"]
