@@ -1,8 +1,5 @@
-[gd_scene load_steps=26 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=25 format=3 uid="uid://cyymvk7nsgj5t"]
 
-[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
-
-[ext_resource type="Texture2D" uid="uid://5pk2obyo53cr" path="res://icon.svg" id="1_qrbhw"]
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
 [ext_resource type="Texture2D" uid="uid://b1gapn3efv4e0" path="res://assets/sprites/rhay.png" id="2_ctrvq"]
@@ -17,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
 [ext_resource type="Texture2D" uid="uid://dqdpwunesijl2" path="res://assets/sprites/rio.png" id="13_dmdnx"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vvea"]
 shader = ExtResource("2_70d5h")
@@ -344,7 +342,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/rhay"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -358,6 +355,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Rhay
 "
 fit_content = true
@@ -408,7 +406,6 @@ texture = ExtResource("3_r2fdo")
 expand_mode = 1
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/ramon"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -422,6 +419,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Ramón"
 fit_content = true
 autowrap_mode = 0
@@ -472,7 +470,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/clean"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -486,6 +483,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Clean"
 fit_content = true
 autowrap_mode = 0
@@ -536,7 +534,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/shugo"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -550,6 +547,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Shugo"
 fit_content = true
 autowrap_mode = 0
@@ -600,7 +598,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/nephi"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -614,6 +611,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Nephi"
 fit_content = true
 autowrap_mode = 0
@@ -664,7 +662,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/ale"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -678,6 +675,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Ale"
 fit_content = true
 autowrap_mode = 0
@@ -728,7 +726,6 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/mystery"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -742,6 +739,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Mystery"
 fit_content = true
 autowrap_mode = 0
@@ -791,7 +789,6 @@ texture = ExtResource("13_dmdnx")
 expand_mode = 1
 
 [node name="CharacterName" type="RichTextLabel" parent="Characters/rio"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -805,6 +802,7 @@ offset_bottom = -18.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 text = "Rio"
 fit_content = true
 autowrap_mode = 0
@@ -830,13 +828,13 @@ theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
 [node name="BlackTeamText" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -77.0
 offset_top = -13.0
 offset_right = -3.0
 offset_bottom = 8.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 12
 text = "Black Team"
 scroll_active = false
@@ -855,13 +853,13 @@ offset_bottom = 130.0
 grow_vertical = 2
 
 [node name="WhiteTeamText" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = 479.0
 offset_top = -14.0
 offset_right = 557.0
 offset_bottom = 7.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 12
 text = "White Team"
 scroll_active = false
@@ -905,15 +903,14 @@ offset_top = -40.0
 offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("1_qrbhw")
 expand_mode = 1
 
 [node name="PlayerUsername" type="RichTextLabel" parent="PlayerTemplate"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 75.0
 offset_bottom = 20.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 11
 text = "nadie xdxd"
 fit_content = true
@@ -930,7 +927,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="StatusText" type="Label" parent="."]
-theme_override_fonts/font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -943,13 +939,13 @@ grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 3
+theme_override_fonts/font = ExtResource("99_mussels")
 theme_override_font_sizes/font_size = 30
 text = "Select Your Character"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="secondsRemaining" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 z_index = 1
 layout_mode = 1
 anchors_preset = 5
@@ -964,6 +960,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 6
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 38
 text = "60"
 horizontal_alignment = 1
