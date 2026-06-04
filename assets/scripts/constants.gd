@@ -37,7 +37,7 @@ const items = [
 	},
 	{
 		"name": "Epic Rod",
-		"price": 0,
+		"price": 15,
 		"stats": {
 			"dmg": 2,
 			"cooldownReduction": 3
