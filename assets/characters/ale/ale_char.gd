@@ -17,7 +17,7 @@ const CHARACTER_NAME = "Ale";
 const Q_COOLDOWN = 7.0;
 const W_COOLDOWN = 9.0;
 const E_COOLDOWN = 2.0;
-const R_COOLDOWN = 45.0;
+const R_COOLDOWN = 5.0;
 const E_MAX_RANGE = 6.0;
 const R_MAX_RANGE = 10.0;
 const Q_STAMINA = 22;
@@ -407,6 +407,9 @@ func ultimate_ability(_moveTo, _global_pos):
 	else:
 		ultiTarget = _moveTo;
 	ultiTarget.y = _global_pos.y;
+	
+	var sound = preload("res://assets/sounds/characters/ale/ale_ulti.ogg");
+	PlayerFunc.playSound(self, sound, false);
 	
 	onAction = true;
 	rTimer = R_COOLDOWN - cooldownReduction;
