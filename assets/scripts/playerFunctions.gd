@@ -303,7 +303,6 @@ func _updateGameUI(character: CharacterBody3D):
 		var UIlevel = abilityUI.get_node("level");
 		var UIrespawningText = abilityUI.get_node("respawningText");
 		var UIrespawnTimer = abilityUI.get_node("respawnTimer");
-		var UItokens = abilityUI.get_node("tokens");
 		var livesContainer = abilityUI.get_node("livesContainer2");
 		var deadOverlay = UI.get_node("deadOverlay");
 		primAbility.get_node("cooldown").scale.x = character.qTimer / character.Q_COOLDOWN;
