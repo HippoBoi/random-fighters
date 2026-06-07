@@ -1,12 +1,11 @@
 [gd_scene load_steps=13 format=3 uid="uid://cgkuuqd0peuxk"]
 
-[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
-
 [ext_resource type="Script" uid="uid://c77ydiooaiofh" path="res://assets/scenes/end_game.gd" id="1_bktvi"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="3_ajo2i"]
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="6_jy2q5"]
 [ext_resource type="Texture2D" uid="uid://rl54fx2l08qf" path="res://assets/textures/bars.png" id="7_l2w2j"]
 [ext_resource type="Texture2D" uid="uid://c3glmdtq8xxac" path="res://assets/textures/bars - copia.png" id="8_r0jio"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="GDScript" id="GDScript_j35p6"]
 script/source = "extends Control
@@ -88,7 +87,6 @@ color = Color(0.296, 0.296, 0.296, 1)
 script = SubResource("GDScript_j35p6")
 
 [node name="statusText" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 0.25, 0, 1)
 z_index = 1
 layout_mode = 1
@@ -105,6 +103,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 30
 theme_override_font_sizes/bold_font_size = 50
 bbcode_enabled = true
@@ -140,19 +139,18 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="Winners"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -2.0
 offset_top = 198.0
 offset_right = 256.0
 offset_bottom = 238.0
 theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 26
 text = "<winner> Team"
 horizontal_alignment = 1
 
 [node name="WinsText" type="RichTextLabel" parent="Winners"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_left = -4.0
 offset_top = 225.0
@@ -162,6 +160,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 24
 bbcode_enabled = true
@@ -184,7 +183,6 @@ theme_override_constants/separation = -5
 alignment = 1
 
 [node name="Template" type="RichTextLabel" parent="Winners/WinnersContainer"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 visible = false
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -192,6 +190,7 @@ theme_override_constants/shadow_outline_size = 4
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 5
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "asdasdasd"
 fit_content = true
@@ -218,7 +217,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="loopingStatus" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(0.64, 0.653, 0.661, 0.5)
 z_index = -1
 layout_mode = 1
@@ -227,9 +225,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 292.0
+offset_left = 324.0
 offset_top = -199.0
-offset_right = 783.0
+offset_right = 815.0
 offset_bottom = -92.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -238,6 +236,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 0
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 58
 text = "Victory/Defeat"
 vertical_alignment = 1
