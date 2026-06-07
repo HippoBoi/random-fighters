@@ -15,7 +15,7 @@ config/description="A MOBA that changes each round."
 config/version="0.11.0"
 run/main_scene="res://assets/scenes/mainMenu.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="uid://dnw5kc1itnjw3"
+config/icon="uid://04agxibx75iw"
 
 [autoload]
 

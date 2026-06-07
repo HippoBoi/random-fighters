@@ -333,6 +333,9 @@ func primary_ability(_mousePos):
 	$q_hit_warning.visible = true;
 	$q_hit_warning/Cube/AnimationPlayer.play("warning");
 	
+	var sound = preload("res://assets/sounds/characters/ale/ale_slash.ogg");
+	PlayerFunc.playSound(self, sound, false);
+	
 	simulateMove(null, global_position);
 	rpc("syncRotation", _mousePos);
 	rpc("syncStamina", stamina, true);
@@ -374,6 +377,9 @@ func tertiary_ability(_moveTo, _global_pos):
 	
 	moveTo = _global_pos + direction * E_MAX_RANGE;
 	moveTo.y = _global_pos.y;
+	
+	var sound = preload("res://assets/sounds/characters/ale/ale_roll.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	eTimer = E_COOLDOWN;
 	stamina -= E_STAMINA - cooldownReduction;

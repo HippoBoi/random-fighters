@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://b11rigyeoc3re"]
+[gd_scene load_steps=38 format=3 uid="uid://b11rigyeoc3re"]
 
 [ext_resource type="Script" uid="uid://brogdkincrfoh" path="res://assets/scenes/game_scene.gd" id="1_5eccb"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="2_ji54v"]
@@ -13,7 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="9_xb6nb"]
 [ext_resource type="FontFile" uid="uid://0lodjd6o1k8f" path="res://addons/fonts/tl_mussels/TT Mussels Trial Bold.otf" id="11_5t5vp"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="11_o0ehx"]
-[ext_resource type="Texture2D" uid="uid://dnw5kc1itnjw3" path="res://rf_icon.png" id="12_4a3ho"]
 [ext_resource type="Script" uid="uid://luo8kcd41hvg" path="res://assets/scenes/minimap.gd" id="14_7678e"]
 [ext_resource type="Script" uid="uid://boiww7d2pjin" path="res://assets/scenes/options_ui.gd" id="17_5t5vp"]
 [ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="18_4emlq"]
@@ -919,7 +918,6 @@ offset_top = -30.0
 offset_right = 75.0
 offset_bottom = 30.0
 grow_vertical = 2
-texture = ExtResource("12_4a3ho")
 expand_mode = 1
 
 [node name="deadOverlay" type="ColorRect" parent="InGameUI"]
