@@ -1,6 +1,6 @@
 extends Control
 
-var webSocketUrl = EnvLoader.get_env("AWS_SOCKET");
+var webSocketUrl = NetworkConfig.MATCHMAKING_SOCKET_URL;
 var messageToSend = "";
 var currentLobbyId = "";
 var currentOwnerId = ""; # lobby owner ID
@@ -68,8 +68,8 @@ func _updateServerStatus():
 		serverIcon.modulate = OFFLINE_COLOR;
 
 func testConnection():
-	var ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
-	var PORT = 8890;
+	var ADDRESS = NetworkConfig.NORAY_ADDRESS;
+	var PORT = NetworkConfig.NORAY_PORT;
 
 	var response = await Noray.connect_to_host(ADDRESS, PORT);
 	if (response != OK):
@@ -334,7 +334,7 @@ func _close_creating_match(secondsToWait: float = 0.5):
 	await get_tree().create_timer(secondsToWait).timeout;
 	_loadMatches();
 
-func getUPnPAddress(_port = 8890):
+func getUPnPAddress(_port = NetworkConfig.NORAY_PORT):
 	var upnp = UPNP.new();
 	var discoverResult = upnp.discover();
 
@@ -403,8 +403,8 @@ func _adminStartMatch() -> void:
 	if (currentLobbyId.is_empty()):
 		return;
 
-	var matchIp = EnvLoader.get_env("NORAY_ADDRESS");
-	var port = 8890;
+	var matchIp = NetworkConfig.NORAY_ADDRESS;
+	var port = NetworkConfig.NORAY_PORT;
 	print("matchIp: ", matchIp);
 
 	startHost.emit(port, fakeUser.username, currentTeam, false);
