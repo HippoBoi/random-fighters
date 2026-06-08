@@ -4,8 +4,8 @@ var multiplayerPeer: ENetMultiplayerPeer = ENetMultiplayerPeer.new();
 var norayNetwork: Node = null;
 
 const LOCALHOST: String = "127.0.0.1";
-const PORT: int = 8890;
-var ADDRESS: String;
+const PORT: int = NetworkConfig.NORAY_PORT;
+const ADDRESS: String = NetworkConfig.NORAY_ADDRESS;
 
 var username: String = "noname";
 var gameIdInput: String;
@@ -36,7 +36,6 @@ var userPreferences: UserPreferences;
 var DEBUG = true;
 
 func _ready() -> void:
-	ADDRESS = EnvLoader.get_env("NORAY_ADDRESS");
 	userPreferences = UserPreferences.loadOrCreate()
 	_loadSettings();
 

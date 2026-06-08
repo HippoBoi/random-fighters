@@ -5,9 +5,9 @@ signal connectToHost;
 signal natConnection(address, port);
 signal relayConnection(address, port);
 
-const PORT: int = 8890;
+const PORT: int = NetworkConfig.NORAY_PORT;
 
-var ADDRESS: String = EnvLoader.get_env("NORAY_ADDRESS");
+var ADDRESS: String = NetworkConfig.NORAY_ADDRESS;
 var multiplayerPeer: ENetMultiplayerPeer = ENetMultiplayerPeer.new();
 
 var isClient: bool = false;

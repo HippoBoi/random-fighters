@@ -22,7 +22,6 @@ config/icon="uid://04agxibx75iw"
 Server="*res://assets/scripts/server.gd"
 Cursor="*res://assets/scripts/cursor.gd"
 PlayerFunc="*res://assets/scripts/playerFunctions.gd"
-EnvLoader="*res://assets/scripts/envLoader.gd"
 Noray="*res://addons/netfox.noray/noray.gd"
 PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
