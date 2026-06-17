@@ -124,11 +124,11 @@ size = Vector2(4, 2.5)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_smljw"]
 render_priority = 1
 shader = ExtResource("19_smljw")
-shader_parameter/tint = Color(0.6240422, 0.8010179, 0.9999996, 0.8)
-shader_parameter/wave_speed = 2.75
-shader_parameter/wave_freq = 2.5
-shader_parameter/wave_width = 0.5
-shader_parameter/blur = 0.275
+shader_parameter/tint = Color(0.5847322, 0.7804817, 1, 0.8)
+shader_parameter/wave_speed = 3.0
+shader_parameter/wave_freq = 2.65
+shader_parameter/wave_width = 0.53
+shader_parameter/blur = 0.29
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_5eccb")
