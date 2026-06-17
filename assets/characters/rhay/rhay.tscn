@@ -960,7 +960,7 @@ shader_parameter/hitTexture = ExtResource("5_qpi53")
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_msvpl"]
+[sub_resource type="CurveTexture" id="CurveTexture_es27p"]
 curve = SubResource("Curve_muese")
 
 [sub_resource type="Curve" id="Curve_4qtsf"]
@@ -968,16 +968,16 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.985075, -93.0337), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_es27p"]
+[sub_resource type="CurveTexture" id="CurveTexture_j7kkc"]
 curve = SubResource("Curve_4qtsf")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j7kkc"]
 angle_min = 1.07288e-05
 angle_max = 10.0
-angle_curve = SubResource("CurveTexture_es27p")
+angle_curve = SubResource("CurveTexture_j7kkc")
 gravity = Vector3(0, 0, 0)
 color = Color(1.5, 1.5, 3, 1)
-alpha_curve = SubResource("CurveTexture_msvpl")
+alpha_curve = SubResource("CurveTexture_es27p")
 
 [sub_resource type="QuadMesh" id="QuadMesh_n8gvt"]
 
@@ -1072,27 +1072,27 @@ _data = {
 &"slash": SubResource("Animation_xqn7j")
 }
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1k028"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_n8gvt"]
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_inplr"]
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_jlqnf"]
 parameter_name = "hitTexture"
 texture_type = 1
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6fwau"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_voxx8"]
 expanded_output_ports = [0]
 source = 5
 texture_type = 1
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_hpohn"]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_if8pf"]
 operator = 2
 
-[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_qpi53"]
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_365l8"]
 billboard_type = 3
 keep_scale = true
 
-[sub_resource type="VisualShader" id="VisualShader_ycejn"]
+[sub_resource type="VisualShader" id="VisualShader_u6w30"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -1141,39 +1141,39 @@ void fragment() {
 }
 "
 flags/unshaded = true
-nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_qpi53")
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_365l8")
 nodes/vertex/2/position = Vector2(120, 380)
 nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)
 nodes/fragment/0/position = Vector2(480, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_1k028")
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_n8gvt")
 nodes/fragment/2/position = Vector2(0, 60)
-nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_inplr")
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_jlqnf")
 nodes/fragment/3/position = Vector2(-220, 320)
-nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_6fwau")
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_voxx8")
 nodes/fragment/4/position = Vector2(60, 360)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_hpohn")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_if8pf")
 nodes/fragment/5/position = Vector2(260, 300)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 2, 2, 4, 5, 1, 5, 0, 0, 1, 4, 1, 5, 0)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5op7a"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_u3jr2"]
 load_path = "res://.godot/imported/T_flare81.png-6059606cde993075ada479a586ab1dec.s3tc.ctex"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8n4ed"]
 render_priority = 0
-shader = SubResource("VisualShader_ycejn")
-shader_parameter/hitTexture = SubResource("CompressedTexture2D_5op7a")
+shader = SubResource("VisualShader_u6w30")
+shader_parameter/hitTexture = SubResource("CompressedTexture2D_u3jr2")
 
 [sub_resource type="Curve" id="Curve_k5a20"]
 _data = [Vector2(0, 0.361868), 0.0, 0.0, 0, 0, Vector2(0.545918, 1), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_tbtxs"]
+[sub_resource type="CurveTexture" id="CurveTexture_hs5xv"]
 curve = SubResource("Curve_k5a20")
 
 [sub_resource type="Gradient" id="Gradient_oe55r"]
 colors = PackedColorArray(7, 2, 0, 1, 1, 1, 1, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_k5a20"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8ntht"]
 gradient = SubResource("Gradient_oe55r")
 use_hdr = true
 
@@ -1181,7 +1181,7 @@ use_hdr = true
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.270408, 0.564202), 0.0, 0.0, 0, 0, Vector2(0.494898, 0.22179), 0.0, 0.0, 0, 0, Vector2(0.75, 0.0972763), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
-[sub_resource type="CurveTexture" id="CurveTexture_k5a20"]
+[sub_resource type="CurveTexture" id="CurveTexture_4d4js"]
 curve = SubResource("Curve_oe55r")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_msvpl"]
@@ -1190,34 +1190,34 @@ angle_max = 180.0
 gravity = Vector3(0, 0, 0)
 scale_min = 2.8
 scale_max = 3.2
-scale_curve = SubResource("CurveTexture_k5a20")
+scale_curve = SubResource("CurveTexture_4d4js")
 color = Color(1, 1, 6, 1)
-color_ramp = SubResource("GradientTexture1D_k5a20")
-alpha_curve = SubResource("CurveTexture_tbtxs")
+color_ramp = SubResource("GradientTexture1D_8ntht")
+alpha_curve = SubResource("CurveTexture_hs5xv")
 
 [sub_resource type="QuadMesh" id="QuadMesh_oe55r"]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_inplr"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_ctoss"]
 expanded_output_ports = [0]
 input_name = "color"
 
-[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_6fwau"]
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_4274q"]
 parameter_name = "hitTexture"
 texture_type = 1
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_hpohn"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_4tef7"]
 expanded_output_ports = [0]
 source = 5
 texture_type = 1
 
-[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_qpi53"]
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_i3et1"]
 operator = 2
 
-[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_ycejn"]
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_nyyrx"]
 billboard_type = 3
 keep_scale = true
 
-[sub_resource type="VisualShader" id="VisualShader_muese"]
+[sub_resource type="VisualShader" id="VisualShader_j3tcl"]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
@@ -1249,35 +1249,35 @@ void fragment() {
 }
 "
 flags/unshaded = true
-nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_ycejn")
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_nyyrx")
 nodes/vertex/2/position = Vector2(120, 380)
 nodes/fragment/0/position = Vector2(480, 160)
-nodes/fragment/2/node = SubResource("VisualShaderNodeInput_inplr")
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_ctoss")
 nodes/fragment/2/position = Vector2(0, 60)
-nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_6fwau")
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_4274q")
 nodes/fragment/3/position = Vector2(-220, 320)
-nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_hpohn")
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_4tef7")
 nodes/fragment/4/position = Vector2(60, 360)
-nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_qpi53")
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_i3et1")
 nodes/fragment/5/position = Vector2(260, 300)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 2, 2, 4, 5, 1, 5, 0, 0, 1, 4, 1, 5, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tbtxs"]
 render_priority = 0
-shader = SubResource("VisualShader_muese")
+shader = SubResource("VisualShader_j3tcl")
 shader_parameter/hitTexture = ExtResource("7_inplr")
 
 [sub_resource type="Gradient" id="Gradient_2qkw6"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_4d27g"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3ge60"]
 gradient = SubResource("Gradient_2qkw6")
 
 [sub_resource type="Curve" id="Curve_6blae"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0661479), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_7lf62"]
+[sub_resource type="CurveTexture" id="CurveTexture_j4ap4"]
 curve = SubResource("Curve_6blae")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_muese"]
@@ -1287,9 +1287,9 @@ spread = 20.0
 initial_velocity_min = 30.0
 initial_velocity_max = 30.0
 gravity = Vector3(0, -12, 0)
-scale_curve = SubResource("CurveTexture_7lf62")
+scale_curve = SubResource("CurveTexture_j4ap4")
 color = Color(0.1, 1.25, 5, 1)
-color_ramp = SubResource("GradientTexture1D_4d27g")
+color_ramp = SubResource("GradientTexture1D_3ge60")
 
 [sub_resource type="BoxMesh" id="BoxMesh_fgikb"]
 size = Vector3(0.1, 1, 0.1)
@@ -1305,7 +1305,7 @@ emission_energy_multiplier = 3.0
 _data = [Vector2(0, 0.988764), 0.0, 0.0, 0, 0, Vector2(0.607407, 0.831461), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_1k028"]
+[sub_resource type="CurveTexture" id="CurveTexture_2bebe"]
 curve = SubResource("Curve_5op7a")
 
 [sub_resource type="Curve" id="Curve_1k028"]
@@ -1313,23 +1313,23 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_inplr"]
+[sub_resource type="CurveTexture" id="CurveTexture_qvqmt"]
 curve = SubResource("Curve_1k028")
 
 [sub_resource type="Curve" id="Curve_inplr"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.459259, 0.955056), 0.0, 0.0, 0, 0, Vector2(0.962963, 0.820225), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_6fwau"]
+[sub_resource type="CurveTexture" id="CurveTexture_pk8nn"]
 curve = SubResource("Curve_inplr")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6fwau"]
-angle_curve = SubResource("CurveTexture_inplr")
+angle_curve = SubResource("CurveTexture_qvqmt")
 gravity = Vector3(0, 0, 0)
 scale_min = 0.5
 scale_max = 0.5
-scale_curve = SubResource("CurveTexture_6fwau")
-alpha_curve = SubResource("CurveTexture_1k028")
+scale_curve = SubResource("CurveTexture_pk8nn")
+alpha_curve = SubResource("CurveTexture_2bebe")
 
 [node name="rhay" instance=ExtResource("1_l5qm4")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
