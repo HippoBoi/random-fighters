@@ -238,7 +238,7 @@ func _physics_process(delta: float) -> void:
 		armorOffset = 0;
 		
 		if (shield > 0 and secondaryShield > 0):
-			shield -= secondaryShield;
+			PlayerFunc.grantShield(self, self, -secondaryShield);
 			secondaryShield = 0;
 		
 		if ($w_shields.visible):
@@ -408,13 +408,13 @@ func secondary_ability():
 	wTimer = W_COOLDOWN - cooldownReduction;
 	secondaryTimer = 5.0;
 	
-	shield += maxHp * 0.1;
-	secondaryShield = shield;
+	var shieldAmount = maxHp * 0.1;
+	secondaryShield = clamp(shield + shieldAmount, 0, maxHp);
 	secondaryShieldTimer = 5.1;
 	
 	var shieldSound = preload("res://assets/sounds/characters/nephi/nephi_shield.ogg");
 	PlayerFunc.playSound(self, shieldSound);
-	syncHealth(hp, shield);
+	PlayerFunc.grantShield(self, self, shieldAmount);
 
 @rpc("call_local", "reliable")
 func tertiary_ability():
@@ -478,6 +478,9 @@ func syncTarget(_target):
 
 @rpc("call_local", "any_peer", "reliable")
 func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
+	if not (PlayerFunc.canApplyHealthSync()):
+		return;
+
 	hp = curHealth;
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self, damaged);
