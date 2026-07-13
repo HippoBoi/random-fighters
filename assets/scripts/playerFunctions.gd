@@ -3,6 +3,7 @@ extends Node
 const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 const BASIC_ATTACK_COOLDOWN = 300;
+const HEALTH_AUTHORITY_PEER_ID = 1;
 
 var gameMode = "";
 var gameUI;
@@ -25,8 +26,6 @@ var blackTeamSize = 0;
 var whiteTeamStocks = 0;
 var whiteTeamSize = 0;
 
-var updateTimer = 0;
-
 var musicVolume = 1.0;
 var soundsVolume = 1.0;
 
@@ -35,6 +34,46 @@ var maxHpStored = {};
 var tokensStored = {};
 
 var userPreferences: UserPreferences;
+
+func _isHealthAuthority() -> bool:
+	if (multiplayer.multiplayer_peer == null):
+		return true;
+
+	return multiplayer.get_unique_id() == HEALTH_AUTHORITY_PEER_ID;
+
+func canApplyHealthSync() -> bool:
+	var senderId = multiplayer.get_remote_sender_id();
+	return senderId == 0 or senderId == HEALTH_AUTHORITY_PEER_ID;
+
+func _getCharacterId(character) -> String:
+	if not (is_instance_valid(character)):
+		return "";
+
+	var characterId = str(character.name);
+	if not (characterId.is_valid_int()):
+		return "";
+
+	return characterId;
+
+func _getNodePath(node) -> NodePath:
+	if not (is_instance_valid(node)):
+		return NodePath();
+
+	return node.get_path();
+
+func _getNodeFromPath(nodePath: NodePath):
+	if (nodePath.is_empty()):
+		return null;
+
+	return get_tree().root.get_node_or_null(nodePath);
+
+func _syncPlayerHealth(character, damaged := false, attackerId: String = ""):
+	if not (_isHealthAuthority()):
+		return;
+	if not (is_instance_valid(character)):
+		return;
+
+	character.rpc("syncHealth", character.hp, character.shield, damaged, attackerId);
 
 func _getHealthBarColor(character: CharacterBody3D) -> Color:
 	var myTeamColor = Color(0.073, 0.509, 0.6);
@@ -409,7 +448,6 @@ func updateState(character: CharacterBody3D, delta):
 	myFogInstances = character.fogInstances;
 	character.mousePos = _getMousePos(character);
 	character.timer += delta;
-	updateTimer += delta;
 	
 	for fog in myFogInstances:
 		if (fog):
@@ -664,7 +702,7 @@ func spawnCharacter(character: CharacterBody3D):
 		else:
 			character.global_position = whiteTeam.global_position;
 	
-	character.rpc("syncHealth", character.hp, character.shield);
+	_syncPlayerHealth(character);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 	
 func respawnCharacter(character: CharacterBody3D):
@@ -695,7 +733,7 @@ func respawnCharacter(character: CharacterBody3D):
 		else:
 			character.global_position = whiteTeam.global_position;
 	
-	character.rpc("syncHealth", character.hp, character.shield);
+	_syncPlayerHealth(character);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
 func _tokensAnimation(scene, _tokens):
@@ -965,6 +1003,36 @@ func _canBeStunned(target) -> bool:
 	return true;
 
 func dealDamage(character, target, dmg, effect := "", trueDamage := false):
+	if not (_isHealthAuthority()):
+		_requestDamage(character, target, dmg, effect, trueDamage);
+		return null;
+
+	return _applyDealDamage(character, target, dmg, effect, trueDamage);
+
+func _requestDamage(character, target, dmg, effect: String, trueDamage: bool):
+	var targetPath = _getNodePath(target);
+	if (targetPath.is_empty()):
+		return;
+
+	rpc_id(HEALTH_AUTHORITY_PEER_ID, "requestDamage", _getNodePath(character), targetPath, dmg, effect, trueDamage);
+
+@rpc("any_peer", "reliable")
+func requestDamage(characterPath: NodePath, targetPath: NodePath, dmg, effect := "", trueDamage := false):
+	if not (_isHealthAuthority()):
+		return;
+
+	var character = _getNodeFromPath(characterPath);
+	var target = _getNodeFromPath(targetPath);
+	if not (is_instance_valid(target)):
+		return;
+
+	var senderId = multiplayer.get_remote_sender_id();
+	if (senderId != 0 and (not is_instance_valid(character) or character.get_multiplayer_authority() != senderId)):
+		return;
+
+	_applyDealDamage(character, target, dmg, effect, trueDamage);
+
+func _applyDealDamage(character, target, dmg, effect := "", trueDamage := false):
 	if not (target):
 		print("[dealDamage]: no target found");
 		return null;
@@ -998,16 +1066,19 @@ func dealDamage(character, target, dmg, effect := "", trueDamage := false):
 		target.hp -= totalDmg;
 		target.hp = clamp(target.hp, 0, target.maxHp);
 	
-	if (updateTimer >= 0.05):
-		var charName = character.name if character else "";
-		
-		updateTimer = 0;
-		target.rpc("syncHealth", target.hp, target.shield, true, charName);
+	var charName = _getCharacterId(character);
+	_syncPlayerHealth(target, true, charName);
 	
-		if not (effect.is_empty()):
-			target.rpc("syncParticles", effect);
+	if not (effect.is_empty()):
+		target.rpc("syncParticles", effect);
 
 func grantShield(character, target, shield, effect := ""):
+	if not (_isHealthAuthority()):
+		return ;
+
+	_applyGrantShield(character, target, shield, effect);
+
+func _applyGrantShield(character, target, shield, effect := ""):
 	if not (target):
 		print("[grantShield]: no target found");
 		return ;
@@ -1015,10 +1086,26 @@ func grantShield(character, target, shield, effect := ""):
 	target.shield += shield;
 	target.shield = clamp(target.shield, 0, target.maxHp);
 	
-	target.rpc("syncHealth", target.hp, target.shield, true, character.name);
+	var attackerId = _getCharacterId(character) if shield >= 0 else "";
+	_syncPlayerHealth(target, true, attackerId);
 	
 	if not (effect.is_empty()):
 		target.rpc("syncParticles", effect);
+
+func healCharacter(target, amount):
+	if not (_isHealthAuthority()):
+		return ;
+
+	_applyHealCharacter(target, amount);
+
+func _applyHealCharacter(target, amount):
+	if not (target):
+		print("[healCharacter]: no target found");
+		return ;
+
+	target.hp += amount;
+	target.hp = clamp(target.hp, 0, target.maxHp);
+	_syncPlayerHealth(target, false);
 
 func stunTarget(target, duration, effect := ""):
 	var canParry = "usingParry" in target;
@@ -1101,8 +1188,9 @@ func _applyUserPreferences():
 func grantItemStats(character: CharacterBody3D, item: Dictionary):
 	if (item.stats.has("hp")):
 		character.maxHp += item.stats.hp;
-		character.hp += item.stats.hp;
-		character.hp = clamp(character.hp, 0, character.maxHp);
+		if (_isHealthAuthority()):
+			character.hp += item.stats.hp;
+			character.hp = clamp(character.hp, 0, character.maxHp);
 	if (item.stats.has("armor")):
 		character.baseArmor += item.stats.armor;
 	if (item.stats.has("dmg")):
@@ -1114,7 +1202,7 @@ func grantItemStats(character: CharacterBody3D, item: Dictionary):
 	if (item.stats.has("speed")):
 		character.baseSpeed += item.stats.speed;
 	
-	character.rpc("syncHealth", character.hp, character.shield);
+	_syncPlayerHealth(character);
 
 func playSound(character: CharacterBody3D, sound, randomPitch: bool = true):
 	var newSound = AudioStreamPlayer3D.new();

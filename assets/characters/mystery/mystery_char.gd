@@ -586,6 +586,9 @@ func syncTarget(_target):
 
 @rpc("call_local", "any_peer", "reliable")
 func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
+	if not (PlayerFunc.canApplyHealthSync()):
+		return;
+
 	hp = curHealth;
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self, damaged);
