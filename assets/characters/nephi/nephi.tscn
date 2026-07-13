@@ -1808,7 +1808,7 @@ keep_scale = true
 
 [sub_resource type="VisualShader" id="VisualShader_6blae"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D hitTexture : source_color;
 
@@ -1947,7 +1947,7 @@ operator = 2
 
 [sub_resource type="VisualShader" id="VisualShader_ow0td"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec4 markColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -2047,7 +2047,7 @@ texture = SubResource("GradientTexture1D_65kta")
 
 [sub_resource type="VisualShader" id="VisualShader_1knk8"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D tex_frg_2;
 uniform sampler2D tex_frg_9;
@@ -2143,7 +2143,7 @@ default_value_enabled = true
 
 [sub_resource type="VisualShader" id="VisualShader_aokmc"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 waveColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -2191,7 +2191,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-325.427, 72.4348)
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(540, 160)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_wl3mr")

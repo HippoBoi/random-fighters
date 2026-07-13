@@ -280,8 +280,7 @@ func killHippo():
 		
 		if (character.team == winnerTeam):
 			character.tokens += 5;
-			character.hp += character.maxHp / 1.25;
-			character.hp = clamp(character.hp, 0, character.maxHp);
+			PlayerFunc.healCharacter(character, character.maxHp / 1.25);
 			
 			var newParticles = preload("res://assets/effects/hippo_buff_particles.tscn").instantiate();
 			character.add_child(newParticles);

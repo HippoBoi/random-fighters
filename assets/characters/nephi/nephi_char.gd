@@ -22,13 +22,13 @@ const ALT_Q_MAX_RANGE = 5.0;
 const stunnedHitEffect = "grabbedEffect";
 
 var primaryDesc = "Fire your DRILL catching and displacing enemies, dealing 100% of your PHYSICAL DAMAGE."
-var primaryIcon = "res://icon.svg";
+var primaryIcon = "res://assets/sprites/nephi_abilities/nephi_primary.png";
 var secondaryDesc = "Gain a shield of 10% of your MAX HEALTH and obtain 20 armor for 5 seconds.";
-var secondaryIcon = "res://icon.svg";
+var secondaryIcon = "res://assets/sprites/nephi_abilities/nephi_secondary.png";
 var tertiaryDesc = "Dig underground to gain MOVEMENT SPEED. Cast again to exit and stun near enemies.";
-var tertiaryIcon = "res://icon.svg";
+var tertiaryIcon = "res://assets/sprites/nephi_abilities/nephi_tertiary.png";
 var ultiDesc = "Create an electric AURA that slows enemies by 55%.";
-var ultiIcon = "res://icon.svg";
+var ultiIcon = "res://assets/sprites/nephi_abilities/nephi_ulti.png";
 
 var qTimer = 0;
 var wTimer = 0;
@@ -238,7 +238,7 @@ func _physics_process(delta: float) -> void:
 		armorOffset = 0;
 		
 		if (shield > 0 and secondaryShield > 0):
-			shield -= secondaryShield;
+			PlayerFunc.grantShield(self, self, -secondaryShield);
 			secondaryShield = 0;
 		
 		if ($w_shields.visible):
@@ -408,13 +408,13 @@ func secondary_ability():
 	wTimer = W_COOLDOWN - cooldownReduction;
 	secondaryTimer = 5.0;
 	
-	shield += maxHp * 0.1;
-	secondaryShield = shield;
+	var shieldAmount = maxHp * 0.1;
+	secondaryShield = clamp(shield + shieldAmount, 0, maxHp);
 	secondaryShieldTimer = 5.1;
 	
 	var shieldSound = preload("res://assets/sounds/characters/nephi/nephi_shield.ogg");
 	PlayerFunc.playSound(self, shieldSound);
-	syncHealth(hp, shield);
+	PlayerFunc.grantShield(self, self, shieldAmount);
 
 @rpc("call_local", "reliable")
 func tertiary_ability():
@@ -478,6 +478,9 @@ func syncTarget(_target):
 
 @rpc("call_local", "any_peer", "reliable")
 func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
+	if not (PlayerFunc.canApplyHealthSync()):
+		return;
+
 	hp = curHealth;
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self, damaged);

@@ -354,6 +354,9 @@ func secondary_ability(_mousePos):
 	wTimer = W_COOLDOWN - cooldownReduction;
 	stamina -= W_STAMINA;
 	
+	var sound = preload("res://assets/sounds/characters/ale/ale_parry.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	animPlayer.play("w_ability");
 	rpc("syncRotation", _mousePos);
 	rpc("syncStamina", stamina, true);
@@ -448,6 +451,9 @@ func syncTarget(_target):
 
 @rpc("call_local", "any_peer", "reliable")
 func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):
+	if not (PlayerFunc.canApplyHealthSync()):
+		return;
+
 	hp = curHealth;
 	shield = curShield;
 	PlayerFunc.updateHealthSize(self, damaged);
@@ -543,6 +549,9 @@ func onItemPurchase(item: Dictionary):
 
 @rpc("call_local", "any_peer")
 func onParry():
+	var sound = preload("res://assets/sounds/characters/ale/ale_parry_success.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	$w_particles/w_aura_hit.emitting = true;
 
 func onCollision():
