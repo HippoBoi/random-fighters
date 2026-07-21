@@ -214,6 +214,8 @@ func _physics_process(delta: float) -> void:
 			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, effect);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
+			storedEmpoweredHits = 0;
+			
 			$w_particles.emitting = false;
 			$w_2_particles.emitting = false;
 			fadeFireMaterial(0.0);
@@ -546,7 +548,7 @@ func secondary_ability(_mousePos):
 		storedEmpoweredHits += 1;
 		
 		$w_particles.emitting = true;
-		basicDmgOffset = baseDmg * 0.8;
+		basicDmgOffset = baseDmg * 0.65;
 		
 		if (storedEmpoweredHits == 2):
 			basicDmgOffset = baseDmg * 1.25;
@@ -590,6 +592,7 @@ func ultimate_ability():
 	eTimer -= 2;
 	swappingTimer = 0.85;
 	basicDmgOffset = 0;
+	storedEmpoweredHits = 0;
 	swappingForm = true;
 	
 	$e_spin.visible = false;
