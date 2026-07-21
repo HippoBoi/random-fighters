@@ -10,6 +10,7 @@ uniform float speed = 1.5;
 uniform float distortion_strength = 0.2;
 uniform float pixelation = 32.0;
 uniform float emission_energy = 2.0;
+uniform float transparency : hint_range(0.0, 1.0) = 1.0;
 
 void vertex() {
     MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
@@ -45,5 +46,5 @@ void fragment() {
 
     ALBEDO = fire_color.rgb;
     EMISSION = fire_color.rgb * flame * emission_energy;
-    ALPHA = flame * fire_color.a;
+    ALPHA = flame * fire_color.a * transparency;
 }

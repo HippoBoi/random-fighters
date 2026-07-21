@@ -15,7 +15,7 @@ const MULTIPLE_FORM = true;
 const CHARACTER_NAME = "Shugo";
 const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 11.0;
-const ALT_W_COOLDOWN = 10.0;
+const ALT_W_COOLDOWN = 5.0;
 const E_COOLDOWN = 7.0;
 const ALT_E_COOLDOWN = 12.0;
 const R_COOLDOWN = 6.0;
@@ -107,6 +107,9 @@ var swappingForm = false;
 var swappedFlag = false;
 var humanForm = true;
 
+var storedEmpoweredHits = 0;
+var fireMaterialTween: Tween;
+
 var alreadyHit = [];
 
 @onready var camera = get_viewport().get_camera_3d();
@@ -160,7 +163,7 @@ func _updateAbilityDescriptions():
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
 		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_primary.png";
-		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE";
+		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE. You can STORE up to 3 empowered attacks";
 		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_secondary.png";
 		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
 		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_tertiary.png";
@@ -211,6 +214,9 @@ func _physics_process(delta: float) -> void:
 			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, effect);
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
+			$w_particles.emitting = false;
+			$w_2_particles.emitting = false;
+			fadeFireMaterial(0.0);
 			
 			var path = "res://assets/sounds/characters/shugo/shugo_basic_hit.ogg";
 			rpc("syncSound", path);
@@ -351,6 +357,20 @@ func swapForm():
 
 func _setHitbox(hitbox: Node3D, enable: bool = true):
 	hitbox.monitoring = enable;
+
+func fadeFireMaterial(transparency: float):
+	var fireMaterial := $w_3_fire_mesh.get_surface_override_material(0) as ShaderMaterial;
+	if (fireMaterial):
+		if (fireMaterialTween and fireMaterialTween.is_valid()):
+			fireMaterialTween.kill();
+		
+		fireMaterialTween = create_tween();
+		fireMaterialTween.tween_property(
+			fireMaterial,
+			"shader_parameter/transparency",
+			clamp(transparency, 0.0, 1.0),
+			0.25
+		);
 	
 func _manage_alt_e():
 	var decimalTimer = int(round(tertiaryTimer * 100));
@@ -522,8 +542,19 @@ func secondary_ability(_mousePos):
 		overrideBasic = true;
 		basicAttacking = false;
 		basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
-		basicDmgOffset = baseDmg * 0.8;
 		basicAttackTimer = 0;
+		storedEmpoweredHits += 1;
+		
+		$w_particles.emitting = true;
+		basicDmgOffset = baseDmg * 0.8;
+		
+		if (storedEmpoweredHits == 2):
+			basicDmgOffset = baseDmg * 1.25;
+			$w_2_particles.emitting = true;
+		
+		if (storedEmpoweredHits == 3):
+			basicDmgOffset = baseDmg * 1.75;
+			fadeFireMaterial(1.0);
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
@@ -565,6 +596,10 @@ func ultimate_ability():
 	$e_spin2.visible = false;
 	$e_spin_hitbox/MeshInstance3D/Area3D.monitoring = false;
 	$e_hitbox/MeshInstance3D/Area3D.monitoring = false;
+	$w_particles.emitting = false;
+	$w_2_particles.emitting = false;
+	fadeFireMaterial(0.0);
+	
 	usingTertiary = false;
 	
 	var sound = preload("res://assets/sounds/characters/shugo/shugo_transform.ogg");
