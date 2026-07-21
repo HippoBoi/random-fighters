@@ -2401,7 +2401,7 @@ gradient = SubResource("Gradient_7fyyc")
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.348485, 1), 0.0, 0.0, 0, 0, Vector2(0.492424, 0.41573), 0.0, 0.0, 0, 0, Vector2(0.598485, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
-[sub_resource type="CurveTexture" id="CurveTexture_2nqxv"]
+[sub_resource type="CurveTexture" id="CurveTexture_fqjyq"]
 curve = SubResource("Curve_fqjyq")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_158rh"]
@@ -2415,7 +2415,7 @@ initial_velocity_max = 10.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.01
 scale_max = 0.1
-scale_curve = SubResource("CurveTexture_2nqxv")
+scale_curve = SubResource("CurveTexture_fqjyq")
 color_ramp = SubResource("GradientTexture1D_itf3g")
 
 [node name="mystery" instance=ExtResource("1_sh7qi")]

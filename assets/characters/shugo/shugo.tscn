@@ -1,9 +1,13 @@
-[gd_scene load_steps=118 format=4 uid="uid://c6yxe5iwkc02y"]
+[gd_scene load_steps=143 format=4 uid="uid://c6yxe5iwkc02y"]
 
 [ext_resource type="PackedScene" uid="uid://bsqe8egdp7w15" path="res://assets/characters/lucho.glb" id="1_ijeav"]
 [ext_resource type="Script" uid="uid://v4wsl5tnt2p5" path="res://assets/characters/shugo/shugo_char.gd" id="2_b10fr"]
 [ext_resource type="Texture2D" uid="uid://cfemujfpmkf0g" path="res://assets/sprites/character_icons/shugo_icon.png" id="3_d8rgy"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="4_gwnvw"]
+[ext_resource type="Shader" uid="uid://bxyubbwwnlbv4" path="res://assets/characters/rhay/epic_q_shader.tres" id="5_12s6e"]
+[ext_resource type="Texture2D" uid="uid://cedf5ox6ou3ic" path="res://assets/textures/fx/T_flare81.png" id="6_12s6e"]
+[ext_resource type="PackedScene" uid="uid://1lp2bywmnppe" path="res://assets/characters/mystery/mystery_shield.tscn" id="7_macv4"]
+[ext_resource type="Shader" uid="uid://dq1chk3u8wlvb" path="res://assets/characters/mystery/mystery_shield.gdshader" id="8_3wruc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fiy4"]
 resource_name = "Material.005"
@@ -4743,6 +4747,111 @@ _data = {
 &"w_ability": SubResource("Animation_u4fmd")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wruc"]
+render_priority = 0
+shader = ExtResource("5_12s6e")
+shader_parameter/hitTexture = ExtResource("6_12s6e")
+
+[sub_resource type="Curve" id="Curve_ejvtc"]
+_data = [Vector2(0, 0.361868), 0.0, 0.0, 0, 0, Vector2(0.545918, 1), 0.0, 0.0, 0, 0, Vector2(0.97449, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rnjxh"]
+curve = SubResource("Curve_ejvtc")
+
+[sub_resource type="Curve" id="Curve_fa8by"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -133.483), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jmue1"]
+curve = SubResource("Curve_fa8by")
+
+[sub_resource type="Gradient" id="Gradient_ul8l0"]
+colors = PackedColorArray(2, 0.577, 0.475, 1, 0.808998, 0.808998, 0.808998, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4xar0"]
+gradient = SubResource("Gradient_ul8l0")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_47lyr"]
+_data = [Vector2(0, 0.842697), 0.0, 0.0, 0, 0, Vector2(0.313433, 0.235955), 0.0, 0.0, 0, 0, Vector2(0.686567, 0.101124), -1.11285, -1.11285, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_riigt"]
+curve = SubResource("Curve_47lyr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_700p0"]
+angle_min = 1.07288e-05
+angle_max = 1.00001
+angle_curve = SubResource("CurveTexture_jmue1")
+initial_velocity_min = 0.1
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.1999998
+scale_curve = SubResource("CurveTexture_riigt")
+color = Color(2.790253, 2.1924245, 1.6598496, 1)
+color_ramp = SubResource("GradientTexture1D_4xar0")
+alpha_curve = SubResource("CurveTexture_rnjxh")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ruyjm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3wruc"]
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="Gradient" id="Gradient_ejvtc"]
+offsets = PackedFloat32Array(0, 0.188679, 0.707547, 0.867925)
+colors = PackedColorArray(0.5, 0.5, 2, 0.419, 4, 1.5096488, 1.0164316, 1, 0.6875394, 0.2528383, 0, 1, 4, 0.114, 0.118, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rnjxh"]
+gradient = SubResource("Gradient_ejvtc")
+
+[sub_resource type="Curve" id="Curve_jmue1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.348485, 1), 0.0, 0.0, 0, 0, Vector2(0.492424, 0.41573), 0.0, 0.0, 0, 0, Vector2(0.598485, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="CurveTexture" id="CurveTexture_ul8l0"]
+curve = SubResource("Curve_jmue1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4xar0"]
+particle_flag_align_y = true
+emission_shape = 1
+emission_sphere_radius = 2.0
+direction = Vector3(0, 1, 0)
+spread = 30.0
+initial_velocity_min = 9.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.01
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_ul8l0")
+color = Color(3.2944162, 1.6756126, 0.3423734, 1)
+color_ramp = SubResource("GradientTexture1D_rnjxh")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_47lyr"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ejvtc"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_rnjxh"]
+noise = SubResource("FastNoiseLite_ejvtc")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ejvtc"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("8_3wruc")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_rnjxh")
+shader_parameter/color_bottom = Color(1, 0, 0, 1)
+shader_parameter/color_mid = Color(0.8104692, 0.59891236, 1.92523e-07, 1)
+shader_parameter/color_top = Color(0.95666, 0, 0.28419182, 1)
+shader_parameter/speed = 1.0
+shader_parameter/distortion_strength = 0.2
+shader_parameter/pixelation = 64.0
+shader_parameter/emission_energy = 10.0
+shader_parameter/transparency = 0.0
+
 [node name="shugo" instance=ExtResource("1_ijeav")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 6
@@ -5131,6 +5240,28 @@ pixel_size = 0.075
 no_depth_test = true
 texture = ExtResource("3_d8rgy")
 script = ExtResource("4_gwnvw")
+
+[node name="w_particles" type="GPUParticles3D" parent="." index="14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3227034, 1.4359, -0.0668663)
+material_override = SubResource("ShaderMaterial_3wruc")
+emitting = false
+amount = 5
+explosiveness = 0.33
+process_material = SubResource("ParticleProcessMaterial_700p0")
+draw_pass_1 = SubResource("QuadMesh_ruyjm")
+
+[node name="w_2_particles" type="GPUParticles3D" parent="." index="15"]
+material_override = SubResource("StandardMaterial3D_3wruc")
+emitting = false
+amount = 40
+explosiveness = 0.38
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_4xar0")
+draw_pass_1 = SubResource("CapsuleMesh_47lyr")
+
+[node name="w_3_fire_mesh" parent="." index="16" instance=ExtResource("7_macv4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_ejvtc")
 
 [connection signal="body_entered" from="q_hitbox/MeshInstance3D/Area3D" to="." method="_on_q_touched"]
 [connection signal="body_entered" from="e_hitbox/MeshInstance3D/Area3D" to="." method="_on_e_touched"]
