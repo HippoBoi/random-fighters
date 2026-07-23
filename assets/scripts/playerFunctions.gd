@@ -1039,7 +1039,6 @@ func _applyDealDamage(character, target, dmg, effect := "", trueDamage := false)
 	if not (_canReceiveDamage(target)):
 		return null;
 	if ("dead" in target and target.dead):
-		print("[dealDamage]: no target found");
 		return null;
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);

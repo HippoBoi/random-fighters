@@ -4,8 +4,8 @@ extends Node3D
 var timer = 0;
 
 func _ready() -> void:
-	$sparkParticle.emitting = true;
-	$meshParticles.emitting = true;
+	for child in self.get_children():
+		child.emitting = true;
 
 func _process(delta: float) -> void:
 	timer += delta;
