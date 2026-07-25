@@ -247,6 +247,10 @@ func _physics_process(delta: float) -> void:
 		$w_particles.emitting = true;
 		$w_2_particles.emitting = true;
 		fadeFireMaterial(1.0);
+		
+		# three stored hits is the max so prevent
+		# the cooldown from lowering
+		wTimer = W_COOLDOWN;
 	else:
 		if ($w_particles.emitting):
 			$w_particles.emitting = false;
