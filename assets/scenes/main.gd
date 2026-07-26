@@ -6,6 +6,7 @@ var norayNetwork: Node = null;
 const LOCALHOST: String = "127.0.0.1";
 const PORT: int = NetworkConfig.NORAY_PORT;
 const ADDRESS: String = NetworkConfig.NORAY_ADDRESS;
+const SINGLE_PLAYER_ID: int = 1;
 
 var username: String = "noname";
 var gameIdInput: String;
@@ -28,6 +29,7 @@ var networkDisconnectInProgress = false;
 var returnToLobbyInProgress = false;
 var enetSignalsConnected = false;
 var activeConnectionMode: String = "";
+var singlePlayerMatch: bool = false;
 
 var lobbyScene: Control = null;
 var mainMenuOptionsUI = null;
@@ -46,11 +48,14 @@ func _process(delta: float) -> void:
 		startRoundTimer -= delta;
 
 		if (startRoundTimer <= 0.1):
-			rpc("startRound", curGameMode);
+			if (singlePlayerMatch):
+				startRound(curGameMode);
+			else:
+				rpc("startRound", curGameMode);
 
 	timer += delta;
-	if (int(round(timer * 100)) % 32 == 0):
-		rpc("syncData", multiplayerPeer.get_unique_id(), username, curTeam, curCharacter);
+	if not (singlePlayerMatch) and (int(round(timer * 100)) % 32 == 0):
+		rpc("syncData", _getLocalPlayerId(), username, curTeam, curCharacter);
 
 func _loadSettings():
 	if not (userPreferences):
@@ -154,9 +159,11 @@ func _on_main_menu_options_reset_defaults() -> void:
 	_loadSettings();
 	_syncMainMenuOptionsUI();
 
-func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> void:
+func _on_host(_port: int = 0, _username: String = "", _team: String = "", isLocal := true) -> void:
 	var useUPnP: bool = false;
 	_resetConnectionState();
+	_setSinglePlayerMatch(false);
+	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 
 	if not (isLocal and DEBUG):
 		if not (norayNetwork):
@@ -189,7 +196,7 @@ func _on_host(_port: int, _username: String, _team: String, isLocal := true) -> 
 	if not (isLocal):
 		lobbyScene.hostMatch(ADDRESS, PORT, curGameId, useUPnP);
 
-	updateUI("Server");
+	startCharacterSelect();
 
 func _hostWithUPnP(_port):
 	print("host...")
@@ -198,6 +205,8 @@ func _hostWithUPnP(_port):
 
 func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
 	_resetConnectionState();
+	_setSinglePlayerMatch(false);
+	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 	username = _username;
 	curTeam = int(_team);
 	# print("joining team: %s" % curTeam);
@@ -222,7 +231,7 @@ func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username :=
 		multiplayer.multiplayer_peer = multiplayerPeer;
 
 	_connectEnetSignals();
-	updateUI("Client");
+	startCharacterSelect();
 
 # this "joinPressed" function will double as the "singleplayer" button
 # this sucks yes but i don't wanna change it's name since it is also used
@@ -243,6 +252,31 @@ func startClient(ip: String, port: int, _gameId: String, _username: String, _tea
 	_joinGame(ip, port, _gameId, _username, _team, _useUPnP);
 
 	get_node("Lobby").visible = false;
+
+func _startSinglePlayerMatch(_username: String = "", _team: int = 0) -> void:
+	_clearRoundData();
+	_setSinglePlayerMatch(true);
+	PlayerFunc.matchType = Constants.MatchTypes.Training;
+	activeConnectionMode = "singleplayer";
+
+	if not (_username.is_empty()):
+		username = _username;
+	curTeam = _team;
+
+	addPlayer(SINGLE_PLAYER_ID);
+	connected = true;
+
+	startCharacterSelect();
+
+func _setSinglePlayerMatch(enabled: bool) -> void:
+	singlePlayerMatch = enabled;
+	PlayerFunc.singlePlayer = enabled;
+
+func _getLocalPlayerId() -> int:
+	if (singlePlayerMatch):
+		return SINGLE_PLAYER_ID;
+
+	return multiplayer.get_unique_id();
 
 func addCharacter(playerID, character = ""):
 	var preloadedCharacter = null;
@@ -270,17 +304,32 @@ func preloadCharacter(playerId, character: String = ""):
 	playerList[playerId].charInstance = selectedChar;
 
 func _selectCharacter(character):
-	var playerId = multiplayerPeer.get_unique_id();
+	var playerId = _getLocalPlayerId();
 	curCharacter = character;
-	rpc("updateSelectedCharacter", playerId, character);
 
-func updateUI(_side: String) -> void:
+	if (singlePlayerMatch):
+		updateSelectedCharacter(playerId, character);
+	else:
+		rpc("updateSelectedCharacter", playerId, character);
+
+func startCharacterSelect() -> void:
 	$UI.visible = false;
 
 	var charSelect = preload("res://assets/scenes/characterSelect.tscn").instantiate();
+	charSelect.singlePlayer = singlePlayerMatch;
 	charSelect.onCharacterPressed.connect(_selectCharacter);
 	charSelect.startGame.connect(onStartGame);
+	charSelect.exitCharacterSelect.connect(_onExitSinglePlayerCharacterSelect);
 	add_child(charSelect);
+
+func _onExitSinglePlayerCharacterSelect() -> void:
+	if not (singlePlayerMatch):
+		return;
+
+	if (has_node("CharSelect")):
+		get_node("CharSelect").queue_free();
+
+	_clearRoundData();
 
 func returnToLobby():
 	var isLobby = has_node("Lobby");
@@ -354,7 +403,10 @@ func _onServerDisconnected():
 	_returnFromMatchToLobby("server_disconnected");
 
 func onStartGame() -> void:
-	rpc("startGame");
+	if (singlePlayerMatch):
+		startGame();
+	else:
+		rpc("startGame");
 
 func onFindMatch():
 	$UI.playLeave();
@@ -379,6 +431,10 @@ func _gameModeSelected(gameMode: String):
 	startRoundTimer = 10.0;
 	if (DEBUG):
 		startRoundTimer = 2.0;
+
+	if (singlePlayerMatch):
+		updateGameMode(gameMode);
+		return;
 
 	for i in range(4):
 		rpc("updateGameMode", gameMode);
@@ -411,7 +467,7 @@ func _disconnectMatchNetwork(reason: String = ""):
 	if (multiplayerPeer):
 		multiplayerPeer.close();
 
-	multiplayer.multiplayer_peer = null;
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new();
 	_disconnectEnetSignals();
 
 	if (norayNetwork and is_instance_valid(norayNetwork)):
@@ -444,6 +500,7 @@ func _clearRoundData():
 	networkDisconnectInProgress = false;
 	returnToLobbyInProgress = false;
 	activeConnectionMode = "";
+	_setSinglePlayerMatch(false);
 	curTeam = -1;
 	curCharacter = "";
 	curGameMode = "";
@@ -539,7 +596,7 @@ func addPlayer(playerId):
 	var character = null;
 	var myTeam = 0;
 
-	if (playerId == multiplayerPeer.get_unique_id()):
+	if (playerId == _getLocalPlayerId()):
 		myTeam = curTeam;
 		connected = true;
 
@@ -573,7 +630,8 @@ func updateSelectedCharacter(playerId, character: String):
 				charSelect.timeInSeconds = 2;
 
 	if (charSelect):
-		charSelect.updateTeams();
+		if not (singlePlayerMatch):
+			charSelect.updateTeams();
 		preloadCharacter(playerId, character);
 
 @rpc("any_peer")
@@ -651,7 +709,7 @@ func startGame():
 			get_node("CharSelect").queue_free();
 		await get_tree().create_timer(0.1).timeout;
 
-	var playerId = multiplayerPeer.get_unique_id();
+	var playerId = _getLocalPlayerId();
 	var gameScene = preload("res://assets/scenes/gameScene.tscn").instantiate();
 	gameScene.gameModeSelected.connect(_gameModeSelected);
 	gameScene.roundVictory.connect(_onRoundVictory);
@@ -713,6 +771,9 @@ func teamHasWon(_teamThatHasWon: int):
 	if (isScene):
 		var gameScene = get_node("Game");
 		gameScene.endGame(_teamThatHasWon);
+
+func _on_training_button_pressed() -> void:
+	_startSinglePlayerMatch();
 
 func _on_exit_pressed() -> void:
 	get_tree().quit();

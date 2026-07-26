@@ -18,7 +18,7 @@ const W_COOLDOWN = 11.0;
 const ALT_W_COOLDOWN = 5.0;
 const E_COOLDOWN = 7.0;
 const ALT_E_COOLDOWN = 12.0;
-const R_COOLDOWN = 6.0;
+const R_COOLDOWN = 4.0;
 const Q_MAX_RANGE = 7.05;
 const ALT_Q_MAX_RANGE = 7.2;
 
@@ -210,15 +210,19 @@ func _physics_process(delta: float) -> void:
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
 			var effect = "hit_01" if basicDmgOffset <= 0 else "hit_02";
+			var fireEffect = "fire_hit_01";
+			var fireEffect2 = "fire_hit_02";
 			basicDamageDealt = true;
 			PlayerFunc.dealDamage(self, target, (dmg * 0.5) + basicDmgOffset, effect);
+			
+			if (storedEmpoweredHits == 2):
+				target.rpc("syncParticles", fireEffect);
+			if (storedEmpoweredHits == 3):
+				rpc("syncParticles", fireEffect2);
+			
 			basicDmgOffset = 0;
 			basicAttackMoment = defaultAttackMoment;
-			storedEmpoweredHits = 0;
-			
-			$w_particles.emitting = false;
-			$w_2_particles.emitting = false;
-			fadeFireMaterial(0.0);
+			rpc("syncStoredEmpoweredHits", 0);
 			
 			var path = "res://assets/sounds/characters/shugo/shugo_basic_hit.ogg";
 			rpc("syncSound", path);
@@ -232,6 +236,28 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	_updateAbilityDescriptions();
+	
+	# cool cool. I really want to get this done.
+	if (storedEmpoweredHits == 1):
+		$w_particles.emitting = true;
+	elif (storedEmpoweredHits == 2):
+		$w_particles.emitting = true;
+		$w_2_particles.emitting = true;
+	elif (storedEmpoweredHits == 3):
+		$w_particles.emitting = true;
+		$w_2_particles.emitting = true;
+		fadeFireMaterial(1.0);
+		
+		# three stored hits is the max so prevent
+		# the cooldown from lowering
+		wTimer = W_COOLDOWN;
+	else:
+		if ($w_particles.emitting):
+			$w_particles.emitting = false;
+		if ($w_2_particles.emitting):
+			$w_2_particles.emitting = false;
+		
+		fadeFireMaterial(0.0);
 	
 	if (humanForm):
 		baseArmor = 26;
@@ -365,6 +391,9 @@ func fadeFireMaterial(transparency: float):
 	if (fireMaterial):
 		if (fireMaterialTween and fireMaterialTween.is_valid()):
 			fireMaterialTween.kill();
+		
+		if (fireMaterial.get_shader_parameter("transparency") == transparency):
+			return;
 		
 		fireMaterialTween = create_tween();
 		fireMaterialTween.tween_property(
@@ -547,16 +576,13 @@ func secondary_ability(_mousePos):
 		basicAttackTimer = 0;
 		storedEmpoweredHits += 1;
 		
-		$w_particles.emitting = true;
-		basicDmgOffset = baseDmg * 0.65;
+		basicDmgOffset = baseDmg * 0.45;
 		
 		if (storedEmpoweredHits == 2):
-			basicDmgOffset = baseDmg * 1.25;
-			$w_2_particles.emitting = true;
+			basicDmgOffset = baseDmg * 1.45;
 		
 		if (storedEmpoweredHits == 3):
-			basicDmgOffset = baseDmg * 1.75;
-			fadeFireMaterial(1.0);
+			basicDmgOffset = baseDmg * 1.95;
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
@@ -628,6 +654,10 @@ func cancelPrimary():
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):
 	target = _target;
+
+@rpc("authority", "call_local", "reliable")
+func syncStoredEmpoweredHits(newValue: int) -> void:
+	storedEmpoweredHits = newValue;
 
 @rpc("call_local", "any_peer", "reliable")
 func syncHealth(curHealth, curShield, damaged = false, attackerId: String = ""):

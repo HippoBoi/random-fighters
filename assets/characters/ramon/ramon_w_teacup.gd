@@ -30,4 +30,4 @@ func _onTouch(other: Node3D) -> void:
 		var totalDmg = dmg * 0.85;
 		if (other.team != team):
 			PlayerFunc.dealDamage(character, other, totalDmg);
-			PlayerFunc.stunTarget(other, 1.5);
+			PlayerFunc.stunTarget(other, 2.25);

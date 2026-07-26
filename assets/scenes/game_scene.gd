@@ -31,8 +31,11 @@ func _ready() -> void:
 	$OptionsUI.controls_changed.connect($InGameUI.update_ability_keybind_labels);
 	_connect_options_ui();
 
-	if (currentGameMode.is_empty()):
+	if (currentGameMode.is_empty() and PlayerFunc.matchType == Constants.MatchTypes.Versus):
 		_selectGameMode();
+	
+	if (PlayerFunc.matchType == Constants.MatchTypes.Training):
+		startGameMode("free_for_all");
 
 	userPreferences = UserPreferences.loadOrCreate();
 	$OptionsUI/ScrollContainer/VBoxContainer/wasd/CheckBox.button_pressed = userPreferences.wasdMovement;
@@ -208,6 +211,10 @@ func startGameMode(gameMode: String):
 	_introSequence(gameMode)
 
 func _introSequence(gameMode):
+	if (PlayerFunc.matchType == Constants.MatchTypes.Training):
+		PlayerFunc.gameStarted = true;
+		return;
+	
 	var description: String = _getModeDescription(gameMode);
 	var camStartingPos = Vector3(4.8, 9.0, 4.0);
 
