@@ -7,7 +7,9 @@ const HEALTH_AUTHORITY_PEER_ID = 1;
 
 var gameMode = "";
 var gameUI;
+var matchType: Constants.MatchTypes;
 
+var singlePlayer = false;
 var gameStarted = false;
 var freeCam = false;
 var wasdMovement = false;
@@ -438,6 +440,8 @@ func tweenCameraToChar(startingPos: Vector3):
 		camera.global_position = startingPos;
 		
 		await get_tree().create_timer(3.0).timeout;
+		if not (is_instance_valid(character) and is_instance_valid(camera)):
+			return;
 		var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO);
 		var newPosition = Vector3(character.global_position.x + 5, camera.global_position.y, character.global_position.z + 5);
 		tween.tween_property(camera, "position", newPosition, 1.55);

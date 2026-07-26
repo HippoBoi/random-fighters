@@ -1,10 +1,10 @@
 extends Control
 
-@onready var whiteTeamContainer = $WhiteTeamContainer;
-@onready var blackTeamContainer = $BlackTeamContainer;
+@onready var whiteTeamContainer = $MultiplayerOnly/WhiteTeamContainer;
+@onready var blackTeamContainer = $MultiplayerOnly/BlackTeamContainer;
 @onready var playerTemplate = $PlayerTemplate;
 @onready var characterList = $Characters;
-@onready var secondsRemaining = $secondsRemaining;
+@onready var secondsRemaining = $MultiplayerOnly/secondsRemaining;
 
 var playersLength = 0;
 var playersLockedIn = [];
@@ -12,9 +12,11 @@ var playersLockedIn = [];
 var selectedChar = "";
 var selectedButton: Button = null;
 var gameStarted = false;
+var singlePlayer: bool = false;
 
 signal onCharacterPressed(character);
 signal startGame;
+signal exitCharacterSelect;
 
 var timer = 0.0;
 var msTimer = 0;
@@ -26,13 +28,22 @@ func _ready() -> void:
 		var button: Button = character.get_node("Button");
 		button.pressed.connect(_on_character_pressed.bind(charName, button))
 
+	if (singlePlayer):
+		$StartButton.visible = true;
+		$StartButton.disabled = true;
+		$StartButton.pressed.connect(_on_start_button_pressed);
+		$QuitButton.visible = true;
+		$QuitButton.pressed.connect(_on_quit_button_pressed);
+
+		$MultiplayerOnly.visible = false;
+
 func _process(delta: float) -> void:
 	timer += delta;
 	msTimer += delta;
-	if (int(round(timer * 100)) % 32 == 0):
+	if not (singlePlayer) and (int(round(timer * 100)) % 32 == 0):
 		updateTeams();
 	
-	if (msTimer >= 1):
+	if not (singlePlayer) and (msTimer >= 1):
 		msTimer = 0;
 		timeInSeconds -= 1;
 		secondsRemaining.text = str(timeInSeconds);
@@ -79,6 +90,20 @@ func _on_character_pressed(character: String, button: Button) -> void:
 		selectedButton.disabled = false;
 	
 	button.disabled = true;
+	selectedChar = character;
 	selectedButton = button;
+
+	if (singlePlayer):
+		$StartButton.disabled = false;
 	
 	onCharacterPressed.emit(character);
+
+func _on_start_button_pressed() -> void:
+	if (selectedChar.is_empty() or gameStarted):
+		return;
+
+	gameStarted = true;
+	startGame.emit();
+
+func _on_quit_button_pressed() -> void:
+	exitCharacterSelect.emit();

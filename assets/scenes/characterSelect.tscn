@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=33 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
 [ext_resource type="Texture2D" uid="uid://dqdpwunesijl2" path="res://assets/sprites/rio.png" id="13_dmdnx"]
+[ext_resource type="Shader" uid="uid://cmrmtbttdxq26" path="res://assets/scenes/real_UI_outline.gdshader" id="16_0o2ln"]
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="16_ndpmk"]
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vvea"]
@@ -57,6 +59,42 @@ shader_parameter/allow_out_of_bounds = true
 shader_parameter/outline_thickness = 1.0
 shader_parameter/outline_color = Color(0.515867, 0.515867, 0.515867, 0.537255)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ndpmk"]
+shader = ExtResource("16_0o2ln")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/thickness = 2.4270000677825
+shader_parameter/fade_minimum_alpha = 0.5
+shader_parameter/progress = 1.0
+shader_parameter/rotation = 0.0
+shader_parameter/draw_border = true
+shader_parameter/fill_style = 2
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gl0g"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w2by4"]
+texture = ExtResource("16_ndpmk")
+modulate_color = Color(0.553, 0.326, 0.531, 0.42)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0o2ln"]
+texture = ExtResource("16_ndpmk")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+modulate_color = Color(0.47724557, 0.10208898, 0.18771774, 0.5019608)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0lru2"]
+texture = ExtResource("16_ndpmk")
+modulate_color = Color(0.38946, 0.130294, 0.150849, 0.641)
+
+[sub_resource type="Theme" id="Theme_koq6x"]
+default_font = ExtResource("99_mussels")
+Button/font_sizes/font_size = 16
+Button/styles/focus = SubResource("StyleBoxEmpty_7gl0g")
+Button/styles/hover = SubResource("StyleBoxTexture_w2by4")
+Button/styles/normal = SubResource("StyleBoxTexture_0o2ln")
+Button/styles/pressed = SubResource("StyleBoxTexture_0lru2")
+
 [node name="CharSelect" type="Control"]
 z_index = 1
 layout_mode = 3
@@ -74,6 +112,7 @@ grow_vertical = 2
 script = ExtResource("1_wsrkv")
 
 [node name="actualBg" type="ColorRect" parent="."]
+visible = false
 z_index = -1
 material = SubResource("ShaderMaterial_3vvea")
 layout_mode = 1
@@ -90,7 +129,7 @@ mouse_filter = 2
 color = Color(0.192256, 0.241947, 0.305851, 1)
 
 [node name="loopingBG" type="TextureRect" parent="."]
-modulate = Color(0.470733, 0.478353, 0.634066, 0.156863)
+modulate = Color(0.47079715, 0.4788676, 0.6342527, 0.492)
 light_mask = 0
 y_sort_enabled = true
 material = SubResource("ShaderMaterial_x2it3")
@@ -110,6 +149,7 @@ texture = ExtResource("3_3vvea")
 stretch_mode = 1
 
 [node name="bg" type="Panel" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_ro2wk")
 layout_mode = 1
 anchors_preset = 15
@@ -120,6 +160,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="line" type="ColorRect" parent="."]
+visible = false
 z_index = 1
 layout_mode = 0
 offset_top = 6.0
@@ -154,9 +195,20 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -93.0
+offset_top = 33.0
 offset_right = 3.0
 offset_bottom = 128.0
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="leftLine2" type="ColorRect" parent="lottaLines"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -92.0
+offset_right = 3.0
+offset_bottom = -13.0
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
@@ -167,6 +219,18 @@ anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 469.0
 offset_top = -93.0
+offset_right = 472.0
+offset_bottom = -10.0
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="rightLine2" type="ColorRect" parent="lottaLines"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 469.0
+offset_top = 33.0
 offset_right = 472.0
 offset_bottom = 125.0
 grow_vertical = 2
@@ -185,7 +249,7 @@ grow_vertical = 2
 rotation = 1.5708
 color = Color(0, 0, 0, 1)
 
-[node name="upLine2" type="ColorRect" parent="lottaLines"]
+[node name="downLine" type="ColorRect" parent="lottaLines"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -827,55 +891,88 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="BlackTeamText" type="RichTextLabel" parent="."]
+[node name="MultiplayerOnly" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -84.5
+offset_top = -30.0
+offset_right = 82.5
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BlackTeamText" type="RichTextLabel" parent="MultiplayerOnly"]
 layout_mode = 0
-offset_left = -77.0
-offset_top = -13.0
-offset_right = -3.0
-offset_bottom = 8.0
+offset_left = 7.5
+offset_top = 17.0
+offset_right = 81.5
+offset_bottom = 38.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 12
 text = "Black Team"
 scroll_active = false
 
-[node name="BlackTeamContainer" type="VBoxContainer" parent="."]
+[node name="BlackTeamContainer" type="VBoxContainer" parent="MultiplayerOnly"]
 clip_contents = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -80.0
-offset_top = -130.0
-offset_right = -5.0
-offset_bottom = 130.0
+offset_left = 4.5
+offset_top = -129.5
+offset_right = 79.5
+offset_bottom = 130.5
 grow_vertical = 2
 
-[node name="WhiteTeamText" type="RichTextLabel" parent="."]
+[node name="WhiteTeamText" type="RichTextLabel" parent="MultiplayerOnly"]
 layout_mode = 0
-offset_left = 479.0
-offset_top = -14.0
-offset_right = 557.0
-offset_bottom = 7.0
+offset_left = 563.5
+offset_top = 16.0
+offset_right = 641.5
+offset_bottom = 37.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 12
 text = "White Team"
 scroll_active = false
 
-[node name="WhiteTeamContainer" type="VBoxContainer" parent="."]
+[node name="WhiteTeamContainer" type="VBoxContainer" parent="MultiplayerOnly"]
 clip_contents = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 476.0
-offset_top = -130.0
-offset_right = 551.0
-offset_bottom = 130.0
+offset_left = 560.5
+offset_top = -129.5
+offset_right = 635.5
+offset_bottom = 130.5
 grow_vertical = 2
+
+[node name="secondsRemaining" type="RichTextLabel" parent="MultiplayerOnly"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -65.5
+offset_top = 34.0
+offset_right = 88.5
+offset_bottom = 87.0
+grow_horizontal = 2
+theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 6
+theme_override_fonts/normal_font = ExtResource("99_mussels")
+theme_override_font_sizes/normal_font_size = 38
+text = "60"
+horizontal_alignment = 1
 
 [node name="PlayerTemplate" type="Button" parent="."]
 visible = false
@@ -945,22 +1042,38 @@ text = "Select Your Character"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="secondsRemaining" type="RichTextLabel" parent="."]
-z_index = 1
+[node name="StartButton" type="Button" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_ndpmk")
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 7
 anchor_left = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-offset_left = -66.5
-offset_top = 4.0
-offset_right = 87.5
-offset_bottom = 57.0
+anchor_bottom = 1.0
+offset_left = -55.5
+offset_top = -2.0
+offset_right = 55.5
+offset_bottom = 24.0
 grow_horizontal = 2
-theme_override_constants/shadow_outline_size = 4
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/outline_size = 6
-theme_override_fonts/normal_font = ExtResource("99_mussels")
-theme_override_font_sizes/normal_font_size = 38
-text = "60"
-horizontal_alignment = 1
+grow_vertical = 0
+theme = SubResource("Theme_koq6x")
+text = "Start Game"
+
+[node name="QuitButton" type="Button" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_ndpmk")
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -319.5
+offset_top = -330.0
+offset_right = -208.5
+offset_bottom = -304.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_koq6x")
+text = "Quit"
