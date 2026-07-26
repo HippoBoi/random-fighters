@@ -8,6 +8,7 @@ const HEALTH_AUTHORITY_PEER_ID = 1;
 var gameMode = "";
 var gameUI;
 
+var singlePlayer = false;
 var gameStarted = false;
 var freeCam = false;
 var wasdMovement = false;
