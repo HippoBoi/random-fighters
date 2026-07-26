@@ -7,6 +7,7 @@ const HEALTH_AUTHORITY_PEER_ID = 1;
 
 var gameMode = "";
 var gameUI;
+var matchType: Constants.MatchTypes;
 
 var singlePlayer = false;
 var gameStarted = false;

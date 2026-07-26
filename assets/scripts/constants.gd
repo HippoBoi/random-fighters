@@ -17,6 +17,12 @@ enum GameModes {
 	Seaweeds
 }
 
+enum MatchTypes {
+	Versus,
+	Story,
+	Training
+}
+
 const items = [
 	{
 		"name": "Cool Bow",

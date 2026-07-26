@@ -163,6 +163,7 @@ func _on_host(_port: int = 0, _username: String = "", _team: String = "", isLoca
 	var useUPnP: bool = false;
 	_resetConnectionState();
 	_setSinglePlayerMatch(false);
+	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 
 	if not (isLocal and DEBUG):
 		if not (norayNetwork):
@@ -205,6 +206,7 @@ func _hostWithUPnP(_port):
 func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
 	_resetConnectionState();
 	_setSinglePlayerMatch(false);
+	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 	username = _username;
 	curTeam = int(_team);
 	# print("joining team: %s" % curTeam);
@@ -254,6 +256,7 @@ func startClient(ip: String, port: int, _gameId: String, _username: String, _tea
 func _startSinglePlayerMatch(_username: String = "", _team: int = 0) -> void:
 	_clearRoundData();
 	_setSinglePlayerMatch(true);
+	PlayerFunc.matchType = Constants.MatchTypes.Training;
 	activeConnectionMode = "singleplayer";
 
 	if not (_username.is_empty()):
@@ -464,7 +467,7 @@ func _disconnectMatchNetwork(reason: String = ""):
 	if (multiplayerPeer):
 		multiplayerPeer.close();
 
-	multiplayer.multiplayer_peer = null;
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new();
 	_disconnectEnetSignals();
 
 	if (norayNetwork and is_instance_valid(norayNetwork)):
