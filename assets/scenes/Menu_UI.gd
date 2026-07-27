@@ -1,116 +1,166 @@
 extends Control
 
-@onready var menu = $Menu
-@onready var topRect = $topRect;
-@onready var midRect = $midRect;
-@onready var bottomRect = $bottomRect;
-@onready var RANDOM_text = $Title1;
-@onready var FIGHTERS_text = $Title2;
-@onready var loopingBG = $loopingBG;
+@onready var random_text: TextureRect = $Title1
+@onready var fighters_text: TextureRect = $Title2
+@onready var left_option_label: Label = $Carousel/SkinsLabel
+@onready var right_option_label: Label = $Carousel/OptionsLabel
+@onready var left_arrow_button: Button = $Carousel/LeftArrowButton
+@onready var selected_option_button: Button = $Carousel/PlayButton
+@onready var right_arrow_button: Button = $Carousel/RightArrowButton
 
 const TITLE_ROTATION_DURATION: float = 2.0;
 const ROTATION = 2;
+const CAROUSEL_TRANSITION_DURATION := 0.16
+const CAROUSEL_OPTIONS := ["PLAY", "OPTIONS", "SKINS"]
 
-func animateTitles():
-	RANDOM_text.pivot_offset = RANDOM_text.size * 0.5;
-	FIGHTERS_text.pivot_offset = FIGHTERS_text.size * 0.5;
-	RANDOM_text.rotation_degrees = ROTATION * -1;
-	FIGHTERS_text.rotation_degrees = ROTATION;
+signal carousel_option_changed(option: String)
 
-	var randomTween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT);
-	randomTween.tween_property(RANDOM_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION);
-	randomTween.tween_property(RANDOM_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION);
+var coolLine1: TextureRect;
+var coolLine2: TextureRect;
+var linesTimer = 0;
+var linesSpeed = 90;
+var selected_carousel_index := 0
+var carousel_is_transitioning := false
+var selected_option_position := Vector2.ZERO
+var left_option_position := Vector2.ZERO
+var right_option_position := Vector2.ZERO
 
-	var fightersTween = get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT);
-	fightersTween.tween_property(FIGHTERS_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION);
-	fightersTween.tween_property(FIGHTERS_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION);
+func _handleCoolLines(delta):
+	linesTimer += delta * linesSpeed;
+	
+	if not (coolLine1 and coolLine2):
+		push_error("COULDN'T FIND COOL LINES :(");
+		return;
+	
+	coolLine1.global_position.x = linesTimer;
+	coolLine2.global_position.x = linesTimer - 650;
+	
+	if (linesTimer >= 650):
+		print("RESTART!")
+		linesTimer = 0;
 
-func playIntro():
-	RANDOM_text.position = Vector2(26, 10);
-	RANDOM_text.scale = Vector2(0.75, 0.75);
-	FIGHTERS_text.position = Vector2(73, 70);
-	FIGHTERS_text.scale = Vector2(0.75, 0.75);
-	
-	var tween = get_tree().create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT);
-	tween.set_parallel();
-	tween.tween_property(topRect, "position", Vector2(-28, 338), 0.5);
-	tween.tween_property(bottomRect, "position", Vector2(0, 0), 0.5);
-	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 1), 0.5);
-	
-	tween.tween_property(RANDOM_text, "position", Vector2(16, -25), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(1.0, 1.0), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(42, 24), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.975, 0.975), 0.5);
-	tween.tween_property(loopingBG, "modulate", Color(0.336, 0.39, 0.434, 1), 0.5);
-	
-	var buttons = menu.get_node("menuButtons");
-	for button in buttons.get_children():
-		button.position.y = 360;
-	
-	tween = get_tree().create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT);
-	tween.set_parallel(false);
-	var i = 0;
-	var finalYPos = -80;
-		
-	for button in buttons.get_children():
-		tween.tween_property(button, "position:y", finalYPos + (55 * i), 0.2);
-		i += 1;
+func animateTitles() -> void:
+	random_text.pivot_offset = random_text.size * 0.5
+	fighters_text.pivot_offset = fighters_text.size * 0.5
+	random_text.rotation_degrees = ROTATION * -1
+	fighters_text.rotation_degrees = ROTATION
 
-func playLeave():
-	var tween = get_tree().create_tween();
-	tween.set_trans(Tween.TRANS_BACK);
-	tween.set_ease(Tween.EASE_IN);
-	tween.set_parallel();
-	tween.tween_property(topRect, "position", Vector2(300, 550), 0.5);
-	tween.tween_property(bottomRect, "position", Vector2(-100, -450), 0.5);
-	tween.tween_property(midRect, "modulate", Color(1, 1, 1, 0), 0.5);
-	
-	tween.tween_property(RANDOM_text, "position", Vector2(-44, -24), 0.5);
-	tween.tween_property(RANDOM_text, "scale", Vector2(0.35, 0.35), 0.5);
-	tween.tween_property(FIGHTERS_text, "position", Vector2(-30, -22), 0.5);
-	tween.tween_property(FIGHTERS_text, "scale", Vector2(0.35, 0.35), 0.5);
-	tween.tween_property(loopingBG, "modulate", Color(1, 1, 1, 0.05), 0.5);
-	
-	$Menu/nameInput.visible = false;
-	$Menu/nameInputText.visible = false;
-	
-	var buttons = menu.get_node("menuButtons");
-	var finalYPos = 200;
-		
-	for button in buttons.get_children():
-		tween.tween_property(button, "position:y", finalYPos, 0.4);
+	var random_tween := get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	random_tween.tween_property(random_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION)
+	random_tween.tween_property(random_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION)
+
+	var fighters_tween := get_tree().create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	fighters_tween.tween_property(fighters_text, "rotation_degrees", ROTATION * -1, TITLE_ROTATION_DURATION)
+	fighters_tween.tween_property(fighters_text, "rotation_degrees", ROTATION, TITLE_ROTATION_DURATION)
+
+func playIntro() -> void:
+	visible = true
+	modulate.a = 0.0
+	get_tree().create_tween().tween_property(self, "modulate:a", 1.0, 0.25)
+
+func playLeave() -> void:
+	get_tree().create_tween().tween_property(self, "modulate:a", 0.0, 0.2)
 
 func _ready() -> void:
-	_setupButtons();
-	playIntro();
-	animateTitles();
+	if (has_node("CoolLines")):
+		coolLine1 = get_node("CoolLines");
+	if (has_node("CoolLines2")):
+		coolLine2 = get_node("CoolLines2");
 
-func _setupButtons():
-	var buttons = menu.get_node("menuButtons");
-	for child in buttons.get_children():
-		var button: Button = child;
-		button.mouse_entered.connect(func():
-			var newSound = AudioStreamPlayer.new();
-			button.add_child(newSound);
-			
-			newSound.stream = preload("res://assets/sounds/menuHover.ogg");
-			newSound.pitch_scale = randf();
-			newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
-			newSound.play();
-			newSound.finished.connect(func():
-				newSound.queue_free();
-			);
-		);
-		
-		button.pressed.connect(func():
-			var newSound = AudioStreamPlayer.new();
-			button.add_child(newSound);
-			
-			newSound.stream = preload("res://assets/sounds/menuClick.ogg");
-			newSound.pitch_scale = randf();
-			newSound.pitch_scale = clamp(newSound.pitch_scale, 0.75, 1.5);
-			newSound.play();
-			newSound.finished.connect(func():
-				newSound.queue_free();
-			);
-		);
+	_setupButtons()
+	_setup_carousel()
+	playIntro()
+	animateTitles()
+
+func _process(delta: float) -> void:
+	_handleCoolLines(delta);
+
+func _setupButtons() -> void:
+	for button: Button in get_tree().get_nodes_in_group("main_menu_interactive"):
+		button.mouse_entered.connect(_play_button_sound.bind(button, "res://assets/sounds/menuHover.ogg"))
+		button.pressed.connect(_play_button_sound.bind(button, "res://assets/sounds/menuClick.ogg"))
+
+func _setup_carousel() -> void:
+	selected_option_position = selected_option_button.position
+	left_option_position = left_option_label.position
+	right_option_position = right_option_label.position
+	selected_option_button.pivot_offset = selected_option_button.size * 0.5
+
+	left_arrow_button.pressed.connect(_cycle_carousel.bind(-1))
+	right_arrow_button.pressed.connect(_cycle_carousel.bind(1))
+	_refresh_carousel_labels()
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if carousel_is_transitioning:
+		return
+
+	var key_event := event as InputEventKey
+	if not key_event or not key_event.pressed or key_event.echo:
+		return
+
+	if key_event.keycode == KEY_LEFT:
+		_cycle_carousel(-1)
+		get_viewport().set_input_as_handled()
+	elif key_event.keycode == KEY_RIGHT:
+		_cycle_carousel(1)
+		get_viewport().set_input_as_handled()
+
+func _cycle_carousel(direction: int) -> void:
+	if carousel_is_transitioning:
+		return
+
+	carousel_is_transitioning = true
+	left_arrow_button.disabled = true
+	right_arrow_button.disabled = true
+
+	var movement := Vector2(-direction * 42.0, 0.0)
+	var tween := get_tree().create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(selected_option_button, "position", selected_option_position + movement, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(selected_option_button, "modulate:a", 0.0, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(selected_option_button, "scale", Vector2(0.88, 0.88), CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(left_option_label, "position", left_option_position + movement, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(left_option_label, "modulate:a", 0.0, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(right_option_label, "position", right_option_position + movement, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(right_option_label, "modulate:a", 0.0, CAROUSEL_TRANSITION_DURATION)
+	tween.finished.connect(_finish_carousel_transition.bind(direction, movement))
+
+func _finish_carousel_transition(direction: int, movement: Vector2) -> void:
+	selected_carousel_index = posmod(selected_carousel_index + direction, CAROUSEL_OPTIONS.size())
+	_refresh_carousel_labels()
+
+	selected_option_button.position = selected_option_position - movement
+	selected_option_button.modulate.a = 0.0
+	selected_option_button.scale = Vector2(1.08, 1.08)
+	left_option_label.position = left_option_position - movement
+	left_option_label.modulate.a = 0.0
+	right_option_label.position = right_option_position - movement
+	right_option_label.modulate.a = 0.0
+
+	var tween := get_tree().create_tween().set_parallel().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(selected_option_button, "position", selected_option_position, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(selected_option_button, "modulate:a", 1.0, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(selected_option_button, "scale", Vector2.ONE, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(left_option_label, "position", left_option_position, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(left_option_label, "modulate:a", 0.55, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(right_option_label, "position", right_option_position, CAROUSEL_TRANSITION_DURATION)
+	tween.tween_property(right_option_label, "modulate:a", 0.55, CAROUSEL_TRANSITION_DURATION)
+	tween.finished.connect(_unlock_carousel)
+
+func _refresh_carousel_labels() -> void:
+	selected_option_button.text = CAROUSEL_OPTIONS[selected_carousel_index]
+	left_option_label.text = CAROUSEL_OPTIONS[posmod(selected_carousel_index - 1, CAROUSEL_OPTIONS.size())]
+	right_option_label.text = CAROUSEL_OPTIONS[posmod(selected_carousel_index + 1, CAROUSEL_OPTIONS.size())]
+
+func _unlock_carousel() -> void:
+	carousel_is_transitioning = false
+	left_arrow_button.disabled = false
+	right_arrow_button.disabled = false
+	carousel_option_changed.emit(CAROUSEL_OPTIONS[selected_carousel_index])
+
+func _play_button_sound(button: Button, sound_path: String) -> void:
+	var sound := AudioStreamPlayer.new()
+	button.add_child(sound)
+	sound.stream = load(sound_path)
+	sound.pitch_scale = clamp(randf(), 0.75, 1.5)
+	sound.play()
+	sound.finished.connect(sound.queue_free)
