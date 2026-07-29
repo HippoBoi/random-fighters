@@ -15,3 +15,4 @@ In order to restore functionality to the matchmaking system you'll have to setup
 
 # CREDITS
 [Unmoving Plaid](https://godotshaders.com/shader/unmoving-plaid-chowder-effect/) shader by: gmpf
+[Line Jitter](https://godotshaders.com/shader/line-jitter-stroke-shake-effect/) shader by: Joezeo

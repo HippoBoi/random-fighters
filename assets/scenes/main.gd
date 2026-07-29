@@ -76,7 +76,7 @@ func _on_name_input(new_text: String) -> void:
 func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
 
-func _on_options_pressed(_port: int, _username: String, _team: String) -> void:
+func _on_options_pressed(_port: int = 8890, _username: String = "", _team: String = "0") -> void:
 	if (DEBUG):
 		_on_host(_port, _username, _team);
 		return;
