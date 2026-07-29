@@ -172,8 +172,11 @@ func _play_button_sound(button: Button, sound_path: String) -> void:
 	sound.play()
 	sound.finished.connect(sound.queue_free)
 
-func _on_button_pressed(button):
+func _on_button_pressed(button: Button):
 	_play_button_sound(button, "res://assets/sounds/menuClick.ogg");
+	
+	if (button.name != "SelectedButton"):
+		return;
 	
 	var selectedOption = CAROUSEL_OPTIONS[selected_carousel_index];
 	
