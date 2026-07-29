@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b8g8bjb8dwlmq"]
+
+[ext_resource type="Shader" uid="uid://dw03usuibtjic" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="1_eol6j"]
+
+[resource]
+shader = ExtResource("1_eol6j")
+shader_parameter/shaking = true
+shader_parameter/amplitude = 1.5
+shader_parameter/noise_scale = 15.0
+shader_parameter/noise_speed = 5.0
