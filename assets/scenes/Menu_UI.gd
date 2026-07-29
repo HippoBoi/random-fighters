@@ -176,10 +176,15 @@ func _on_button_pressed(button):
 	_play_button_sound(button, "res://assets/sounds/menuClick.ogg");
 	
 	var selectedOption = CAROUSEL_OPTIONS[selected_carousel_index];
-	if (selectedOption == PLAY):
-		_on_play_pressed();
-	else:
-		print(selectedOption);
+	
+	match (selectedOption):
+		PLAY:
+			_on_play_pressed();
+		OPTIONS:
+			var mainScript = get_parent();
+			mainScript._on_options_pressed();
+		_:
+			print(selectedOption);
 
 func _on_play_pressed():
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT);
