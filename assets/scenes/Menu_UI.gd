@@ -1,18 +1,22 @@
 extends Control
 
-@onready var random_text: TextureRect = $Title1
-@onready var fighters_text: TextureRect = $Title2
-@onready var left_option_label: Label = $Carousel/SkinsLabel
-@onready var right_option_label: Label = $Carousel/OptionsLabel
-@onready var left_arrow_button: Button = $Carousel/LeftArrowButton
-@onready var selected_option_button: Button = $Carousel/PlayButton
-@onready var right_arrow_button: Button = $Carousel/RightArrowButton
-@onready var game_version_label: RichTextLabel = $GameVersion
+@onready var menu_assets: Control = $MainMenuAssets;
+@onready var random_text: TextureRect = $MainMenuAssets/Title1
+@onready var fighters_text: TextureRect = $MainMenuAssets/Title2
+@onready var left_option_label: Label = $MainMenuAssets/Carousel/SkinsLabel
+@onready var right_option_label: Label = $MainMenuAssets/Carousel/OptionsLabel
+@onready var left_arrow_button: Button = $MainMenuAssets/Carousel/LeftArrowButton
+@onready var selected_option_button: Button = $MainMenuAssets/Carousel/SelectedButton
+@onready var right_arrow_button: Button = $MainMenuAssets/Carousel/RightArrowButton
+@onready var game_version_label: RichTextLabel = $MainMenuAssets/GameVersion
 
 const TITLE_ROTATION_DURATION: float = 2.0;
 const ROTATION = 2;
 const CAROUSEL_TRANSITION_DURATION := 0.16
 const CAROUSEL_OPTIONS := ["PLAY", "OPTIONS", "SKINS"]
+const PLAY = CAROUSEL_OPTIONS[0];
+const OPTIONS = CAROUSEL_OPTIONS[1];
+const SKINS = CAROUSEL_OPTIONS[2];
 
 signal carousel_option_changed(option: String)
 
@@ -37,7 +41,6 @@ func _handleCoolLines(delta):
 	coolLine2.global_position.x = linesTimer - 650;
 	
 	if (linesTimer >= 650):
-		print("RESTART!")
 		linesTimer = 0;
 
 func animateTitles() -> void:
@@ -63,10 +66,10 @@ func playLeave() -> void:
 	get_tree().create_tween().tween_property(self, "modulate:a", 0.0, 0.2)
 
 func _ready() -> void:
-	if (has_node("CoolLines")):
-		coolLine1 = get_node("CoolLines");
-	if (has_node("CoolLines2")):
-		coolLine2 = get_node("CoolLines2");
+	if (menu_assets.has_node("CoolLines")):
+		coolLine1 = menu_assets.get_node("CoolLines");
+	if (menu_assets.has_node("CoolLines2")):
+		coolLine2 = menu_assets.get_node("CoolLines2");
 
 	var version = ProjectSettings.get_setting("application/config/version")
 	game_version_label.text = "V " + version
@@ -82,7 +85,7 @@ func _process(delta: float) -> void:
 func _setupButtons() -> void:
 	for button: Button in get_tree().get_nodes_in_group("main_menu_interactive"):
 		button.mouse_entered.connect(_play_button_sound.bind(button, "res://assets/sounds/menuHover.ogg"))
-		button.pressed.connect(_play_button_sound.bind(button, "res://assets/sounds/menuClick.ogg"))
+		button.pressed.connect(_on_button_pressed.bind(button));
 
 func _setup_carousel() -> void:
 	selected_option_position = selected_option_button.position
@@ -168,3 +171,16 @@ func _play_button_sound(button: Button, sound_path: String) -> void:
 	sound.pitch_scale = clamp(randf(), 0.75, 1.5)
 	sound.play()
 	sound.finished.connect(sound.queue_free)
+
+func _on_button_pressed(button):
+	_play_button_sound(button, "res://assets/sounds/menuClick.ogg");
+	
+	var selectedOption = CAROUSEL_OPTIONS[selected_carousel_index];
+	if (selectedOption == PLAY):
+		_on_play_pressed();
+	else:
+		print(selectedOption);
+
+func _on_play_pressed():
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT);
+	tween.tween_property(menu_assets, "position", Vector2(0, -300), 0.7);

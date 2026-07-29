@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cwq5xwhdfkoh6"]
+[gd_scene load_steps=34 format=3 uid="uid://cwq5xwhdfkoh6"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_menu"]
@@ -26,33 +26,6 @@ shader_parameter/vertical = true
 bg_color = Color(0.105882, 0.129412, 0.235294, 1)
 border_width_right = 2
 border_color = Color(0.282353, 0.360784, 0.576471, 0.8)
-
-[sub_resource type="StyleBoxFlat" id="StyleProfile"]
-bg_color = Color(0.0705882, 0.0980392, 0.14902, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.384314, 0.513725, 0.678431, 0.9)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-corner_detail = 1
-
-[sub_resource type="StyleBoxFlat" id="StyleProfileHover"]
-bg_color = Color(0.117647, 0.160784, 0.239216, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.564706, 0.803922, 1, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufrab"]
 
 [sub_resource type="StyleBoxFlat" id="StyleCarousel"]
 bg_color = Color(0.0823529, 0.105882, 0.188235, 0.98)
@@ -97,6 +70,36 @@ shader_parameter/amplitude = 4.0
 shader_parameter/noise_scale = 200.0
 shader_parameter/noise_speed = 5.0
 
+[sub_resource type="StyleBoxFlat" id="StyleProfile"]
+bg_color = Color(0.0705882, 0.0980392, 0.14902, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.384314, 0.513725, 0.678431, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleProfileHover"]
+bg_color = Color(0.117647, 0.160784, 0.239216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.564706, 0.803922, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufrab"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ra08g"]
+bg_color = Color(0.0823529, 0.105882, 0.188235, 0.98)
+
 [node name="MainMenu" type="Node3D"]
 script = ExtResource("1_main")
 
@@ -110,25 +113,39 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_menu")
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="MainMenuAssets" type="Control" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="UI/MainMenuAssets"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0470588, 0.0666667, 0.101961, 1)
 
-[node name="loopingBG" type="TextureRect" parent="UI"]
+[node name="loopingBG" type="TextureRect" parent="UI/MainMenuAssets"]
 modulate = Color(0.231373, 0.309804, 0.462745, 0.24)
 material = SubResource("ShaderMaterial_ss3a5")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -1.0
 offset_right = 640.0
-offset_bottom = 360.0
+offset_bottom = 359.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
@@ -137,7 +154,7 @@ texture = ExtResource("4_background")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="RightDecor" type="Panel" parent="UI"]
+[node name="RightDecor" type="Panel" parent="UI/MainMenuAssets"]
 material = SubResource("ShaderMaterial_lffdy")
 layout_mode = 1
 anchors_preset = 11
@@ -145,64 +162,49 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -108.0
+offset_top = -1.0
+offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleSideRail")
 
-[node name="Title1" type="TextureRect" parent="UI"]
+[node name="Title1" type="TextureRect" parent="UI/MainMenuAssets"]
 layout_mode = 0
 offset_left = 150.0
-offset_top = -53.0
+offset_top = -54.0
 offset_right = 436.0
-offset_bottom = 134.0
+offset_bottom = 133.0
 mouse_filter = 2
 texture = ExtResource("5_random")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Title2" type="TextureRect" parent="UI"]
+[node name="Title2" type="TextureRect" parent="UI/MainMenuAssets"]
 layout_mode = 0
 offset_left = 208.0
+offset_top = -1.0
 offset_right = 526.0
-offset_bottom = 194.0
+offset_bottom = 193.0
 mouse_filter = 2
 texture = ExtResource("6_fighters")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ProfileButton" type="Button" parent="UI" groups=["main_menu_interactive"]]
-z_index = 4
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -120.0
-offset_right = 1.0
-offset_bottom = 44.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(0.94902, 0.960784, 0.984314, 1)
-theme_override_colors/font_hover_color = Color(1, 0.843137, 0.494118, 1)
-theme_override_fonts/font = ExtResource("3_font")
-theme_override_font_sizes/font_size = 14
-theme_override_styles/normal = SubResource("StyleProfile")
-theme_override_styles/pressed = SubResource("StyleProfileHover")
-theme_override_styles/hover = SubResource("StyleProfileHover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_ufrab")
-
-[node name="Carousel" type="Panel" parent="UI"]
+[node name="Carousel" type="Panel" parent="UI/MainMenuAssets"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -63.0
+offset_top = -64.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleCarousel")
 
-[node name="SkinsLabel" type="Label" parent="UI/Carousel"]
+[node name="SkinsLabel" type="Label" parent="UI/MainMenuAssets/Carousel"]
 modulate = Color(1, 1, 1, 0.55)
 layout_mode = 0
 offset_left = 20.0
@@ -215,7 +217,7 @@ theme_override_font_sizes/font_size = 22
 text = "SKINS"
 horizontal_alignment = 1
 
-[node name="OptionsLabel" type="Label" parent="UI/Carousel"]
+[node name="OptionsLabel" type="Label" parent="UI/MainMenuAssets/Carousel"]
 modulate = Color(1, 1, 1, 0.55)
 layout_mode = 1
 anchors_preset = 1
@@ -232,7 +234,7 @@ theme_override_font_sizes/font_size = 21
 text = "OPTIONS"
 horizontal_alignment = 1
 
-[node name="LeftArrowButton" type="Button" parent="UI/Carousel" groups=["main_menu_interactive"]]
+[node name="LeftArrowButton" type="Button" parent="UI/MainMenuAssets/Carousel" groups=["main_menu_interactive"]]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -255,7 +257,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_s104v")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_7ab4m")
 text = "<"
 
-[node name="PlayButton" type="Button" parent="UI/Carousel" groups=["main_menu_interactive"]]
+[node name="SelectedButton" type="Button" parent="UI/MainMenuAssets/Carousel" groups=["main_menu_interactive"]]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -279,7 +281,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_i7exv")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tu4pt")
 text = "PLAY"
 
-[node name="RightArrowButton" type="Button" parent="UI/Carousel" groups=["main_menu_interactive"]]
+[node name="RightArrowButton" type="Button" parent="UI/MainMenuAssets/Carousel" groups=["main_menu_interactive"]]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -302,41 +304,75 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_lffdy")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1om2t")
 text = ">"
 
-[node name="CoolLines" type="TextureRect" parent="UI"]
+[node name="CoolLines" type="TextureRect" parent="UI/MainMenuAssets"]
 material = SubResource("ShaderMaterial_e73gw")
 layout_mode = 0
-offset_top = 294.0
+offset_top = 293.0
 offset_right = 643.0
-offset_bottom = 300.0
+offset_bottom = 299.0
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
 
-[node name="CoolLines2" type="TextureRect" parent="UI"]
+[node name="CoolLines2" type="TextureRect" parent="UI/MainMenuAssets"]
 material = SubResource("ShaderMaterial_e73gw")
 layout_mode = 0
 offset_left = -664.0
-offset_top = 294.0
+offset_top = 293.0
 offset_right = -21.0
-offset_bottom = 300.0
+offset_bottom = 299.0
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
 
-[node name="CoolMovingLines2" type="TextureRect" parent="UI"]
+[node name="CoolMovingLines2" type="TextureRect" parent="UI/MainMenuAssets"]
 material = SubResource("ShaderMaterial_e73gw")
 layout_mode = 0
 offset_left = 536.0
-offset_top = 4.0
+offset_top = 3.0
 offset_right = 824.86206
-offset_bottom = 12.317657
+offset_bottom = 11.317657
 rotation = 1.5707964
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
 
-[node name="GameVersion" type="RichTextLabel" parent="UI"]
+[node name="GameVersion" type="RichTextLabel" parent="UI/MainMenuAssets"]
 layout_mode = 0
 offset_left = 4.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = 70.0
-offset_bottom = 25.0
+offset_bottom = 24.0
 theme = ExtResource("11_ra08g")
 text = "V 0.0.0"
+
+[node name="ProfileButton" type="Button" parent="UI/MainMenuAssets" groups=["main_menu_interactive"]]
+z_index = 4
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 43.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.94902, 0.960784, 0.984314, 1)
+theme_override_colors/font_hover_color = Color(1, 0.843137, 0.494118, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleProfile")
+theme_override_styles/pressed = SubResource("StyleProfileHover")
+theme_override_styles/hover = SubResource("StyleProfileHover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ufrab")
+
+[node name="BgPanel" type="Panel" parent="UI"]
+z_index = -10
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -364.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ra08g")
