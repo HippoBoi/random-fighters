@@ -7,6 +7,7 @@ extends Control
 @onready var left_arrow_button: Button = $Carousel/LeftArrowButton
 @onready var selected_option_button: Button = $Carousel/PlayButton
 @onready var right_arrow_button: Button = $Carousel/RightArrowButton
+@onready var game_version_label: RichTextLabel = $GameVersion
 
 const TITLE_ROTATION_DURATION: float = 2.0;
 const ROTATION = 2;
@@ -66,6 +67,9 @@ func _ready() -> void:
 		coolLine1 = get_node("CoolLines");
 	if (has_node("CoolLines2")):
 		coolLine2 = get_node("CoolLines2");
+
+	var version = ProjectSettings.get_setting("application/config/version")
+	game_version_label.text = "V " + version
 
 	_setupButtons()
 	_setup_carousel()

@@ -1,23 +1,26 @@
-[gd_scene load_steps=31 format=3 uid="uid://c3oe5yemp2xjc"]
+[gd_scene load_steps=33 format=3 uid="uid://cwq5xwhdfkoh6"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_menu"]
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="3_font"]
 [ext_resource type="Texture2D" uid="uid://b14dbyhybd5fs" path="res://assets/textures/looping_background.png" id="4_background"]
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="4_e73gw"]
+[ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="5_e73gw"]
 [ext_resource type="Texture2D" uid="uid://dwlwdckb1s4s8" path="res://assets/sprites/random.png" id="5_random"]
 [ext_resource type="Texture2D" uid="uid://c1ibuefw3763v" path="res://assets/sprites/fighters.png" id="6_fighters"]
-[ext_resource type="Shader" uid="uid://dw03usuibtjic" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="8_i7exv"]
+[ext_resource type="Shader" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="8_i7exv"]
 [ext_resource type="Texture2D" uid="uid://culglqjol8gq5" path="res://assets/sprites/menu_lines.png" id="9_tu4pt"]
+[ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="11_ra08g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ss3a5"]
 shader = ExtResource("4_e73gw")
 shader_parameter/MOVE_SPEED = 0.2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p7a6f"]
-bg_color = Color(0.105882, 0.129412, 0.235294, 1)
-border_width_left = 2
-border_color = Color(0.282353, 0.360784, 0.576471, 0.8)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lffdy"]
+shader = ExtResource("5_e73gw")
+shader_parameter/initial_color = Color(0.105882354, 0.12941177, 0.23529412, 0.78431374)
+shader_parameter/final_color = Color(0.105882354, 0.12941177, 0.23529412, 0.31764707)
+shader_parameter/vertical = true
 
 [sub_resource type="StyleBoxFlat" id="StyleSideRail"]
 bg_color = Color(0.105882, 0.129412, 0.235294, 1)
@@ -134,18 +137,8 @@ texture = ExtResource("4_background")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="LeftDecor" type="Panel" parent="UI"]
-modulate = Color(1, 1, 1, 0.5)
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 120.0
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_p7a6f")
-
 [node name="RightDecor" type="Panel" parent="UI"]
-modulate = Color(1, 1, 1, 0.5)
+material = SubResource("ShaderMaterial_lffdy")
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -179,6 +172,7 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="ProfileButton" type="Button" parent="UI" groups=["main_menu_interactive"]]
+z_index = 4
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -326,3 +320,23 @@ offset_right = -21.0
 offset_bottom = 300.0
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
+
+[node name="CoolMovingLines2" type="TextureRect" parent="UI"]
+material = SubResource("ShaderMaterial_e73gw")
+layout_mode = 0
+offset_left = 536.0
+offset_top = 4.0
+offset_right = 824.86206
+offset_bottom = 12.317657
+rotation = 1.5707964
+texture = ExtResource("9_tu4pt")
+expand_mode = 1
+
+[node name="GameVersion" type="RichTextLabel" parent="UI"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 70.0
+offset_bottom = 25.0
+theme = ExtResource("11_ra08g")
+text = "V 0.0.0"

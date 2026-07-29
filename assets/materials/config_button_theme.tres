@@ -1,6 +1,7 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://br3g2to4mj3gg"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://br3g2to4mj3gg"]
 
 [ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_7gl0g"]
+[ext_resource type="FontFile" uid="uid://bvj5cr1pdhlr5" path="res://addons/fonts/tl_mussels/TT Mussels Trial Light.otf" id="2_sn6te"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gl0g"]
 
@@ -16,7 +17,13 @@ modulate_color = Color(0.429, 0.217, 0.304, 0.503)
 texture = ExtResource("1_7gl0g")
 modulate_color = Color(0.38946, 0.130294, 0.150849, 0.641)
 
+[sub_resource type="FontVariation" id="FontVariation_sn6te"]
+base_font = ExtResource("2_sn6te")
+spacing_glyph = 1
+
 [resource]
+default_font = SubResource("FontVariation_sn6te")
+default_font_size = 16
 Button/styles/focus = SubResource("StyleBoxEmpty_7gl0g")
 Button/styles/hover = SubResource("StyleBoxTexture_w2by4")
 Button/styles/normal = SubResource("StyleBoxTexture_sn6te")
