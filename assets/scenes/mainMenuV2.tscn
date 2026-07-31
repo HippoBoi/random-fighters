@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cwq5xwhdfkoh6"]
+[gd_scene load_steps=36 format=3 uid="uid://cwq5xwhdfkoh6"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_menu"]
@@ -8,9 +8,10 @@
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="5_e73gw"]
 [ext_resource type="Texture2D" uid="uid://dwlwdckb1s4s8" path="res://assets/sprites/random.png" id="5_random"]
 [ext_resource type="Texture2D" uid="uid://c1ibuefw3763v" path="res://assets/sprites/fighters.png" id="6_fighters"]
-[ext_resource type="Shader" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="8_i7exv"]
+[ext_resource type="Shader" uid="uid://dw03usuibtjic" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="8_i7exv"]
 [ext_resource type="Texture2D" uid="uid://culglqjol8gq5" path="res://assets/sprites/menu_lines.png" id="9_tu4pt"]
 [ext_resource type="Theme" uid="uid://br3g2to4mj3gg" path="res://assets/materials/config_button_theme.tres" id="11_ra08g"]
+[ext_resource type="FontFile" uid="uid://0lodjd6o1k8f" path="res://addons/fonts/tl_mussels/TT Mussels Trial Bold.otf" id="12_lffdy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ss3a5"]
 shader = ExtResource("4_e73gw")
@@ -96,6 +97,10 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufrab"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lffdy"]
+bg_color = Color(0.049073577, 0.066944435, 0.12954172, 0.98039216)
+border_color = Color(0.32549, 0.396078, 0.592157, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ra08g"]
 bg_color = Color(0.0823529, 0.105882, 0.188235, 0.98)
@@ -362,6 +367,206 @@ theme_override_styles/normal = SubResource("StyleProfile")
 theme_override_styles/pressed = SubResource("StyleProfileHover")
 theme_override_styles/hover = SubResource("StyleProfileHover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ufrab")
+
+[node name="PlayMenuAssets" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 369.0
+offset_bottom = 369.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Carousel" type="Panel" parent="UI/PlayMenuAssets"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -59.0
+offset_right = -1.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lffdy")
+
+[node name="LeftArrowButton" type="Button" parent="UI/PlayMenuAssets/Carousel" groups=["main_menu_interactive"]]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -19.0
+offset_right = -83.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.752941, 0.862745, 0.968627, 1)
+theme_override_colors/font_hover_color = Color(1, 0.843137, 0.494118, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kk7om")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_vhmb6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s104v")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7ab4m")
+text = "<"
+
+[node name="SelectedOption" type="TextureButton" parent="UI/PlayMenuAssets/Carousel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_background")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="LeftOption" type="TextureButton" parent="UI/PlayMenuAssets/Carousel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -20.0
+offset_right = -240.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_background")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="RightOption" type="TextureButton" parent="UI/PlayMenuAssets/Carousel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = -20.0
+offset_right = 272.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("4_background")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="RightArrowButton" type="Button" parent="UI/PlayMenuAssets/Carousel" groups=["main_menu_interactive"]]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 83.0
+offset_top = -19.0
+offset_right = 125.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.752941, 0.862745, 0.968627, 1)
+theme_override_colors/font_hover_color = Color(1, 0.843137, 0.494118, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e73gw")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_ra08g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_lffdy")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1om2t")
+text = ">"
+
+[node name="ContextLabel" type="RichTextLabel" parent="UI/PlayMenuAssets"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -183.0
+offset_top = -124.0
+offset_right = 183.0
+offset_bottom = -81.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("12_lffdy")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Context Name"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="UI/PlayMenuAssets"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -152.5
+offset_top = 66.0
+offset_right = 152.5
+offset_bottom = 129.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("3_font")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "Description a a sadnasjd nasjdn djsadn ajdnj ndask naskdnaskdnkdajnks sd a ds"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="CoolLines3" type="TextureRect" parent="UI/PlayMenuAssets"]
+material = SubResource("ShaderMaterial_e73gw")
+layout_mode = 0
+offset_top = 29.0
+offset_right = 643.0
+offset_bottom = 35.0
+texture = ExtResource("9_tu4pt")
+expand_mode = 1
+
+[node name="CoolLines4" type="TextureRect" parent="UI/PlayMenuAssets"]
+material = SubResource("ShaderMaterial_e73gw")
+layout_mode = 0
+offset_left = -664.0
+offset_top = 29.0
+offset_right = -21.0
+offset_bottom = 35.0
+texture = ExtResource("9_tu4pt")
+expand_mode = 1
+
+[node name="CoolLines5" type="TextureRect" parent="UI/PlayMenuAssets"]
+material = SubResource("ShaderMaterial_e73gw")
+layout_mode = 0
+offset_top = 317.0
+offset_right = 643.0
+offset_bottom = 323.0
+texture = ExtResource("9_tu4pt")
+expand_mode = 1
+
+[node name="CoolLines6" type="TextureRect" parent="UI/PlayMenuAssets"]
+material = SubResource("ShaderMaterial_e73gw")
+layout_mode = 0
+offset_left = -664.0
+offset_top = 317.0
+offset_right = -21.0
+offset_bottom = 323.0
+texture = ExtResource("9_tu4pt")
+expand_mode = 1
 
 [node name="BgPanel" type="Panel" parent="UI"]
 z_index = -10

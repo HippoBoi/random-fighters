@@ -191,4 +191,4 @@ func _on_button_pressed(button: Button):
 
 func _on_play_pressed():
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT);
-	tween.tween_property(menu_assets, "position", Vector2(0, -300), 0.7);
+	tween.tween_property(menu_assets, "position", Vector2(0, -360), 0.7);
