@@ -1,6 +1,7 @@
 extends Control
 
 @onready var menu_assets: Control = $MainMenuAssets;
+@onready var play_menu_assets: Control = $PlayMenuAssets;
 @onready var random_text: TextureRect = $MainMenuAssets/Title1
 @onready var fighters_text: TextureRect = $MainMenuAssets/Title2
 @onready var left_option_label: Label = $MainMenuAssets/Carousel/SkinsLabel
@@ -22,23 +23,38 @@ signal carousel_option_changed(option: String)
 
 var coolLine1: TextureRect;
 var coolLine2: TextureRect;
+var coolLine3: TextureRect;
+var coolLine4: TextureRect;
+var coolLine5: TextureRect;
+var coolLine6: TextureRect;
+
 var linesTimer = 0;
-var linesSpeed = 90;
+var linesSpeed = 50;
 var selected_carousel_index := 0
 var carousel_is_transitioning := false
 var selected_option_position := Vector2.ZERO
 var left_option_position := Vector2.ZERO
 var right_option_position := Vector2.ZERO
 
+# technical debt alert, will fix this
+# TODO: refactor this logic ig
 func _handleCoolLines(delta):
 	linesTimer += delta * linesSpeed;
 	
-	if not (coolLine1 and coolLine2):
+	var linesCheck = coolLine1 and coolLine2 and coolLine3 and coolLine4 and coolLine5 and coolLine6;
+
+	if not (linesCheck):
 		push_error("COULDN'T FIND COOL LINES :(");
 		return;
 	
 	coolLine1.global_position.x = linesTimer;
 	coolLine2.global_position.x = linesTimer - 650;
+
+	coolLine3.global_position.x = linesTimer;
+	coolLine4.global_position.x = linesTimer - 650;
+
+	coolLine5.global_position.x = linesTimer;
+	coolLine6.global_position.x = linesTimer - 650;
 	
 	if (linesTimer >= 650):
 		linesTimer = 0;
@@ -66,10 +82,15 @@ func playLeave() -> void:
 	get_tree().create_tween().tween_property(self, "modulate:a", 0.0, 0.2)
 
 func _ready() -> void:
+	# we are going to trust that, if a single "CoolLines" asset exists,
+	# all the others will exist as well. Either way an error will show up
 	if (menu_assets.has_node("CoolLines")):
 		coolLine1 = menu_assets.get_node("CoolLines");
-	if (menu_assets.has_node("CoolLines2")):
 		coolLine2 = menu_assets.get_node("CoolLines2");
+		coolLine3 = play_menu_assets.get_node("CoolLines3");
+		coolLine4 = play_menu_assets.get_node("CoolLines4");
+		coolLine5 = play_menu_assets.get_node("CoolLines5");
+		coolLine6 = play_menu_assets.get_node("CoolLines6");
 
 	var version = ProjectSettings.get_setting("application/config/version")
 	game_version_label.text = "V " + version
@@ -190,5 +211,6 @@ func _on_button_pressed(button: Button):
 			print(selectedOption);
 
 func _on_play_pressed():
-	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT);
-	tween.tween_property(menu_assets, "position", Vector2(0, -360), 0.7);
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
+	tween.tween_property(menu_assets, "position", Vector2(0, -360), 0.8);
+	tween.tween_property(play_menu_assets, "position", Vector2(0, 0), 0.8);
