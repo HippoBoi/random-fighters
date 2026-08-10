@@ -94,6 +94,7 @@ func _ready() -> void:
 
 	var version = ProjectSettings.get_setting("application/config/version")
 	game_version_label.text = "V " + version
+	$MainMenuAssets/Debug.visible = Constants.DEBUG;
 
 	_setupButtons()
 	_setup_carousel()

@@ -545,9 +545,9 @@ horizontal_alignment = 1
 [node name="CoolLines3" type="TextureRect" parent="UI/PlayMenuAssets"]
 material = SubResource("ShaderMaterial_e73gw")
 layout_mode = 0
-offset_top = 33.0
+offset_top = 34.0
 offset_right = 643.0
-offset_bottom = 39.0
+offset_bottom = 40.0
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
 
@@ -555,9 +555,9 @@ expand_mode = 1
 material = SubResource("ShaderMaterial_e73gw")
 layout_mode = 0
 offset_left = -664.0
-offset_top = 33.0
+offset_top = 34.0
 offset_right = -21.0
-offset_bottom = 39.0
+offset_bottom = 40.0
 texture = ExtResource("9_tu4pt")
 expand_mode = 1
 

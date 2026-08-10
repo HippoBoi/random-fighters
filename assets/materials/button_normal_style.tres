@@ -2,13 +2,7 @@
 
 [resource]
 bg_color = Color(0.15252906, 0.15946212, 0.33971652, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
 border_width_bottom = 4
 border_color = Color(0.3776561, 0.4530362, 0.6438125, 1)
 border_blend = true
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+anti_aliasing = false
