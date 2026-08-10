@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cwq5xwhdfkoh6"]
+[gd_scene load_steps=39 format=3 uid="uid://cwq5xwhdfkoh6"]
 
 [ext_resource type="Script" uid="uid://is8wuorg5hfu" path="res://assets/scenes/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://rf8w15dupyyd" path="res://assets/scenes/Menu_UI.gd" id="2_menu"]
@@ -14,6 +14,7 @@
 [ext_resource type="FontFile" uid="uid://0lodjd6o1k8f" path="res://addons/fonts/tl_mussels/TT Mussels Trial Bold.otf" id="12_lffdy"]
 [ext_resource type="Theme" uid="uid://dbufd4n0tsgq8" path="res://assets/materials/button_dark_theme.tres" id="13_1om2t"]
 [ext_resource type="StyleBox" uid="uid://bnjv5eubhwq0o" path="res://assets/materials/button_normal_style.tres" id="14_kk7om"]
+[ext_resource type="Script" uid="uid://bg4nhmydac7o8" path="res://assets/scenes/carousel.gd" id="15_carousel"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ss3a5"]
 shader = ExtResource("4_e73gw")
@@ -404,6 +405,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lffdy")
+script = ExtResource("15_carousel")
 
 [node name="LeftArrowButton" type="Button" parent="UI/PlayMenuAssets/Carousel" groups=["main_menu_interactive"]]
 layout_mode = 1

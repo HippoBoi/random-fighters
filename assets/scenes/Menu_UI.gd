@@ -10,6 +10,10 @@ extends Control
 @onready var selected_option_button: Button = $MainMenuAssets/Carousel/SelectedButton
 @onready var right_arrow_button: Button = $MainMenuAssets/Carousel/RightArrowButton
 @onready var game_version_label: RichTextLabel = $MainMenuAssets/GameVersion
+@onready var play_carousel = $PlayMenuAssets/Carousel
+@onready var context_label: RichTextLabel = $PlayMenuAssets/ContextLabel
+@onready var description_label: RichTextLabel = $PlayMenuAssets/DescriptionLabel
+@onready var return_button: Button = $PlayMenuAssets/ReturnButton
 
 const TITLE_ROTATION_DURATION: float = 2.0;
 const ROTATION = 2;
@@ -18,8 +22,10 @@ const CAROUSEL_OPTIONS := ["PLAY", "OPTIONS", "SKINS"]
 const PLAY = CAROUSEL_OPTIONS[0];
 const OPTIONS = CAROUSEL_OPTIONS[1];
 const SKINS = CAROUSEL_OPTIONS[2];
+const CHARACTERS := ["rhay", "ramon", "clean", "shugo", "nephi", "ale", "mystery", "rio"]
 
 signal carousel_option_changed(option: String)
+signal play_carousel_option_selected(character: String)
 
 var coolLine1: TextureRect;
 var coolLine2: TextureRect;
@@ -35,6 +41,7 @@ var carousel_is_transitioning := false
 var selected_option_position := Vector2.ZERO
 var left_option_position := Vector2.ZERO
 var right_option_position := Vector2.ZERO
+var play_menu_is_active := false
 
 # technical debt alert, will fix this
 # TODO: refactor this logic ig
@@ -98,6 +105,7 @@ func _ready() -> void:
 
 	_setupButtons()
 	_setup_carousel()
+	_setup_play_carousel()
 	playIntro()
 	animateTitles()
 
@@ -109,6 +117,8 @@ func _setupButtons() -> void:
 		button.mouse_entered.connect(_play_button_sound.bind(button, "res://assets/sounds/menuHover.ogg"))
 		button.pressed.connect(_on_button_pressed.bind(button));
 
+	return_button.pressed.connect(_on_return_button_pressed)
+
 func _setup_carousel() -> void:
 	selected_option_position = selected_option_button.position
 	left_option_position = left_option_label.position
@@ -119,7 +129,32 @@ func _setup_carousel() -> void:
 	right_arrow_button.pressed.connect(_cycle_carousel.bind(1))
 	_refresh_carousel_labels()
 
+func _setup_play_carousel() -> void:
+	var character_options: Array = []
+	for character in CHARACTERS:
+		character_options.append({
+			"name": character,
+			"texture": load("res://assets/sprites/character_icons/%s_icon.png" % character),
+			"description": "Character description for %s" % character,
+		})
+
+	play_carousel.setup(character_options)
+	play_carousel.option_changed.connect(_on_play_carousel_option_changed)
+	play_carousel.option_selected.connect(_on_play_carousel_option_selected)
+	_on_play_carousel_option_changed(play_carousel.selected_index)
+
+func _on_play_carousel_option_changed(index: int) -> void:
+	var option: Dictionary = play_carousel.options[index]
+	context_label.text = "[center]%s[/center]" % option["name"].to_upper()
+	description_label.text = "[center]%s[/center]" % option["description"]
+
+func _on_play_carousel_option_selected(index: int) -> void:
+	play_carousel_option_selected.emit(play_carousel.options[index]["name"])
+
 func _unhandled_key_input(event: InputEvent) -> void:
+	if play_menu_is_active:
+		return
+
 	if carousel_is_transitioning:
 		return
 
@@ -212,6 +247,16 @@ func _on_button_pressed(button: Button):
 			print(selectedOption);
 
 func _on_play_pressed():
+	play_menu_is_active = true
+	play_carousel.set_active(true)
+	return_button.grab_focus()
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
 	tween.tween_property(menu_assets, "position", Vector2(0, -360), 0.8);
 	tween.tween_property(play_menu_assets, "position", Vector2(0, 0), 0.8);
+
+func _on_return_button_pressed():
+	play_menu_is_active = false
+	play_carousel.set_active(false)
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
+	tween.tween_property(menu_assets, "position", Vector2(0, 0), 0.8);
+	tween.tween_property(play_menu_assets, "position", Vector2(0, 369), 0.8);
