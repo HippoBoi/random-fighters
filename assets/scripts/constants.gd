@@ -1,5 +1,7 @@
 class_name Constants
 
+static var DEBUG = true;
+
 enum CursorTypes {
 	cursor,
 	cursorAttack

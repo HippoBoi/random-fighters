@@ -350,6 +350,16 @@ offset_bottom = 24.0
 theme = ExtResource("11_ra08g")
 text = "V 0.0.0"
 
+[node name="Debug" type="RichTextLabel" parent="UI/MainMenuAssets"]
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 17.0
+offset_right = 110.0
+offset_bottom = 40.0
+theme = ExtResource("11_ra08g")
+text = "DEBUG MODE"
+
 [node name="ProfileButton" type="Button" parent="UI/MainMenuAssets" groups=["main_menu_interactive"]]
 z_index = 4
 layout_mode = 1
@@ -572,8 +582,9 @@ expand_mode = 1
 
 [node name="ReturnButton" type="Button" parent="UI/PlayMenuAssets"]
 layout_mode = 0
+offset_top = 0.5
 offset_right = 58.0
-offset_bottom = 36.0
+offset_bottom = 35.5
 theme = ExtResource("13_1om2t")
 theme_override_constants/outline_size = 6
 theme_override_fonts/font = ExtResource("3_font")

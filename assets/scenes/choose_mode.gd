@@ -12,8 +12,6 @@ var blackTeamWins = 0;
 var whiteTeamWins = 0;
 var pointsToWin = 0;
 
-var DEBUG = false;
-
 @onready var bgModeName = $loopingModeName;
 var bgNamesCreated = [];
 var bgNamesTimer = 0;
@@ -164,7 +162,7 @@ func _animate_mode_selection():
 		$modeName.text = _getModeName(chosenMode);
 		$modeTexture.texture = _getModeImage(chosenMode);
 		
-		if not (DEBUG):
+		if not (Constants.DEBUG):
 			await get_tree().create_timer(0.075).timeout;
 	
 	selectedMode = true;

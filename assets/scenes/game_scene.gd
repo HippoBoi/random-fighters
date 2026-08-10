@@ -16,7 +16,6 @@ var teamThatHasWon = -1;
 var userPreferences: UserPreferences;
 
 var gameOver = false;
-var DEBUG = false;
 
 signal gameModeSelected(gamemode);
 signal roundVictory(team);
@@ -263,7 +262,6 @@ func _selectGameMode():
 	choosingMode.set_gamemode.connect(func(selectedMode: String):
 		gameModeSelected.emit(selectedMode);
 	);
-	choosingMode.DEBUG = DEBUG;
 	add_child(choosingMode);
 
 func _clearMap():

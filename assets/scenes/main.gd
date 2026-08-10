@@ -35,8 +35,6 @@ var lobbyScene: Control = null;
 var mainMenuOptionsUI = null;
 var userPreferences: UserPreferences;
 
-var DEBUG = true;
-
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate()
 	_loadSettings();
@@ -77,7 +75,7 @@ func _on_game_input_changed(new_text: String) -> void:
 	gameIdInput = new_text;
 
 func _on_options_pressed(_port: int = 8890, _username: String = "", _team: String = "0") -> void:
-	if (DEBUG):
+	if (Constants.DEBUG):
 		_on_host(_port, _username, _team);
 		return;
 
@@ -165,7 +163,7 @@ func _on_host(_port: int = 0, _username: String = "", _team: String = "", isLoca
 	_setSinglePlayerMatch(false);
 	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 
-	if not (isLocal and DEBUG):
+	if not (isLocal and Constants.DEBUG):
 		if not (norayNetwork):
 			norayNetwork = preload("res://assets/scenes/noray_network.tscn").instantiate();
 			add_child(norayNetwork);
@@ -237,7 +235,7 @@ func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username :=
 # this sucks yes but i don't wanna change it's name since it is also used
 # in the multiplayer logic
 func _joinPressed(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
-	if (DEBUG):
+	if (Constants.DEBUG):
 		_joinGame(ip, port, _gameId, _username, _team, _useUPnP);
 		return;
 
@@ -429,7 +427,7 @@ func onFindMatch():
 func _gameModeSelected(gameMode: String):
 	curGameMode = gameMode;
 	startRoundTimer = 10.0;
-	if (DEBUG):
+	if (Constants.DEBUG):
 		startRoundTimer = 2.0;
 
 	if (singlePlayerMatch):
@@ -626,7 +624,7 @@ func updateSelectedCharacter(playerId, character: String):
 		if (charSelect.timeInSeconds > 10):
 			charSelect.timeInSeconds = 10;
 
-			if (DEBUG):
+			if (Constants.DEBUG):
 				charSelect.timeInSeconds = 2;
 
 	if (charSelect):
@@ -717,7 +715,6 @@ func startGame():
 	gameScene.teamWonGame.connect(_onTeamWonGame);
 	gameScene.returnToLobby.connect(_onReturnToLobby);
 	gameScene.playerId = playerId;
-	gameScene.DEBUG = DEBUG;
 	add_child(gameScene);
 
 @rpc("any_peer", "call_local", "reliable")
