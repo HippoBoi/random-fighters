@@ -22,7 +22,7 @@ const CAROUSEL_OPTIONS := ["PLAY", "OPTIONS", "SKINS"]
 const PLAY = CAROUSEL_OPTIONS[0];
 const OPTIONS = CAROUSEL_OPTIONS[1];
 const SKINS = CAROUSEL_OPTIONS[2];
-const CHARACTERS := ["rhay", "ramon", "clean", "shugo", "nephi", "ale", "mystery", "rio"]
+const MODES := ["Multiplayer", "Story", "Training"];
 
 signal carousel_option_changed(option: String)
 signal play_carousel_option_selected(character: String)
@@ -130,15 +130,17 @@ func _setup_carousel() -> void:
 	_refresh_carousel_labels()
 
 func _setup_play_carousel() -> void:
-	var character_options: Array = []
-	for character in CHARACTERS:
-		character_options.append({
-			"name": character,
-			"texture": load("res://assets/sprites/character_icons/%s_icon.png" % character),
-			"description": "Character description for %s" % character,
+	var mode_options: Array = []
+	# not to confuse with actual gamemodes in game,
+	# i lowkey messed up the naming with those
+	for gameMode in MODES:
+		mode_options.append({
+			"name": gameMode,
+			"texture": load("res://assets/sprites/modes/%s.png" % gameMode),
+			"description": Constants.ModeDescriptions[gameMode],
 		})
 
-	play_carousel.setup(character_options)
+	play_carousel.setup(mode_options)
 	play_carousel.option_changed.connect(_on_play_carousel_option_changed)
 	play_carousel.option_selected.connect(_on_play_carousel_option_selected)
 	_on_play_carousel_option_changed(play_carousel.selected_index)
