@@ -27,7 +27,7 @@ enum MatchTypes {
 
 const ModeDescriptions = {
 	"Multiplayer": "Join or create a multiplayer a lobby to play team matches with people around the world.",
-	"Story": "Play the singleplayer story mode of Random Fighters. Fight against multiple rounds of enemies and bosses",
+	"Story": "Play the singleplayer story mode of Random Fighters. Fight against multiple rounds of enemies and bosses.",
 	"Training": "Play every character or try to learn combos in this sandbox environment."
 }
 

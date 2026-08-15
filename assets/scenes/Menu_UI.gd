@@ -151,7 +151,20 @@ func _on_play_carousel_option_changed(index: int) -> void:
 	description_label.text = "[center]%s[/center]" % option["description"]
 
 func _on_play_carousel_option_selected(index: int) -> void:
-	play_carousel_option_selected.emit(play_carousel.options[index]["name"])
+	var mode_name: String = play_carousel.options[index]["name"]
+	play_carousel_option_selected.emit(mode_name)
+	_start_mode(mode_name)
+
+func _start_mode(mode_name: String) -> void:
+	_play_button_sound(play_carousel, "res://assets/sounds/menuClick.ogg")
+	var main_script = get_parent()
+	match mode_name:
+		"Multiplayer":
+			main_script.onFindMatch()
+		"Training":
+			main_script._on_training_button_pressed()
+		_:
+			print("Mode not implemented yet: %s" % mode_name)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if play_menu_is_active:
@@ -223,7 +236,7 @@ func _unlock_carousel() -> void:
 	right_arrow_button.disabled = false
 	carousel_option_changed.emit(CAROUSEL_OPTIONS[selected_carousel_index])
 
-func _play_button_sound(button: Button, sound_path: String) -> void:
+func _play_button_sound(button: Node, sound_path: String) -> void:
 	var sound := AudioStreamPlayer.new()
 	button.add_child(sound)
 	sound.stream = load(sound_path)
