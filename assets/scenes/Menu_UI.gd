@@ -1,6 +1,7 @@
 extends Control
 
 @onready var menu_assets: Control = $MainMenuAssets;
+@onready var play_menu_assets: Control = $PlayMenuAssets;
 @onready var random_text: TextureRect = $MainMenuAssets/Title1
 @onready var fighters_text: TextureRect = $MainMenuAssets/Title2
 @onready var left_option_label: Label = $MainMenuAssets/Carousel/SkinsLabel
@@ -9,6 +10,10 @@ extends Control
 @onready var selected_option_button: Button = $MainMenuAssets/Carousel/SelectedButton
 @onready var right_arrow_button: Button = $MainMenuAssets/Carousel/RightArrowButton
 @onready var game_version_label: RichTextLabel = $MainMenuAssets/GameVersion
+@onready var play_carousel = $PlayMenuAssets/Carousel
+@onready var context_label: RichTextLabel = $PlayMenuAssets/ContextLabel
+@onready var description_label: RichTextLabel = $PlayMenuAssets/DescriptionLabel
+@onready var return_button: Button = $PlayMenuAssets/ReturnButton
 
 const TITLE_ROTATION_DURATION: float = 2.0;
 const ROTATION = 2;
@@ -17,28 +22,46 @@ const CAROUSEL_OPTIONS := ["PLAY", "OPTIONS", "SKINS"]
 const PLAY = CAROUSEL_OPTIONS[0];
 const OPTIONS = CAROUSEL_OPTIONS[1];
 const SKINS = CAROUSEL_OPTIONS[2];
+const MODES := ["Multiplayer", "Story", "Training"];
 
 signal carousel_option_changed(option: String)
+signal play_carousel_option_selected(character: String)
 
 var coolLine1: TextureRect;
 var coolLine2: TextureRect;
+var coolLine3: TextureRect;
+var coolLine4: TextureRect;
+var coolLine5: TextureRect;
+var coolLine6: TextureRect;
+
 var linesTimer = 0;
-var linesSpeed = 90;
+var linesSpeed = 50;
 var selected_carousel_index := 0
 var carousel_is_transitioning := false
 var selected_option_position := Vector2.ZERO
 var left_option_position := Vector2.ZERO
 var right_option_position := Vector2.ZERO
+var play_menu_is_active := false
 
+# technical debt alert, will fix this
+# TODO: refactor this logic ig
 func _handleCoolLines(delta):
 	linesTimer += delta * linesSpeed;
 	
-	if not (coolLine1 and coolLine2):
+	var linesCheck = coolLine1 and coolLine2 and coolLine3 and coolLine4 and coolLine5 and coolLine6;
+
+	if not (linesCheck):
 		push_error("COULDN'T FIND COOL LINES :(");
 		return;
 	
 	coolLine1.global_position.x = linesTimer;
 	coolLine2.global_position.x = linesTimer - 650;
+
+	coolLine3.global_position.x = linesTimer;
+	coolLine4.global_position.x = linesTimer - 650;
+
+	coolLine5.global_position.x = linesTimer;
+	coolLine6.global_position.x = linesTimer - 650;
 	
 	if (linesTimer >= 650):
 		linesTimer = 0;
@@ -66,16 +89,23 @@ func playLeave() -> void:
 	get_tree().create_tween().tween_property(self, "modulate:a", 0.0, 0.2)
 
 func _ready() -> void:
+	# we are going to trust that, if a single "CoolLines" asset exists,
+	# all the others will exist as well. Either way an error will show up
 	if (menu_assets.has_node("CoolLines")):
 		coolLine1 = menu_assets.get_node("CoolLines");
-	if (menu_assets.has_node("CoolLines2")):
 		coolLine2 = menu_assets.get_node("CoolLines2");
+		coolLine3 = play_menu_assets.get_node("CoolLines3");
+		coolLine4 = play_menu_assets.get_node("CoolLines4");
+		coolLine5 = play_menu_assets.get_node("CoolLines5");
+		coolLine6 = play_menu_assets.get_node("CoolLines6");
 
 	var version = ProjectSettings.get_setting("application/config/version")
 	game_version_label.text = "V " + version
+	$MainMenuAssets/Debug.visible = Constants.DEBUG;
 
 	_setupButtons()
 	_setup_carousel()
+	_setup_play_carousel()
 	playIntro()
 	animateTitles()
 
@@ -87,6 +117,8 @@ func _setupButtons() -> void:
 		button.mouse_entered.connect(_play_button_sound.bind(button, "res://assets/sounds/menuHover.ogg"))
 		button.pressed.connect(_on_button_pressed.bind(button));
 
+	return_button.pressed.connect(_on_return_button_pressed)
+
 func _setup_carousel() -> void:
 	selected_option_position = selected_option_button.position
 	left_option_position = left_option_label.position
@@ -97,7 +129,47 @@ func _setup_carousel() -> void:
 	right_arrow_button.pressed.connect(_cycle_carousel.bind(1))
 	_refresh_carousel_labels()
 
+func _setup_play_carousel() -> void:
+	var mode_options: Array = []
+	# not to confuse with actual gamemodes in game,
+	# i lowkey messed up the naming with those
+	for gameMode in MODES:
+		mode_options.append({
+			"name": gameMode,
+			"texture": load("res://assets/sprites/modes/%s.png" % gameMode),
+			"description": Constants.ModeDescriptions[gameMode],
+		})
+
+	play_carousel.setup(mode_options)
+	play_carousel.option_changed.connect(_on_play_carousel_option_changed)
+	play_carousel.option_selected.connect(_on_play_carousel_option_selected)
+	_on_play_carousel_option_changed(play_carousel.selected_index)
+
+func _on_play_carousel_option_changed(index: int) -> void:
+	var option: Dictionary = play_carousel.options[index]
+	context_label.text = "[center]%s[/center]" % option["name"].to_upper()
+	description_label.text = "[center]%s[/center]" % option["description"]
+
+func _on_play_carousel_option_selected(index: int) -> void:
+	var mode_name: String = play_carousel.options[index]["name"]
+	play_carousel_option_selected.emit(mode_name)
+	_start_mode(mode_name)
+
+func _start_mode(mode_name: String) -> void:
+	_play_button_sound(play_carousel, "res://assets/sounds/menuClick.ogg")
+	var main_script = get_parent()
+	match mode_name:
+		"Multiplayer":
+			main_script.onFindMatch()
+		"Training":
+			main_script._on_training_button_pressed()
+		_:
+			print("Mode not implemented yet: %s" % mode_name)
+
 func _unhandled_key_input(event: InputEvent) -> void:
+	if play_menu_is_active:
+		return
+
 	if carousel_is_transitioning:
 		return
 
@@ -164,7 +236,7 @@ func _unlock_carousel() -> void:
 	right_arrow_button.disabled = false
 	carousel_option_changed.emit(CAROUSEL_OPTIONS[selected_carousel_index])
 
-func _play_button_sound(button: Button, sound_path: String) -> void:
+func _play_button_sound(button: Node, sound_path: String) -> void:
 	var sound := AudioStreamPlayer.new()
 	button.add_child(sound)
 	sound.stream = load(sound_path)
@@ -190,5 +262,16 @@ func _on_button_pressed(button: Button):
 			print(selectedOption);
 
 func _on_play_pressed():
-	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT);
-	tween.tween_property(menu_assets, "position", Vector2(0, -300), 0.7);
+	play_menu_is_active = true
+	play_carousel.set_active(true)
+	return_button.grab_focus()
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
+	tween.tween_property(menu_assets, "position", Vector2(0, -360), 0.8);
+	tween.tween_property(play_menu_assets, "position", Vector2(0, 0), 0.8);
+
+func _on_return_button_pressed():
+	play_menu_is_active = false
+	play_carousel.set_active(false)
+	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT).set_parallel(true);
+	tween.tween_property(menu_assets, "position", Vector2(0, 0), 0.8);
+	tween.tween_property(play_menu_assets, "position", Vector2(0, 369), 0.8);

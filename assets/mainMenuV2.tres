@@ -1,24 +1,24 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://br3g2to4mj3gg"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://o0y2e8eqr1yp"]
 
-[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_7gl0g"]
-[ext_resource type="FontFile" uid="uid://bvj5cr1pdhlr5" path="res://addons/fonts/tl_mussels/TT Mussels Trial Light.otf" id="2_sn6te"]
+[ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="1_agpm6"]
+[ext_resource type="FontFile" uid="uid://bvj5cr1pdhlr5" path="res://addons/fonts/tl_mussels/TT Mussels Trial Light.otf" id="2_7ei64"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7gl0g"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w2by4"]
-texture = ExtResource("1_7gl0g")
+texture = ExtResource("1_agpm6")
 modulate_color = Color(0.553, 0.326, 0.531, 0.42)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sn6te"]
-texture = ExtResource("1_7gl0g")
+texture = ExtResource("1_agpm6")
 modulate_color = Color(0.21243998, 0.21441108, 0.26739222, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0lru2"]
-texture = ExtResource("1_7gl0g")
+texture = ExtResource("1_agpm6")
 modulate_color = Color(0.38946, 0.130294, 0.150849, 0.641)
 
 [sub_resource type="FontVariation" id="FontVariation_sn6te"]
-base_font = ExtResource("2_sn6te")
+base_font = ExtResource("2_7ei64")
 spacing_glyph = 1
 
 [resource]
