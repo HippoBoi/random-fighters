@@ -381,6 +381,22 @@ theme_override_styles/pressed = SubResource("StyleProfileHover")
 theme_override_styles/hover = SubResource("StyleProfileHover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_ufrab")
 
+[node name="NameInput" type="LineEdit" parent="UI/MainMenuAssets"]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 265.0
+offset_right = 398.0
+offset_bottom = 295.0
+theme_override_colors/font_color = Color(0.776471, 0.847059, 0.952941, 1)
+theme_override_colors/font_placeholder_color = Color(0.5, 0.552941, 0.678431, 1)
+theme_override_colors/caret_color = Color(0.776471, 0.847059, 0.952941, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleProfile")
+theme_override_styles/focus = SubResource("StyleProfileHover")
+placeholder_text = "Username..."
+max_length = 16
+
 [node name="PlayMenuAssets" type="Control" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
@@ -608,3 +624,5 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ra08g")
+
+[connection signal="text_changed" from="UI/MainMenuAssets/NameInput" to="." method="_on_name_input"]
