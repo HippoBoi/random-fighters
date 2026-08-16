@@ -25,9 +25,11 @@ const SWITCH_TEAM = "SWITCH_TEAM";
 
 const BLACK_TEAM = "0";
 const WHITE_TEAM = "1";
+const JOIN_TIMEOUT: float = 10.0;
 
 var dontShowAgain = false;
 var userPreferences: UserPreferences;
+var joinRequestTime: float = -1.0;
 
 @onready var statusText = $Status;
 @onready var playerAvatar = $PlayerStats/PlayerAvatar;
@@ -66,6 +68,20 @@ func _updateServerStatus():
 	else:
 		serverText.text = "OFFLINE";
 		serverIcon.modulate = OFFLINE_COLOR;
+
+func _process(delta: float) -> void:
+	if (joinRequestTime < 0):
+		return;
+
+	joinRequestTime += delta;
+	if (joinRequestTime >= JOIN_TIMEOUT):
+		joinRequestTime = -1.0;
+		_onJoinTimeout();
+
+func _onJoinTimeout():
+	print("[lobby][WARNING]: join timed out, returning to match list");
+	_leaveMatchLobby();
+	statusText.text = "Failed to join match";
 
 func testConnection():
 	var ADDRESS = NetworkConfig.NORAY_ADDRESS;
@@ -150,6 +166,7 @@ func _enterMatchLobby(matchData):
 	print("entered match!");
 	print(matchData);
 
+	joinRequestTime = -1.0;
 	currentLobbyId = matchData.matchInfo.matchId;
 	print("lobby ID: %s" % currentLobbyId);
 
@@ -160,6 +177,7 @@ func _enterMatchLobby(matchData):
 	_buildLobbyPlayerList(matchData);
 
 func _leaveMatchLobby():
+	joinRequestTime = -1.0;
 	currentLobbyId = "";
 
 	$LobbyContainer.visible = false;
@@ -175,11 +193,9 @@ func _buildLobbyPlayerList(matchData):
 
 	var matchPlayers = matchData.users;
 	var ownerId = matchData.matchInfo.ownerId;
-	var foundOwner = false;
 
 	if (ownerId):
 		if (ownerId == fakeUser.playerId):
-			foundOwner = true;
 			$LobbyContainer/Teams/Ready.visible = true;
 
 		currentOwnerId = ownerId;
@@ -191,14 +207,10 @@ func _buildLobbyPlayerList(matchData):
 
 		var userId: String = player.userId;
 		var tagId = userId.right(3);
-		var isOwner = tagId == ownerId;
 		var isPlayer = tagId == fakeUser.playerId;
 		if (isPlayer):
 			fakeUser.username = player.username;
 			currentTeam = player.team;
-		
-		if (isOwner):
-			foundOwner = true;
 
 		print("%s: my team is: %s" % [player.username, player.team]);
 
@@ -217,11 +229,6 @@ func _buildLobbyPlayerList(matchData):
 				$LobbyContainer/Teams/BlackTeamJoin.visible = true;
 				$LobbyContainer/Teams/WhiteTeamJoin.visible = true;
 			print("%s: - - - - player has no team - - - -" % player.username);
-	
-	if (ownerId and not foundOwner):
-		# force to leave if owner wasn't found in the game
-		# a better solution is to implement this server side LOL
-		_leaveMatchLobby();
 
 func _updateMatchesList(matches):
 	for lobby_button in $MatchesContainer/AvailableMatches.get_children():
@@ -239,6 +246,7 @@ func _updateMatchesList(matches):
 func _joinMatch(game):
 	$MatchesContainer/AvailableMatches.visible = false;
 	statusText.text = "Joining match...";
+	joinRequestTime = 0.0;
 
 	var join_request = {
 		"op": JOIN_MATCH,
@@ -381,11 +389,20 @@ func hostMatch(_matchIp: String, _port: int, _gameOid: String, _useUPnP: bool):
 
 	if (_matchIp.is_empty()):
 		print("FAILED: couldn't host match");
-		return;
+		return ERR_INVALID_PARAMETER;
+
+	if (currentLobbyId.is_empty()):
+		print("FAILED: couldn't host match, no lobby id");
+		return ERR_UNCONFIGURED;
 
 	if (_useUPnP):
 		_matchIp = getUPnPAddress(_port);
 		print("NEW UPNP MATCH IP: %s" % _matchIp);
+
+		if (_matchIp.is_empty()):
+			print("FAILED: UPnP could not resolve an external ip");
+			cleanupUPnPMapping();
+			return ERR_CANT_RESOLVE;
 
 	var request = {
 		"op": MATCH_READY,
@@ -398,6 +415,7 @@ func hostMatch(_matchIp: String, _port: int, _gameOid: String, _useUPnP: bool):
 	};
 
 	_sendMessage(request);
+	return OK;
 
 func _adminStartMatch() -> void:
 	if (currentLobbyId.is_empty()):
@@ -412,7 +430,10 @@ func _adminStartMatch() -> void:
 func _on_refresh() -> void:
 	_loadMatches();
 
-func _on_leave_match() -> void:
+func _notifyLeaveMatch():
+	if (currentLobbyId.is_empty()):
+		return;
+
 	var request = {
 		"op": PLAYER_DROPPED,
 		"matchId": currentLobbyId,
@@ -420,6 +441,9 @@ func _on_leave_match() -> void:
 	};
 
 	_sendMessage(request);
+
+func _on_leave_match() -> void:
+	_notifyLeaveMatch();
 
 	_leaveMatchLobby();
 
@@ -454,6 +478,7 @@ func _on_return_pressed() -> void:
 		newSound.queue_free();
 	);
 
+	_notifyLeaveMatch();
 	returnToLobby.emit();
 
 func _on_return_hovered() -> void:

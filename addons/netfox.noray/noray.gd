@@ -64,7 +64,7 @@ func _enter_tree():
 	on_command.connect(_handle_commands)
 
 ## Connect to noray at host.
-func connect_to_host(address: String, port: int = 8890) -> Error:
+func connect_to_host(address: String, port: int = 8890, timeout: float = 10.0) -> Error:
 	if is_connected_to_host():
 		disconnect_from_host()
 
@@ -80,8 +80,13 @@ func connect_to_host(address: String, port: int = 8890) -> Error:
 	_peer.set_no_delay(true)
 	_protocol.reset()
 	
-	while _peer.get_status() < 2:
+	var start_time: int = Time.get_ticks_msec()
+	while _peer.get_status() < _peer.STATUS_CONNECTED:
 		_peer.poll()
+		if Time.get_ticks_msec() - start_time > int(timeout * 1000.0):
+			_logger.error("timed out connecting to noray at %s:%s", [address, port])
+			disconnect_from_host()
+			return ERR_TIMEOUT
 		await get_tree().process_frame
 	
 	if _peer.get_status() == _peer.STATUS_CONNECTED:
