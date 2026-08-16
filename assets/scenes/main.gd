@@ -31,6 +31,10 @@ var enetSignalsConnected = false;
 var activeConnectionMode: String = "";
 var singlePlayerMatch: bool = false;
 
+var pendingDirectIp: String = "";
+var pendingDirectPort: int = 0;
+var directFallbackAttempted: bool = false;
+
 var lobbyScene: Control = null;
 var mainMenuOptionsUI = null;
 var userPreferences: UserPreferences;
@@ -48,7 +52,7 @@ func _process(delta: float) -> void:
 		if (startRoundTimer <= 0.1):
 			if (singlePlayerMatch):
 				startRound(curGameMode);
-			else:
+			elif (multiplayer.is_server()):
 				rpc("startRound", curGameMode);
 
 	timer += delta;
@@ -172,14 +176,20 @@ func _on_host(_port: int = 0, _username: String = "", _team: String = "", isLoca
 			norayNetwork.setup(self);
 			norayNetwork.startNorayHost.connect(startNorayHost);
 
-		await norayNetwork.createServerPeer(ADDRESS);
+		var norayResult = await norayNetwork.createServerPeer(ADDRESS);
+		if (norayResult != OK):
+			print("[main][WARNING]: NORAY HOST FAILED: %s. STARTING UPNP SERVER" % norayResult);
 
 	if (not (norayNetwork) or norayNetwork.isHosting == false):
 		print("[main][WARNING]: NORAY NETWORKING FAILED. STARTING UPNP SERVER");
 		useUPnP = true;
 		activeConnectionMode = "upnp";
 
-		_hostWithUPnP(_port);
+		var upnpResult = _hostWithUPnP(_port);
+		if (upnpResult != OK):
+			print("[main][ERROR]: FAILED TO START UPNP SERVER: %s" % upnpResult);
+			_returnFromMatchToLobby("host_failed");
+			return;
 	else:
 		activeConnectionMode = "noray";
 
@@ -192,14 +202,23 @@ func _on_host(_port: int = 0, _username: String = "", _team: String = "", isLoca
 	_connectEnetSignals();
 
 	if not (isLocal):
-		lobbyScene.hostMatch(ADDRESS, PORT, curGameId, useUPnP);
+		var hostResult = lobbyScene.hostMatch(ADDRESS, PORT, curGameId, useUPnP);
+		if (hostResult != OK):
+			print("[main][ERROR]: FAILED TO ADVERTISE MATCH: %s" % hostResult);
+			_returnFromMatchToLobby("host_failed");
+			return;
 
 	startCharacterSelect();
 
 func _hostWithUPnP(_port):
 	print("host...")
-	multiplayerPeer.create_server(_port);
+	multiplayerPeer.close();
+	var response = multiplayerPeer.create_server(_port);
+	if (response != OK):
+		print("[main][ERROR]: failed to create upnp server: %s" % response);
+		return response;
 	multiplayer.multiplayer_peer = multiplayerPeer;
+	return OK;
 
 func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username := "noname", _team := "1", _useUPnP := true):
 	_resetConnectionState();
@@ -207,8 +226,10 @@ func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username :=
 	PlayerFunc.matchType = Constants.MatchTypes.Versus;
 	username = _username;
 	curTeam = int(_team);
-	# print("joining team: %s" % curTeam);
-	# print("GAME ID: %s" % _gameId);
+
+	pendingDirectIp = ip;
+	pendingDirectPort = port;
+	directFallbackAttempted = false;
 
 	if not (_useUPnP):
 		activeConnectionMode = "noray";
@@ -221,15 +242,45 @@ func _joinGame(ip := LOCALHOST, port := PORT, _gameId := curGameId, _username :=
 			norayNetwork.relayConnection.connect(handleRelayConnection);
 			norayNetwork.setup(self);
 
-		norayNetwork.createClientPeer(ip, _gameId);
+		_norayClientConnectAsync(ip, _gameId);
 	else:
-		activeConnectionMode = "upnp";
 		print("USING UPNP TO JOIN: %s:%s" % [ip, port]);
-		multiplayerPeer.create_client(ip, port);
-		multiplayer.multiplayer_peer = multiplayerPeer;
+		_joinDirect(ip, port);
 
 	_connectEnetSignals();
 	startCharacterSelect();
+
+func _norayClientConnectAsync(ip: String, _gameId: String) -> void:
+	norayNetwork.gameId = _gameId;
+	var result = await norayNetwork.createClientPeer(ip, _gameId);
+	if (result != OK):
+		print("[main][WARNING]: NORAY CLIENT FAILED: %s. FALLING BACK TO DIRECT CONNECTION" % result);
+		_fallbackToDirectConnection();
+
+func _fallbackToDirectConnection() -> void:
+	if (directFallbackAttempted):
+		return;
+
+	directFallbackAttempted = true;
+	_joinDirect(pendingDirectIp, pendingDirectPort);
+
+func _joinDirect(ip: String, port: int) -> void:
+	if (ip.is_empty() or port <= 0):
+		print("[main][ERROR]: cannot join directly, invalid address %s:%s" % [ip, port]);
+		_returnFromMatchToLobby("connection_failed");
+		return;
+
+	print("[main]: JOINING DIRECTLY: %s:%s" % [ip, port]);
+	activeConnectionMode = "direct";
+
+	multiplayerPeer.close();
+	var response = multiplayerPeer.create_client(ip, port);
+	if (response != OK):
+		print("[main][ERROR]: failed to create direct client: %s" % response);
+		_returnFromMatchToLobby("connection_failed");
+		return;
+
+	multiplayer.multiplayer_peer = multiplayerPeer;
 
 # this "joinPressed" function will double as the "singleplayer" button
 # this sucks yes but i don't wanna change it's name since it is also used
@@ -276,11 +327,23 @@ func _getLocalPlayerId() -> int:
 
 	return multiplayer.get_unique_id();
 
-func addCharacter(playerID, character = ""):
-	var preloadedCharacter = null;
+func _isValidCharacter(character: String) -> bool:
+	if (character.is_empty()):
+		return false;
+	if (character.contains("/") or character.contains("\\") or character.contains("..")):
+		return false;
 
+	return ResourceLoader.exists("res://assets/characters/%s/%s.tscn" % [character, character]);
+
+func addCharacter(playerID, character = ""):
+	if not (_isValidCharacter(character)):
+		return;
+
+	var preloadedCharacter = null;
 	var path = "res://assets/characters/%s/%s.tscn" % [character, character];
 	preloadedCharacter = load(path);
+	if (preloadedCharacter == null):
+		return;
 
 	var selectedChar = preloadedCharacter.instantiate();
 	var playerList = Server.playersInfo;
@@ -290,12 +353,14 @@ func addCharacter(playerID, character = ""):
 	add_child(selectedChar);
 
 func preloadCharacter(playerId, character: String = ""):
-	if (character.is_empty()):
+	if not (_isValidCharacter(character)):
 		return;
 
 	var preloadedCharacter = null;
 	var path = "res://assets/characters/%s/%s.tscn" % [character, character];
 	preloadedCharacter = load(path);
+	if (preloadedCharacter == null):
+		return;
 
 	var selectedChar = preloadedCharacter;
 	var playerList = Server.playersInfo;
@@ -426,17 +491,36 @@ func onFindMatch():
 
 func _gameModeSelected(gameMode: String):
 	curGameMode = gameMode;
+
+	if (singlePlayerMatch):
+		startRoundTimer = 10.0;
+		if (Constants.DEBUG):
+			startRoundTimer = 2.0;
+		updateGameMode(gameMode);
+		return;
+
+	if (multiplayer.is_server()):
+		_startRoundCountdown(gameMode);
+	else:
+		rpc_id(1, "requestModeSelect", gameMode);
+
+func _startRoundCountdown(gameMode: String):
+	curGameMode = gameMode;
+	rpc("updateGameMode", gameMode);
+
+	if (startRoundTimer > 0 or roundStarted):
+		return;
+
 	startRoundTimer = 10.0;
 	if (Constants.DEBUG):
 		startRoundTimer = 2.0;
 
-	if (singlePlayerMatch):
-		updateGameMode(gameMode);
+@rpc("any_peer", "call_remote")
+func requestModeSelect(gameMode: String):
+	if not (multiplayer.is_server()):
 		return;
 
-	for i in range(4):
-		rpc("updateGameMode", gameMode);
-		await get_tree().create_timer(0.1).timeout;
+	_startRoundCountdown(gameMode);
 
 func _onRoundVictory(winnerTeam: int):
 	rpc("syncRoundVictory", winnerTeam);
@@ -472,6 +556,9 @@ func _disconnectMatchNetwork(reason: String = ""):
 		norayNetwork.queue_free();
 	norayNetwork = null;
 	activeConnectionMode = "";
+	pendingDirectIp = "";
+	pendingDirectPort = 0;
+	directFallbackAttempted = false;
 
 	print("match network disconnected: %s" % reason);
 
@@ -498,6 +585,9 @@ func _clearRoundData():
 	networkDisconnectInProgress = false;
 	returnToLobbyInProgress = false;
 	activeConnectionMode = "";
+	pendingDirectIp = "";
+	pendingDirectPort = 0;
+	directFallbackAttempted = false;
 	_setSinglePlayerMatch(false);
 	curTeam = -1;
 	curCharacter = "";
@@ -521,18 +611,24 @@ func _clearRoundData():
 	$UI.visible = true;
 
 func startNorayHost():
-	var response = OK;
+	if (Noray.local_port < 0):
+		print("[main][ERROR]: cannot start host, noray local port not registered: %s" % Noray.local_port);
+		return;
 
-	response = multiplayerPeer.create_server(Noray.local_port);
-	multiplayer.multiplayer_peer = multiplayerPeer;
-
-	if (response == OK):
-		norayNetwork.isHosting = true;
-		print("HOST SUCCESS!!!!!")
-	else:
+	var response = multiplayerPeer.create_server(Noray.local_port);
+	if (response != OK):
 		print("failed to start host: %s, %s" % [Noray.local_port, response]);
+		return;
+
+	multiplayer.multiplayer_peer = multiplayerPeer;
+	norayNetwork.isHosting = true;
+	print("HOST SUCCESS!!!!!")
 
 func connectToNorayHost(address: String, port: int):
+	if (Noray.local_port < 0):
+		print("[main][ERROR]: cannot connect via noray, local port not registered");
+		return ERR_UNCONFIGURED;
+
 	var udp = PacketPeerUDP.new();
 	udp.bind(Noray.local_port);
 	udp.set_dest_address(address, port);
@@ -560,6 +656,7 @@ func handleNatConnection(address: String, port: int):
 	var response = await connectToNorayHost(address, port);
 	if (response != OK):
 		print("[ERROR]: NAT CONNECTION FAILED.")
+		_fallbackToDirectConnection();
 		return response;
 
 	print("NAT CONNECTION SUCCESSFUL");
@@ -569,7 +666,10 @@ func handleRelayConnection(address: String, port: int):
 	var response = await connectToNorayHost(address, port);
 	if (response != OK):
 		print("[ERROR]: RELAY CONNECTION FAILED.")
-		norayNetwork.useNatConnection(curGameId);
+		var natResult = norayNetwork.useNatConnection(norayNetwork.gameId);
+		if (natResult != OK):
+			print("[main][WARNING]: FAILED TO REQUEST NAT CONNECTION: %s. FALLING BACK TO DIRECT" % natResult);
+			_fallbackToDirectConnection();
 		return response;
 
 	print("CONNECTION SUCCESS!!!")
@@ -585,11 +685,11 @@ func setupClientEnetConnection():
 func _norrayServerDisconnected():
 	_onServerDisconnected();
 
-@rpc
+@rpc("authority")
 func addNewPlayerCharacter(newPlayerID):
 	addCharacter(newPlayerID);
 
-@rpc
+@rpc("authority", "call_local")
 func addPlayer(playerId):
 	var character = null;
 	var myTeam = 0;
@@ -603,6 +703,14 @@ func addPlayer(playerId):
 
 @rpc("call_local", "any_peer")
 func updateSelectedCharacter(playerId, character: String):
+	var remoteSender = multiplayer.get_remote_sender_id();
+	if (remoteSender != 0 and remoteSender != playerId):
+		print("[main][WARNING]: rejected spoofed character selection from peer %s for player %s" % [remoteSender, playerId]);
+		return;
+
+	if not (_isValidCharacter(character)):
+		return;
+
 	var playerList = Server.playersInfo;
 	var charSelect = null;
 
@@ -634,6 +742,11 @@ func updateSelectedCharacter(playerId, character: String):
 
 @rpc("any_peer")
 func syncData(playerId, _username, _team, _character):
+	var remoteSender = multiplayer.get_remote_sender_id();
+	if (remoteSender != 0 and remoteSender != playerId):
+		print("[main][WARNING]: rejected spoofed syncData from peer %s for player %s" % [remoteSender, playerId]);
+		return;
+
 	var playerList = Server.playersInfo;
 
 	if (playerList.has(playerId)):
@@ -646,12 +759,12 @@ func syncData(playerId, _username, _team, _character):
 		var playerInfo = PlayerData.new(playerId, _username, character, character, _team);
 		Server.playersInfo[playerId] = playerInfo;
 
-@rpc
+@rpc("authority")
 func addPreviousCharacters(playersList):
 	for playerID in playersList.keys():
 		addCharacter(playerID);
 
-@rpc
+@rpc("authority")
 func addPreviousPlayers(playersList):
 	for playerID in playersList.keys():
 		addPlayer(playerID);
@@ -679,14 +792,14 @@ func disconnectPlayer(playerID):
 		if (gameScene.has_method("updatePlayerList")):
 			gameScene.updatePlayerList();
 
-@rpc("call_local")
+@rpc("authority", "call_local", "reliable")
 func updateGameMode(gameMode: String):
 	var isScene = has_node("Game");
 	if (isScene):
 		var gameScene = get_node("Game");
 		gameScene.setGameMode(gameMode);
 
-@rpc("any_peer", "call_local")
+@rpc("authority", "call_local", "reliable")
 func startGame():
 	if (gameStarted):
 		return;
@@ -717,7 +830,7 @@ func startGame():
 	gameScene.playerId = playerId;
 	add_child(gameScene);
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func startRound(gameMode: String):
 	if (roundStarted):
 		return;
@@ -738,7 +851,7 @@ func startRound(gameMode: String):
 
 	await get_tree().create_timer(0.5).timeout;
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func syncRoundVictory(winnerTeam: int):
 	if not (roundStarted):
 		return;
@@ -751,7 +864,7 @@ func syncRoundVictory(winnerTeam: int):
 		var gameScene = get_node("Game");
 		gameScene.onRoundVictory(winnerTeam);
 
-@rpc("reliable")
+@rpc("authority", "reliable")
 func syncTeamWins(_blackTeamWins: int, _whiteTeamWins: int):
 	var isScene = has_node("Game");
 
@@ -760,7 +873,7 @@ func syncTeamWins(_blackTeamWins: int, _whiteTeamWins: int):
 		gameScene.blackTeamWins = _blackTeamWins;
 		gameScene.whiteTeamWins = _whiteTeamWins;
 
-@rpc("reliable", "call_local")
+@rpc("authority", "reliable", "call_local")
 func teamHasWon(_teamThatHasWon: int):
 	matchHasEnded = true;
 	var isScene = has_node("Game");
