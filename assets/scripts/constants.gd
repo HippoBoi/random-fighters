@@ -1,6 +1,6 @@
 class_name Constants
 
-static var DEBUG = true;
+static var DEBUG = false;
 
 enum CursorTypes {
 	cursor,
