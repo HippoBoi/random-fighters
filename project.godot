@@ -22,6 +22,7 @@ config/icon="uid://04agxibx75iw"
 Server="*res://assets/scripts/server.gd"
 Cursor="*res://assets/scripts/cursor.gd"
 PlayerFunc="*res://assets/scripts/playerFunctions.gd"
+ShaderWarmup="*res://assets/scripts/shader_warmup.gd"
 Noray="*res://addons/netfox.noray/noray.gd"
 PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
@@ -133,3 +134,6 @@ D={
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method.web="gl_compatibility"
+shader_compiler/shader_cache/enabled=true

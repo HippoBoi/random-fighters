@@ -820,6 +820,8 @@ func startGame():
 			get_node("CharSelect").queue_free();
 		await get_tree().create_timer(0.1).timeout;
 
+	await ShaderWarmup.warm_up();
+
 	var playerId = _getLocalPlayerId();
 	var gameScene = preload("res://assets/scenes/gameScene.tscn").instantiate();
 	gameScene.gameModeSelected.connect(_gameModeSelected);
@@ -837,6 +839,8 @@ func startRound(gameMode: String):
 
 	roundStarted = true;
 	startRoundTimer = 0;
+
+	await ShaderWarmup.warm_up();
 
 	var isScene = has_node("Game");
 	if (isScene):
