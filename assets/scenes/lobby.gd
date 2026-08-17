@@ -30,6 +30,8 @@ const JOIN_TIMEOUT: float = 10.0;
 var dontShowAgain = false;
 var userPreferences: UserPreferences;
 var joinRequestTime: float = -1.0;
+var currentLobbyUsers = [];
+var currentLobbyOwnerId = "";
 
 @onready var statusText = $Status;
 @onready var playerAvatar = $PlayerStats/PlayerAvatar;
@@ -131,18 +133,22 @@ func _processRecievedMessage(message):
 	elif (responseMsg.op == MATCH_PLAYERS):
 		print("----------------------- MATCH_PLAYERS -----------------------");
 
-		_enterMatchLobby(responseMsg.response);
+		var matchData = responseMsg.response;
+		if (matchData and matchData.has("matchInfo")):
+			_enterMatchLobby(matchData);
 	elif (responseMsg.op == PLAYER_JOINED):
 		print("----------------------- PLAYER_JOINED -----------------------");
 
 		var matchData = responseMsg.response;
-		_buildLobbyPlayerList(matchData);
+		if (_isMessageForCurrentLobby(matchData)):
+			_updateLobbyData(matchData);
 	elif (responseMsg.op == PLAYER_DROPPED):
 		print("----------------------- PLAYER_DROPPED -----------------------");
 
 		var matchData = responseMsg.response;
-		print("player %s dropped from match" % matchData.disconnectedUserId);
-		_buildLobbyPlayerList(matchData);
+		if (_isMessageForCurrentLobby(matchData)):
+			print("player %s dropped from match" % matchData.disconnectedUserId);
+			_removeLobbyPlayer(matchData.disconnectedUserId);
 	elif (responseMsg.op == MATCH_READY):
 		print("------------------------ MATCH_READY -------------------------");
 
@@ -162,23 +168,72 @@ func _processRecievedMessage(message):
 
 		_client.close(1000, "game started normally!");
 
+func _isMessageForCurrentLobby(matchData) -> bool:
+	if (currentLobbyId.is_empty()):
+		return false;
+	if (matchData == null):
+		return false;
+	if not (matchData.has("matchInfo")) or matchData.matchInfo == null:
+		return false;
+
+	var matchInfo = matchData.matchInfo;
+	if (matchInfo.has("matchId")):
+		return str(matchInfo.matchId) == currentLobbyId;
+
+	return str(matchInfo.get("ownerId", "")) == str(currentLobbyOwnerId);
+
 func _enterMatchLobby(matchData):
 	print("entered match!");
 	print(matchData);
+
+	if not (matchData.has("matchInfo")) or matchData.matchInfo == null:
+		return;
+	if (matchData.matchInfo.get("matchId", "") == ""):
+		return;
 
 	joinRequestTime = -1.0;
 	currentLobbyId = matchData.matchInfo.matchId;
 	print("lobby ID: %s" % currentLobbyId);
 
+	currentLobbyUsers = matchData.users if (matchData.has("users") and matchData.users is Array) else [];
+	currentLobbyOwnerId = str(matchData.matchInfo.get("ownerId", ""));
+
 	$MatchesContainer.visible = false;
 	$CreateMatchContainer.visible = false;
 	$LobbyContainer.visible = true;
 	statusText.text = "Waiting for players...";
-	_buildLobbyPlayerList(matchData);
+	_refreshLobbyList();
+
+func _updateLobbyData(matchData):
+	if (matchData.has("users") and matchData.users is Array):
+		currentLobbyUsers = matchData.users;
+	if (matchData.has("matchInfo") and matchData.matchInfo):
+		currentLobbyOwnerId = str(matchData.matchInfo.get("ownerId", currentLobbyOwnerId));
+
+	_refreshLobbyList();
+
+func _removeLobbyPlayer(playerId):
+	var filtered = [];
+	for player in currentLobbyUsers:
+		if (str(player.get("userId", "")) != str(playerId)):
+			filtered.append(player);
+	currentLobbyUsers = filtered;
+
+	_refreshLobbyList();
+
+func _refreshLobbyList():
+	_buildLobbyPlayerList({
+		"users": currentLobbyUsers,
+		"matchInfo": { "ownerId": currentLobbyOwnerId },
+	});
 
 func _leaveMatchLobby():
 	joinRequestTime = -1.0;
 	currentLobbyId = "";
+	currentOwnerId = "";
+	currentTeam = "1";
+	currentLobbyUsers = [];
+	currentLobbyOwnerId = "";
 
 	$LobbyContainer.visible = false;
 	$MatchesContainer.visible = true;
@@ -190,6 +245,16 @@ func _buildLobbyPlayerList(matchData):
 		team_player.queue_free();
 	for team_player in $LobbyContainer/Teams/WhiteTeam.get_children():
 		team_player.queue_free();
+
+	$LobbyContainer/Teams/Ready.visible = false;
+	$LobbyContainer/Teams/BlackTeamJoin.visible = false;
+	$LobbyContainer/Teams/WhiteTeamJoin.visible = false;
+	currentOwnerId = "";
+
+	if (matchData == null):
+		return;
+	if not (matchData.has("users")) or not (matchData.has("matchInfo")):
+		return;
 
 	var matchPlayers = matchData.users;
 	var ownerId = matchData.matchInfo.ownerId;
