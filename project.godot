@@ -135,5 +135,3 @@ D={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-renderer/rendering_method.web="gl_compatibility"
-shader_compiler/shader_cache/enabled=true
