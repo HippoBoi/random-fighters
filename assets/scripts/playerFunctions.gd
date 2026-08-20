@@ -96,6 +96,7 @@ func _getMousePos(character):
 	var rayEnd = rayOrigin + character.camera.project_ray_normal(mousePos) * 2000;
 	
 	var query = PhysicsRayQueryParameters3D.create(rayOrigin, rayEnd);
+	query.collision_mask = 4;
 	var ridArray: Array[RID];
 	ridArray.append(character.get_rid());
 	query.exclude = ridArray;
