@@ -15,27 +15,26 @@ var shield = 0;
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
 const Q_COOLDOWN = 8.5;
-const W_COOLDOWN = 7.5;
+const W_COOLDOWN = 8.5;
 const E_COOLDOWN = 13.0;
-const R_COOLDOWN = 1.0;
+const R_COOLDOWN = 95.0;
 const W_MAX_RANGE = 15.0;
-const R_MAX_RANGE = 9.25;
-const SECONDARY_WINDUP = 0.55;
-const W_TELEPORT_WIDTH = 1.5;
-const TRAIL_LIFETIME = 1.2;
-const TRAIL_PARTICLES = 100;
+const SECONDARY_WINDUP = 0.5;
+const W_TELEPORT_WIDTH = 2.0;
+const TRAIL_LIFETIME = 0.5;
+const TRAIL_PARTICLES = 60;
 const ELECTRIC_LIFETIME = 0.3;
 const ELECTRIC_PARTICLES = 60;
 const ELECTRIC_FLICKER_INTERVAL = 0.08;
 const ELECTRIC_DURATION = 1.0;
 
-var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMAGE."
+var primaryDesc = "placeholder"
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
-var secondaryDesc = "Dash to your mouse position, dealing 75% of your PHYSICAL DAMAGE to enemies hit on the way.";
+var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Slash that deals 95% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
-var ultiDesc = "Dash towards an enemy target.";
+var ultiDesc = "Gain SPEED and EMPOWER your next BASIC ATTACK. This effect lasts for 10 seconds or until you hit a BASIC ATTACK";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
 
 var qTimer = 0;
@@ -216,18 +215,17 @@ func _physics_process(delta: float) -> void:
 		
 		if (electricTrailTimer <= 0):
 			electricTrailActive = false;
+	
 	if (usingUlti):
 		ultiTimer -= delta;
 		
-		if (moveTo == null or target or ultiTimer <= 0):
-			cancelUlti();
-		else:
-			ultimate_ability(moveTo, global_position);
+		if (ultiTimer <= 0):
+			usingUlti = false;
+			$r_trail.emitting = false;
 		
 	if (tertiaryTimer > 0):
 		tertiaryTimer -= delta;
 		# moveTo = global_position;
-		
 	else:
 		if (usingTertiary):
 			usingTertiary = false;
@@ -243,6 +241,16 @@ func _physics_process(delta: float) -> void:
 	
 	if (moveTo):
 		PlayerFunc.moveChar(self, delta, moveTo);
+	
+	if (usingUlti):
+		baseSpeed = 12.0
+		if (velocity != Vector3.ZERO):
+			$r_trail.emitting = true;
+		else:
+			$r_trail.emitting = false;
+	else:
+		baseSpeed = 6.25
+		$r_trail.emitting = false;
 	
 	move_and_slide();
 	
@@ -296,16 +304,8 @@ func _setup_primary():
 
 @rpc("call_local", "reliable")
 func primary_ability():
-	overrideBasic = true;
-	basicAttacking = false;
-	primaryTimer = 4.0;
-	dmgOffset = baseDmg * 1.2;
-	basicAttackTimer = 0;
-	qTimer = Q_COOLDOWN - cooldownReduction;
-	qTimer = clamp(qTimer, 2.0, Q_COOLDOWN);
-	
-	$q_particles.emitting = true;
-	$q_ground_particles.emitting = true;
+	print("COOL this does nothing")
+	pass;
 
 func _setup_secondary():
 	if (mousePos.is_empty()):
@@ -336,7 +336,6 @@ func secondary_ability(_moveTo, _global_pos):
 	moveTo = _global_pos;
 	velocity = Vector3.ZERO;
 	wTimer = W_COOLDOWN - cooldownReduction;
-	speedOffset = 0;
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
@@ -371,7 +370,6 @@ func _perform_teleport():
 	_start_electric_trail();
 	usingSecondary = false;
 	onAction = false;
-	speedOffset = 0;
 
 func _spawn_teleport_trail():
 	var trail = $w_trail;
@@ -459,7 +457,6 @@ func _deal_teleport_damage():
 		return;
 	
 	var direction = segment / segmentLength;
-	var teleportDmg = dmg * 1.25;
 	
 	for enemy in gameScene.addedCharacters:
 		if not (is_instance_valid(enemy)) or enemy == self:
@@ -478,7 +475,7 @@ func _deal_teleport_damage():
 		var distanceToLine = enemy.global_position.distance_to(closestPoint);
 		
 		if (distanceToLine <= W_TELEPORT_WIDTH):
-			PlayerFunc.dealDamage(self, enemy, teleportDmg, "hit_01");
+			PlayerFunc.dealDamage(self, enemy, dmg, "hit_01");
 			PlayerFunc.slowTarget(enemy, 0.75);
 	
 func _setup_tertiary():
@@ -501,62 +498,35 @@ func tertiary_ability(_mousePos):
 	rpc("syncRotation", _mousePos);
 
 func _setup_ultimate():
-	if not (hovering):
-		return;
-	
-	ultiTarget = hovering;
-	moveTo = ultiTarget.global_position;
-	moveTo.y = global_position.y;
-	
-	rpc("ultimate_ability", moveTo, global_position);
+	rpc("ultimate_ability");
 
 @rpc("call_local", "reliable")
-func ultimate_ability(_moveTo, _global_pos):
-	if (_moveTo == null):
-		return;
-	
-	moveTo = _moveTo;
-	moveTo.y = _global_pos.y;
-	
+func ultimate_ability():
 	usingUlti = true;
-	usingSecondary = false;
-	target = null;
-		
-	var distance = _global_pos.distance_to(_moveTo);
-	if (distance < R_MAX_RANGE):
-		if not (playingUltiSound):
-			var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
-			PlayerFunc.playSound(self, sound);
-			
-			playingUltiSound = true;
-			ultiTimer = 0.5;
-		
-		rTimer = R_COOLDOWN;
-		speedOffset = 17;
-		onAction = true;
-		
-		$w_dash_particles/sparkParticle.emitting = true;
-		$w_dash_particles/meshParticles.emitting = true;
-		$r_trail.emitting = true;
-		animPlayer.play("q_ability_001");
-	else:
-		ultiTimer = 0.5;
+	ultiTimer = 10.0;
+	
+	rTimer = R_COOLDOWN;
+	
+	$w_dash_particles/sparkParticle.emitting = true;
+	$w_dash_particles/meshParticles.emitting = true;
+	$r_trail.emitting = true;
+	
+	# TODO: 
+	# add a different anim later
+	animPlayer.play("q_ability_001");
+	
+	overrideBasic = true;
+	basicAttacking = false;
+	dmgOffset = baseDmg * 1.2;
+	basicAttackTimer = 0;
+	
+	$q_particles.emitting = true;
+	$q_ground_particles.emitting = true;
 
 @rpc("call_local")
 func cancelSecondary():
 	usingSecondary = false;
 	onAction = false;
-	speedOffset = 0;
-
-@rpc("call_local")
-func cancelUlti():
-	moveTo = global_position;
-	usingUlti = false;
-	onAction = false;
-	playingUltiSound = false;
-	ultiTarget = null;
-	moveTo = null;
-	speedOffset = 0;
 	
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):

@@ -6651,12 +6651,11 @@ process_material = SubResource("ParticleProcessMaterial_yhbxm")
 draw_pass_1 = SubResource("BoxMesh_m21vc")
 
 [node name="r_trail" type="GPUParticles3D" parent="."]
-transform = Transform3D(-1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, -1, 0.048481, 9.53674e-07, 0.238563)
+transform = Transform3D(-1, 0, -5.9604602e-08, 0, 1, 0, 5.9604602e-08, 0, -1, 0.048481002, 9.5367403e-07, 0.64198196)
 material_override = SubResource("StandardMaterial3D_e2x2k")
 emitting = false
-amount = 3
-lifetime = 0.25
-one_shot = true
+amount = 7
+lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_lsqo6")
 draw_pass_1 = ExtResource("8_0g080")
 
