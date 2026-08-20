@@ -18,12 +18,20 @@ const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 7.5;
 const E_COOLDOWN = 13.0;
 const R_COOLDOWN = 1.0;
-const W_MAX_RANGE = 7.5;
+const W_MAX_RANGE = 15.0;
 const R_MAX_RANGE = 9.25;
+const SECONDARY_WINDUP = 0.55;
+const W_TELEPORT_WIDTH = 1.5;
+const TRAIL_LIFETIME = 1.2;
+const TRAIL_PARTICLES = 100;
+const ELECTRIC_LIFETIME = 0.3;
+const ELECTRIC_PARTICLES = 60;
+const ELECTRIC_FLICKER_INTERVAL = 0.08;
+const ELECTRIC_DURATION = 1.0;
 
 var primaryDesc = "Empower your BASIC ATTACK and deal 120% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
-var secondaryDesc = "Dash towards your mouse position.";
+var secondaryDesc = "Dash to your mouse position, dealing 75% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Slash that deals 95% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
@@ -71,6 +79,12 @@ var usingSecondary = false;
 var usingTertiary = false;
 var primaryTimer = 0;
 var secondaryTimer = 0;
+var secondaryStartPos = Vector3.ZERO;
+var secondaryDestination = Vector3.ZERO;
+var secondaryTeleported = false;
+var electricTrailActive = false;
+var electricTrailTimer = 0;
+var trailFlickerTimer = 0;
 var tertiaryTimer = 0;
 var ultiTimer = 0;
 var usingUlti = false;
@@ -186,9 +200,22 @@ func _physics_process(delta: float) -> void:
 	
 	if (usingSecondary == true):
 		secondaryTimer -= delta;
+		moveTo = global_position;
 		
-		if (moveTo == null or target or secondaryTimer <= 0):
+		if (target):
 			cancelSecondary();
+		elif (secondaryTimer <= 0 and not secondaryTeleported):
+			_perform_teleport();
+	if (electricTrailActive):
+		electricTrailTimer -= delta;
+		trailFlickerTimer -= delta;
+		
+		if (trailFlickerTimer <= 0):
+			trailFlickerTimer = ELECTRIC_FLICKER_INTERVAL;
+			_spawn_electric_trail();
+		
+		if (electricTrailTimer <= 0):
+			electricTrailActive = false;
 	if (usingUlti):
 		ultiTimer -= delta;
 		
@@ -201,22 +228,10 @@ func _physics_process(delta: float) -> void:
 		tertiaryTimer -= delta;
 		# moveTo = global_position;
 		
-		if (tertiaryTimer <= 0.55 and not $e_slash/AnimationPlayer.is_playing()):
-			var sound = preload("res://assets/sounds/characters/rhay/rhay_slash.ogg");
-			PlayerFunc.playSound(self, sound);
-			$e_slash/AnimationPlayer.play("slash");
-		if (tertiaryTimer <= 0.45):
-			slashHitbox.get_node("MeshInstance3D/Area3D").monitoring = true;
 	else:
 		if (usingTertiary):
 			usingTertiary = false;
 			onAction = false;
-			# cancel Q damage and basic attack
-			overrideBasic = false;
-			dmgOffset = 0;
-			
-			slashHitbox.get_node("MeshInstance3D").visible = false;
-			slashHitbox.get_node("MeshInstance3D/Area3D").monitoring = false;
 	
 	if not (overrideBasic):
 		$q_particles.emitting = false;
@@ -303,18 +318,25 @@ func secondary_ability(_moveTo, _global_pos):
 	var direction = (_moveTo - _global_pos).normalized();
 	var distance = _global_pos.distance_to(_moveTo);
 	usingSecondary = true;
-	secondaryTimer = 0.5;
+	secondaryTimer = SECONDARY_WINDUP;
+	secondaryTeleported = false;
 	usingUlti = false;
 	onAction = true;
 	target = null;
 	
+	secondaryStartPos = _global_pos;
 	if (distance > W_MAX_RANGE):
-		moveTo = _global_pos + direction * W_MAX_RANGE;
+		secondaryDestination = _global_pos + direction * W_MAX_RANGE;
 	else:
-		moveTo = _moveTo;
-	moveTo.y = _global_pos.y;
+		secondaryDestination = _moveTo;
+	secondaryDestination.y = _global_pos.y;
+	
+	_spawn_teleport_trail();
+	
+	moveTo = _global_pos;
+	velocity = Vector3.ZERO;
 	wTimer = W_COOLDOWN - cooldownReduction;
-	speedOffset = 8.5;
+	speedOffset = 0;
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
@@ -323,7 +345,141 @@ func secondary_ability(_moveTo, _global_pos):
 	PlayerFunc.playSound(self, sound);
 			
 	animPlayer.play("w_ability");
-	syncRotation(moveTo);
+	syncRotation(secondaryDestination);
+
+func _perform_teleport():
+	secondaryTeleported = true;
+	
+	global_position = secondaryDestination;
+	velocity = Vector3.ZERO;
+	moveTo = null;
+	
+	if (is_multiplayer_authority()):
+		rpc("syncPosition", global_position);
+	
+	$w_dash_particles/sparkParticle.emitting = true;
+	$w_dash_particles/meshParticles.emitting = true;
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+	var electricSound = preload("res://assets/sounds/characters/rhay/rhay_electricity.ogg");
+	PlayerFunc.playSound(self, sound);
+	PlayerFunc.playSound(self, electricSound);
+	
+	if (is_multiplayer_authority()):
+		_deal_teleport_damage();
+	
+	_start_electric_trail();
+	usingSecondary = false;
+	onAction = false;
+	speedOffset = 0;
+
+func _spawn_teleport_trail():
+	var trail = $w_trail;
+	var start = secondaryStartPos;
+	var end = secondaryDestination;
+	var mid = (start + end) * 0.5;
+	
+	var count = TRAIL_PARTICLES;
+	var points = PackedVector3Array();
+	points.resize(count);
+	for i in count:
+		var t = float(i) / float(count - 1);
+		points[i] = start.lerp(end, t) - mid;
+	
+	var image = Image.create(count, 1, false, Image.FORMAT_RGBAF);
+	for i in count:
+		image.set_pixel(i, 0, Color(points[i].x, points[i].y, points[i].z, 1.0));
+	
+	var mat = trail.process_material as ParticleProcessMaterial;
+	mat.emission_point_texture = ImageTexture.create_from_image(image);
+	mat.emission_point_count = count;
+	trail.lifetime = TRAIL_LIFETIME;
+	trail.amount = count;
+	trail.global_position = mid;
+	trail.emitting = false;
+	trail.restart();
+	trail.emitting = true;
+
+func _start_electric_trail():
+	electricTrailActive = true;
+	electricTrailTimer = ELECTRIC_DURATION;
+	trailFlickerTimer = 0;
+	_spawn_electric_trail();
+
+func _spawn_electric_trail():
+	var trail = $w_trail;
+	var start = secondaryStartPos;
+	var end = secondaryDestination;
+	var mid = (start + end) * 0.5;
+	var dir = end - start;
+	if (dir.length() < 0.0001):
+		return;
+	dir = dir.normalized();
+	
+	var right = Vector3.UP.cross(dir);
+	if (right.length() < 0.0001):
+		right = Vector3.RIGHT;
+	right = right.normalized();
+	var up = dir.cross(right).normalized();
+	
+	var count = ELECTRIC_PARTICLES;
+	var points = PackedVector3Array();
+	points.resize(count);
+	for i in count:
+		var t = float(i) / float(count - 1);
+		var envelope = sin(PI * t);
+		var jitterX = randf_range(-0.8, 0.8) * envelope;
+		var jitterY = randf_range(-0.3, 0.3) * envelope;
+		points[i] = start.lerp(end, t) + right * jitterX + up * jitterY - mid;
+	
+	var image = Image.create(count, 1, false, Image.FORMAT_RGBAF);
+	for i in count:
+		image.set_pixel(i, 0, Color(points[i].x, points[i].y, points[i].z, 1.0));
+	
+	var mat = trail.process_material as ParticleProcessMaterial;
+	mat.emission_point_texture = ImageTexture.create_from_image(image);
+	mat.emission_point_count = count;
+	trail.lifetime = ELECTRIC_LIFETIME;
+	trail.amount = count;
+	trail.global_position = mid;
+	trail.emitting = false;
+	trail.restart();
+	trail.emitting = true;
+
+func _deal_teleport_damage():
+	var gameScene = get_parent();
+	if not (gameScene and "addedCharacters" in gameScene):
+		return;
+	
+	var start = secondaryStartPos;
+	var end = secondaryDestination;
+	var segment = end - start;
+	var segmentLength = segment.length();
+	if (segmentLength <= 0.0001):
+		return;
+	
+	var direction = segment / segmentLength;
+	var teleportDmg = dmg * 1.25;
+	
+	for enemy in gameScene.addedCharacters:
+		if not (is_instance_valid(enemy)) or enemy == self:
+			continue;
+		
+		var isCharacter = "CHARACTER_NAME" in enemy;
+		if not (isCharacter):
+			continue;
+		
+		if (enemy.team == team):
+			continue;
+		
+		var toEnemy = enemy.global_position - start;
+		var t = clamp(toEnemy.dot(direction), 0.0, segmentLength);
+		var closestPoint = start + direction * t;
+		var distanceToLine = enemy.global_position.distance_to(closestPoint);
+		
+		if (distanceToLine <= W_TELEPORT_WIDTH):
+			PlayerFunc.dealDamage(self, enemy, teleportDmg, "hit_01");
+			PlayerFunc.slowTarget(enemy, 0.75);
 	
 func _setup_tertiary():
 	if (mousePos.is_empty()):

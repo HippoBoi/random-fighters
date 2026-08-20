@@ -1,6 +1,6 @@
 [gd_scene load_steps=135 format=4 uid="uid://ct464r78kvvu2"]
 
-[ext_resource type="Script" uid="uid://bt1li3vyfdhpt" path="res://assets/characters/rhay/rhay_char.gd" id="2_v1ns3"]
+[ext_resource type="Script" uid="uid://cov3jhsp7n4ad" path="res://assets/characters/rhay_v2/rhay_char_v2.gd" id="1_deal8"]
 [ext_resource type="Shader" uid="uid://bxyubbwwnlbv4" path="res://assets/characters/rhay/epic_q_shader.tres" id="3_hpohn"]
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="3_inplr"]
 [ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="3_q3isg"]
@@ -6377,7 +6377,7 @@ alpha_curve = SubResource("CurveTexture_1k028")
 [node name="rhay_v2" type="CharacterBody3D"]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
 collision_layer = 6
-script = ExtResource("2_v1ns3")
+script = ExtResource("1_deal8")
 
 [node name="rhay_armature" type="Node3D" parent="."]
 transform = Transform3D(2.45, 0, 0, 0, 2.45, 3.2623723e-07, 0, -3.2623723e-07, 2.45, 0, 0.69596446, -1.4210854e-16)

@@ -1,12 +1,8 @@
-[gd_scene load_steps=135 format=4 uid="uid://cse7ugqqkmkn5"]
+[gd_scene load_steps=138 format=4 uid="uid://cse7ugqqkmkn5"]
 
-[ext_resource type="Script" uid="uid://bgmpg7wg5t3jb" path="res://assets/characters/rhay_v2/rhay_char.gd" id="1_gf6lk"]
-[ext_resource type="Shader" uid="uid://cppcfrtcx5db1" path="res://assets/characters/rhay_v2/epic_q_shader.tres" id="2_q5vqc"]
+[ext_resource type="Script" uid="uid://cov3jhsp7n4ad" path="res://assets/characters/rhay_v2/rhay_char_v2.gd" id="1_j16sn"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="3_wqt0a"]
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="4_fjee1"]
-[ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="5_mlpdd"]
-[ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="6_cbpkg"]
-[ext_resource type="PackedScene" uid="uid://rrvuvuhureng" path="res://assets/characters/rhay_v2/slash_hitbox.tscn" id="7_nlvfl"]
 [ext_resource type="ArrayMesh" uid="uid://kn5uqpnyi8pf" path="res://assets/characters/rhay.obj" id="8_0g080"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="9_y4od6"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="10_4er5v"]
@@ -5944,9 +5940,92 @@ _data = {
 radius = 0.999927
 height = 6.91007
 
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_6fwau"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_hpohn"]
+parameter_name = "hitTexture"
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_qpi53"]
+expanded_output_ports = [0]
+source = 5
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_ycejn"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_muese"]
+billboard_type = 3
+keep_scale = true
+
+[sub_resource type="VisualShader" id="VisualShader_f5j7m"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform sampler2D hitTexture : source_color;
+
+
+
+void vertex() {
+	mat4 n_out2p0;
+// GetBillboardMatrix:2
+	{
+		mat4 __wm = mat4(normalize(INV_VIEW_MATRIX[0]), normalize(INV_VIEW_MATRIX[1]), normalize(INV_VIEW_MATRIX[2]), MODEL_MATRIX[3]);
+		__wm = __wm * mat4(vec4(cos(INSTANCE_CUSTOM.x), -sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(0.0, 0.0, 1.0, 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		__wm = __wm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		n_out2p0 = VIEW_MATRIX * __wm;
+	}
+
+
+// Output:0
+	MODELVIEW_MATRIX = n_out2p0;
+
+
+}
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+	float n_out2p4 = n_out2p0.a;
+
+
+	vec4 n_out4p0;
+// Texture2D:4
+	n_out4p0 = texture(hitTexture, UV);
+	float n_out4p1 = n_out4p0.r;
+
+
+// FloatOp:5
+	float n_out5p0 = n_out4p1 * n_out2p4;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out5p0;
+
+
+}
+"
+flags/unshaded = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_muese")
+nodes/vertex/2/position = Vector2(120, 380)
+nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)
+nodes/fragment/0/position = Vector2(480, 160)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_6fwau")
+nodes/fragment/2/position = Vector2(0, 60)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_hpohn")
+nodes/fragment/3/position = Vector2(-220, 320)
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_qpi53")
+nodes/fragment/4/position = Vector2(60, 360)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_ycejn")
+nodes/fragment/5/position = Vector2(260, 300)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 2, 2, 4, 5, 1, 5, 0, 0, 1, 4, 1, 5, 0)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6l8iw"]
 render_priority = 0
-shader = ExtResource("2_q5vqc")
+shader = SubResource("VisualShader_f5j7m")
 shader_parameter/hitTexture = ExtResource("3_wqt0a")
 
 [sub_resource type="Curve" id="Curve_dpc8g"]
@@ -5996,7 +6075,7 @@ alpha_curve = SubResource("CurveTexture_ycejn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8gxuk"]
 render_priority = 0
-shader = ExtResource("2_q5vqc")
+shader = SubResource("VisualShader_f5j7m")
 shader_parameter/hitTexture = ExtResource("4_fjee1")
 
 [sub_resource type="Curve" id="Curve_igdnh"]
@@ -6023,97 +6102,6 @@ color = Color(1.5, 1.5, 3, 1)
 alpha_curve = SubResource("CurveTexture_msvpl")
 
 [sub_resource type="QuadMesh" id="QuadMesh_8d7ba"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_73iba"]
-render_priority = 0
-shader = ExtResource("6_cbpkg")
-shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/gradient_1_slider = -0.225
-shader_parameter/gradient_2_slider = 0.2
-
-[sub_resource type="Animation" id="Animation_r1nbt"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_1_slider")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [-0.225]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_2_slider")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.2]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Slash:surface_material_override/0:shader_parameter/color")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_xqn7j"]
-resource_name = "slash"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_1_slider")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.5, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [-0.225, 0.175, 0.565, 0.65]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Slash:surface_material_override/0:shader_parameter/gradient_2_slider")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.5, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.2, -0.58, -1.455, -1.39]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Slash:surface_material_override/0:shader_parameter/color")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.13, 0.333333, 0.566667),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(0.689109, 0.883459, 0.99942, 1), Color(0.471908, 0.650883, 0.954281, 1), Color(0.529114, 0.492766, 0.87684, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sky8r"]
-_data = {
-&"RESET": SubResource("Animation_r1nbt"),
-&"slash": SubResource("Animation_xqn7j")
-}
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_1k028"]
 expanded_output_ports = [0]
@@ -6374,10 +6362,35 @@ scale_max = 0.5
 scale_curve = SubResource("CurveTexture_6fwau")
 alpha_curve = SubResource("CurveTexture_1k028")
 
+[sub_resource type="Curve" id="Curve_xtrail"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xtrail"]
+curve = SubResource("Curve_xtrail")
+
+[sub_resource type="Gradient" id="Gradient_xtrail"]
+colors = PackedColorArray(0.2, 0.7, 3, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xtrail"]
+gradient = SubResource("Gradient_xtrail")
+use_hdr = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xtrail"]
+emission_shape = 4
+emission_point_count = 1
+gravity = Vector3(0, 0, 0)
+scale_min = 1.8
+scale_max = 2.4
+scale_curve = SubResource("CurveTexture_k5a20")
+color = Color(0.1, 1.25, 5, 1)
+color_ramp = SubResource("GradientTexture1D_xtrail")
+alpha_curve = SubResource("CurveTexture_xtrail")
+
 [node name="rhay_v2" type="CharacterBody3D"]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
 collision_layer = 6
-script = ExtResource("1_gf6lk")
+script = ExtResource("1_j16sn")
 
 [node name="rhay_armature" type="Node3D" parent="."]
 transform = Transform3D(2.45, 0, 0, 0, 2.45, 3.2623723e-07, 0, -3.2623723e-07, 2.45, 0, 0.69596446, -1.4210854e-16)
@@ -6613,26 +6626,6 @@ amount = 3
 process_material = SubResource("ParticleProcessMaterial_ljibu")
 draw_pass_1 = SubResource("QuadMesh_8d7ba")
 
-[node name="e_slash" type="Node3D" parent="."]
-transform = Transform3D(3.7752, 8.9407e-08, -5.83914e-07, 1.73092e-07, -1, -2.19375e-14, -3.30038e-07, -3.07674e-15, -6.6792, -0.546984, 0, 0.481022)
-
-[node name="Slash" type="MeshInstance3D" parent="e_slash"]
-mesh = ExtResource("5_mlpdd")
-surface_material_override/0 = SubResource("ShaderMaterial_73iba")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="e_slash"]
-libraries = {
-&"": SubResource("AnimationLibrary_sky8r")
-}
-
-[node name="slashHitbox" parent="." instance=ExtResource("7_nlvfl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.32, 0, 2, -3.38353)
-
-[node name="Area3D" parent="slashHitbox/MeshInstance3D" index="0"]
-collision_layer = 5
-collision_mask = 5
-monitoring = false
-
 [node name="w_dash_particles" type="Node3D" parent="."]
 
 [node name="sparkParticle" type="GPUParticles3D" parent="w_dash_particles"]
@@ -6667,6 +6660,17 @@ one_shot = true
 process_material = SubResource("ParticleProcessMaterial_lsqo6")
 draw_pass_1 = ExtResource("8_0g080")
 
+[node name="w_trail" type="GPUParticles3D" parent="."]
+top_level = true
+material_override = SubResource("ShaderMaterial_vihup")
+emitting = false
+amount = 100
+lifetime = 1.2
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_xtrail")
+draw_pass_1 = SubResource("QuadMesh_adiox")
+
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)
 top_level = true
@@ -6676,5 +6680,3 @@ pixel_size = 0.075
 no_depth_test = true
 texture = ExtResource("9_y4od6")
 script = ExtResource("10_4er5v")
-
-[editable path="slashHitbox"]
