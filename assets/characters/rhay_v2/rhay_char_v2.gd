@@ -16,8 +16,8 @@ const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
 const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 8.5;
-const E_COOLDOWN = 13.0;
-const R_COOLDOWN = 95.0;
+const E_COOLDOWN = 15.0;
+const R_COOLDOWN = 80.0;
 const W_MAX_RANGE = 15.0;
 const SECONDARY_WINDUP = 0.5;
 const W_TELEPORT_WIDTH = 2.0;
@@ -27,12 +27,14 @@ const ELECTRIC_LIFETIME = 0.3;
 const ELECTRIC_PARTICLES = 60;
 const ELECTRIC_FLICKER_INTERVAL = 0.08;
 const ELECTRIC_DURATION = 1.0;
+const E_RECAST_COOLDOWN = 1.0;
+const E_EXPLODE_RADIUS = 8.0;
 
 var primaryDesc = "placeholder"
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
-var tertiaryDesc = "Slash that deals 95% of your PHYSICAL DAMAGE. Hitting any target will reset your PRIMARY ability.";
+var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 120% of your PHYSICAL DAMAGE.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
 var ultiDesc = "Gain SPEED and EMPOWER your next BASIC ATTACK. This effect lasts for 10 seconds or until you hit a BASIC ATTACK";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
@@ -85,6 +87,10 @@ var electricTrailActive = false;
 var electricTrailTimer = 0;
 var trailFlickerTimer = 0;
 var tertiaryTimer = 0;
+var tertiaryShieldActive = false;
+var tertiaryShieldGranted = 0;
+var tertiaryShieldTimer = 0;
+var tertiaryExplodeTimer = 0;
 var ultiTimer = 0;
 var usingUlti = false;
 var ultiTarget = null;
@@ -230,6 +236,19 @@ func _physics_process(delta: float) -> void:
 		if (usingTertiary):
 			usingTertiary = false;
 			onAction = false;
+	
+	if (tertiaryShieldActive):
+		tertiaryShieldTimer -= delta;
+		
+		if (tertiaryShieldTimer <= 0 or shield <= 0):
+			_explode_shield();
+	
+	if (tertiaryExplodeTimer > 0):
+		tertiaryExplodeTimer -= delta;
+		
+		if (tertiaryExplodeTimer <= 0):
+			tertiaryExplodeTimer = 0;
+			_apply_explosion_damage();
 	
 	if not (overrideBasic):
 		$q_particles.emitting = false;
@@ -487,15 +506,25 @@ func _setup_tertiary():
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
 	dmgOffset = 0;
-	eTimer = E_COOLDOWN - cooldownReduction;
-	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
 	tertiaryTimer = 0.5;
 	target = null;
 	usingTertiary = true;
 	animPlayer.play("q_ability");
 	
-	simulateMove(null, global_position);
-	rpc("syncRotation", _mousePos);
+	if (tertiaryShieldActive):
+		_explode_shield();
+		return;
+	
+	eTimer = E_RECAST_COOLDOWN;
+	
+	var shieldAmount = maxHp * 0.15;
+	var shieldBefore = shield;
+	PlayerFunc.grantShield(self, self, shieldAmount);
+	
+	tertiaryShieldGranted = shield - shieldBefore;
+	tertiaryShieldActive = true;
+	tertiaryShieldTimer = 10.0;
+	$shield_particles.emitting = true;
 
 func _setup_ultimate():
 	rpc("ultimate_ability");
@@ -609,6 +638,11 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	dead = false;
 	isInvisible = false;
 	visible = true;
+	shield = 0;
+	tertiaryShieldActive = false;
+	tertiaryShieldGranted = 0;
+	$shield_particles.emitting = false;
+	PlayerFunc.updateHealthSize(self);
 
 @rpc("call_local", "any_peer")
 func syncSound(soundPath: String):
@@ -632,3 +666,47 @@ func _onSlashTouched(other) -> void:
 		if (other.team != team):
 			qTimer = 0;
 			PlayerFunc.dealDamage(self, other, (dmg * 0.95 + 0.5));
+
+func _explode_shield():
+	if not (tertiaryShieldActive):
+		return;
+	
+	tertiaryShieldActive = false;
+	tertiaryShieldTimer = 0;
+	tertiaryExplodeTimer = 0.15;
+	
+	$shield_particles.emitting = false;
+	$shield_end_particles.emitting = true;
+	$shield_thunder_particles.emitting = true;
+	
+	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 4.0, E_COOLDOWN);
+	
+	var remainingShield = min(tertiaryShieldGranted, shield);
+	tertiaryShieldGranted = 0;
+	
+	if (remainingShield > 0):
+		PlayerFunc.grantShield(self, self, -remainingShield);
+
+func _apply_explosion_damage():
+	if (is_multiplayer_authority()):
+		_deal_explode_damage();
+
+func _deal_explode_damage():
+	var gameScene = get_parent();
+	if not (gameScene and "addedCharacters" in gameScene):
+		return;
+	
+	for enemy in gameScene.addedCharacters:
+		if not (is_instance_valid(enemy)) or enemy == self:
+			continue;
+		
+		var isCharacter = "CHARACTER_NAME" in enemy;
+		if not (isCharacter):
+			continue;
+		
+		if (enemy.team == team):
+			continue;
+		
+		if (enemy.global_position.distance_to(global_position) <= E_EXPLODE_RADIUS):
+			PlayerFunc.dealDamage(self, enemy, dmg * 1.2, "hit_bullet_01");
