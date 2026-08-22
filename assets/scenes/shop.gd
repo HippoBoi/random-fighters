@@ -113,7 +113,7 @@ func _on_buy_pressed() -> void:
 	
 	var playerTokens = character.tokens;
 	var itemPrice = int(selectedItem.get_node("Price").text);
-	if (playerTokens - itemPrice >= 0):
+	if (playerTokens - itemPrice >= 0) or (Constants.DEBUG):
 		onItemBought(character)
 
 func onItemBought(_character: CharacterBody3D):

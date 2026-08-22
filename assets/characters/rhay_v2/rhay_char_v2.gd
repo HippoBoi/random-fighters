@@ -14,19 +14,23 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
-const Q_COOLDOWN = 8.5;
-const W_COOLDOWN = 8.5;
-const E_COOLDOWN = 15.0;
-const R_COOLDOWN = 80.0;
+const Q_COOLDOWN = 9.5;
+const W_COOLDOWN = 12.0;
+const E_COOLDOWN = 17.5;
+const R_COOLDOWN = 90.0;
+
+const Q_MAX_RANGE = 7.0;
 const W_MAX_RANGE = 15.0;
+
+const PRIMARY_WINDUP = 0.4;
 const SECONDARY_WINDUP = 0.5;
-const W_TELEPORT_WIDTH = 2.0;
 const TRAIL_LIFETIME = 0.5;
 const TRAIL_PARTICLES = 60;
 const ELECTRIC_LIFETIME = 0.3;
 const ELECTRIC_PARTICLES = 60;
 const ELECTRIC_FLICKER_INTERVAL = 0.08;
 const ELECTRIC_DURATION = 1.0;
+const W_TELEPORT_WIDTH = 2.0;
 const E_RECAST_COOLDOWN = 1.0;
 const E_EXPLODE_RADIUS = 8.0;
 
@@ -76,9 +80,14 @@ var basicAttackTimer = 0;
 var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.9;
 var onAction = false;
 var overrideBasic = false;
+var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
 var primaryTimer = 0;
+var primaryTarget = null;
+var primaryTeleported = false;
+var pendingPrimary = false;
+var pendingPrimaryTarget = null;
 var secondaryTimer = 0;
 var secondaryStartPos = Vector3.ZERO;
 var secondaryDestination = Vector3.ZERO;
@@ -155,6 +164,18 @@ func _physics_process(delta: float) -> void:
 		if (Engine.get_physics_frames() % 60 == 0):
 			rpc("syncPosition", global_position);
 			rpc("syncTarget", target);
+		
+		if (pendingPrimary):
+			if not (is_instance_valid(pendingPrimaryTarget)) or pendingPrimaryTarget.dead or target != pendingPrimaryTarget:
+				pendingPrimary = false;
+				pendingPrimaryTarget = null;
+				target = null;
+			elif (global_position.distance_to(pendingPrimaryTarget.global_position) <= Q_MAX_RANGE):
+				pendingPrimary = false;
+				var targetId = pendingPrimaryTarget.get_multiplayer_authority();
+				pendingPrimaryTarget = null;
+				target = null;
+				rpc("primary_ability", targetId);
 		
 		PlayerFunc.updateState(self, delta);
 		
@@ -261,6 +282,12 @@ func _physics_process(delta: float) -> void:
 	if (moveTo):
 		PlayerFunc.moveChar(self, delta, moveTo);
 	
+	if (usingPrimary):
+		moveTo = global_position;
+		
+		if (primaryTimer <= 0):
+			_perform_primary_teleport();
+	
 	if (usingUlti):
 		baseSpeed = 12.0
 		if (velocity != Vector3.ZERO):
@@ -319,12 +346,76 @@ func playBasicAttack():
 		animPlayer.play("e_ability");
 
 func _setup_primary():
-	rpc("primary_ability");
+	if not (hovering):
+		return;
+	
+	if (global_position.distance_to(hovering.global_position) > Q_MAX_RANGE):
+		pendingPrimary = true;
+		pendingPrimaryTarget = hovering;
+		target = hovering;
+		return;
+	
+	pendingPrimary = false;
+	pendingPrimaryTarget = null;
+	rpc("primary_ability", hovering.get_multiplayer_authority());
 
 @rpc("call_local", "reliable")
-func primary_ability():
-	print("COOL this does nothing")
-	pass;
+func primary_ability(_targetId: int):
+	var gameScene = get_parent();
+	if not (gameScene.has_method("get_character_by_id")):
+		return;
+	
+	var _primaryTarget = gameScene.get_character_by_id(str(_targetId));
+	if not (is_instance_valid(_primaryTarget)):
+		return;
+	
+	if (global_position.distance_to(_primaryTarget.global_position) > Q_MAX_RANGE):
+		return;
+	
+	primaryTarget = _primaryTarget;
+	primaryTimer = PRIMARY_WINDUP;
+	primaryTeleported = false;
+	usingPrimary = true;
+	onAction = true;
+	target = null;
+	moveTo = global_position;
+	velocity = Vector3.ZERO;
+	qTimer = Q_COOLDOWN - cooldownReduction;
+	
+	$w_dash_particles/sparkParticle.emitting = true;
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_jump.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	animPlayer.play("e_ability");
+	syncRotation(primaryTarget.global_position);
+
+func _perform_primary_teleport():
+	primaryTeleported = true;
+	
+	if not (is_instance_valid(primaryTarget)):
+		cancelPrimary();
+		return;
+	
+	global_position = primaryTarget.global_position;
+	velocity = Vector3.ZERO;
+	moveTo = null;
+	
+	if (is_multiplayer_authority()):
+		rpc("syncPosition", global_position);
+	
+	$w_dash_particles/sparkParticle.emitting = true;
+	$w_dash_particles/meshParticles.emitting = true;
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	if (is_multiplayer_authority()):
+		if (primaryTarget.team != team):
+			PlayerFunc.dealDamage(self, primaryTarget, dmg, "hit_01");
+	
+	usingPrimary = false;
+	onAction = false;
 
 func _setup_secondary():
 	if (mousePos.is_empty()):
@@ -559,6 +650,14 @@ func ultimate_ability():
 	$q_ground_particles.emitting = true;
 
 @rpc("call_local")
+func cancelPrimary():
+	usingPrimary = false;
+	onAction = false;
+	primaryTarget = null;
+	primaryTeleported = false;
+	speedOffset = 0;
+
+@rpc("call_local")
 func cancelSecondary():
 	usingSecondary = false;
 	onAction = false;
@@ -687,7 +786,7 @@ func _explode_shield():
 	$shield_thunder_particles.emitting = true;
 	
 	eTimer = E_COOLDOWN - cooldownReduction;
-	eTimer = clamp(eTimer, 4.0, E_COOLDOWN);
+	eTimer = clamp(eTimer, 3.0, E_COOLDOWN);
 	
 	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_explode.ogg");
 	PlayerFunc.playSound(self, sound);
