@@ -517,6 +517,9 @@ func tertiary_ability(_mousePos):
 	
 	eTimer = E_RECAST_COOLDOWN;
 	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_up.ogg");
+	PlayerFunc.playSound(self, sound);
+	
 	var shieldAmount = maxHp * 0.15;
 	var shieldBefore = shield;
 	PlayerFunc.grantShield(self, self, shieldAmount);
@@ -543,6 +546,9 @@ func ultimate_ability():
 	# TODO: 
 	# add a different anim later
 	animPlayer.play("q_ability_001");
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_new_ulti.ogg");
+	PlayerFunc.playSound(self, sound, false);
 	
 	overrideBasic = true;
 	basicAttacking = false;
@@ -640,6 +646,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	visible = true;
 	shield = 0;
 	tertiaryShieldActive = false;
+	PlayerFunc.updateHealthSize(self);
 	tertiaryShieldGranted = 0;
 	$shield_particles.emitting = false;
 	PlayerFunc.updateHealthSize(self);
@@ -681,6 +688,9 @@ func _explode_shield():
 	
 	eTimer = E_COOLDOWN - cooldownReduction;
 	eTimer = clamp(eTimer, 4.0, E_COOLDOWN);
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_explode.ogg");
+	PlayerFunc.playSound(self, sound);
 	
 	var remainingShield = min(tertiaryShieldGranted, shield);
 	tertiaryShieldGranted = 0;

@@ -708,6 +708,7 @@ func spawnCharacter(character: CharacterBody3D):
 			character.global_position = whiteTeam.global_position;
 	
 	_syncPlayerHealth(character);
+	updateHealthSize(character);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 	
 func respawnCharacter(character: CharacterBody3D):
@@ -739,6 +740,7 @@ func respawnCharacter(character: CharacterBody3D):
 			character.global_position = whiteTeam.global_position;
 	
 	_syncPlayerHealth(character);
+	updateHealthSize(character);
 	character.rpc("syncRespawn", character.hp, character.global_position);
 
 func _tokensAnimation(scene, _tokens):
