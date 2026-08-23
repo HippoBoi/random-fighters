@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 190.0;
 @export var hp = 190.0;
 @export var baseArmor = 14.0;
-@export var baseDmg = 15.5;
+@export var baseDmg = 35.5;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 6.25;
@@ -15,14 +15,14 @@ var shield = 0;
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
 const Q_COOLDOWN = 9.5;
-const W_COOLDOWN = 12.0;
+const W_COOLDOWN = 12.5;
 const E_COOLDOWN = 17.5;
 const R_COOLDOWN = 90.0;
 
-const Q_MAX_RANGE = 7.0;
+const Q_MAX_RANGE = 8.0;
 const W_MAX_RANGE = 15.0;
 
-const PRIMARY_WINDUP = 0.4;
+const PRIMARY_WINDUP = 0.1;
 const SECONDARY_WINDUP = 0.5;
 const TRAIL_LIFETIME = 0.5;
 const TRAIL_PARTICLES = 60;
@@ -34,13 +34,13 @@ const W_TELEPORT_WIDTH = 2.0;
 const E_RECAST_COOLDOWN = 1.0;
 const E_EXPLODE_RADIUS = 8.0;
 
-var primaryDesc = "placeholder"
+var primaryDesc = "Dash into a target and deal 100% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 120% of your PHYSICAL DAMAGE.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
-var ultiDesc = "Gain SPEED and EMPOWER your next BASIC ATTACK. This effect lasts for 10 seconds or until you hit a BASIC ATTACK";
+var ultiDesc = "Gain a lot of SPEED. This effect lasts for 6 seconds.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
 
 var qTimer = 0;
@@ -95,6 +95,8 @@ var secondaryTeleported = false;
 var electricTrailActive = false;
 var electricTrailTimer = 0;
 var trailFlickerTimer = 0;
+var electricTrailStartPos = Vector3.ZERO;
+var electricTrailEndPos = Vector3.ZERO;
 var tertiaryTimer = 0;
 var tertiaryShieldActive = false;
 var tertiaryShieldGranted = 0;
@@ -172,10 +174,10 @@ func _physics_process(delta: float) -> void:
 				target = null;
 			elif (global_position.distance_to(pendingPrimaryTarget.global_position) <= Q_MAX_RANGE):
 				pendingPrimary = false;
-				var targetId = pendingPrimaryTarget.get_multiplayer_authority();
+				var castTargetPath = pendingPrimaryTarget.get_path();
 				pendingPrimaryTarget = null;
 				target = null;
-				rpc("primary_ability", targetId);
+				rpc("primary_ability", castTargetPath);
 		
 		PlayerFunc.updateState(self, delta);
 		
@@ -210,10 +212,11 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
+			var basicDmg = dmg * 0.6;
 			var path = "res://assets/sounds/characters/rhay/rhay_basic_attack.ogg";
 			basicDamageDealt = true;
 			
-			PlayerFunc.dealDamage(self, target, dmg, "hit_01");
+			PlayerFunc.dealDamage(self, target, basicDmg, "hit_01");
 			rpc("syncSound", path);
 	
 	PlayerFunc.updateGlobally(self, delta);
@@ -232,13 +235,14 @@ func _physics_process(delta: float) -> void:
 			cancelSecondary();
 		elif (secondaryTimer <= 0 and not secondaryTeleported):
 			_perform_teleport();
+	
 	if (electricTrailActive):
 		electricTrailTimer -= delta;
 		trailFlickerTimer -= delta;
 		
 		if (trailFlickerTimer <= 0):
 			trailFlickerTimer = ELECTRIC_FLICKER_INTERVAL;
-			_spawn_electric_trail();
+			_spawn_electric_trail(electricTrailStartPos, electricTrailEndPos);
 		
 		if (electricTrailTimer <= 0):
 			electricTrailActive = false;
@@ -252,7 +256,6 @@ func _physics_process(delta: float) -> void:
 		
 	if (tertiaryTimer > 0):
 		tertiaryTimer -= delta;
-		# moveTo = global_position;
 	else:
 		if (usingTertiary):
 			usingTertiary = false;
@@ -357,15 +360,11 @@ func _setup_primary():
 	
 	pendingPrimary = false;
 	pendingPrimaryTarget = null;
-	rpc("primary_ability", hovering.get_multiplayer_authority());
+	rpc("primary_ability", hovering.get_path());
 
 @rpc("call_local", "reliable")
-func primary_ability(_targetId: int):
-	var gameScene = get_parent();
-	if not (gameScene.has_method("get_character_by_id")):
-		return;
-	
-	var _primaryTarget = gameScene.get_character_by_id(str(_targetId));
+func primary_ability(_targetPath):
+	var _primaryTarget = get_tree().root.get_node_or_null(_targetPath);
 	if not (is_instance_valid(_primaryTarget)):
 		return;
 	
@@ -381,6 +380,7 @@ func primary_ability(_targetId: int):
 	moveTo = global_position;
 	velocity = Vector3.ZERO;
 	qTimer = Q_COOLDOWN - cooldownReduction;
+	qTimer = clamp(qTimer, 2.0, Q_COOLDOWN);
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	
@@ -397,6 +397,12 @@ func _perform_primary_teleport():
 		cancelPrimary();
 		return;
 	
+	var startPos = global_position;
+	var endPos = primaryTarget.global_position;
+	endPos.y = primaryTarget.global_position.y;
+	
+	_start_electric_trail(startPos, endPos, 0.1);
+	
 	global_position = primaryTarget.global_position;
 	velocity = Vector3.ZERO;
 	moveTo = null;
@@ -406,8 +412,9 @@ func _perform_primary_teleport():
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
+	$q_slash/AnimationPlayer.play("slash");
 	
-	var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_slash.ogg");
 	PlayerFunc.playSound(self, sound);
 	
 	if (is_multiplayer_authority()):
@@ -427,10 +434,9 @@ func _setup_secondary():
 func secondary_ability(_moveTo, _global_pos):
 	var direction = (_moveTo - _global_pos).normalized();
 	var distance = _global_pos.distance_to(_moveTo);
-	usingSecondary = true;
 	secondaryTimer = SECONDARY_WINDUP;
+	usingSecondary = true;
 	secondaryTeleported = false;
-	usingUlti = false;
 	onAction = true;
 	target = null;
 	
@@ -446,6 +452,7 @@ func secondary_ability(_moveTo, _global_pos):
 	moveTo = _global_pos;
 	velocity = Vector3.ZERO;
 	wTimer = W_COOLDOWN - cooldownReduction;
+	wTimer = clamp(wTimer, 3.0, W_COOLDOWN);
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
@@ -469,6 +476,8 @@ func _perform_teleport():
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
 	
+	animPlayer.play("w_ability_activate");
+	
 	var sound = preload("res://assets/sounds/characters/rhay/rhay_big_jump.ogg");
 	var electricSound = preload("res://assets/sounds/characters/rhay/rhay_electricity.ogg");
 	PlayerFunc.playSound(self, sound);
@@ -477,7 +486,7 @@ func _perform_teleport():
 	if (is_multiplayer_authority()):
 		_deal_teleport_damage();
 	
-	_start_electric_trail();
+	_start_electric_trail(secondaryStartPos, secondaryDestination);
 	usingSecondary = false;
 	onAction = false;
 
@@ -508,18 +517,22 @@ func _spawn_teleport_trail():
 	trail.restart();
 	trail.emitting = true;
 
-func _start_electric_trail():
+func _start_electric_trail(startPos, endPos, duration: float = 0):
+	var totalDuration = duration;
+	if (duration == 0):
+		totalDuration = ELECTRIC_DURATION;
+	
+	electricTrailStartPos = startPos;
+	electricTrailEndPos = endPos;
 	electricTrailActive = true;
-	electricTrailTimer = ELECTRIC_DURATION;
+	electricTrailTimer = totalDuration;
 	trailFlickerTimer = 0;
-	_spawn_electric_trail();
+	_spawn_electric_trail(startPos, endPos);
 
-func _spawn_electric_trail():
+func _spawn_electric_trail(startPos, endPos):
 	var trail = $w_trail;
-	var start = secondaryStartPos;
-	var end = secondaryDestination;
-	var mid = (start + end) * 0.5;
-	var dir = end - start;
+	var mid = (startPos + endPos) * 0.5;
+	var dir = endPos - startPos;
 	if (dir.length() < 0.0001):
 		return;
 	dir = dir.normalized();
@@ -538,7 +551,7 @@ func _spawn_electric_trail():
 		var envelope = sin(PI * t);
 		var jitterX = randf_range(-0.8, 0.8) * envelope;
 		var jitterY = randf_range(-0.3, 0.3) * envelope;
-		points[i] = start.lerp(end, t) + right * jitterX + up * jitterY - mid;
+		points[i] = startPos.lerp(endPos, t) + right * jitterX + up * jitterY - mid;
 	
 	var image = Image.create(count, 1, false, Image.FORMAT_RGBAF);
 	for i in count:
@@ -556,7 +569,7 @@ func _spawn_electric_trail():
 
 func _deal_teleport_damage():
 	var gameScene = get_parent();
-	if not (gameScene and "addedCharacters" in gameScene):
+	if not (gameScene and gameScene.has_method("getAllCharacters")):
 		return;
 	
 	var start = secondaryStartPos;
@@ -568,7 +581,7 @@ func _deal_teleport_damage():
 	
 	var direction = segment / segmentLength;
 	
-	for enemy in gameScene.addedCharacters:
+	for enemy in gameScene.getAllCharacters():
 		if not (is_instance_valid(enemy)) or enemy == self:
 			continue;
 		
@@ -628,7 +641,8 @@ func ultimate_ability():
 	usingUlti = true;
 	ultiTimer = 10.0;
 	
-	rTimer = R_COOLDOWN;
+	rTimer = R_COOLDOWN - cooldownReduction;
+	rTimer = clamp(rTimer, 3.0, R_COOLDOWN);
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
@@ -786,7 +800,7 @@ func _explode_shield():
 	$shield_thunder_particles.emitting = true;
 	
 	eTimer = E_COOLDOWN - cooldownReduction;
-	eTimer = clamp(eTimer, 3.0, E_COOLDOWN);
+	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
 	
 	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_explode.ogg");
 	PlayerFunc.playSound(self, sound);
@@ -803,10 +817,10 @@ func _apply_explosion_damage():
 
 func _deal_explode_damage():
 	var gameScene = get_parent();
-	if not (gameScene and "addedCharacters" in gameScene):
+	if not (gameScene and gameScene.has_method("getAllCharacters")):
 		return;
 	
-	for enemy in gameScene.addedCharacters:
+	for enemy in gameScene.getAllCharacters():
 		if not (is_instance_valid(enemy)) or enemy == self:
 			continue;
 		

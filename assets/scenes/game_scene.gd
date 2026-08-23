@@ -489,6 +489,28 @@ func get_character_by_id(_playerId: String):
 
 	return charLookingFor;
 
+func getAllCharacters():
+	var all = [];
+	for character in addedCharacters:
+		if (is_instance_valid(character)):
+			all.append(character);
+	
+	var mapNode = get_node_or_null("Map");
+	if (mapNode):
+		_collectNpcs(mapNode, all);
+	
+	return all;
+
+func _collectNpcs(node, all):
+	if (node == null):
+		return;
+	
+	if (node is CharacterBody3D and "CHARACTER_NAME" in node and "team" in node):
+		all.append(node);
+	
+	for child in node.get_children():
+		_collectNpcs(child, all);
+
 func endGame(_teamThatHasWon: int):
 	gameOver = true;
 	teamThatHasWon = _teamThatHasWon;
