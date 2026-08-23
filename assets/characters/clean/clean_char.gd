@@ -542,6 +542,7 @@ func syncRespawn(newHp: float, newPos: Vector3):
 	dead = false;
 	isInvisible = false;
 	visible = true;
+	PlayerFunc.updateHealthSize(self);
 	
 @rpc("call_local")
 func showChatText(newText):
