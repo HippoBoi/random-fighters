@@ -40,7 +40,7 @@ var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL 
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 120% of your PHYSICAL DAMAGE.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
-var ultiDesc = "Gain a lot of SPEED. This effect lasts for 6 seconds.";
+var ultiDesc = "Gain a lot of SPEED. This effect lasts for 7 seconds.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
 
 var qTimer = 0;
@@ -60,6 +60,7 @@ var attackSpeed = 0;
 var speedOffset = 0;
 var speed = 0;
 var speedMultiplier = 0;
+var ultiSpeedBonus = 0;
 
 var timer = 0;
 var team = -1;
@@ -221,6 +222,8 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	speed += ultiSpeedBonus;
+	
 	if (primaryTimer > 0):
 		primaryTimer -= delta;
 	else:
@@ -252,6 +255,7 @@ func _physics_process(delta: float) -> void:
 		
 		if (ultiTimer <= 0):
 			usingUlti = false;
+			ultiSpeedBonus = 0;
 			$r_trail.emitting = false;
 		
 	if (tertiaryTimer > 0):
@@ -292,13 +296,11 @@ func _physics_process(delta: float) -> void:
 			_perform_primary_teleport();
 	
 	if (usingUlti):
-		baseSpeed = 12.0
 		if (velocity != Vector3.ZERO):
 			$r_trail.emitting = true;
 		else:
 			$r_trail.emitting = false;
 	else:
-		baseSpeed = 6.25
 		$r_trail.emitting = false;
 	
 	move_and_slide();
@@ -639,7 +641,8 @@ func _setup_ultimate():
 @rpc("call_local", "reliable")
 func ultimate_ability():
 	usingUlti = true;
-	ultiTimer = 10.0;
+	ultiTimer = 7.0;
+	ultiSpeedBonus = 10.0;
 	
 	rTimer = R_COOLDOWN - cooldownReduction;
 	rTimer = clamp(rTimer, 3.0, R_COOLDOWN);
@@ -669,7 +672,6 @@ func cancelPrimary():
 	onAction = false;
 	primaryTarget = null;
 	primaryTeleported = false;
-	speedOffset = 0;
 
 @rpc("call_local")
 func cancelSecondary():
