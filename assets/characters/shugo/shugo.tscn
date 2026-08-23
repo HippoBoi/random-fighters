@@ -294,7 +294,7 @@ blend_shape_mode = 0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ifwec"]
 radius = 1.81503
-height = 8.00531
+height = 9.752548
 
 [sub_resource type="Animation" id="Animation_uqkds"]
 resource_name = "basic_01"
@@ -5084,7 +5084,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.04803, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.921649, 0)
 shape = SubResource("CapsuleShape3D_ifwec")
 
 [node name="dashParticles" type="GPUParticles3D" parent="." index="4"]

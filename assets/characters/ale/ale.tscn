@@ -3150,7 +3150,7 @@ _data = {
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lihjd"]
 radius = 1.1271
-height = 5.58393
+height = 8.568821
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqcgl"]
 transparency = 1
@@ -4500,28 +4500,23 @@ script = ExtResource("2_kqcgl")
 transform = Transform3D(1.62, 0, 0, 0, 1.62, 0, 0, 0, 1.62, 0, 1.14277, 0)
 
 [node name="Skeleton3D" parent="ale_armature" index="0"]
-bones/0/position = Vector3(0, 1.1292735, 0)
-bones/0/rotation = Quaternion(0.6973567, 0.019440977, 0.04573489, 0.7149993)
-bones/1/rotation = Quaternion(0.02860856, -0.110594034, -0.007209407, 0.99342775)
-bones/3/rotation = Quaternion(0.79171574, 0.325558, 0.41876197, 0.30304563)
-bones/4/rotation = Quaternion(-0.24793105, 0.1621099, 0.19749495, 0.9344765)
-bones/5/position = Vector3(0.23786259, 0.90794283, 0.6306826)
-bones/5/rotation = Quaternion(0.46395305, 0.47177047, 0.69695264, 0.27647308)
+bones/0/rotation = Quaternion(-0.09032021, 0, 0, 0.9959128)
+bones/1/rotation = Quaternion(-0.061596822, 0.0024906062, 0.017092764, 0.99795175)
+bones/3/rotation = Quaternion(0.35025653, 0.08969717, 0.17451213, 0.9158714)
+bones/4/rotation = Quaternion(0.43383917, 0.45588163, -0.29452547, 0.7191733)
+bones/5/position = Vector3(0.07174516, 0.6309062, 0.31875578)
+bones/5/rotation = Quaternion(0.6720437, 0.235455, 0.10477467, 0.6942194)
 bones/5/scale = Vector3(1.706134, 1.7061039, 1.7061139)
-bones/6/rotation = Quaternion(-0.029553633, -0.00332415, 0.019038599, 0.99937636)
+bones/6/rotation = Quaternion(-3.154856e-08, -6.79238e-08, 1.4515527e-09, 1)
 bones/6/scale = Vector3(1.139591, 1.139591, 1.139591)
-bones/7/position = Vector3(0.20726824, 0.96344084, 0.6437244)
-bones/7/rotation = Quaternion(-0.41015542, -0.2884011, 0.47111946, 0.7257023)
-bones/9/rotation = Quaternion(0.30394766, -0.6339163, -0.3236325, 0.6332677)
-bones/10/rotation = Quaternion(-0.25932908, -0.4325146, -0.4712963, 0.7235741)
-bones/11/position = Vector3(-5.37228e-08, 1.1292735, -2.4625646e-10)
-bones/11/rotation = Quaternion(-0.615079, 0.463675, 0.5446372, 0.33174333)
-bones/12/rotation = Quaternion(-0.5065376, -0.08358261, -0.08283428, 0.8541499)
-bones/13/rotation = Quaternion(-0.09989966, -0.016697198, -0.2076152, 0.97295284)
-bones/14/position = Vector3(5.37228e-08, 1.1292735, -2.4625646e-10)
-bones/14/rotation = Quaternion(0.6295493, 0.453018, 0.53211886, -0.3395469)
-bones/15/rotation = Quaternion(-0.47491404, 0.022110626, 0.02659907, 0.87935215)
-bones/16/rotation = Quaternion(-0.041014254, -0.07451871, 0.3040042, 0.9488658)
+bones/7/position = Vector3(0.07174528, 0.63090605, 0.3187558)
+bones/7/rotation = Quaternion(-0.62894905, 0.45121193, -0.37847686, 0.5075296)
+bones/9/rotation = Quaternion(-0.13655207, 0.14756534, -0.49832547, 0.84335625)
+bones/10/rotation = Quaternion(0.003735218, 0.034205873, -0.2796079, 0.9594976)
+bones/12/rotation = Quaternion(-0.49724445, 1.6994625e-07, -7.0086045e-08, 0.8676106)
+bones/13/rotation = Quaternion(-0.07643831, -5.2335206e-08, -2.2171946e-08, 0.9970743)
+bones/15/rotation = Quaternion(-0.4944479, -1.7002098e-07, 6.999256e-08, 0.8692074)
+bones/16/rotation = Quaternion(-0.07643829, 5.2335203e-08, 2.2171946e-08, 0.9970743)
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="2"]
 libraries = {
@@ -4534,7 +4529,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7482, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2406464, 0)
 shape = SubResource("CapsuleShape3D_lihjd")
 
 [node name="q_hitbox" type="Node3D" parent="." index="5"]

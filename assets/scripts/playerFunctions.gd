@@ -107,7 +107,52 @@ func _getMousePos(character):
 	query.exclude = ridArray;
 	
 	var intersection = spaceState.intersect_ray(query);
+	
+	if (intersection.is_empty() or "team" not in intersection.collider):
+		var hoverRadius = 3.5;
+		var nearestChar = _getNearestCharacterToMouse(character, rayOrigin, hoverRadius);
+		if nearestChar:
+			intersection = {"collider": nearestChar, "position": nearestChar.global_position}
+	
 	return intersection;
+
+func _getNearestCharacterToMouse(character, rayOrigin: Vector3, radius: float):
+	var scene = character.get_parent();
+	if (scene.name != "Game"):
+		return null;
+	
+	var mousePos = get_viewport().get_mouse_position();
+	var rayNormal = character.camera.project_ray_normal(mousePos);
+	
+	var t = -rayOrigin.y / rayNormal.y;
+	var groundHit = rayOrigin + rayNormal * t;
+	
+	var nearestEnemy = null;
+	var nearestEnemyDist = radius;
+	var nearestAlly = null;
+	var nearestAllyDist = radius;
+	
+	for playerId in Server.playersInfo:
+		var player = Server.playersInfo[playerId];
+		var charInstance = player.charInstance;
+		
+		if not (charInstance is Node3D) or not is_instance_valid(charInstance) or charInstance == character:
+			continue;
+		if not _canSeeCharacter(charInstance):
+			continue;
+		
+		var dist = Vector2(charInstance.global_position.x - groundHit.x, charInstance.global_position.z - groundHit.z).length();
+		
+		if (charInstance.team != character.team):
+			if (dist < nearestEnemyDist):
+				nearestEnemyDist = dist;
+				nearestEnemy = charInstance;
+		else:
+			if (dist < nearestAllyDist):
+				nearestAllyDist = dist;
+				nearestAlly = charInstance;
+	
+	return nearestEnemy if nearestEnemy else nearestAlly;
 
 func _getMapMargins(_gameMode: String) -> Array:
 	var xMargins = [-20, 32];

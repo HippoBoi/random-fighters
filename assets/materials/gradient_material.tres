@@ -171,5 +171,5 @@ nodes/fragment/connections = PackedInt32Array(4, 0, 2, 0, 5, 0, 4, 2, 3, 0, 6, 0
 render_priority = 0
 shader = SubResource("VisualShader_biwfa")
 shader_parameter/color = Color(1.7034391, 0.71932274, 1.0052567, 1)
-shader_parameter/gradient_1_slider = 0.725
-shader_parameter/gradient_2_slider = -0.275
+shader_parameter/gradient_1_slider = 1.1338861274719239
+shader_parameter/gradient_2_slider = -0.40174647736549374

@@ -8642,7 +8642,7 @@ _data = {
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bnuvi"]
 radius = 0.999927
-height = 6.91007
+height = 9.255106
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mlpdd"]
 render_priority = 0
@@ -9851,7 +9851,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77329, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9458091, 0)
 shape = SubResource("CapsuleShape3D_bnuvi")
 
 [node name="slashParticles" type="Node3D" parent="."]

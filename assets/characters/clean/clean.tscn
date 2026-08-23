@@ -13,7 +13,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pv2p4"]
 radius = 1.13073
-height = 6.80891
+height = 8.99837
 
 [sub_resource type="Curve" id="Curve_aihlf"]
 _data = [Vector2(0.0357143, 0.0350195), 0.0, 0.0, 0, 0, Vector2(0.423469, 0.844358), 0.0, 0.0, 0, 0, Vector2(0.75, 0.797665), 0.0, 0.0, 0, 0, Vector2(0.994898, 0.0661479), 0.0, 0.0, 0, 0]
@@ -1959,27 +1959,27 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1, 0)
 
 [node name="Skeleton3D" parent="clean" index="0"]
 bones/0/position = Vector3(0, 0, 0)
-bones/1/rotation = Quaternion(0.0519306, -0.253351, -0.0305878, 0.965495)
-bones/2/rotation = Quaternion(0.317367, -0.0629063, -0.0793536, 0.942881)
-bones/3/rotation = Quaternion(-0.00586064, 0.000820745, 0.0150703, 0.999869)
-bones/4/rotation = Quaternion(-0.0963036, 5.95183e-05, 0.00261162, 0.995349)
-bones/6/rotation = Quaternion(0.191578, -0.273604, -0.730423, 0.595752)
-bones/7/rotation = Quaternion(0.268424, -0.0458015, -0.0355967, 0.961553)
-bones/9/rotation = Quaternion(0.151966, 0.178013, 0.594696, 0.769126)
-bones/10/rotation = Quaternion(0.700846, 0.0144199, -0.253744, 0.666498)
-bones/12/rotation = Quaternion(-0.0202317, -0.188666, 0.257462, 0.947475)
-bones/13/rotation = Quaternion(0.385166, 0.202704, -0.0163769, 0.900161)
-bones/14/rotation = Quaternion(6.50891e-08, -5.09939e-08, 0.876306, -0.481755)
-bones/15/rotation = Quaternion(0.021622, -0.0176877, -0.321287, 0.94657)
-bones/16/rotation = Quaternion(0.397378, -0.0828711, -0.113176, 0.906871)
+bones/1/rotation = Quaternion(-0.060263798, -0.072849594, 0.010499776, 0.9954653)
+bones/2/rotation = Quaternion(0.11162313, -4.5795066e-05, -0.027418908, 0.9933723)
+bones/3/rotation = Quaternion(0.04799588, 8.71158e-05, 0.0015995232, 0.99884635)
+bones/4/rotation = Quaternion(-0.09162896, 7.8610115e-05, 0.0019187751, 0.99579144)
+bones/6/rotation = Quaternion(0.12001633, -0.19907069, -0.73580784, 0.63604546)
+bones/7/rotation = Quaternion(-0.026184924, -0.03701004, 0.05555519, 0.9974258)
+bones/9/rotation = Quaternion(0.0014653411, -0.023006018, 0.6537025, 0.75640047)
+bones/10/rotation = Quaternion(-0.12094444, -0.20308316, 0.090779565, 0.9674135)
+bones/12/rotation = Quaternion(0.2157571, 0.32992464, 0.2922977, 0.87129825)
+bones/13/rotation = Quaternion(0.46122777, 0.11891846, 0.18893017, 0.85873914)
+bones/14/rotation = Quaternion(6.5089125e-08, -5.0993865e-08, 0.87630606, -0.4817549)
+bones/15/rotation = Quaternion(0.65606993, -0.42706493, -0.20042293, 0.5890828)
+bones/16/rotation = Quaternion(0.030259337, 0.07223895, -0.035539594, 0.9962946)
 bones/17/position = Vector3(0, 0, 0)
-bones/17/rotation = Quaternion(0.641804, -0.296796, -0.641804, -0.296796)
-bones/18/rotation = Quaternion(-0.411307, 0.00213885, 0.00451481, 0.911483)
-bones/19/rotation = Quaternion(-0.00895236, -0.00235894, -0.254788, 0.966953)
+bones/17/rotation = Quaternion(0.6418039, -0.29679605, -0.6418036, -0.29679605)
+bones/18/rotation = Quaternion(-0.4047695, -0.07605545, -0.16054705, 0.896996)
+bones/19/rotation = Quaternion(-0.009220319, -0.00083426415, -0.090108104, 0.995889)
 bones/20/position = Vector3(0, 0, 0)
-bones/20/rotation = Quaternion(0.641804, 0.296796, 0.641804, -0.296796)
-bones/21/rotation = Quaternion(-0.410814, 0.0210523, 0.0444398, 0.910392)
-bones/22/rotation = Quaternion(-0.00923138, 0.000701422, 0.075759, 0.997083)
+bones/20/rotation = Quaternion(0.6418039, 0.29679605, 0.6418036, -0.29679605)
+bones/21/rotation = Quaternion(-0.4086079, -0.04901235, -0.10346099, 0.9055017)
+bones/22/rotation = Quaternion(-0.008972273, 0.0022820167, 0.24647829, 0.9691042)
 
 [node name="armL" parent="clean/Skeleton3D" index="0"]
 layers = 2
@@ -2015,7 +2015,7 @@ layers = 2
 layers = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.24532, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.34005, 0)
 shape = SubResource("CapsuleShape3D_pv2p4")
 
 [node name="codeThunder" type="Node3D" parent="." index="3"]
