@@ -143,6 +143,20 @@ func _ready() -> void:
 	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
 
+func _dealDamage(_target, _dmg, effect := ""):
+	var canDamage = is_instance_valid(_target) and not ("dead" in _target and _target.dead);
+	
+	PlayerFunc.dealDamage(self, _target, _dmg, effect);
+	
+	if (canDamage):
+		_reduceCooldowns(1.0);
+
+func _reduceCooldowns(amount: float):
+	qTimer = max(0.0, qTimer - amount);
+	wTimer = max(0.0, wTimer - amount);
+	eTimer = max(0.0, eTimer - amount);
+	rTimer = max(0.0, rTimer - amount);
+
 func rotateChar(newPos) -> void:
 	var direction = (newPos - global_position);
 	direction.y = 0;
@@ -218,7 +232,7 @@ func _physics_process(delta: float) -> void:
 			var path = "res://assets/sounds/characters/rhay/rhay_basic_attack.ogg";
 			basicDamageDealt = true;
 			
-			PlayerFunc.dealDamage(self, target, basicDmg, "hit_01");
+			_dealDamage(target, basicDmg, "hit_01");
 			rpc("syncSound", path);
 	
 	attackSpeedOffset += ultiAttackSpeedBonus;
@@ -425,7 +439,7 @@ func _perform_primary_teleport():
 	
 	if (is_multiplayer_authority()):
 		if (primaryTarget.team != team):
-			PlayerFunc.dealDamage(self, primaryTarget, dmg, "hit_01");
+			_dealDamage(primaryTarget, dmg, "hit_01");
 	
 	usingPrimary = false;
 	onAction = false;
@@ -604,7 +618,7 @@ func _deal_teleport_damage():
 		var distanceToLine = enemy.global_position.distance_to(closestPoint);
 		
 		if (distanceToLine <= W_TELEPORT_WIDTH):
-			PlayerFunc.dealDamage(self, enemy, dmg, "hit_01");
+			_dealDamage(enemy, dmg, "hit_01");
 			PlayerFunc.slowTarget(enemy, 0.75);
 	
 func _setup_tertiary():
@@ -792,7 +806,7 @@ func _onSlashTouched(other) -> void:
 	if (isCharacter):
 		if (other.team != team):
 			qTimer = 0;
-			PlayerFunc.dealDamage(self, other, (dmg * 0.95 + 0.5));
+			_dealDamage(other, (dmg * 0.95 + 0.5));
 
 func _explode_shield():
 	if not (tertiaryShieldActive):
@@ -839,4 +853,4 @@ func _deal_explode_damage():
 			continue;
 		
 		if (enemy.global_position.distance_to(global_position) <= E_EXPLODE_RADIUS):
-			PlayerFunc.dealDamage(self, enemy, dmg * 1.2, "hit_bullet_01");
+			_dealDamage(enemy, dmg * 1.2, "hit_bullet_01");

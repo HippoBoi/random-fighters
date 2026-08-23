@@ -19,6 +19,11 @@ var optionsOpen = false;
 
 var activeBasicArea: MeshInstance3D = null;
 var lastHpValue = 0;
+var lastQTimer = 0;
+var lastWTimer = 0;
+var lastETimer = 0;
+var lastRTimer = 0;
+var abilityFlashTweens = {};
 var myTeam = -1;
 var myCharacter = null;
 
@@ -352,6 +357,19 @@ func _updateGameUI(character: CharacterBody3D):
 		tertAbility.get_node("cooldown").scale.x = character.eTimer / character.E_COOLDOWN;
 		ultAbility.get_node("cooldown").scale.x = character.rTimer / character.R_COOLDOWN;
 		
+		if (character.qTimer < lastQTimer - 0.1):
+			_flashAbility(primAbility);
+		if (character.wTimer < lastWTimer - 0.1):
+			_flashAbility(secondAbility);
+		if (character.eTimer < lastETimer - 0.1):
+			_flashAbility(tertAbility);
+		if (character.rTimer < lastRTimer - 0.1):
+			_flashAbility(ultAbility);
+		lastQTimer = character.qTimer;
+		lastWTimer = character.wTimer;
+		lastETimer = character.eTimer;
+		lastRTimer = character.rTimer;
+		
 		UIlevel.text = str(character.level);
 		UIrespawnTimer.text = str(roundf(character.respawnTimer * 100) / 100);
 		#UItokens.text = str(character.tokens);
@@ -375,6 +393,22 @@ func _updateGameUI(character: CharacterBody3D):
 			UIrespawnTimer.visible = false;
 		
 		healthBar.scale.x = character.hp / character.maxHp;
+
+func _flashAbility(abilityNode):
+	if not (is_instance_valid(abilityNode)):
+		return;
+	
+	var key = abilityNode.get_path();
+	if (abilityFlashTweens.has(key)):
+		var oldTween = abilityFlashTweens[key];
+		if (is_instance_valid(oldTween)):
+			oldTween.kill();
+	
+	var flashColor = Color(3.5, 3.8, 0.0, 1.0);
+	abilityNode.self_modulate = flashColor;
+	var tween = abilityNode.create_tween();
+	tween.tween_property(abilityNode, "self_modulate", Color(1, 1, 1, 1), 0.45);
+	abilityFlashTweens[key] = tween;
 
 func _setupAbilityDescriptions(character: CharacterBody3D, UI: Control):
 	UI.primaryDesc = character.primaryDesc;
@@ -689,6 +723,11 @@ func spawnCharacter(character: CharacterBody3D):
 	character.wTimer = 0;
 	character.eTimer = 0;
 	character.rTimer = 0;
+	
+	lastQTimer = 0;
+	lastWTimer = 0;
+	lastETimer = 0;
+	lastRTimer = 0;
 	
 	var scene = character.get_parent();
 	if (scene.name == "Game"):
