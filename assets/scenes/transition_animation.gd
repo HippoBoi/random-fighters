@@ -5,6 +5,9 @@ extends Control
 @onready var spinningSquare = $"bars/bar#3/bar#4";
 @onready var loopingBg = $loopingBG;
 
+var _spinning := false;
+var _stop_spinning := false;
+
 signal transition_finished;
 
 func _playBarsIn():
@@ -19,13 +22,24 @@ func _playBarsIn():
 	return true;
 
 func _playBarSpin():
+	if (_spinning):
+		return;
+	_spinning = true;
 	spinningSquare.rotation = 0;
 	
 	var tween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO);
 	tween.tween_property(spinningSquare, "rotation", 6.3, 1);
 	await get_tree().create_timer(1.0).timeout;
 	
+	_spinning = false;
 	return true;
+
+func _playBarSpinLoop():
+	while not _stop_spinning:
+		await _playBarSpin();
+		if (_stop_spinning):
+			break;
+		await get_tree().create_timer(2.0).timeout;
 
 func _playBarsOut():
 	for bar: ColorRect in bars.get_children():
@@ -64,16 +78,25 @@ func _fadeLoopBackgroundOut():
 	return true;
 
 func _ready() -> void:
+	ShaderWarmup.warm_up();
+
 	_playBackgroundIn();
 	_fadeLoopBackgroundIn();
 	await _playBarsIn();
 	await get_tree().create_timer(0.1).timeout;
+
+	if not ShaderWarmup.is_done():
+		_playBarSpinLoop();
+
+	await ShaderWarmup.warm_up();
+	_stop_spinning = true;
+	
+	print("LOADING FINISHED")
 	_playBarSpin();
-	await get_tree().create_timer(0.5).timeout;
+	
 	await _playBarsOut();
 	_fadeLoopBackgroundOut();
 	await _playBackgroundOut();
 	
-	# print("TRANSITION FINISHED")
 	transition_finished.emit();
 	queue_free();

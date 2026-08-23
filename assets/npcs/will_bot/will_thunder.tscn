@@ -51,7 +51,7 @@ operator = 2
 
 [sub_resource type="VisualShader" id="VisualShader_0tdrq"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
 
 uniform vec4 markColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -115,45 +115,45 @@ render_priority = 0
 shader = SubResource("VisualShader_0tdrq")
 shader_parameter/markColor = Color(0.787176, 0.527994, 0.502409, 1)
 
-[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_sip4w"]
+[sub_resource type="VisualShaderNodeRemap" id="VisualShaderNodeRemap_57geh"]
 default_input_values = [1, 0.0, 2, 1.0, 3, 0.0, 4, 0.7]
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_mpqyx"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gf6lk"]
 expanded_output_ports = [0]
 texture = ExtResource("2_7cp00")
 
-[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_1v062"]
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_q5vqc"]
 default_input_values = [1, Vector2(2, 2), 2, Vector2(0, 0)]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_8kdnk"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_wqt0a"]
 input_name = "time"
 
-[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_ibvba"]
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_fjee1"]
 default_input_values = [0, Vector2(0, 0), 1, Vector2(0, -0.5)]
 op_type = 0
 operator = 2
 
-[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_o6ak1"]
+[sub_resource type="VisualShaderNodeSmoothStep" id="VisualShaderNodeSmoothStep_mlpdd"]
 default_input_values = [0, 0.0, 1, 0.9, 2, 0.5]
 
-[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_lf4aa"]
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_cbpkg"]
 expanded_output_ports = [0]
 input_name = "color"
 
 [sub_resource type="Gradient" id="Gradient_4cw0f"]
 offsets = PackedFloat32Array(0, 0.653179)
-colors = PackedColorArray(5, 0, 0.35, 1, 1, 1, 1, 1)
+colors = PackedColorArray(2.184344, 0.14771448, 0.10323976, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_ibeu8"]
 gradient = SubResource("Gradient_4cw0f")
 use_hdr = true
 
-[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_gdps2"]
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_nlvfl"]
 texture = SubResource("GradientTexture1D_ibeu8")
 
-[sub_resource type="VisualShader" id="VisualShader_cdusb"]
+[sub_resource type="VisualShader" id="VisualShader_0g080"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform sampler2D tex_frg_2;
 uniform sampler2D tex_frg_9;
@@ -214,31 +214,30 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(125.201, -20.4613)
 modes/cull = 2
 flags/unshaded = true
 nodes/fragment/0/position = Vector2(1120, 120)
-nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_mpqyx")
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_gf6lk")
 nodes/fragment/2/position = Vector2(-120, 380)
-nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_1v062")
+nodes/fragment/3/node = SubResource("VisualShaderNodeUVFunc_q5vqc")
 nodes/fragment/3/position = Vector2(-380, 300)
-nodes/fragment/4/node = SubResource("VisualShaderNodeInput_8kdnk")
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_wqt0a")
 nodes/fragment/4/position = Vector2(-880, 240)
-nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_ibvba")
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorOp_fjee1")
 nodes/fragment/5/position = Vector2(-600, 380)
-nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_o6ak1")
+nodes/fragment/6/node = SubResource("VisualShaderNodeSmoothStep_mlpdd")
 nodes/fragment/6/position = Vector2(400, 380)
-nodes/fragment/7/node = SubResource("VisualShaderNodeInput_lf4aa")
+nodes/fragment/7/node = SubResource("VisualShaderNodeInput_cbpkg")
 nodes/fragment/7/position = Vector2(-160, 80)
-nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_gdps2")
+nodes/fragment/9/node = SubResource("VisualShaderNodeTexture_nlvfl")
 nodes/fragment/9/position = Vector2(660, 40)
-nodes/fragment/10/node = SubResource("VisualShaderNodeRemap_sip4w")
+nodes/fragment/10/node = SubResource("VisualShaderNodeRemap_57geh")
 nodes/fragment/10/position = Vector2(180, 120)
-nodes/fragment/connections = PackedInt32Array(3, 0, 2, 0, 4, 0, 5, 0, 5, 0, 3, 2, 2, 1, 6, 2, 9, 0, 0, 0, 6, 0, 9, 0, 6, 0, 0, 1, 7, 1, 10, 0, 10, 0, 6, 0)
+nodes/fragment/connections = PackedInt32Array(6, 0, 9, 0, 6, 0, 0, 1, 10, 0, 6, 0, 9, 0, 0, 0, 5, 0, 3, 2, 4, 0, 5, 0, 7, 1, 10, 0, 3, 0, 2, 0, 2, 1, 6, 2)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g6y6e"]
 render_priority = 0
-shader = SubResource("VisualShader_cdusb")
+shader = SubResource("VisualShader_0g080")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_bq125"]
 expanded_output_ports = [0]
@@ -278,7 +277,7 @@ default_value_enabled = true
 
 [sub_resource type="VisualShader" id="VisualShader_khm2g"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
 
 uniform vec4 waveColor : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
 uniform sampler2D tex_frg_2;
@@ -349,7 +348,7 @@ render_priority = 0
 shader = SubResource("VisualShader_khm2g")
 shader_parameter/waveColor = Color(2, 0.75, 0.948, 1)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_ibeu8"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_5qdsp"]
 _surfaces = [{
 "aabb": AABB(-1.12256, 0, -1.12256, 2.24513, 1e-05, 2.24513),
 "format": 34896613377,
@@ -422,7 +421,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("IYYAAKpeNQP/fwAACV6yAsiX//9vAjUD/3///wAAsgKmrv//pQlkBgeMAACGYGQGusP//1sVhgl3kQAAjGOGCTPW//8dJZQMO5YAAJxnlAxd5f//UTiGDySaAACQbIYPofD//zpOVxIMnQAAN3JXEpH3//8AZqUS1p4AAFh4xxX/////8XpiFnGfAAC5fkwZif3//+aUlBrWngAAGYWeGkD2///crZAcDJ0AADuLmBxs6v//3cRFHiSaAADikEsegdr//wbZrx87lgAA1pWzHxzH//+S6cogd5EAAOaZzSD7sP//3vWXIQeMAADrnJgh+Jj//3D9ESIhhgAAyJ4SIv9//////zsi/38AAGifOyIGZ///cP0RIt15AADInhIiA0///971lyH3cwAA65yYIeI4//+S6cogh24AAOaZzSB9Jf//BtmvH8NpAADWlbMfkhX//93ERR7aZQAA4pBLHr4J///crZAc8mIAADuLmBx1Av//5pSUGihhAAAZhZ4aAAD///F6RRaNYAAAuX75GG0I//8AZsASKGEAAFh4IRZdD///Ok5XEvJiAAA3clcSoRr//1E4hg/aZQAAkGyGD8sp//8dJZQMw2kAAJxnlAxEPP//WxWGCYduAACMY4YJWFH//6UJZAb3cwAAhmBkBjZo//9vAjUD3XkAAKpeNQP/f///AACyAv9/AAAJXrICdtszCGTZZQF22zMIZNllAbTdiw+03YsPwt9JFsLfSRaw4ZwcsOGcHInjqyKJ46siV+WXKFfllyiV5XUqaOdsLOPmgDD06IEyJ+pCOjDqXzpJ7N5AUuz8QJHuA0ia7iBIEfHpTxrxBVDg899Y6PP4WCH3V2Mo92tjDfsCcBL7DnD///9/////fwHw8IQO8OyEVuPciGvj1Yje2B6M99gWjOjP7Y4E0OSOAshskSDIY5HdwLWT+8Crk0K615Vfus2VarAvmUGyRpeEqlmapKxgmJeoppqXqKaaq6J1nKuidZycnE6enJxOnkmWO6BJljugi49KoouPSqIyiIekMoiHpGWBmqZlgZqm")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_ibeu8")
+shadow_mesh = SubResource("ArrayMesh_5qdsp")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8xw6w"]
 transparency = 1

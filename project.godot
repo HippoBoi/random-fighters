@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Random Fighters"
 config/description="A MOBA that changes each round."
-config/version="0.13.5"
+config/version="0.14.1"
 run/main_scene="uid://cwq5xwhdfkoh6"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://04agxibx75iw"
@@ -22,6 +22,7 @@ config/icon="uid://04agxibx75iw"
 Server="*res://assets/scripts/server.gd"
 Cursor="*res://assets/scripts/cursor.gd"
 PlayerFunc="*res://assets/scripts/playerFunctions.gd"
+ShaderWarmup="*res://assets/scripts/shader_warmup.gd"
 Noray="*res://addons/netfox.noray/noray.gd"
 PacketHandshake="*res://addons/netfox.noray/packet-handshake.gd"
 
@@ -133,3 +134,4 @@ D={
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

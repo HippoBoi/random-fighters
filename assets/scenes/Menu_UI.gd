@@ -162,6 +162,10 @@ func _start_mode(mode_name: String) -> void:
 		"Multiplayer":
 			main_script.onFindMatch()
 		"Training":
+			if (Constants.DEBUG):
+				main_script._joinPressed();
+				return;
+		
 			main_script._on_training_button_pressed()
 		_:
 			print("Mode not implemented yet: %s" % mode_name)
