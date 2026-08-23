@@ -40,7 +40,7 @@ var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL 
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
 var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 120% of your PHYSICAL DAMAGE.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
-var ultiDesc = "Gain a lot of SPEED. This effect lasts for 7 seconds.";
+var ultiDesc = "Gain lots of SPEED and ATTACK SPEED. This effect lasts for 7 seconds.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
 
 var qTimer = 0;
@@ -61,6 +61,7 @@ var speedOffset = 0;
 var speed = 0;
 var speedMultiplier = 0;
 var ultiSpeedBonus = 0;
+var ultiAttackSpeedBonus = 0;
 
 var timer = 0;
 var team = -1;
@@ -220,7 +221,9 @@ func _physics_process(delta: float) -> void:
 			PlayerFunc.dealDamage(self, target, basicDmg, "hit_01");
 			rpc("syncSound", path);
 	
+	attackSpeedOffset += ultiAttackSpeedBonus;
 	PlayerFunc.updateGlobally(self, delta);
+	attackSpeedOffset -= ultiAttackSpeedBonus;
 	
 	speed += ultiSpeedBonus;
 	
@@ -256,6 +259,7 @@ func _physics_process(delta: float) -> void:
 		if (ultiTimer <= 0):
 			usingUlti = false;
 			ultiSpeedBonus = 0;
+			ultiAttackSpeedBonus = 0;
 			$r_trail.emitting = false;
 		
 	if (tertiaryTimer > 0):
@@ -643,6 +647,7 @@ func ultimate_ability():
 	usingUlti = true;
 	ultiTimer = 7.0;
 	ultiSpeedBonus = 10.0;
+	ultiAttackSpeedBonus = 6.5;
 	
 	rTimer = R_COOLDOWN - cooldownReduction;
 	rTimer = clamp(rTimer, 3.0, R_COOLDOWN);
