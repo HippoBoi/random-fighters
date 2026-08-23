@@ -11,7 +11,7 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kl43q"]
 radius = 1.06153
-height = 6.66703
+height = 11.105488
 
 [sub_resource type="Animation" id="Animation_ij8xy"]
 resource_name = "basic_01"
@@ -2015,20 +2015,28 @@ alpha_curve = SubResource("CurveTexture_biwfa")
 [sub_resource type="BoxMesh" id="BoxMesh_me532"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jstbi"]
+size = Vector3(2.7908936, 1, 1.0766602)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gspga"]
+size = Vector3(2.7642822, 1, 1.2145996)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_edtkn"]
+size = Vector3(2.5703125, 1, 1.1833496)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n7404"]
+size = Vector3(2.4956665, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_27m3t"]
+size = Vector3(3.026245, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rgxvm"]
+size = Vector3(2.8604736, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uyy1l"]
+size = Vector3(2.850891, 1, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2a1j7"]
+size = Vector3(2.4813843, 1, 1)
 
 [sub_resource type="Gradient" id="Gradient_me532"]
 offsets = PackedFloat32Array(0.009803922, 1)
@@ -2103,7 +2111,7 @@ bones/16/rotation = Quaternion(-0.2924923, -0.48089525, 0.404111, 0.7210287)
 bones/17/rotation = Quaternion(-0.057586394, -0.28526554, -0.11272562, 0.9500528)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.21271, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.431939, 0)
 shape = SubResource("CapsuleShape3D_kl43q")
 
 [node name="Sprite3D" type="Sprite3D" parent="." index="2"]
@@ -2217,6 +2225,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D/Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1, -0.22174072, 0, -0.038330078)
 shape = SubResource("BoxShape3D_jstbi")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="wHitboxes" index="1"]
@@ -2231,6 +2240,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D7/Area3D" index="0"]
+transform = Transform3D(1.0000006, 0, -2.842171e-14, 0, 1, 0, -1.7763568e-15, 0, 1, -0.056213856, 0, -0.069702156)
 shape = SubResource("BoxShape3D_gspga")
 
 [node name="MeshInstance3D8" type="MeshInstance3D" parent="wHitboxes" index="2"]
@@ -2245,6 +2255,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D8/Area3D" index="0"]
+transform = Transform3D(1.0000006, 0, -2.842171e-14, 0, 1, 0, -1.7763568e-15, 0, 1, 0.1816411, 0, 0.06896973)
 shape = SubResource("BoxShape3D_edtkn")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="wHitboxes" index="3"]
@@ -2259,6 +2270,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D4/Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1, 0.18588352, 0, 0)
 shape = SubResource("BoxShape3D_n7404")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="wHitboxes" index="4"]
@@ -2273,6 +2285,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D2/Area3D" index="0"]
+transform = Transform3D(1, 0, 1.66893e-06, 0, 0.9999999, 0, 0, 0, 0.9999999, -0.20367241, 0, -1.1920929e-07)
 shape = SubResource("BoxShape3D_27m3t")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="wHitboxes" index="5"]
@@ -2287,6 +2300,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D5/Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 1, 0.2935176, 0, -5.9604645e-08)
 shape = SubResource("BoxShape3D_rgxvm")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="wHitboxes" index="6"]
@@ -2301,6 +2315,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D3/Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, -0.23629665, 0, -1.1920929e-07)
 shape = SubResource("BoxShape3D_uyy1l")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="wHitboxes" index="7"]
@@ -2315,6 +2330,7 @@ collision_mask = 5
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="wHitboxes/MeshInstance3D6/Area3D" index="0"]
+transform = Transform3D(0.99999964, 0, -9.417534e-06, 0, 1, 0, 2.9802322e-08, 0, 0.99999446, -0.047454834, 0, 0)
 shape = SubResource("BoxShape3D_2a1j7")
 
 [node name="rParticles2" type="GPUParticles3D" parent="." index="13"]

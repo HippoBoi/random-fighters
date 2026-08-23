@@ -138,6 +138,9 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (dead and not reallyReallyDead):
+		visible = true;
+	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
 		bufferedMoveTo = null;

@@ -17,12 +17,14 @@ render_priority = 0
 shader = ExtResource("3_wllyx")
 shader_parameter/texture_albedo = ExtResource("4_emb01")
 shader_parameter/scale = 0.5
+shader_parameter/transparency = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6yj01"]
 render_priority = 0
 shader = ExtResource("3_wllyx")
 shader_parameter/texture_albedo = ExtResource("5_h2vus")
 shader_parameter/scale = 0.25
+shader_parameter/transparency = 1.0
 
 [sub_resource type="Animation" id="Animation_qtk6m"]
 resource_name = "basic_01"
@@ -2282,7 +2284,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0i4rp"]
-size = Vector3(1.50684, 6.13483, 1)
+size = Vector3(1.50684, 9.046053, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emb01"]
 vertex_color_use_as_albedo = true
@@ -2458,7 +2460,7 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 3.1166, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 4.572211, 0)
 shape = SubResource("BoxShape3D_0i4rp")
 
 [node name="q_particles" type="GPUParticles3D" parent="." index="4"]
