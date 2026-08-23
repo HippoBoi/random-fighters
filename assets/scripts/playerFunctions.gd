@@ -274,7 +274,10 @@ func _canContinueLivesAnimation(character, inGameUI, deadOverlay, livesText, liv
 		and is_instance_valid(livesContainer)
 	);
 
-func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
+func _updateTokensInUI(character, _newTokens: int):
+	if not (is_instance_valid(character)):
+		return ;
+
 	var tokensUI = _getTokensUI(character);
 	if not (is_instance_valid(tokensUI)):
 		return ;
@@ -311,7 +314,7 @@ func _updateTokensInUI(character: CharacterBody3D, _newTokens: int):
 		return ;
 	tokensUI.text = str(_newTokens);
 
-func _getTokensUI(character: CharacterBody3D):
+func _getTokensUI(character):
 	if not (is_instance_valid(character) and character.is_inside_tree()):
 		return null;
 

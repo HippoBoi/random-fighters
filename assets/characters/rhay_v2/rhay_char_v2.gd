@@ -283,11 +283,11 @@ func _physics_process(delta: float) -> void:
 			usingTertiary = false;
 			onAction = false;
 	
-	if (tertiaryShieldActive):
+	if (is_multiplayer_authority() and tertiaryShieldActive):
 		tertiaryShieldTimer -= delta;
 		
 		if (tertiaryShieldTimer <= 0 or shield <= 0):
-			_explode_shield();
+			rpc("explode_shield");
 	
 	if (tertiaryExplodeTimer > 0):
 		tertiaryExplodeTimer -= delta;
@@ -635,9 +635,18 @@ func tertiary_ability(_mousePos):
 	usingTertiary = true;
 	animPlayer.play("q_ability");
 	
-	if (tertiaryShieldActive):
-		_explode_shield();
+	if not (is_multiplayer_authority()):
 		return;
+	
+	if (tertiaryShieldActive):
+		rpc("explode_shield");
+	else:
+		rpc("spawn_shield");
+
+@rpc("call_local", "reliable")
+func spawn_shield():
+	tertiaryShieldActive = true;
+	tertiaryShieldTimer = 10.0;
 	
 	eTimer = E_RECAST_COOLDOWN;
 	
@@ -649,8 +658,7 @@ func tertiary_ability(_mousePos):
 	PlayerFunc.grantShield(self, self, shieldAmount);
 	
 	tertiaryShieldGranted = shield - shieldBefore;
-	tertiaryShieldActive = true;
-	tertiaryShieldTimer = 10.0;
+	
 	$shield_particles.emitting = true;
 
 func _setup_ultimate():
@@ -808,7 +816,8 @@ func _onSlashTouched(other) -> void:
 			qTimer = 0;
 			_dealDamage(other, (dmg * 0.95 + 0.5));
 
-func _explode_shield():
+@rpc("call_local", "reliable")
+func explode_shield():
 	if not (tertiaryShieldActive):
 		return;
 	
