@@ -4,8 +4,8 @@ extends CharacterBody3D
 @export var hp = 220.0;
 @export var maxStamina = 100.0;
 @export var stamina = 100.0;
-@export var baseArmor = 30.0;
-@export var baseDmg = 30.0;
+@export var baseArmor = 35.0;
+@export var baseDmg = 26.0;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 5.0;
@@ -26,13 +26,13 @@ const E_STAMINA = 14;
 const R_STAMINA = 30;
 const BASIC_STAMINA = 20;
 
-var primaryDesc = "Big forward slash that stuns enemies dealing 100% of your PHYSICAL DAMAGE."
+var primaryDesc = "Big forward slash that STUNS enemies dealing 125% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/ale_abilities/ale_primary.png";
 var secondaryDesc = "Parry attacks with your sword. If any attack hits you during PARRY the attacker will be stunned and recieve the incoming damage.";
 var secondaryIcon = "res://assets/sprites/ale_abilities/ale_secondary.png";
 var tertiaryDesc = "Roll towards your mouse position.";
 var tertiaryIcon = "res://assets/sprites/ale_abilities/ale_tertiary.png";
-var ultiDesc = "Slash three times where your mouse is facing dealing 100% of your PHYSICAL DAMAGE per hit and stunning enemies.";
+var ultiDesc = "Jump towards your mouse position and deal 150% of your PHYSICAL DAMAGE while STUNNING enemies hit.";
 var ultiIcon = "res://assets/sprites/ale_abilities/ale_ultimate.png";
 
 var qTimer = 0;
@@ -102,7 +102,7 @@ var respawnTimer = 0;
 var assistedInKill = [];
 
 var staminaRecover = 0.1;
-var maxStaminaRecover = 12.0;
+var maxStaminaRecover = 15.0;
 var wParticlesEmitting = false;
 var usingParry = false;
 
@@ -169,14 +169,26 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_anything_pressed()):
 			var action = null;
 			
-			if (Input.is_action_just_pressed("primary") and qTimer <= 0 and stamina >= Q_STAMINA / 1.5):
-				action = Callable(self, "_setup_primary");
-			if (Input.is_action_just_pressed("secondary") and wTimer <= 0 and stamina >= W_STAMINA / 1.5):
-				action = Callable(self, "_setup_secondary");
-			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0 and stamina >= E_STAMINA / 1.5):
-				action = Callable(self, "_setup_tertiary");
-			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0 and stamina >= R_STAMINA / 1.5):
-				action = Callable(self, "_setup_ultimate");
+			if (Input.is_action_just_pressed("primary") and qTimer <= 0):
+				if (stamina >= Q_STAMINA / 1.5):
+					action = Callable(self, "_setup_primary");
+				else:
+					PlayerFunc.flashAbilityUI(self, "primaryAbility");
+			if (Input.is_action_just_pressed("secondary") and wTimer <= 0):
+				if (stamina >= W_STAMINA / 1.5):
+					action = Callable(self, "_setup_secondary");
+				else:
+					PlayerFunc.flashAbilityUI(self, "secondaryAbility");
+			if (Input.is_action_just_pressed("tertiary") and eTimer <= 0):
+				if (stamina >= E_STAMINA / 1.5):
+					action = Callable(self, "_setup_tertiary");
+				else:
+					PlayerFunc.flashAbilityUI(self, "tertiaryAbility");
+			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0):
+				if (stamina >= R_STAMINA / 1.5):
+					action = Callable(self, "_setup_ultimate");
+				else:
+					PlayerFunc.flashAbilityUI(self, "ultiAbility");
 			
 			if (action):
 				if not (onAction or stunned or dead):
@@ -185,7 +197,7 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var dmgMultiplier = min(0.6 + (stamina * 0.004), 1.0);
+			var dmgMultiplier = min(0.7 + (stamina * 0.011), 1.5);
 			var totalDmg = dmg * dmgMultiplier;
 			var soundPath = "res://assets/sounds/characters/ale/ale_basic_hit.ogg";
 			basicDamageDealt = true;
@@ -197,7 +209,7 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	staminaRecover += 2 * delta;
+	staminaRecover += 3 * delta;
 	staminaRecover = clamp(staminaRecover, 0, maxStaminaRecover);
 	stamina += (staminaRecover * delta);
 	
@@ -563,12 +575,12 @@ func _onSlashTouched(other) -> void:
 	if (isCharacter):
 		if (other.team != team):
 			qTimer = 0;
-			PlayerFunc.dealDamage(self, other, (dmg + 0.5));
+			PlayerFunc.dealDamage(self, other, (dmg * 1.1));
 
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.0;
+		var totalDmg = dmg * 1.25;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 1.0);
@@ -584,7 +596,7 @@ func _on_r_hit_slow(other: Node3D) -> void:
 func _on_r_hit_damage(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.0;
+		var totalDmg = dmg * 1.5;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.5);

@@ -16,7 +16,7 @@ const MAX_Q_COOLDOWN = 6.0;
 const MAX_W_COOLDOWN = 18.5;
 const MAX_E_COOLDOWN = 9.5;
 const MAX_R_COOLDOWN = 75.0;
-const MAX_R_SLASH_COOLDOWN = 1.75;
+const MAX_R_SLASH_COOLDOWN = 2.5;
 
 var Q_COOLDOWN = 6.0;
 var W_COOLDOWN = 18.5;
@@ -27,7 +27,7 @@ const TRAVEL_SPEED = 0.5;
 
 var primaryDesc = "Cast for 1.5 seconds and fire a small projectile dealing 100% of your DAMAGE."
 var primaryIcon = "res://assets/sprites/mystery_abilities/mistery_primary.png";
-var secondaryDesc = "Spawn a storm in the position of your mouse. Enemies will be hit and slowed by 11% every second";
+var secondaryDesc = "Spawn a storm for 10 seconds. Enemies will be hit and slowed by 10% every second";
 var secondaryIcon = "res://assets/sprites/mystery_abilities/mistery_secondary.png";
 var tertiaryDesc = "Damage an enemy by 75% of your DAMAGE or shield an ally by 50% of your DAMAGE. Target anyone regardless of distance";
 var tertiaryIcon = "res://assets/sprites/mystery_abilities/mistery_tertiary.png";
@@ -373,7 +373,7 @@ func _spawn_w_storm(_mousePos):
 	storm.setup(self, dmg);
 	
 	stormInstance = storm;
-	stormTimer = 12.0;
+	stormTimer = 10.0;
 	usingStorm = true;
 
 func _spawn_r_projectile(_mousePos):

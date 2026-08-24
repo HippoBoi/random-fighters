@@ -678,17 +678,17 @@ func _onSlashTouched(other) -> void:
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = (dmg + 4) * 0.85;
+		var totalDmg = (dmg + 5) * 0.95;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 
 func _on_w_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg;
+		var totalDmg = dmg * 1.35;
 		
 		if (other.team != team and not alreadyHitByW.has(other)):
 			PlayerFunc.dealDamage(self, other, totalDmg);
-			PlayerFunc.slowTarget(other, 0.35, "slow_effect_02");
+			PlayerFunc.slowTarget(other, 0.4, "slow_effect_02");
 			
 			alreadyHitByW[other] = true;
