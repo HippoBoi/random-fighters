@@ -474,6 +474,9 @@ func secondary_ability(_moveTo, _global_pos):
 	wTimer = W_COOLDOWN - cooldownReduction;
 	wTimer = clamp(wTimer, 3.0, W_COOLDOWN);
 	
+	$q_particles.emitting = true;
+	$q_ground_particles.emitting = true;
+	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
 	
@@ -492,6 +495,9 @@ func _perform_teleport():
 	
 	if (is_multiplayer_authority()):
 		rpc("syncPosition", global_position);
+	
+	$q_particles.emitting = false;
+	$q_ground_particles.emitting = false;
 	
 	$w_dash_particles/sparkParticle.emitting = true;
 	$w_dash_particles/meshParticles.emitting = true;
