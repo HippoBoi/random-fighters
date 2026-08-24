@@ -63,6 +63,8 @@ func _getCharacterId(character) -> String:
 	return characterId;
 
 func _getNodePath(node) -> NodePath:
+	if (node is EncodedObjectAsID):
+		node = instance_from_id(node.get_object_id());
 	if not (is_instance_valid(node)):
 		return NodePath();
 
