@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 200.0;
-@export var hp = 200.0;
-@export var baseArmor = 22;
-@export var baseDmg = 27.0;
+@export var maxHp = 250.0;
+@export var hp = 250.0;
+@export var baseArmor = 30;
+@export var baseDmg = 34.0;
 @export var baseAttackRange = 7.0;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 5.0;
@@ -383,6 +383,7 @@ func _manage_r_papers():
 @rpc("call_local", "reliable")
 func primary_ability(_mousePos):
 	qTimer = Q_COOLDOWN - cooldownReduction;
+	qTimer = clamp(qTimer, 0.5, Q_COOLDOWN);
 	primaryTimer = 0.65;
 	usingPrimary = true;
 	onAction = true;
@@ -398,6 +399,7 @@ func primary_ability(_mousePos):
 @rpc("call_local", "reliable")
 func secondary_ability(_mousePos):
 	wTimer = W_COOLDOWN - cooldownReduction;
+	wTimer = clamp(wTimer, 3.0, W_COOLDOWN);
 	secondaryTimer = 0.9;
 	usingSecondary = true;
 	onAction = true;
@@ -414,6 +416,7 @@ func secondary_ability(_mousePos):
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
 	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 1.75, E_COOLDOWN);
 	tertiaryTimer = 0.4;
 	usingTertiary = true;
 	onAction = true;
@@ -427,6 +430,7 @@ func tertiary_ability(_mousePos):
 @rpc("call_local", "reliable")
 func ultimate_ability():
 	rTimer = R_COOLDOWN - cooldownReduction;
+	rTimer = clamp(rTimer, 10.0, R_COOLDOWN);
 	speedOffset = -(baseSpeed * 0.5);
 	ultimateTimer = 5.0;
 	usingUltimate = true;

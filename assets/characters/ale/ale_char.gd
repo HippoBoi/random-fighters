@@ -1,11 +1,11 @@
 extends CharacterBody3D
 
-@export var maxHp = 170.0;
-@export var hp = 170.0;
+@export var maxHp = 220.0;
+@export var hp = 220.0;
 @export var maxStamina = 100.0;
 @export var stamina = 100.0;
-@export var baseArmor = 22.0;
-@export var baseDmg = 20.5;
+@export var baseArmor = 30.0;
+@export var baseDmg = 30.0;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 5.0;
@@ -26,13 +26,13 @@ const E_STAMINA = 14;
 const R_STAMINA = 30;
 const BASIC_STAMINA = 20;
 
-var primaryDesc = "Big forward slash that stuns enemies dealing 124% of your PHYSICAL DAMAGE."
+var primaryDesc = "Big forward slash that stuns enemies dealing 100% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/ale_abilities/ale_primary.png";
 var secondaryDesc = "Parry attacks with your sword. If any attack hits you during PARRY the attacker will be stunned and recieve the incoming damage.";
 var secondaryIcon = "res://assets/sprites/ale_abilities/ale_secondary.png";
 var tertiaryDesc = "Roll towards your mouse position.";
 var tertiaryIcon = "res://assets/sprites/ale_abilities/ale_tertiary.png";
-var ultiDesc = "Slash three times where your mouse is facing dealing 140% of your PHYSICAL DAMAGE per hit and stunning enemies.";
+var ultiDesc = "Slash three times where your mouse is facing dealing 100% of your PHYSICAL DAMAGE per hit and stunning enemies.";
 var ultiIcon = "res://assets/sprites/ale_abilities/ale_ultimate.png";
 
 var qTimer = 0;
@@ -185,7 +185,7 @@ func _physics_process(delta: float) -> void:
 					bufferedInput = action;
 		
 		if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target):
-			var dmgMultiplier = min(1.0 + (stamina * 0.015), 1.85);
+			var dmgMultiplier = min(0.6 + (stamina * 0.004), 1.0);
 			var totalDmg = dmg * dmgMultiplier;
 			var soundPath = "res://assets/sounds/characters/ale/ale_basic_hit.ogg";
 			basicDamageDealt = true;
@@ -568,7 +568,7 @@ func _onSlashTouched(other) -> void:
 func _on_q_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.24;
+		var totalDmg = dmg * 1.0;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 1.0);
@@ -584,7 +584,7 @@ func _on_r_hit_slow(other: Node3D) -> void:
 func _on_r_hit_damage(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.5;
+		var totalDmg = dmg * 1.0;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);
 			PlayerFunc.stunTarget(other, 0.5);

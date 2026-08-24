@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 220.0;
-@export var hp = 220.0;
-@export var baseArmor = 28;
-@export var baseDmg = 12.5;
+@export var maxHp = 290.0;
+@export var hp = 290.0;
+@export var baseArmor = 38;
+@export var baseDmg = 18.0;
 @export var baseAttackRange = 3.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -224,7 +224,7 @@ func _physics_process(delta: float) -> void:
 			usingSecondary = false;
 			secondaryTimer = 0;
 		
-		armorOffset = 20;
+		armorOffset = 24;
 		
 		if not ($w_shields.visible):
 			$w_particles.emitting = true;
@@ -408,7 +408,7 @@ func secondary_ability():
 	wTimer = W_COOLDOWN - cooldownReduction;
 	secondaryTimer = 5.0;
 	
-	var shieldAmount = maxHp * 0.1;
+	var shieldAmount = maxHp * 0.125;
 	secondaryShield = clamp(shield + shieldAmount, 0, maxHp);
 	secondaryShieldTimer = 5.1;
 	
@@ -613,6 +613,6 @@ func _on_r_touched(other: Node3D) -> void:
 func _on_r_outer_touched(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 1.15;
+		var totalDmg = dmg;
 		if (other.team != team):
 			PlayerFunc.dealDamage(self, other, totalDmg);

@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 170.0;
-@export var hp = 170.0;
-@export var baseArmor = 18;
-@export var baseDmg = 16.0;
+@export var maxHp = 210.0;
+@export var hp = 210.0;
+@export var baseArmor = 24;
+@export var baseDmg = 26.0;
 @export var baseAttackRange = 8.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -25,7 +25,7 @@ var R_COOLDOWN = 75.0;
 const W_MAX_RANGE = 5.0;
 const TRAVEL_SPEED = 0.5;
 
-var primaryDesc = "Cast for 1.5 seconds and fire a small projectile dealing 170% of your DAMAGE."
+var primaryDesc = "Cast for 1.5 seconds and fire a small projectile dealing 100% of your DAMAGE."
 var primaryIcon = "res://assets/sprites/mystery_abilities/mistery_primary.png";
 var secondaryDesc = "Spawn a storm in the position of your mouse. Enemies will be hit and slowed by 11% every second";
 var secondaryIcon = "res://assets/sprites/mystery_abilities/mistery_secondary.png";
