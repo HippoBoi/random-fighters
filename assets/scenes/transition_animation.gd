@@ -39,7 +39,7 @@ func _playBarSpinLoop():
 		await _playBarSpin();
 		if (_stop_spinning):
 			break;
-		await get_tree().create_timer(2.0).timeout;
+		await get_tree().create_timer(1.0).timeout;
 
 func _playBarsOut():
 	for bar: ColorRect in bars.get_children():

@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 150.0;
-@export var hp = 150.0;
-@export var baseArmor = 14;
-@export var baseDmg = 17.5;
+@export var maxHp = 190.0;
+@export var hp = 190.0;
+@export var baseArmor = 20;
+@export var baseDmg = 24.0;
 @export var baseAttackRange = 8.0;
 @export var baseAttackSpeed = 5.0;
 @export var baseSpeed = 5.5;
@@ -24,7 +24,7 @@ var secondaryDesc = "Gain 20% Attack Speed for 3 BASIC ATTACKS. Runs out after a
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_secondary.png";
 var tertiaryDesc = "Enter HACKER MODE and gain 25% movement speed for 4 seconds. Using roll will cancel this.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_tertiary.png";
-var ultiDesc = "Fire a huge laser towards your mouse position dealing 250% of your PHYSICAL DAMAGE.";
+var ultiDesc = "Fire a huge laser towards your mouse position dealing 100% of your PHYSICAL DAMAGE.";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 
 var qTimer = 0;

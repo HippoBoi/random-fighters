@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 210.0;
-@export var hp = 210.0;
-@export var baseArmor = 24;
-@export var baseDmg = 29.5;
+@export var maxHp = 270.0;
+@export var hp = 270.0;
+@export var baseArmor = 32;
+@export var baseDmg = 38.0;
 @export var baseAttackRange = 3.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -164,7 +164,7 @@ func _updateAbilityDescriptions():
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
 		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_primary.png";
-		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE. You can STORE up to 3 empowered attacks";
+		secondaryDesc = "Empower your next BASIC ATTACK dealing up to 100% of your PHYSICAL DAMAGE. You can STORE up to 3 empowered attacks";
 		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_secondary.png";
 		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
 		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_tertiary.png";
@@ -234,7 +234,7 @@ func _physics_process(delta: float) -> void:
 			if (moveTo == null or target):
 				var distance = global_position.distance_to(primaryTarget.global_position);
 				if (distance < 5):
-					PlayerFunc.dealDamage(self, primaryTarget, dmg * 1.15);
+					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.85);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -276,11 +276,11 @@ func _physics_process(delta: float) -> void:
 			wLoopPlayer.stop();
 	
 	if (humanForm):
-		baseArmor = 26;
+		baseArmor = 32;
 		baseAttackRange = 3.15;
 		attackSpeedOffset = 0.0;
 	else:
-		baseArmor = 13;
+		baseArmor = 16;
 		baseAttackRange = 2.15;
 		attackSpeedOffset = 2.5;
 	
@@ -602,10 +602,10 @@ func secondary_ability(_mousePos):
 		basicDmgOffset = baseDmg * 0.45;
 		
 		if (storedEmpoweredHits == 2):
-			basicDmgOffset = baseDmg * 1.45;
+			basicDmgOffset = baseDmg * 1.0; # xd
 		
 		if (storedEmpoweredHits == 3):
-			basicDmgOffset = baseDmg * 1.95;
+			basicDmgOffset = baseDmg * 1.5;
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):

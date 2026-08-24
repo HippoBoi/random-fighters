@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 190.0;
-@export var hp = 190.0;
-@export var baseArmor = 14.0;
-@export var baseDmg = 35.5;
+@export var maxHp = 220.0;
+@export var hp = 220.0;
+@export var baseArmor = 21.0;
+@export var baseDmg = 45.0;
 @export var baseAttackRange = 3.2;
 @export var baseAttackSpeed = 3.5;
 @export var baseSpeed = 6.25;
@@ -34,11 +34,11 @@ const W_TELEPORT_WIDTH = 2.0;
 const E_RECAST_COOLDOWN = 1.0;
 const E_EXPLODE_RADIUS = 8.0;
 
-var primaryDesc = "Dash into a target and deal 100% of your PHYSICAL DAMAGE."
+var primaryDesc = "Dash into a target and deal 90% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
-var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 120% of your PHYSICAL DAMAGE.";
+var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 90% of your PHYSICAL DAMAGE.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
 var ultiDesc = "Gain lots of SPEED and ATTACK SPEED. This effect lasts for 7 seconds.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
@@ -439,7 +439,7 @@ func _perform_primary_teleport():
 	
 	if (is_multiplayer_authority()):
 		if (primaryTarget.team != team):
-			_dealDamage(primaryTarget, dmg, "hit_01");
+			_dealDamage(primaryTarget, dmg * 0.9, "hit_01");
 	
 	usingPrimary = false;
 	onAction = false;
@@ -693,7 +693,7 @@ func ultimate_ability():
 	
 	overrideBasic = true;
 	basicAttacking = false;
-	dmgOffset = baseDmg * 1.2;
+	dmgOffset = baseDmg * 0.5;
 	basicAttackTimer = 0;
 	
 	$q_particles.emitting = true;
@@ -815,13 +815,6 @@ func onItemPurchase(item: Dictionary):
 func onCollision():
 	pass;
 
-func _onSlashTouched(other) -> void:
-	var isCharacter = "CHARACTER_NAME" in other;
-	if (isCharacter):
-		if (other.team != team):
-			qTimer = 0;
-			_dealDamage(other, (dmg * 0.95 + 0.5));
-
 @rpc("call_local", "reliable")
 func explode_shield():
 	if not (tertiaryShieldActive):
@@ -868,4 +861,4 @@ func _deal_explode_damage():
 			continue;
 		
 		if (enemy.global_position.distance_to(global_position) <= E_EXPLODE_RADIUS):
-			_dealDamage(enemy, dmg * 1.2, "hit_bullet_01");
+			_dealDamage(enemy, dmg * 0.9, "hit_bullet_01");

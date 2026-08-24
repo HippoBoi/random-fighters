@@ -54,7 +54,7 @@ const items = [
 		"price": 15,
 		"stats": {
 			"dmg": 2,
-			"cooldownReduction": 3
+			"cooldownReduction": 2
 		},
 		"texture": "res://assets/textures/items/rod.png"
 	},

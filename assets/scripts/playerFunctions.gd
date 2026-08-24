@@ -444,7 +444,7 @@ func _updateGameUI(character: CharacterBody3D):
 		
 		healthBar.scale.x = character.hp / character.maxHp;
 
-func _flashAbility(abilityNode):
+func _flashAbility(abilityNode, flashColor = Color(3.5, 3.8, 0.0, 1.0)):
 	if not (is_instance_valid(abilityNode)):
 		return;
 	
@@ -454,11 +454,33 @@ func _flashAbility(abilityNode):
 		if (is_instance_valid(oldTween)):
 			oldTween.kill();
 	
-	var flashColor = Color(3.5, 3.8, 0.0, 1.0);
 	abilityNode.self_modulate = flashColor;
 	var tween = abilityNode.create_tween();
-	tween.tween_property(abilityNode, "self_modulate", Color(1, 1, 1, 1), 0.45);
+	tween.tween_property(abilityNode, "self_modulate", Color(1, 1, 1, 1), 0.35);
 	abilityFlashTweens[key] = tween;
+
+func flashAbilityUI(character, abilityNodeName, flashColor = Color(1, 0.3, 0.3)):
+	var abilityNode = _getAbilityNode(character, abilityNodeName);
+	if (abilityNode):
+		_flashAbility(abilityNode, flashColor);
+
+func _getAbilityNode(character, abilityNodeName):
+	if not (is_instance_valid(character)):
+		return null;
+	
+	var scene = character.get_parent();
+	if not (is_instance_valid(scene) and scene.name == "Game"):
+		return null;
+	
+	var UI = scene.get_node_or_null("InGameUI");
+	if not (is_instance_valid(UI)):
+		return null;
+	
+	var abilityUI = UI.get_node_or_null("abilitiesUI");
+	if not (is_instance_valid(abilityUI)):
+		return null;
+	
+	return abilityUI.get_node_or_null(abilityNodeName);
 
 func _setupAbilityDescriptions(character: CharacterBody3D, UI: Control):
 	UI.primaryDesc = character.primaryDesc;
