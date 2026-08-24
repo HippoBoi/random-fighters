@@ -81,7 +81,7 @@ func _on_hit(other: Node3D, forced: bool = false) -> void:
 			var tickDamage = dmg * 0.25;
 			if (other.team != team):
 				PlayerFunc.dealDamage(ownerInstance, other, tickDamage);
-				PlayerFunc.slowTarget(other, 0.11);
+				PlayerFunc.slowTarget(other, 0.09);
 
 func _on_hit_exit(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;

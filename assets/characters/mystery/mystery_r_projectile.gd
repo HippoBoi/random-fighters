@@ -54,7 +54,7 @@ func _on_hit(other: Node3D) -> void:
 		var wasHitBefore = alreadyHit.has(other);
 		if not (wasHitBefore):
 			alreadyHit.insert(len(alreadyHit), other);
-			var totalDmg = dmg + dmg * 0.25;
+			var totalDmg = dmg;
 			if (other.team != team):
 				PlayerFunc.dealDamage(ownerInstance, other, totalDmg);
 				PlayerFunc.stunTarget(other, 0.5, "fire_hit_01");
@@ -67,6 +67,6 @@ func _on_thunder_hit(other: Node3D) -> void:
 		var wasHitBefore = alreadyHit.has(other);
 		if not (wasHitBefore):
 			alreadyHit.insert(len(alreadyHit), other);
-			var totalDmg = dmg * 1.25;
+			var totalDmg = dmg * 0.75;
 			if (other.team != team):
 				PlayerFunc.dealDamage(ownerInstance, other, totalDmg);

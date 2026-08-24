@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
-@export var maxHp = 210.0;
-@export var hp = 210.0;
-@export var baseArmor = 24;
-@export var baseDmg = 29.5;
+@export var maxHp = 270.0;
+@export var hp = 270.0;
+@export var baseArmor = 32;
+@export var baseDmg = 38.0;
 @export var baseAttackRange = 3.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.0;
@@ -15,7 +15,7 @@ const MULTIPLE_FORM = true;
 const CHARACTER_NAME = "Shugo";
 const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 11.0;
-const ALT_W_COOLDOWN = 5.0;
+const ALT_W_COOLDOWN = 7.0;
 const E_COOLDOWN = 7.0;
 const ALT_E_COOLDOWN = 12.0;
 const R_COOLDOWN = 4.0;
@@ -109,6 +109,7 @@ var humanForm = true;
 
 var storedEmpoweredHits = 0;
 var fireMaterialTween: Tween;
+var wLoopPlayer: AudioStreamPlayer3D = null;
 
 var alreadyHit = [];
 
@@ -163,7 +164,7 @@ func _updateAbilityDescriptions():
 	else:
 		primaryDesc = "Dash towards an enemy target dealing 85% of your PHYSICAL DAMAGE."
 		primaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_primary.png";
-		secondaryDesc = "Empower your next BASIC ATTACK dealing 180% of your PHYSICAL DAMAGE. You can STORE up to 3 empowered attacks";
+		secondaryDesc = "Empower your next BASIC ATTACK dealing up to 100% of your PHYSICAL DAMAGE. You can STORE up to 3 empowered attacks";
 		secondaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_secondary.png";
 		tertiaryDesc = "Spin on the ground dealing damage to nearby enemies.";
 		tertiaryIcon = "res://assets/sprites/shugo_abilities/shugo_kirby_tertiary.png";
@@ -218,6 +219,8 @@ func _physics_process(delta: float) -> void:
 			if (storedEmpoweredHits == 2):
 				target.rpc("syncParticles", fireEffect);
 			if (storedEmpoweredHits == 3):
+				var sound = preload("res://assets/sounds/characters/shugo/shugo_w_big_hit.ogg");
+				PlayerFunc.playSound(self, sound);
 				rpc("syncParticles", fireEffect2);
 			
 			basicDmgOffset = 0;
@@ -231,7 +234,7 @@ func _physics_process(delta: float) -> void:
 			if (moveTo == null or target):
 				var distance = global_position.distance_to(primaryTarget.global_position);
 				if (distance < 5):
-					PlayerFunc.dealDamage(self, primaryTarget, dmg * 1.15);
+					PlayerFunc.dealDamage(self, primaryTarget, dmg * 0.85);
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
@@ -248,9 +251,19 @@ func _physics_process(delta: float) -> void:
 		$w_2_particles.emitting = true;
 		fadeFireMaterial(1.0);
 		
+		if (wLoopPlayer == null):
+			wLoopPlayer = AudioStreamPlayer3D.new();
+			add_child(wLoopPlayer);
+			wLoopPlayer.stream = preload("res://assets/sounds/characters/shugo/shugo_w_loop.ogg");
+			wLoopPlayer.bus = "Master";
+			wLoopPlayer.play();
+		elif (not wLoopPlayer.playing):
+			wLoopPlayer.play();
+		
 		# three stored hits is the max so prevent
 		# the cooldown from lowering
-		wTimer = W_COOLDOWN;
+		wTimer = W_COOLDOWN - cooldownReduction;
+		wTimer = clamp(wTimer, 1.0, W_COOLDOWN);
 	else:
 		if ($w_particles.emitting):
 			$w_particles.emitting = false;
@@ -258,13 +271,16 @@ func _physics_process(delta: float) -> void:
 			$w_2_particles.emitting = false;
 		
 		fadeFireMaterial(0.0);
+		
+		if (wLoopPlayer != null and wLoopPlayer.playing):
+			wLoopPlayer.stop();
 	
 	if (humanForm):
-		baseArmor = 26;
+		baseArmor = 32;
 		baseAttackRange = 3.15;
 		attackSpeedOffset = 0.0;
 	else:
-		baseArmor = 13;
+		baseArmor = 16;
 		baseAttackRange = 2.15;
 		attackSpeedOffset = 2.5;
 	
@@ -517,6 +533,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 		
 		moveTo.y = _global_pos.y;
 		qTimer = Q_COOLDOWN - cooldownReduction;
+		qTimer = clamp(qTimer, 2.0, Q_COOLDOWN);
 		primaryTimer = 0.5;
 		speedOffset = 7.0;
 		onAction = true;
@@ -545,6 +562,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 				primaryTimer = 0.5;
 			
 			qTimer = Q_COOLDOWN - cooldownReduction;
+			qTimer = clamp(qTimer, 0.5, Q_COOLDOWN);
 			speedOffset = 15;
 			onAction = true;
 			
@@ -556,6 +574,7 @@ func primary_ability(_moveTo, _global_pos, _primaryTarget = null):
 func secondary_ability(_mousePos):
 	if (humanForm):
 		wTimer = W_COOLDOWN - cooldownReduction;
+		wTimer = clamp(wTimer, 2.5, W_COOLDOWN);
 		secondaryTimer = 0.9;
 		usingSecondary = true;
 		onAction = true;
@@ -570,23 +589,28 @@ func secondary_ability(_mousePos):
 		rpc("syncRotation", _mousePos);
 	else:
 		wTimer = ALT_W_COOLDOWN - cooldownReduction;
+		wTimer = clamp(wTimer, 1.0, W_COOLDOWN);
 		overrideBasic = true;
 		basicAttacking = false;
 		basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
 		basicAttackTimer = 0;
 		storedEmpoweredHits += 1;
 		
+		var sound = preload("res://assets/sounds/characters/shugo/shugo_w_charge.ogg");
+		PlayerFunc.playSound(self, sound);
+		
 		basicDmgOffset = baseDmg * 0.45;
 		
 		if (storedEmpoweredHits == 2):
-			basicDmgOffset = baseDmg * 1.45;
+			basicDmgOffset = baseDmg * 1.0; # xd
 		
 		if (storedEmpoweredHits == 3):
-			basicDmgOffset = baseDmg * 1.95;
+			basicDmgOffset = baseDmg * 1.5;
 
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos):
 	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 1.5, E_COOLDOWN);
 	if (humanForm):
 		target = null;
 		usingTertiary = true;
@@ -612,7 +636,8 @@ func tertiary_ability(_mousePos):
 
 @rpc("call_local", "reliable")
 func ultimate_ability():
-	rTimer = R_COOLDOWN;
+	rTimer = R_COOLDOWN - cooldownReduction;
+	rTimer = clamp(rTimer, 1.0, R_COOLDOWN);
 	qTimer -= 3;
 	wTimer -= 3;
 	eTimer -= 2;

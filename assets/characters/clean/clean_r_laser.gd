@@ -46,7 +46,7 @@ func _onTouch(other: Node3D) -> void:
 		if (wasHitBefore):
 			return;
 		
-		var totalDmg = dmg * 2.55;
+		var totalDmg = dmg * 2.0;
 		if (other.team != team):
 			alreadyHit.insert(len(alreadyHit), other);
 			PlayerFunc.dealDamage(character, other, totalDmg);
