@@ -79,6 +79,7 @@ var primaryCompleted = false;
 var secondaryTimer = 0;
 var secondaryShieldTimer = 0;
 var secondaryShield = 0;
+var secondaryShieldApplied = false;
 var tertiaryTimer = 0;
 var ultiTimer = 0;
 var bufferedTarget = null;
@@ -220,9 +221,10 @@ func _physics_process(delta: float) -> void:
 			_setHitbox(q_hitbox3, false);
 	
 	if (usingSecondary):
-		if (shield <= 0):
-			usingSecondary = false;
-			secondaryTimer = 0;
+		secondaryTimer -= delta;
+		
+		if (secondaryShield > 0 and shield > 0):
+			secondaryShieldApplied = true;
 		
 		armorOffset = 24;
 		
@@ -231,8 +233,7 @@ func _physics_process(delta: float) -> void:
 			$w_shields.visible = true;
 			$w_shields/AnimationPlayer.play("spin");
 		
-		secondaryTimer -= delta;
-		if (secondaryTimer <= 0):
+		if (secondaryTimer <= 0 or (secondaryShieldApplied and shield <= 0)):
 			usingSecondary = false;
 	else:
 		armorOffset = 0;
@@ -409,8 +410,9 @@ func secondary_ability():
 	secondaryTimer = 5.0;
 	
 	var shieldAmount = maxHp * 0.125;
-	secondaryShield = clamp(shield + shieldAmount, 0, maxHp);
+	secondaryShield = clamp(shield + shieldAmount, 0, maxHp) - shield;
 	secondaryShieldTimer = 5.1;
+	secondaryShieldApplied = false;
 	
 	var shieldSound = preload("res://assets/sounds/characters/nephi/nephi_shield.ogg");
 	PlayerFunc.playSound(self, shieldSound);
