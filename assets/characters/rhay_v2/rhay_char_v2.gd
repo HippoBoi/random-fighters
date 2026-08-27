@@ -466,6 +466,7 @@ func secondary_ability(_moveTo, _global_pos):
 	else:
 		secondaryDestination = _moveTo;
 	secondaryDestination.y = _global_pos.y;
+	secondaryDestination = _clamp_to_floor(secondaryStartPos, secondaryDestination);
 	
 	_spawn_teleport_trail();
 	
@@ -515,6 +516,31 @@ func _perform_teleport():
 	_start_electric_trail(secondaryStartPos, secondaryDestination);
 	usingSecondary = false;
 	onAction = false;
+
+func _is_on_floor(pos: Vector3) -> bool:
+	var spaceState = get_world_3d().direct_space_state;
+	var query = PhysicsRayQueryParameters3D.create(
+		Vector3(pos.x, 50.0, pos.z),
+		Vector3(pos.x, -5.0, pos.z)
+	);
+	query.collision_mask = 1;
+	var hit = spaceState.intersect_ray(query);
+	if hit.is_empty():
+		return false;
+	return hit.collider.collision_layer & 4 != 0;
+
+func _clamp_to_floor(from: Vector3, to: Vector3) -> Vector3:
+	if _is_on_floor(to):
+		return to;
+	var lo = 0.0;
+	var hi = 1.0;
+	for i in range(20):
+		var mid = (lo + hi) * 0.5;
+		if _is_on_floor(from.lerp(to, mid)):
+			lo = mid;
+		else:
+			hi = mid;
+	return from.lerp(to, lo);
 
 func _spawn_teleport_trail():
 	var trail = $w_trail;
