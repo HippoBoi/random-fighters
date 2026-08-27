@@ -2283,8 +2283,9 @@ _data = {
 &"w_run": SubResource("Animation_cmp6x")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_0i4rp"]
-size = Vector3(1.50684, 9.046053, 1)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_itf3g"]
+radius = 0.999927
+height = 10.701715
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emb01"]
 vertex_color_use_as_albedo = true
@@ -2460,8 +2461,8 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0522461, 4.572211, 0)
-shape = SubResource("BoxShape3D_0i4rp")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6691136, 0)
+shape = SubResource("CapsuleShape3D_itf3g")
 
 [node name="q_particles" type="GPUParticles3D" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08275, 5.45455)

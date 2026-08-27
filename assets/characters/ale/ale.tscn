@@ -3148,9 +3148,9 @@ _data = {
 &"w_ability": SubResource("Animation_l7cn5")
 }
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lihjd"]
-radius = 1.1271
-height = 8.568821
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j5m4y"]
+radius = 1.4472656
+height = 9.255106
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqcgl"]
 transparency = 1
@@ -4529,8 +4529,8 @@ libraries = {
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2406464, 0)
-shape = SubResource("CapsuleShape3D_lihjd")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9458108, 0)
+shape = SubResource("CapsuleShape3D_j5m4y")
 
 [node name="q_hitbox" type="Node3D" parent="." index="5"]
 transform = Transform3D(0.648016, 0, 0, 0, 0.72, 0, 0, 0, 2.80181, -0.207886, 1.45214, 7.77838)
