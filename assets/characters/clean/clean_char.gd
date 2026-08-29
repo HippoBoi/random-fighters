@@ -22,7 +22,7 @@ var primaryDesc = "Roll towards your mouse position. Rolling will cancel HACKER 
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_primary.png";
 var secondaryDesc = "Gain 20% Attack Speed for 3 BASIC ATTACKS. Runs out after a few seconds";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_secondary.png";
-var tertiaryDesc = "Enter HACKER MODE and gain 25% movement speed for 4 seconds. Using roll will cancel this.";
+var tertiaryDesc = "Enter HACKER MODE and gain 25% movement speed for 4 seconds. Heal 10% of your current health. Using roll will cancel this.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_tertiary.png";
 var ultiDesc = "Fire a huge laser towards your mouse position dealing 100% of your PHYSICAL DAMAGE.";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -231,8 +231,10 @@ func _physics_process(delta: float) -> void:
 			
 			if not (appliedBuffs):
 				_toggle_toon_shader(true);
+				
 				appliedBuffs = true;
-				speedOffset += 0.75;
+				speedOffset += 0.95;
+				PlayerFunc.healCharacter(self, hp * 0.05);
 		else:
 			var sound = preload("res://assets/sounds/characters/clean/clean_hacker_end.ogg");
 			PlayerFunc.playSound(self, sound);
@@ -338,21 +340,6 @@ func _setup_ultimate():
 	
 	rpc("ultimate_ability", mousePos.position);
 
-func _spawn_e_ray(_mousePos):
-	var direction = (_mousePos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-	var targetRotation = atan2(direction.x, direction.z);
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-	
-	var papers = preload("res://assets/characters/ramon/ramon_q_ability.tscn").instantiate();
-	get_parent().add_child(papers);
-	
-	papers.global_position = global_position + Vector3(0, 2, 0);
-	papers.rotation = Vector3(rotation.x, shortestAngle, rotation.z);
-	papers.get_node("parts").emitting = true;
-
 func _spawn_ulti_laser(_mousePos):
 	var direction = (_mousePos - global_position);
 	direction.y = 0;
@@ -400,7 +387,7 @@ func primary_ability(_moveTo, _global_pos):
 	
 	moveTo.y = _global_pos.y;
 	qTimer = Q_COOLDOWN - cooldownReduction;
-	speedOffset = 7;
+	speedOffset = 8;
 	onAction = true;
 	animPlayer.play("q_ability");
 	syncRotation(moveTo);
@@ -422,12 +409,10 @@ func secondary_ability():
 @rpc("call_local", "reliable")
 func tertiary_ability(_mousePos: Vector3):
 	eTimer = E_COOLDOWN - cooldownReduction;
-	tertiaryTimer = 0.65;
+	tertiaryTimer = 0.675;
 	usingTertiary = true;
 	onAction = true;
 	circle.emitting = true;
-	
-	# _spawn_e_ray(_mousePos);
 	
 	var sound = preload("res://assets/sounds/characters/clean/clean_empower.ogg");
 	PlayerFunc.playSound(self, sound);
@@ -459,7 +444,7 @@ func cancelDash():
 	appliedBuffs = false;
 	hackerTimer = 0;
 	
-	speedOffset -= 7;
+	speedOffset -= 8;
 	speedOffset = clamp(speedOffset, 0, 100);
 	
 @rpc("call_local", "any_peer", "reliable")

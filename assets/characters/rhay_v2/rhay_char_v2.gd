@@ -38,7 +38,7 @@ var primaryDesc = "Dash into a target and deal 90% of your PHYSICAL DAMAGE."
 var primaryIcon = "res://assets/sprites/rhay_abilities/rhay_primary.png";
 var secondaryDesc = "Dash to your mouse position, dealing 100% of your PHYSICAL DAMAGE to enemies hit on the way.";
 var secondaryIcon = "res://assets/sprites/rhay_abilities/rhay_secondary.png";
-var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing 90% of your PHYSICAL DAMAGE.";
+var tertiaryDesc = "Grants a SHIELD. Reactivate while shielded to make it EXPLODE, dealing PHYSICAL DAMAGE based on your remaining SHIELD.";
 var tertiaryIcon = "res://assets/sprites/rhay_abilities/rhay_tertiary.png";
 var ultiDesc = "Gain lots of SPEED and ATTACK SPEED. This effect lasts for 7 seconds.";
 var ultiIcon = "res://assets/sprites/rhay_abilities/rhay_ultimate.png";
@@ -104,6 +104,7 @@ var tertiaryShieldActive = false;
 var tertiaryShieldGranted = 0;
 var tertiaryShieldTimer = 0;
 var tertiaryExplodeTimer = 0;
+var tertiaryShieldExplodeDamage = 0;
 var ultiTimer = 0;
 var usingUlti = false;
 var ultiTarget = null;
@@ -466,6 +467,7 @@ func secondary_ability(_moveTo, _global_pos):
 	else:
 		secondaryDestination = _moveTo;
 	secondaryDestination.y = _global_pos.y;
+	secondaryDestination = _clamp_to_floor(secondaryStartPos, secondaryDestination);
 	
 	_spawn_teleport_trail();
 	
@@ -515,6 +517,31 @@ func _perform_teleport():
 	_start_electric_trail(secondaryStartPos, secondaryDestination);
 	usingSecondary = false;
 	onAction = false;
+
+func _is_on_floor(pos: Vector3) -> bool:
+	var spaceState = get_world_3d().direct_space_state;
+	var query = PhysicsRayQueryParameters3D.create(
+		Vector3(pos.x, 50.0, pos.z),
+		Vector3(pos.x, -5.0, pos.z)
+	);
+	query.collision_mask = 1;
+	var hit = spaceState.intersect_ray(query);
+	if hit.is_empty():
+		return false;
+	return hit.collider.collision_layer & 4 != 0;
+
+func _clamp_to_floor(from: Vector3, to: Vector3) -> Vector3:
+	if _is_on_floor(to):
+		return to;
+	var lo = 0.0;
+	var hi = 1.0;
+	for i in range(20):
+		var mid = (lo + hi) * 0.5;
+		if _is_on_floor(from.lerp(to, mid)):
+			lo = mid;
+		else:
+			hi = mid;
+	return from.lerp(to, lo);
 
 func _spawn_teleport_trail():
 	var trail = $w_trail;
@@ -822,23 +849,28 @@ func explode_shield():
 	
 	tertiaryShieldActive = false;
 	tertiaryShieldTimer = 0;
-	tertiaryExplodeTimer = 0.15;
-	
-	$shield_particles.emitting = false;
-	$shield_end_particles.emitting = true;
-	$shield_thunder_particles.emitting = true;
-	
-	eTimer = E_COOLDOWN - cooldownReduction;
-	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
-	
-	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_explode.ogg");
-	PlayerFunc.playSound(self, sound);
 	
 	var remainingShield = min(tertiaryShieldGranted, shield);
 	tertiaryShieldGranted = 0;
 	
-	if (remainingShield > 0):
-		PlayerFunc.grantShield(self, self, -remainingShield);
+	$shield_particles.emitting = false;
+	
+	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 2.0, E_COOLDOWN);
+	
+	if (remainingShield <= 0):
+		return;
+	
+	tertiaryShieldExplodeDamage = (remainingShield * 0.8) + (dmg * 0.25);
+	tertiaryExplodeTimer = 0.15;
+	
+	$shield_end_particles.emitting = true;
+	$shield_thunder_particles.emitting = true;
+	
+	var sound = preload("res://assets/sounds/characters/rhay/rhay_shield_explode.ogg");
+	PlayerFunc.playSound(self, sound);
+	
+	PlayerFunc.grantShield(self, self, -remainingShield);
 
 func _apply_explosion_damage():
 	if (is_multiplayer_authority()):
@@ -861,4 +893,4 @@ func _deal_explode_damage():
 			continue;
 		
 		if (enemy.global_position.distance_to(global_position) <= E_EXPLODE_RADIUS):
-			_dealDamage(enemy, dmg * 0.9, "hit_bullet_01");
+			_dealDamage(enemy, tertiaryShieldExplodeDamage, "hit_bullet_01");

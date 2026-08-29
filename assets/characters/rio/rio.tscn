@@ -9,9 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://cedf5ox6ou3ic" path="res://assets/textures/fx/T_flare81.png" id="7_61rq6"]
 [ext_resource type="Material" uid="uid://cpxrdjqho0rya" path="res://assets/materials/transparent.tres" id="8_me532"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kl43q"]
-radius = 1.06153
-height = 11.105488
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_me532"]
+radius = 0.999927
+height = 11.622182
 
 [sub_resource type="Animation" id="Animation_ij8xy"]
 resource_name = "basic_01"
@@ -2111,8 +2111,8 @@ bones/16/rotation = Quaternion(-0.2924923, -0.48089525, 0.404111, 0.7210287)
 bones/17/rotation = Quaternion(-0.057586394, -0.28526554, -0.11272562, 0.9500528)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.431939, 0)
-shape = SubResource("CapsuleShape3D_kl43q")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.129347, 0)
+shape = SubResource("CapsuleShape3D_me532")
 
 [node name="Sprite3D" type="Sprite3D" parent="." index="2"]
 transform = Transform3D(-1, -1.50996e-07, 6.60024e-15, 0, -4.37114e-08, -1, 1.50996e-07, -1, 4.37114e-08, 0, 1, 0)

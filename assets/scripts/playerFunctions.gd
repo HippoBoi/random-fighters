@@ -181,8 +181,8 @@ func _getMapMargins(_gameMode: String) -> Array:
 		zMargins = [-28, 29];
 	
 	if (gameMode.to_lower() == "seaweeds"):
-		xMargins = [-36, 49];
-		zMargins = [-45, 48];
+		xMargins = [-30, 42];
+		zMargins = [-39, 41];
 	
 	return [xMargins, zMargins];
 
