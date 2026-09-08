@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://oeisaq2cnc7i"]
+
+[ext_resource type="Material" uid="uid://437dxqxvoi1j" path="res://assets/materials/hitbox_material.tres" id="1_gv420"]
+[ext_resource type="Script" uid="uid://c4xldetxnuh3c" path="res://assets/characters/eli/eli_q_projectile.gd" id="1_pyfy3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_u03rk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gv420"]
+
+[node name="EliProjectile" type="Node3D"]
+script = ExtResource("1_pyfy3")
+
+[node name="initialHitbox" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 2.1948951e-14, 0, 1, 0, -2.1948951e-14, 0, 1, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="initialHitbox"]
+transform = Transform3D(3.5426834, 0, -1.3552527e-20, 0, 1.921955, 0, 6.7762636e-21, 0, 3.377459, 0, 0.64221287, 0)
+visible = false
+mesh = SubResource("BoxMesh_u03rk")
+surface_material_override/0 = ExtResource("1_gv420")
+
+[node name="Area3D" type="Area3D" parent="initialHitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="initialHitbox/MeshInstance3D/Area3D"]
+transform = Transform3D(1, 0, 1.0164395e-20, 0, 1.0000024, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_gv420")
+
+[node name="explosionHitbox" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 2.1948951e-14, 0, 1, 0, -2.1948951e-14, 0, 1, 0, 0.3337921, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="explosionHitbox"]
+transform = Transform3D(7.4934974, 0, -1.3552527e-20, 0, 2.5211298, 0, 0, 0, 7.570503, 0, 0.64221287, 0)
+visible = false
+mesh = SubResource("BoxMesh_u03rk")
+surface_material_override/0 = ExtResource("1_gv420")
+
+[node name="Area3D" type="Area3D" parent="explosionHitbox/MeshInstance3D"]
+collision_layer = 5
+collision_mask = 5
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="explosionHitbox/MeshInstance3D/Area3D"]
+transform = Transform3D(1, 0, 1.0164395e-20, 0, 1.0000024, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_gv420")
+
+[connection signal="body_entered" from="initialHitbox/MeshInstance3D/Area3D" to="." method="_onTouchSlow"]
+[connection signal="body_entered" from="explosionHitbox/MeshInstance3D/Area3D" to="." method="_onTouch"]

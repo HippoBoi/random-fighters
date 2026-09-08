@@ -1,27 +1,28 @@
 extends CharacterBody3D
 
-@export var maxHp = 120.0;
-@export var hp = 130.0;
-@export var baseArmor = 26;
-@export var baseDmg = 20.0;
+@export var maxHp = 135.0;
+@export var hp = 135.0;
+@export var baseArmor = 28;
+@export var baseDmg = 22.0;
 @export var baseAttackRange = 9.0;
 @export var baseAttackSpeed = 4.0;
-@export var baseSpeed = 5.25;
+@export var baseSpeed = 5.2;
 @export var cooldownReduction = 0;
 var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Eli";
-const Q_COOLDOWN = 1.0;
+const Q_COOLDOWN = 5.5;
+const Q_MAX_RANGE = 12.0;
 const W_COOLDOWN = 1.0;
 const E_COOLDOWN = 1.0;
 const R_COOLDOWN = 10.0;
 
-var primaryDesc = "";
+var primaryDesc = "Fire a projectile to your mouse position that EXPLODES in 1 second dealing 65% of your PHYSICAL DAMAGE and SLOWS enemies hit.";
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var secondaryDesc = "";
+var secondaryDesc = "Spin around and deal and push away enemies, dealing 40% of your PHYSICAL DAMAGE to enemies hit.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var tertiaryDesc = "";
+var tertiaryDesc = "Get on your JET which allows you to fly at high speeds. You can NOT use BASIC ATTACKS while flying.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var ultiDesc = "";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -90,6 +91,9 @@ var xp = 0;
 var tokens = 0;
 var respawnTimer = 0;
 var assistedInKill = [];
+
+var projectileTarget: Vector3;
+var projectileFired: bool = false;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -165,6 +169,17 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (usingPrimary):
+		primaryTimer -= delta;
+		
+		if (primaryTimer > 0.1):
+			moveTo = global_position;
+		elif (primaryTimer > 0):
+			_fireProjectile()
+		else:
+			usingPrimary = false;
+			onAction = false;
+	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
 		bufferedMoveTo = null;
@@ -184,6 +199,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 			animPlayer.play("idle");
+
+func _fireProjectile():
+	if (projectileFired):
+		return;
+	
+	if not (projectileTarget):
+		return;
+	
+	projectileFired = true;
+	
+	var projectile = preload("res://assets/characters/eli/eli_projectile.tscn").instantiate();
+	get_parent().add_child(projectile);
+	
+	projectile.global_position = global_position + Vector3(0, 2, 0);
+	projectile.fire(self, team, dmg, projectileTarget);
 
 func basicAttack():
 	if not (target):
@@ -232,6 +262,9 @@ func playBasicAttack():
 	attackSpeedOffset = 0;
 
 func _setup_primary():
+	if (mousePos.is_empty()):
+		return;
+	
 	rpc("primary_ability", mousePos.position, global_position);
 
 func _setup_secondary():
@@ -263,7 +296,22 @@ func _toggle_toon_shader(enable: bool):
 
 @rpc("call_local", "reliable")
 func primary_ability(_moveTo, _global_pos):
-	pass;
+	var direction = (_moveTo - _global_pos).normalized();
+	var distance = _global_pos.distance_to(_moveTo);
+	
+	qTimer = Q_COOLDOWN - cooldownReduction;
+	qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
+	primaryTimer = 0.25;
+	usingPrimary = true;
+	onAction = true;
+	projectileFired = false;
+	
+	if (distance > Q_MAX_RANGE):
+		projectileTarget = _global_pos + direction * Q_MAX_RANGE;
+	else:
+		projectileTarget = _moveTo;
+		
+	syncRotation(_moveTo);
 
 @rpc("call_local", "reliable")
 func secondary_ability():
