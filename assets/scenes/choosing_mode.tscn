@@ -1,7 +1,5 @@
 [gd_scene load_steps=15 format=3 uid="uid://by3jto66up0ev"]
 
-[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
-
 [ext_resource type="Script" uid="uid://bnt703t7rjxc7" path="res://assets/scenes/choosing_mode.gd" id="1_aidr7"]
 [ext_resource type="Script" uid="uid://bvfyx5dby45fb" path="res://assets/scenes/choose_mode.gd" id="1_awl5g"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="1_mpuvj"]
@@ -10,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://caf178hqihny4" path="res://assets/sprites/emptyPoint.png" id="4_whmpy"]
 [ext_resource type="Texture2D" uid="uid://rl54fx2l08qf" path="res://assets/textures/bars.png" id="5_awl5g"]
 [ext_resource type="Texture2D" uid="uid://c3glmdtq8xxac" path="res://assets/textures/bars - copia.png" id="7_5jk3c"]
+[ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xveiu"]
 shader = ExtResource("1_mpuvj")
@@ -88,11 +87,11 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 97.0
 offset_bottom = 33.0
 theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 16
 text = "Black Team"
 horizontal_alignment = 1
@@ -127,7 +126,6 @@ texture = ExtResource("4_whmpy")
 expand_mode = 4
 
 [node name="WinText" type="RichTextLabel" parent="TeamWinsUI/BlackTeam"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.536)
 layout_mode = 0
 offset_left = -2.0
@@ -135,9 +133,10 @@ offset_top = 249.0
 offset_right = 93.0
 offset_bottom = 290.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_offset_y = 4
 theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -167,11 +166,11 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TeamColor" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 0
 offset_right = 97.0
 offset_bottom = 33.0
 theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 16
 text = "White Team"
 horizontal_alignment = 1
@@ -206,7 +205,6 @@ texture = ExtResource("4_whmpy")
 expand_mode = 4
 
 [node name="WinText" type="RichTextLabel" parent="TeamWinsUI/WhiteTeam"]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(1, 1, 1, 0.536)
 layout_mode = 0
 offset_left = -2.0
@@ -214,9 +212,10 @@ offset_top = 249.0
 offset_right = 93.0
 offset_bottom = 290.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_offset_y = 4
 theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -275,7 +274,6 @@ texture = ExtResource("2_tkvfe")
 expand_mode = 1
 
 [node name="modeName" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -289,16 +287,16 @@ offset_bottom = 81.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_constants/shadow_offset_y = 3
-theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_outline_size = 2
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 4
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 20
 text = "Game Mode"
 horizontal_alignment = 1
 
 [node name="loopingModeName" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 modulate = Color(0.64, 0.653, 0.661, 0.5)
 z_index = -1
 layout_mode = 1
@@ -307,22 +305,22 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 292.0
+offset_left = 316.0
 offset_top = -199.0
-offset_right = 783.0
+offset_right = 807.0
 offset_bottom = -92.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 1
-theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_outline_size = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 58
 text = "Game Mode"
 vertical_alignment = 1
 
 [node name="statusText" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -332,16 +330,16 @@ offset_right = 124.0
 offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 22
 text = "Choosing next mode"
 horizontal_alignment = 1
 
 [node name="statusDots" type="RichTextLabel" parent="."]
-theme_override_fonts/normal_font = ExtResource("99_mussels")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -351,10 +349,11 @@ offset_right = 140.0
 offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/shadow_offset_x = 4
 theme_override_constants/shadow_outline_size = 4
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("99_mussels")
 theme_override_font_sizes/normal_font_size = 22
 text = ". . ."
 
