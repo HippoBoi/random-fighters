@@ -22,7 +22,7 @@ var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE t
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var secondaryDesc = "Spin around and deal and push away enemies, dealing 40% of your PHYSICAL DAMAGE to enemies hit.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var tertiaryDesc = "Get on your JET which allows you to fly at high speeds. You can NOT use BASIC ATTACKS while flying.";
+var tertiaryDesc = "Get on your JET which allows you to fly at high speeds. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var ultiDesc = "";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -60,7 +60,7 @@ var target = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
+var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.75;
 var basicTarget = null;
 var onAction = false;
 var overrideBasic = false;
@@ -95,6 +95,8 @@ var projectileFired: bool = false;
 
 var chargingPrimary: bool = false;
 var chargeTime: float = 0.0;
+var jetMode: bool = false;
+
 const MAX_CHARGE_TIME: float = 5.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
 
@@ -172,6 +174,11 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
+	if (jetMode):
+		speed *= 1.25;
+		attackRange = 0;
+		armor *= 1.5;
+	
 	if (chargingPrimary):
 		if (stunned or dead):
 			chargingPrimary = false;
@@ -202,6 +209,17 @@ func _physics_process(delta: float) -> void:
 					qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
 					rpc("syncCharging", false);
 	
+	if (usingTertiary):
+		tertiaryTimer -= delta;
+		moveTo = global_position;
+
+		if (tertiaryTimer <= 0):
+			usingTertiary = false;
+			onAction = false;
+			jetMode = not jetMode;
+
+			print(jetMode);
+
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
 		bufferedMoveTo = null;
@@ -241,6 +259,9 @@ func _fireProjectile(chargeLevel: float = 0.0):
 	projectile.fire(self, team, finalDmg, projectileTarget, chargeLevel);
 
 func basicAttack():
+	if (jetMode):
+		return;
+
 	if not (target):
 		return;
 	
@@ -298,7 +319,7 @@ func _setup_secondary():
 	rpc("secondary_ability");
 	
 func _setup_tertiary():
-	rpc("tertiary_ability", mousePos.position);
+	rpc("tertiary_ability");
 	
 func _setup_ultimate():
 	if (mousePos.is_empty()):
@@ -326,8 +347,12 @@ func secondary_ability():
 	pass;
 
 @rpc("call_local", "reliable")
-func tertiary_ability(_mousePos: Vector3):
-	pass;
+func tertiary_ability():
+	usingTertiary = true;
+	onAction = true;
+	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
+	tertiaryTimer = 0.5;
 
 @rpc("call_local", "reliable")
 func ultimate_ability(_mousePos):
