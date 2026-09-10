@@ -22,7 +22,7 @@ var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE t
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var secondaryDesc = "Spin around and deal and push away enemies, dealing 40% of your PHYSICAL DAMAGE to enemies hit.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var tertiaryDesc = "Get on your JET which allows you to fly at high speeds. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
+var tertiaryDesc = "Get on your JET which allows you to fly at high speeds and double your PHYSICAL DEFENSE. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var ultiDesc = "";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -177,7 +177,7 @@ func _physics_process(delta: float) -> void:
 	if (jetMode):
 		speed *= 1.25;
 		attackRange = 0;
-		armor *= 1.5;
+		armor *= 2;
 	
 	if (chargingPrimary):
 		if (stunned or dead):
