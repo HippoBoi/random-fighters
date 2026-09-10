@@ -176,19 +176,21 @@ func _physics_process(delta: float) -> void:
 		if (stunned or dead):
 			chargingPrimary = false;
 			chargeTime = 0.0;
+			rpc("syncCharging", false);
 		else:
 			chargeTime += delta;
 			if (chargeTime > MAX_CHARGE_TIME):
 				chargeTime = MAX_CHARGE_TIME;
 			
-			moveTo = global_position;
+			speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 			
-			if (Input.is_action_just_released("primary")):
+			if (is_multiplayer_authority() and Input.is_action_just_released("primary")):
 				var chargeLevel = chargeTime / MAX_CHARGE_TIME;
 				_fireProjectile(chargeLevel);
 				chargingPrimary = false;
 				qTimer = Q_COOLDOWN - cooldownReduction;
 				qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
+				rpc("syncCharging", false);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -289,9 +291,9 @@ func _setup_primary():
 	chargingPrimary = true;
 	chargeTime = 0.0;
 	projectileFired = false;
-	speedMultiplier -= CHARGE_SLOW_AMOUNT;
-	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
+	speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 	rpc("syncSlow", CHARGE_SLOW_AMOUNT);
+	rpc("syncCharging", true);
 
 func _setup_secondary():
 	rpc("secondary_ability");
@@ -370,6 +372,10 @@ func syncStun(_isStunned, _stunDuration):
 func syncSlow(_slowAmount):
 	speedMultiplier -= _slowAmount;
 	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
+
+@rpc("call_local", "any_peer")
+func syncCharging(_isCharging: bool):
+	chargingPrimary = _isCharging;
 
 @rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):
