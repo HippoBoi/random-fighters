@@ -21,7 +21,8 @@ func fire(_character, _team: int, _dmg: float, _targetPos: Vector3, _chargeLevel
 	team = _team;
 	chargeLevel = _chargeLevel;
 	
-	var hitboxScale = 1.0 + chargeLevel;
+	var hitboxScale = 0.5 + chargeLevel;
+	print(hitboxScale);
 	$initialHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
 	$explosionHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
 

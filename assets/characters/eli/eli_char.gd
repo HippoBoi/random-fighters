@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 135.0;
 @export var hp = 135.0;
 @export var baseArmor = 28;
-@export var baseDmg = 22.0;
+@export var baseDmg = 28.0;
 @export var baseAttackRange = 9.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.2;
@@ -185,12 +185,22 @@ func _physics_process(delta: float) -> void:
 			speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 			
 			if (is_multiplayer_authority() and Input.is_action_just_released("primary")):
-				var chargeLevel = chargeTime / MAX_CHARGE_TIME;
-				_fireProjectile(chargeLevel);
-				chargingPrimary = false;
-				qTimer = Q_COOLDOWN - cooldownReduction;
-				qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
-				rpc("syncCharging", false);
+				if (not mousePos.is_empty()):
+					var direction = (mousePos.position - global_position).normalized();
+					var distance = global_position.distance_to(mousePos.position);
+					
+					if (distance > Q_MAX_RANGE):
+						projectileTarget = global_position + direction * Q_MAX_RANGE;
+					else:
+						projectileTarget = mousePos.position;
+					
+					syncRotation(mousePos.position);
+					var chargeLevel = chargeTime / MAX_CHARGE_TIME;
+					_fireProjectile(chargeLevel);
+					chargingPrimary = false;
+					qTimer = Q_COOLDOWN - cooldownReduction;
+					qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
+					rpc("syncCharging", false);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -221,7 +231,7 @@ func _fireProjectile(chargeLevel: float = 0.0):
 	
 	projectileFired = true;
 	
-	var damageMultiplier = lerp(0.65, 1.0, chargeLevel);
+	var damageMultiplier = lerp(0.65, 1.5, chargeLevel);
 	var finalDmg = dmg * damageMultiplier;
 	
 	var projectile = preload("res://assets/characters/eli/eli_projectile.tscn").instantiate();
@@ -241,7 +251,7 @@ func basicAttack():
 # create a unique on hit effect
 func _onBasicTouched():
 	var path = "res://assets/sounds/characters/clean/clean_basic_hit.ogg";
-	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
+	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.1, "hit_bullet_01");
 	rpc("syncSound", path);
 
 # TODO:
@@ -277,17 +287,6 @@ func playBasicAttack():
 	attackSpeedOffset = 0;
 
 func _setup_primary():
-	if (mousePos.is_empty()):
-		return;
-	
-	var direction = (mousePos.position - global_position).normalized();
-	var distance = global_position.distance_to(mousePos.position);
-	
-	if (distance > Q_MAX_RANGE):
-		projectileTarget = global_position + direction * Q_MAX_RANGE;
-	else:
-		projectileTarget = mousePos.position;
-	
 	chargingPrimary = true;
 	chargeTime = 0.0;
 	projectileFired = false;
