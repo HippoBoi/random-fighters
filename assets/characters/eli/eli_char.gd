@@ -18,7 +18,7 @@ const W_COOLDOWN = 1.0;
 const E_COOLDOWN = 1.0;
 const R_COOLDOWN = 10.0;
 
-var primaryDesc = "Fire a projectile to your mouse position that EXPLODES in 1 second dealing 65% of your PHYSICAL DAMAGE and SLOWS enemies hit.";
+var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 65%-100% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var secondaryDesc = "Spin around and deal and push away enemies, dealing 40% of your PHYSICAL DAMAGE to enemies hit.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -64,11 +64,9 @@ var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.5;
 var basicTarget = null;
 var onAction = false;
 var overrideBasic = false;
-var usingPrimary = false;
 var usingSecondary = false;
 var usingTertiary = false;
 var usingUltimate = false;
-var primaryTimer = 0;
 var secondaryTimer = 0;
 var tertiaryTimer = 0;
 var ultimateTimer = 0;
@@ -94,6 +92,11 @@ var assistedInKill = [];
 
 var projectileTarget: Vector3;
 var projectileFired: bool = false;
+
+var chargingPrimary: bool = false;
+var chargeTime: float = 0.0;
+const MAX_CHARGE_TIME: float = 5.0;
+const CHARGE_SLOW_AMOUNT: float = 0.4;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -169,16 +172,23 @@ func _physics_process(delta: float) -> void:
 	
 	PlayerFunc.updateGlobally(self, delta);
 	
-	if (usingPrimary):
-		primaryTimer -= delta;
-		
-		if (primaryTimer > 0.1):
-			moveTo = global_position;
-		elif (primaryTimer > 0):
-			_fireProjectile()
+	if (chargingPrimary):
+		if (stunned or dead):
+			chargingPrimary = false;
+			chargeTime = 0.0;
 		else:
-			usingPrimary = false;
-			onAction = false;
+			chargeTime += delta;
+			if (chargeTime > MAX_CHARGE_TIME):
+				chargeTime = MAX_CHARGE_TIME;
+			
+			moveTo = global_position;
+			
+			if (Input.is_action_just_released("primary")):
+				var chargeLevel = chargeTime / MAX_CHARGE_TIME;
+				_fireProjectile(chargeLevel);
+				chargingPrimary = false;
+				qTimer = Q_COOLDOWN - cooldownReduction;
+				qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
 	
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -200,7 +210,7 @@ func _physics_process(delta: float) -> void:
 		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
 			animPlayer.play("idle");
 
-func _fireProjectile():
+func _fireProjectile(chargeLevel: float = 0.0):
 	if (projectileFired):
 		return;
 	
@@ -209,11 +219,14 @@ func _fireProjectile():
 	
 	projectileFired = true;
 	
+	var damageMultiplier = lerp(0.65, 1.0, chargeLevel);
+	var finalDmg = dmg * damageMultiplier;
+	
 	var projectile = preload("res://assets/characters/eli/eli_projectile.tscn").instantiate();
 	get_parent().add_child(projectile);
 	
 	projectile.global_position = global_position + Vector3(0, 2, 0);
-	projectile.fire(self, team, dmg, projectileTarget);
+	projectile.fire(self, team, finalDmg, projectileTarget, chargeLevel);
 
 func basicAttack():
 	if not (target):
@@ -265,7 +278,20 @@ func _setup_primary():
 	if (mousePos.is_empty()):
 		return;
 	
-	rpc("primary_ability", mousePos.position, global_position);
+	var direction = (mousePos.position - global_position).normalized();
+	var distance = global_position.distance_to(mousePos.position);
+	
+	if (distance > Q_MAX_RANGE):
+		projectileTarget = global_position + direction * Q_MAX_RANGE;
+	else:
+		projectileTarget = mousePos.position;
+	
+	chargingPrimary = true;
+	chargeTime = 0.0;
+	projectileFired = false;
+	speedMultiplier -= CHARGE_SLOW_AMOUNT;
+	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
+	rpc("syncSlow", CHARGE_SLOW_AMOUNT);
 
 func _setup_secondary():
 	rpc("secondary_ability");
@@ -293,25 +319,6 @@ func _toggle_toon_shader(enable: bool):
 	
 	$e_particles/sparkParticle.emitting = enable;
 	$e_particles/spinningParts.emitting = enable;
-
-@rpc("call_local", "reliable")
-func primary_ability(_moveTo, _global_pos):
-	var direction = (_moveTo - _global_pos).normalized();
-	var distance = _global_pos.distance_to(_moveTo);
-	
-	qTimer = Q_COOLDOWN - cooldownReduction;
-	qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
-	primaryTimer = 0.25;
-	usingPrimary = true;
-	onAction = true;
-	projectileFired = false;
-	
-	if (distance > Q_MAX_RANGE):
-		projectileTarget = _global_pos + direction * Q_MAX_RANGE;
-	else:
-		projectileTarget = _moveTo;
-		
-	syncRotation(_moveTo);
 
 @rpc("call_local", "reliable")
 func secondary_ability():

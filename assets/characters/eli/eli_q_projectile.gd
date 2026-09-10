@@ -6,12 +6,12 @@ var team: int = 0;
 var timer: float = 0.5;
 var deathTimer: float = 0.5;
 var die: bool = false;
+var chargeLevel: float = 0.0;
 
 var dealtInitial = false;
 var dealtExplosion = false;
 
-func fire(_character, _team: int, _dmg: float, _targetPos: Vector3):
-	# TODO: finish this tween when the projectile model gets added
+func fire(_character, _team: int, _dmg: float, _targetPos: Vector3, _chargeLevel: float = 0.0):
 	var tween = get_tree().create_tween();
 	$initialHitbox.global_position = _targetPos;
 	$explosionHitbox.global_position = _targetPos;
@@ -19,6 +19,11 @@ func fire(_character, _team: int, _dmg: float, _targetPos: Vector3):
 	character = _character;
 	dmg = _dmg;
 	team = _team;
+	chargeLevel = _chargeLevel;
+	
+	var hitboxScale = 1.0 + chargeLevel;
+	$initialHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
+	$explosionHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
 
 func _initialDamage():
 	dealtInitial = true;
@@ -36,7 +41,6 @@ func _explode():
 	# ---------
 	$explosionHitbox/MeshInstance3D/Area3D.monitoring = true;
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	timer -= delta;
 	
