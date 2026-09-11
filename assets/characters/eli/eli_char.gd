@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var maxHp = 135.0;
 @export var hp = 135.0;
 @export var baseArmor = 28;
-@export var baseDmg = 28.0;
+@export var baseDmg = 29.0;
 @export var baseAttackRange = 9.0;
 @export var baseAttackSpeed = 4.0;
 @export var baseSpeed = 5.2;
@@ -14,13 +14,13 @@ const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Eli";
 const Q_COOLDOWN = 5.5;
 const Q_MAX_RANGE = 12.0;
-const W_COOLDOWN = 1.0;
+const W_COOLDOWN = 9.25;
 const E_COOLDOWN = 1.0;
 const R_COOLDOWN = 10.0;
 
-var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 65%-100% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
+var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 75% / 125% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var secondaryDesc = "Spin around and push enemies away. If used when JET is active, it will double it's damage instead of pushing enemies.";
+var secondaryDesc = "Spin around and push enemies away dealing 75% of your PHYSICAL DAMAGE. If used when JET is active, it will deal more DAMAGE instead of pushing enemies.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var tertiaryDesc = "Get on your JET which allows you to fly at high speeds and double your PHYSICAL DEFENSE. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -96,6 +96,9 @@ var projectileFired: bool = false;
 var chargingPrimary: bool = false;
 var chargeTime: float = 0.0;
 var jetMode: bool = false;
+
+var alreadyHitWind = [];
+var alreadyHitSpinDamage = [];
 
 const MAX_CHARGE_TIME: float = 5.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
@@ -175,9 +178,9 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (jetMode):
-		speed *= 1.4;
+		speed *= 1.35;
 		attackRange = 0;
-		armor *= 2;
+		armor *= 1.5;
 	
 	if (chargingPrimary):
 		if (stunned or dead):
@@ -211,14 +214,22 @@ func _physics_process(delta: float) -> void:
 	
 	if (usingSecondary):
 		secondaryTimer -= delta;
-		moveTo = global_position;
+
+		if (secondaryTimer > 0.25):
+			moveTo = global_position;
 		
-		if (secondaryTimer <= 0.5):
-			pass;
+		if (secondaryTimer > 0.25 and secondaryTimer <= 0.5):
+			_doSpin();
 		
 		if (secondaryTimer <= 0):
 			usingSecondary = false;
 			onAction = false;
+
+			$w_hitbox_wind/MeshInstance3D/Area3D.monitoring = false;
+			$w_hitbox_damage/MeshInstance3D/Area3D.monitoring = false;
+			
+			$w_hitbox_wind/MeshInstance3D.visible = false;
+			$w_hitbox_damage/MeshInstance3D.visible = false;
 
 	if (usingTertiary):
 		tertiaryTimer -= delta;
@@ -228,8 +239,6 @@ func _physics_process(delta: float) -> void:
 			usingTertiary = false;
 			onAction = false;
 			jetMode = not jetMode;
-
-			print(jetMode);
 
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -275,6 +284,9 @@ func _doSpin():
 	var windArea = spinWindHitbox.get_child(0).get_child(0);
 	var damageArea = spinDamageHitbox.get_child(0).get_child(0);
 
+	spinWindHitbox.get_child(0).visible = true;
+	spinDamageHitbox.get_child(0).visible = true;
+
 	windArea.monitoring = true;
 	damageArea.monitoring = true;
 
@@ -292,7 +304,7 @@ func basicAttack():
 # create a unique on hit effect
 func _onBasicTouched():
 	var path = "res://assets/sounds/characters/clean/clean_basic_hit.ogg";
-	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
+	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.05, "hit_bullet_01");
 	rpc("syncSound", path);
 
 # TODO:
@@ -366,7 +378,13 @@ func _toggle_toon_shader(enable: bool):
 func secondary_ability():
 	usingSecondary = true;
 	onAction = true;
-	secondaryTimer = 1.0;
+	secondaryTimer = 0.95;
+	
+	wTimer = W_COOLDOWN - cooldownReduction;
+	wTimer = clamp(wTimer, 2.0, W_COOLDOWN);
+
+	alreadyHitSpinDamage = [];
+	alreadyHitWind = [];
 
 	# TODO:
 	# play anim ig
@@ -484,3 +502,28 @@ func syncSound(soundPath: String):
 
 func onCollision():
 	pass;
+
+func _on_w_hitbox_hit(other: Node3D, isWind: bool) -> void:
+	var isCharacter = "CHARACTER_NAME" in other
+	if not (isCharacter):
+		return;
+
+	if (other.team == team):
+		return;
+
+	var wasHitByWind = alreadyHitWind.has(other);
+	var wasHitByDamage = alreadyHitSpinDamage.has(other);
+	var baseDamage = dmg * 0.65;
+	var dmgMultiplier = 1.0;
+
+	if (jetMode):
+		dmgMultiplier = 1.5;
+	else:
+		if (isWind) and not (wasHitByWind):
+			alreadyHitWind.append(other);
+			var pushDirection = (other.global_position - global_position).normalized();
+			PlayerFunc.moveTarget(other, 0.5, other.global_position + pushDirection * 8, 12);
+		
+	if not (wasHitByDamage):
+		alreadyHitSpinDamage.append(other);
+		PlayerFunc.dealDamage(self, other, baseDamage * dmgMultiplier, "fire_hit_01");

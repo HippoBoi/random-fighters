@@ -8924,7 +8924,7 @@ script = ExtResource("8_vnu0j")
 transform = Transform3D(1, 0, 2.1948951e-14, 0, 1, 0, -2.1948951e-14, 0, 1, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="w_hitbox_wind"]
-transform = Transform3D(15.198113, 0, -8.131516e-20, 0, 1.921955, 0, 5.421011e-20, 0, 14.860823, 0, 0.64221287, 0)
+transform = Transform3D(13.678303, 0, -8.131516e-20, 0, 1.921955, 0, 5.421011e-20, 0, 13.374742, 0, 0.64221287, 0)
 visible = false
 mesh = SubResource("BoxMesh_8cy83")
 surface_material_override/0 = ExtResource("6_2yi8k")
@@ -8942,7 +8942,7 @@ shape = SubResource("BoxShape3D_lwv67")
 transform = Transform3D(1.3500003, 0, 2.8533636e-14, 0, 1, 0, -2.963109e-14, 0, 1.3, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="w_hitbox_damage"]
-transform = Transform3D(15.198113, 0, -8.131516e-20, 0, 1.921955, 0, 5.421011e-20, 0, 14.860823, 0, 0.64221287, 0)
+transform = Transform3D(13.678302, 0, -1.0842022e-19, 0, 1.921955, 0, 2.7105054e-20, 0, 13.374743, 0, 0.64221287, 0)
 visible = false
 mesh = SubResource("BoxMesh_8cy83")
 surface_material_override/0 = ExtResource("6_2yi8k")
@@ -8955,3 +8955,6 @@ monitoring = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="w_hitbox_damage/MeshInstance3D/Area3D"]
 transform = Transform3D(1, 0, 1.0164395e-20, 0, 1.0000024, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_lwv67")
+
+[connection signal="body_entered" from="w_hitbox_wind/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [true]]
+[connection signal="body_entered" from="w_hitbox_damage/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [false]]

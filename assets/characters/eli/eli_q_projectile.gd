@@ -60,7 +60,7 @@ func _process(delta: float) -> void:
 func _onTouch(other: Node3D) -> void:
 	var isCharacter = "CHARACTER_NAME" in other;
 	if (isCharacter):
-		var totalDmg = dmg * 0.75;
+		var totalDmg = dmg * 0.85;
 		if (other.team != team):
 			PlayerFunc.dealDamage(character, other, totalDmg);
 
@@ -70,4 +70,4 @@ func _onTouchSlow(other: Node3D) -> void:
 		var totalDmg = dmg * 0.25;
 		if (other.team != team):
 			PlayerFunc.dealDamage(character, other, totalDmg);
-			PlayerFunc.slowTarget(other, 0.45);
+			PlayerFunc.slowTarget(other, 0.55);
