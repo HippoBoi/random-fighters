@@ -20,7 +20,7 @@ const R_COOLDOWN = 10.0;
 
 var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 65%-100% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var secondaryDesc = "Spin around and deal and push away enemies, dealing 40% of your PHYSICAL DAMAGE to enemies hit.";
+var secondaryDesc = "Spin around and push enemies away. If used when JET is active, it will double it's damage instead of pushing enemies.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var tertiaryDesc = "Get on your JET which allows you to fly at high speeds and double your PHYSICAL DEFENSE. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
@@ -175,7 +175,7 @@ func _physics_process(delta: float) -> void:
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (jetMode):
-		speed *= 1.25;
+		speed *= 1.4;
 		attackRange = 0;
 		armor *= 2;
 	
@@ -209,6 +209,17 @@ func _physics_process(delta: float) -> void:
 					qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
 					rpc("syncCharging", false);
 	
+	if (usingSecondary):
+		secondaryTimer -= delta;
+		moveTo = global_position;
+		
+		if (secondaryTimer <= 0.5):
+			pass;
+		
+		if (secondaryTimer <= 0):
+			usingSecondary = false;
+			onAction = false;
+
 	if (usingTertiary):
 		tertiaryTimer -= delta;
 		moveTo = global_position;
@@ -258,6 +269,15 @@ func _fireProjectile(chargeLevel: float = 0.0):
 	projectile.global_position = global_position + Vector3(0, 2, 0);
 	projectile.fire(self, team, finalDmg, projectileTarget, chargeLevel);
 
+func _doSpin():
+	var spinWindHitbox = $w_hitbox_wind;
+	var spinDamageHitbox = $w_hitbox_damage;
+	var windArea = spinWindHitbox.get_child(0).get_child(0);
+	var damageArea = spinDamageHitbox.get_child(0).get_child(0);
+
+	windArea.monitoring = true;
+	damageArea.monitoring = true;
+
 func basicAttack():
 	if (jetMode):
 		return;
@@ -272,7 +292,7 @@ func basicAttack():
 # create a unique on hit effect
 func _onBasicTouched():
 	var path = "res://assets/sounds/characters/clean/clean_basic_hit.ogg";
-	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.1, "hit_bullet_01");
+	PlayerFunc.dealDamage(self, basicTarget, dmg, "hit_bullet_01");
 	rpc("syncSound", path);
 
 # TODO:
@@ -344,7 +364,12 @@ func _toggle_toon_shader(enable: bool):
 
 @rpc("call_local", "reliable")
 func secondary_ability():
-	pass;
+	usingSecondary = true;
+	onAction = true;
+	secondaryTimer = 1.0;
+
+	# TODO:
+	# play anim ig
 
 @rpc("call_local", "reliable")
 func tertiary_ability():
@@ -353,6 +378,9 @@ func tertiary_ability():
 	eTimer = E_COOLDOWN - cooldownReduction;
 	eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
 	tertiaryTimer = 0.5;
+
+	# TODO:
+	# most anims are missing
 
 @rpc("call_local", "reliable")
 func ultimate_ability(_mousePos):
