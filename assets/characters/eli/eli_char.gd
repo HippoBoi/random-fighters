@@ -62,6 +62,7 @@ var basicAttacking = false;
 var basicAttackTimer = 0;
 var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.75;
 var basicTarget = null;
+var basicDamageDealt = false;
 var onAction = false;
 var overrideBasic = false;
 var usingSecondary = false;
@@ -175,6 +176,10 @@ func _physics_process(delta: float) -> void:
 				else:
 					bufferedInput = action;
 	
+	if (basicAttacking and basicAttackTimer <= basicAttackMoment and not basicDamageDealt and target is Node3D):
+		basicDamageDealt = true;
+		rpc("showBasicAttack", target.global_position);
+	
 	PlayerFunc.updateGlobally(self, delta);
 	
 	if (jetMode):
@@ -205,11 +210,15 @@ func _physics_process(delta: float) -> void:
 						projectileTarget = mousePos.position;
 					
 					syncRotation(mousePos.position);
+					animPlayer.play("q_ability");
+					
 					var chargeLevel = chargeTime / MAX_CHARGE_TIME;
 					_fireProjectile(chargeLevel);
+					
 					chargingPrimary = false;
 					qTimer = Q_COOLDOWN - cooldownReduction;
 					qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
+					
 					rpc("syncCharging", false);
 	
 	if (usingSecondary):
@@ -250,14 +259,25 @@ func _physics_process(delta: float) -> void:
 	move_and_slide();
 	
 	# handle animations
+	# ELI edit: animations are overriten a lot
 	if (onAction or basicAttacking):
 		return;
 	
-	if (velocity != Vector3.ZERO):
+	if (animPlayer.current_animation == "q_ability"):
+		return;
+	
+	if (chargingPrimary):
+		if (velocity != Vector3.ZERO):
+			if not (animPlayer.current_animation == "q_charging_run"):
+				animPlayer.play("q_charging_run");
+		else:
+			if not (animPlayer.current_animation == "q_charging"):
+				animPlayer.play("q_charging");
+	elif (velocity != Vector3.ZERO):
 		if not (animPlayer.current_animation == "run"):
 			animPlayer.play("run");
 	else:
-		if not (animPlayer.is_playing() and animPlayer.current_animation != "run"):
+		if not (animPlayer.current_animation == "idle"):
 			animPlayer.play("idle");
 
 func _fireProjectile(chargeLevel: float = 0.0):
@@ -297,8 +317,9 @@ func basicAttack():
 	if not (target):
 		return;
 	
+	basicDamageDealt = false;
+	basicAttacking = true;
 	basicTarget = target;
-	rpc("showBasicAttack", target.global_position);
 
 # TODO:
 # create a unique on hit effect
