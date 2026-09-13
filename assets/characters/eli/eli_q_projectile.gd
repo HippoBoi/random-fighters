@@ -21,7 +21,7 @@ func fire(_character, _team: int, _dmg: float, _targetPos: Vector3, _chargeLevel
 	team = _team;
 	chargeLevel = _chargeLevel;
 	
-	var hitboxScale = 0.5 + chargeLevel;
+	var hitboxScale = 0.65 + chargeLevel * 0.5;
 	print(hitboxScale);
 	$initialHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
 	$explosionHitbox.scale = Vector3(hitboxScale, hitboxScale, hitboxScale);
@@ -70,4 +70,4 @@ func _onTouchSlow(other: Node3D) -> void:
 		var totalDmg = dmg * 0.25;
 		if (other.team != team):
 			PlayerFunc.dealDamage(character, other, totalDmg);
-			PlayerFunc.slowTarget(other, 0.55);
+			PlayerFunc.slowTarget(other, 0.6);

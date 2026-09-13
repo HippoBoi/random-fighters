@@ -1960,6 +1960,7 @@ size = Vector3(0.5, 0.5, 0.5)
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
 collision_layer = 6
 script = ExtResource("1_yiuic")
+metadata/_edit_group_ = true
 
 [node name="eli_armature" type="Node3D" parent="."]
 transform = Transform3D(0.576, 0, 0, 0, 0.576, 0, 0, 0, 0.576, -0.011760061, 1.0492126, -0.01209897)

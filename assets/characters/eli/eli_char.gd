@@ -1,12 +1,12 @@
 extends CharacterBody3D
 
-@export var maxHp = 135.0;
-@export var hp = 135.0;
-@export var baseArmor = 28;
+@export var maxHp = 140.0;
+@export var hp = 140.0;
+@export var baseArmor = 29;
 @export var baseDmg = 29.0;
 @export var baseAttackRange = 9.0;
 @export var baseAttackSpeed = 4.0;
-@export var baseSpeed = 5.2;
+@export var baseSpeed = 4.8;
 @export var cooldownReduction = 0;
 var shield = 0;
 
@@ -60,7 +60,7 @@ var target = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.675;
+var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.72;
 var basicTarget = null;
 var basicDamageDealt = false;
 var onAction = false;
@@ -101,7 +101,7 @@ var jetMode: bool = false;
 var alreadyHitWind = [];
 var alreadyHitSpinDamage = [];
 
-const MAX_CHARGE_TIME: float = 5.0;
+const MAX_CHARGE_TIME: float = 4.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
 
 var basicAnimList = ["basic_01", "basic_02"];
@@ -302,7 +302,7 @@ func _fireProjectile(chargeLevel: float = 0.0):
 	
 	projectileFired = true;
 	
-	var damageMultiplier = lerp(0.65, 1.5, chargeLevel);
+	var damageMultiplier = lerp(0.65, 1.75, chargeLevel);
 	var finalDmg = dmg * damageMultiplier;
 	
 	var projectile = preload("res://assets/characters/eli/eli_projectile.tscn").instantiate();
@@ -337,8 +337,8 @@ func basicAttack():
 # TODO:
 # create a unique on hit effect
 func _onBasicTouched():
-	var path = "res://assets/sounds/characters/clean/clean_basic_hit.ogg";
-	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.05, "hit_bullet_01");
+	var path = "res://assets/sounds/characters/eli/eli_basic_hit.ogg";
+	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.05, "fire_hit_03");
 	rpc("syncSound", path);
 
 # TODO:
@@ -349,9 +349,8 @@ func showBasicAttack(_targetPos):
 	if not (_targetPos):
 		return;
 	
-	var basicScene = preload("res://assets/characters/clean/cleanBasic.tscn");
-	
-	var sound = preload("res://assets/sounds/characters/clean/clean_basic.ogg");
+	var basicScene = preload("res://assets/characters/eli/eliBasic.tscn");
+	var sound = preload("res://assets/sounds/characters/eli/eli_basic.ogg");
 	PlayerFunc.playSound(self, sound);
 	
 	var basic = basicScene.instantiate();
@@ -364,6 +363,9 @@ func showBasicAttack(_targetPos):
 	
 @rpc("call_local", "any_peer", "reliable")
 func playBasicAttack():
+	if (jetMode):
+		return;
+	
 	basicAttacking = true;
 	basicAttackTimer = BASIC_ATTACK_COOLDOWN;
 	animPlayer.play(basicAnimList[basicAnimPos]);
