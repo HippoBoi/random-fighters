@@ -60,7 +60,7 @@ var target = null;
 var showingUIs = false;
 var basicAttacking = false;
 var basicAttackTimer = 0;
-var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.75;
+var basicAttackMoment = BASIC_ATTACK_COOLDOWN * 0.675;
 var basicTarget = null;
 var basicDamageDealt = false;
 var onAction = false;
@@ -210,7 +210,6 @@ func _physics_process(delta: float) -> void:
 						projectileTarget = mousePos.position;
 					
 					syncRotation(mousePos.position);
-					animPlayer.play("q_ability");
 					
 					var chargeLevel = chargeTime / MAX_CHARGE_TIME;
 					_fireProjectile(chargeLevel);
@@ -263,7 +262,16 @@ func _physics_process(delta: float) -> void:
 	if (onAction or basicAttacking):
 		return;
 	
+	if (usingSecondary):
+		return;
+		
+	if (usingTertiary):
+		return;
+	
 	if (animPlayer.current_animation == "q_ability"):
+		return;
+	
+	if (animPlayer.is_playing() and (animPlayer.current_animation == "e_ability" or animPlayer.current_animation == "e_ability_end")):
 		return;
 	
 	if (chargingPrimary):
@@ -273,6 +281,11 @@ func _physics_process(delta: float) -> void:
 		else:
 			if not (animPlayer.current_animation == "q_charging"):
 				animPlayer.play("q_charging");
+	
+	elif (jetMode):
+		if not (animPlayer.current_animation == "e_ability_loop"):
+			animPlayer.play("e_ability_loop");
+	
 	elif (velocity != Vector3.ZERO):
 		if not (animPlayer.current_animation == "run"):
 			animPlayer.play("run");
@@ -311,7 +324,7 @@ func _doSpin():
 	damageArea.monitoring = true;
 
 func basicAttack():
-	if (jetMode):
+	if (jetMode or chargingPrimary):
 		return;
 
 	if not (target):
@@ -401,6 +414,8 @@ func secondary_ability():
 	onAction = true;
 	secondaryTimer = 0.95;
 	
+	animPlayer.play("w_ability");
+	
 	wTimer = W_COOLDOWN - cooldownReduction;
 	wTimer = clamp(wTimer, 2.0, W_COOLDOWN);
 
@@ -417,9 +432,14 @@ func tertiary_ability():
 	eTimer = E_COOLDOWN - cooldownReduction;
 	eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
 	tertiaryTimer = 0.5;
-
-	# TODO:
-	# most anims are missing
+	
+	$fireParticle01.emitting = not jetMode;
+	$fireParticle02.emitting = not jetMode;
+			
+	if not (jetMode):
+		animPlayer.play("e_ability");
+	else:
+		animPlayer.play("e_ability_end");
 
 @rpc("call_local", "reliable")
 func ultimate_ability(_mousePos):
@@ -467,6 +487,9 @@ func syncSlow(_slowAmount):
 @rpc("call_local", "any_peer")
 func syncCharging(_isCharging: bool):
 	chargingPrimary = _isCharging;
+	
+	if (_isCharging == false):
+		animPlayer.play("q_ability");
 
 @rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):
