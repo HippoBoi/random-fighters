@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cpwsn6hb0wjyr"]
+
+[ext_resource type="Shader" uid="uid://bky3hncygesbd" path="res://assets/scripts/shaders/warning_fire_shader.tres" id="1_qgerx"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qgerx")
+shader_parameter/transparency = 1.0
