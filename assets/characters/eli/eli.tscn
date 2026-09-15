@@ -1,9 +1,10 @@
-[gd_scene load_steps=75 format=4 uid="uid://b41t31ibk2ikl"]
+[gd_scene load_steps=76 format=4 uid="uid://b41t31ibk2ikl"]
 
 [ext_resource type="Script" uid="uid://2gg8v14elsb3" path="res://assets/characters/eli/eli_char.gd" id="1_yiuic"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="4_3ki0s"]
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_f6mru"]
 [ext_resource type="Material" uid="uid://437dxqxvoi1j" path="res://assets/materials/hitbox_material.tres" id="6_2yi8k"]
+[ext_resource type="Material" uid="uid://blm0btpc02hs2" path="res://assets/materials/water_material.tres" id="7_8cy83"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="7_ekuxr"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="8_vnu0j"]
 
@@ -2546,9 +2547,8 @@ color_ramp = SubResource("GradientTexture1D_lwv67")
 [sub_resource type="BoxMesh" id="BoxMesh_00vsr"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_2yi8k"]
-radius = 0.0005
-height = 1.35
+[sub_resource type="CylinderMesh" id="CylinderMesh_lwv67"]
+height = 0.1
 
 [node name="eli" type="CharacterBody3D"]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
@@ -2775,8 +2775,20 @@ lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_lwv67")
 draw_pass_1 = SubResource("BoxMesh_00vsr")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_2yi8k")
+[node name="q_charge_fire" type="Node3D" parent="."]
+visible = false
+
+[node name="fire1" type="MeshInstance3D" parent="q_charge_fire"]
+transform = Transform3D(7.63487, 0, 0, 0, 1, 0, 0, 0, 8, 0, 0, 0)
+mesh = SubResource("CylinderMesh_lwv67")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("7_8cy83")
+
+[node name="fire2" type="MeshInstance3D" parent="q_charge_fire"]
+transform = Transform3D(-6.6119924, 0, 4.000001, 0, 1, 0, -3.8174362, 0, -6.928205, 0, 0, 0)
+mesh = SubResource("CylinderMesh_lwv67")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("7_8cy83")
 
 [connection signal="body_entered" from="w_hitbox_wind/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [true]]
 [connection signal="body_entered" from="w_hitbox_damage/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [false]]

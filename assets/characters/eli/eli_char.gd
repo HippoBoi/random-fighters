@@ -179,6 +179,8 @@ func _physics_process(delta: float) -> void:
 			if (chargeTime > MAX_CHARGE_TIME):
 				chargeTime = MAX_CHARGE_TIME;
 			
+			$q_charge_fire.scale = Vector3(chargeTime, chargeTime, chargeTime);
+			
 			speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 			attackRange = 0;
 			
@@ -297,6 +299,8 @@ func _fireProjectile(_chargeLevel: float = 0.0, _projectileTarget: Vector3 = Vec
 	
 	projectile.global_position = global_position + Vector3(0, 2, 0);
 	projectile.fire(self, team, finalDmg, _projectileTarget, _chargeLevel);
+	
+	# $q_charge_fire.scale = 0.1;
 
 func _doSpin():
 	var spinWindHitbox = $w_hitbox_wind;

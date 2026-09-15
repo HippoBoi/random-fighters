@@ -7,5 +7,5 @@ render_priority = 0
 shader = ExtResource("1_bboai")
 shader_parameter/top_color = Color(2.18877, 1.0759717, 0, 1)
 shader_parameter/bottom_color = Color(1.6659015, 0, 0, 1)
-shader_parameter/scroll_speed = 2.2530001070175
+shader_parameter/scroll_speed = 3.058000145255
 shader_parameter/direction = -1.0
