@@ -1,8 +1,7 @@
-[gd_scene load_steps=20 format=4 uid="uid://48goncvcnetc"]
+[gd_scene load_steps=14 format=4 uid="uid://48goncvcnetc"]
 
 [ext_resource type="Script" uid="uid://onbrs6j4xi5c" path="res://assets/characters/clean/clean_basic.gd" id="1_k4iry"]
 [ext_resource type="Material" uid="uid://plq0tk2bbye2" path="res://assets/materials/eli_bullet.tres" id="2_1csty"]
-[ext_resource type="Material" uid="uid://dx4tojgelwe31" path="res://assets/materials/fire_material.tres" id="2_qx710"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fdrq7"]
 
@@ -36,31 +35,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_1d8a3")
 
-[sub_resource type="Gradient" id="Gradient_qx710"]
-colors = PackedColorArray(1, 0.767801, 0.5132349, 1, 0.3692371, 0, 0.12675253, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1csty"]
-gradient = SubResource("Gradient_qx710")
-
-[sub_resource type="Curve" id="Curve_71cws"]
-_data = [Vector2(0, 0.57303375), 0.0, 0.76154786, 0, 0, Vector2(0.7486339, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_0vs5h"]
-curve = SubResource("Curve_71cws")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s50hx"]
-scale_min = 0.75
-scale_max = 1.5
-scale_curve = SubResource("CurveTexture_0vs5h")
-color_ramp = SubResource("GradientTexture1D_1csty")
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_qx710"]
-radius = 0.25
-height = 0.5
-radial_segments = 4
-rings = 1
-
 [sub_resource type="Gradient" id="Gradient_71cws"]
 colors = PackedColorArray(1, 0.767801, 0.5132349, 1, 0.3692371, 0, 0.12675253, 1)
 
@@ -83,6 +57,12 @@ scale_max = 1.5
 scale_curve = SubResource("CurveTexture_ofomb")
 color_ramp = SubResource("GradientTexture1D_0vs5h")
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qx710"]
+radius = 0.25
+height = 0.5
+radial_segments = 4
+rings = 1
+
 [sub_resource type="Animation" id="Animation_soew4"]
 resource_name = "CubeAction"
 length = 0.001
@@ -101,19 +81,11 @@ material_override = ExtResource("2_1csty")
 mesh = SubResource("ArrayMesh_mlhmx")
 skeleton = NodePath("")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005354762, 0, 0.25847876)
-material_override = ExtResource("2_qx710")
-amount = 16
-lifetime = 0.5
-process_material = SubResource("ParticleProcessMaterial_s50hx")
-draw_pass_1 = SubResource("CapsuleMesh_qx710")
-
 [node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.020460844, 0, 0)
 material_override = ExtResource("2_1csty")
 amount = 16
-lifetime = 0.5
+lifetime = 0.35000000000000003
 process_material = SubResource("ParticleProcessMaterial_qyu1e")
 draw_pass_1 = SubResource("CapsuleMesh_qx710")
 

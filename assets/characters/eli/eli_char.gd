@@ -170,7 +170,7 @@ func _physics_process(delta: float) -> void:
 			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0):
 				action = Callable(self, "_setup_ultimate");
 			
-			if (action):
+			if (action and not chargingPrimary):
 				if not (onAction or stunned or dead):
 					action.call();
 				else:
@@ -198,6 +198,7 @@ func _physics_process(delta: float) -> void:
 				chargeTime = MAX_CHARGE_TIME;
 			
 			speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
+			attackRange = 0;
 			
 			if (is_multiplayer_authority() and Input.is_action_just_released("primary")):
 				if (not mousePos.is_empty()):
@@ -212,7 +213,7 @@ func _physics_process(delta: float) -> void:
 					syncRotation(mousePos.position);
 					
 					var chargeLevel = chargeTime / MAX_CHARGE_TIME;
-					_fireProjectile(chargeLevel);
+					rpc("syncFireProjectile", chargeLevel, projectileTarget);
 					
 					chargingPrimary = false;
 					qTimer = Q_COOLDOWN - cooldownReduction;
@@ -268,19 +269,23 @@ func _physics_process(delta: float) -> void:
 	if (usingTertiary):
 		return;
 	
-	if (animPlayer.current_animation == "q_ability"):
+	if (animPlayer.current_animation == "q_ability") or (animPlayer.current_animation == "e_ability_fire"):
 		return;
 	
 	if (animPlayer.is_playing() and (animPlayer.current_animation == "e_ability" or animPlayer.current_animation == "e_ability_end")):
 		return;
 	
 	if (chargingPrimary):
-		if (velocity != Vector3.ZERO):
-			if not (animPlayer.current_animation == "q_charging_run"):
-				animPlayer.play("q_charging_run");
+		if (jetMode):
+			if not (animPlayer.current_animation == "e_ability_charging"):
+				animPlayer.play("e_ability_charging");
 		else:
-			if not (animPlayer.current_animation == "q_charging"):
-				animPlayer.play("q_charging");
+			if (velocity != Vector3.ZERO):
+				if not (animPlayer.current_animation == "q_charging_run"):
+					animPlayer.play("q_charging_run");
+			else:
+				if not (animPlayer.current_animation == "q_charging"):
+					animPlayer.play("q_charging");
 	
 	elif (jetMode):
 		if not (animPlayer.current_animation == "e_ability_loop"):
@@ -293,23 +298,23 @@ func _physics_process(delta: float) -> void:
 		if not (animPlayer.current_animation == "idle"):
 			animPlayer.play("idle");
 
-func _fireProjectile(chargeLevel: float = 0.0):
+func _fireProjectile(_chargeLevel: float = 0.0, _projectileTarget: Vector3 = Vector3.ZERO):
 	if (projectileFired):
 		return;
 	
-	if not (projectileTarget):
+	if not (_projectileTarget):
 		return;
 	
 	projectileFired = true;
 	
-	var damageMultiplier = lerp(0.65, 1.75, chargeLevel);
+	var damageMultiplier = lerp(0.65, 1.75, _chargeLevel);
 	var finalDmg = dmg * damageMultiplier;
 	
 	var projectile = preload("res://assets/characters/eli/eli_projectile.tscn").instantiate();
 	get_parent().add_child(projectile);
 	
 	projectile.global_position = global_position + Vector3(0, 2, 0);
-	projectile.fire(self, team, finalDmg, projectileTarget, chargeLevel);
+	projectile.fire(self, team, finalDmg, _projectileTarget, _chargeLevel);
 
 func _doSpin():
 	var spinWindHitbox = $w_hitbox_wind;
@@ -363,7 +368,7 @@ func showBasicAttack(_targetPos):
 	
 @rpc("call_local", "any_peer", "reliable")
 func playBasicAttack():
-	if (jetMode):
+	if (jetMode or chargingPrimary):
 		return;
 	
 	basicAttacking = true;
@@ -379,6 +384,8 @@ func _setup_primary():
 	chargingPrimary = true;
 	chargeTime = 0.0;
 	projectileFired = false;
+	basicAttacking = false;
+	basicAttackTimer = 0;
 	speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 	rpc("syncSlow", CHARGE_SLOW_AMOUNT);
 	rpc("syncCharging", true);
@@ -491,7 +498,12 @@ func syncCharging(_isCharging: bool):
 	chargingPrimary = _isCharging;
 	
 	if (_isCharging == false):
-		animPlayer.play("q_ability");
+		if (jetMode):
+			animPlayer.play("e_ability_fire");
+		else:
+			animPlayer.play("q_ability");
+	else:
+		projectileFired = false;
 
 @rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):
@@ -545,6 +557,10 @@ func onItemPurchase(item: Dictionary):
 func syncSound(soundPath: String):
 	var sound = load(soundPath);
 	PlayerFunc.playSound(self, sound);
+
+@rpc("call_local", "any_peer")
+func syncFireProjectile(_chargeLevel, _projectileTarget):
+	_fireProjectile(_chargeLevel, _projectileTarget);
 
 func onCollision():
 	pass;

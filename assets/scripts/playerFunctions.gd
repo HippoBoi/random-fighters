@@ -1255,6 +1255,8 @@ func moveTarget(target, duration, finalPos, moveSpeed = 20, effect := ""): # bad
 		target.rpc("syncParticles", effect);
 
 func basicAttack(character):
+	if ("chargingPrimary" in character and character.chargingPrimary):
+		return;
 	stopCharacter(character, false);
 	if not (character.onAction or character.basicAttacking) and character.basicAttackTimer <= 0 and (character.target):
 		character.basicAttacking = true;

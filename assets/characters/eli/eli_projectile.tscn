@@ -1,9 +1,11 @@
-[gd_scene load_steps=21 format=4 uid="uid://oeisaq2cnc7i"]
+[gd_scene load_steps=32 format=4 uid="uid://oeisaq2cnc7i"]
 
 [ext_resource type="Material" uid="uid://437dxqxvoi1j" path="res://assets/materials/hitbox_material.tres" id="1_gv420"]
 [ext_resource type="Script" uid="uid://c4xldetxnuh3c" path="res://assets/characters/eli/eli_q_projectile.gd" id="1_pyfy3"]
 [ext_resource type="Material" uid="uid://cpwsn6hb0wjyr" path="res://assets/materials/warning_fire_material.tres" id="3_uri63"]
 [ext_resource type="Material" uid="uid://dx4tojgelwe31" path="res://assets/materials/fire_material.tres" id="4_uri63"]
+[ext_resource type="Shader" uid="uid://dkf5emurtndht" path="res://assets/scripts/shaders/fresnel_bubble_smoke.gdshader" id="5_x1n08"]
+[ext_resource type="Shader" uid="uid://6f73lvef8ehm" path="res://assets/characters/eli/eli_basic_shader.gdshader" id="6_5fkia"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_u03rk"]
 
@@ -112,6 +114,83 @@ height = 0.5
 radial_segments = 4
 rings = 1
 
+[sub_resource type="SphereMesh" id="SphereMesh_x1n08"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4ypy1"]
+render_priority = 0
+shader = ExtResource("5_x1n08")
+shader_parameter/color1 = Color(0.7019608, 0.50980395, 0.62352943, 0.16078432)
+shader_parameter/color2 = Color(1, 1, 1, 1)
+shader_parameter/threshold = -0.2
+shader_parameter/fresnel_sharpness = 10.0
+shader_parameter/intensity = 1.0
+shader_parameter/intensity_2 = 0.0
+shader_parameter/distortion_enabled = true
+shader_parameter/distortion_strength = 0.6
+shader_parameter/edge_distortion_power = 2.5
+shader_parameter/chromatic_aberration = 0.03
+shader_parameter/event_horizon_radius = 0.3
+shader_parameter/event_horizon_darkness = 0.85
+shader_parameter/blur_enabled = true
+shader_parameter/blur_amount = 3.0
+shader_parameter/blur_samples = 8
+shader_parameter/accretion_color = Color(2.5322325, 0.57035, 0.37800857, 1)
+shader_parameter/accretion_intensity = 3.0
+shader_parameter/accretion_width = 1.0
+shader_parameter/noise_detail = 4
+shader_parameter/noise_inflate = 1.0
+shader_parameter/noise_speed = 0.73200003477
+shader_parameter/invert_dissolve = false
+shader_parameter/noise_scale_min = 2.2100001017151203
+shader_parameter/noise_scale_max = 5.235000245402619
+shader_parameter/noise_roughness_min = 1.0
+shader_parameter/noise_roughness_max = 1.0
+shader_parameter/ripple_enabled = true
+shader_parameter/ripple_time = 0.0
+shader_parameter/ripple_frequency = 12.0
+shader_parameter/ripple_speed = 3.0
+shader_parameter/ripple_amplitude = 0.08
+shader_parameter/ripple_fade_distance = 1.5
+shader_parameter/ripple_center = Vector3(0, -1, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tbkib"]
+render_priority = 0
+shader = ExtResource("6_5fkia")
+shader_parameter/top_color = Color(3.6007304, 0.9257521, 1.1222756, 1)
+shader_parameter/bottom_color = Color(3.601, 1.5316486, 1.4326285, 1)
+shader_parameter/scroll_speed = 2.2530001070175
+shader_parameter/direction = -1.0
+
+[sub_resource type="Gradient" id="Gradient_4ypy1"]
+colors = PackedColorArray(1, 0.767801, 0.5132349, 1, 0.3692371, 0, 0.12675253, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tbkib"]
+gradient = SubResource("Gradient_4ypy1")
+
+[sub_resource type="Curve" id="Curve_2t1nl"]
+_data = [Vector2(0, 0.57303375), 0.0, 0.76154786, 0, 0, Vector2(0.7486339, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_rn6jq"]
+curve = SubResource("Curve_2t1nl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vw8cg"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 15.0
+initial_velocity_max = 20.0
+gravity = Vector3(0, -32, 0)
+radial_accel_min = -5.000002
+radial_accel_max = 4.9999976
+tangential_accel_min = -20.000002
+tangential_accel_max = -20.000002
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_rn6jq")
+color_ramp = SubResource("GradientTexture1D_tbkib")
+
+[sub_resource type="PrismMesh" id="PrismMesh_5fkia"]
+size = Vector3(1, 1, 0.5)
+
 [node name="EliProjectile" type="Node3D"]
 script = ExtResource("1_pyfy3")
 
@@ -213,6 +292,22 @@ transform = Transform3D(0.5006082, 0, 0, 0, 0.50179714, 0, 0, 0, 0.5006082, 0.01
 material_override = ExtResource("4_uri63")
 mesh = SubResource("ArrayMesh_mlhmx")
 skeleton = NodePath("")
+
+[node name="Explosion" type="MeshInstance3D" parent="."]
+transform = Transform3D(6.3, 0, 0, 0, 6.3, 0, 0, 0, 6.3, 0, 1.716889, 0)
+mesh = SubResource("SphereMesh_x1n08")
+surface_material_override/0 = SubResource("ShaderMaterial_4ypy1")
+
+[node name="ExplosionParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.020460844, 1, 0)
+material_override = SubResource("ShaderMaterial_tbkib")
+emitting = false
+amount = 24
+lifetime = 0.65
+one_shot = true
+explosiveness = 0.75
+process_material = SubResource("ParticleProcessMaterial_vw8cg")
+draw_pass_1 = SubResource("PrismMesh_5fkia")
 
 [connection signal="body_entered" from="initialHitbox/MeshInstance3D/Area3D" to="." method="_onTouchSlow"]
 [connection signal="body_entered" from="explosionHitbox/MeshInstance3D/Area3D" to="." method="_onTouch"]
