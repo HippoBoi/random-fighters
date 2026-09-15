@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://b41t31ibk2ikl"]
+[gd_scene load_steps=75 format=4 uid="uid://b41t31ibk2ikl"]
 
 [ext_resource type="Script" uid="uid://2gg8v14elsb3" path="res://assets/characters/eli/eli_char.gd" id="1_yiuic"]
 [ext_resource type="Texture2D" uid="uid://b4s4a4wfgi6qm" path="res://assets/textures/fx/T_flare12.png" id="4_3ki0s"]
@@ -2546,6 +2546,10 @@ color_ramp = SubResource("GradientTexture1D_lwv67")
 [sub_resource type="BoxMesh" id="BoxMesh_00vsr"]
 size = Vector3(0.5, 0.5, 0.5)
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_2yi8k"]
+radius = 0.0005
+height = 1.35
+
 [node name="eli" type="CharacterBody3D"]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
 collision_layer = 6
@@ -2770,6 +2774,9 @@ emitting = false
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_lwv67")
 draw_pass_1 = SubResource("BoxMesh_00vsr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_2yi8k")
 
 [connection signal="body_entered" from="w_hitbox_wind/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [true]]
 [connection signal="body_entered" from="w_hitbox_damage/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [false]]

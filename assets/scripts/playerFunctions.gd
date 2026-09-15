@@ -4,6 +4,8 @@ const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 const BASIC_ATTACK_COOLDOWN = 300;
 const HEALTH_AUTHORITY_PEER_ID = 1;
+const ROTATION_DURATION = 0.18;
+const ROTATION_TWEEN_META = &"_player_func_rotation_tween";
 
 var gameMode = "";
 var gameUI;
@@ -1053,7 +1055,44 @@ func syncMovement(character):
 		if (character.CHARACTER_NAME == "Rhay" and character.usingTertiary):
 			return ;
 		
-		character.rotateChar(character.moveTo);
+		rotateChar(character, character.moveTo);
+
+func rotateChar(character: Node3D, newPos) -> void:
+	if not (is_instance_valid(character)) or newPos == null:
+		return;
+
+	var direction = newPos - character.global_position;
+	direction.y = 0;
+	if (direction.is_zero_approx()):
+		return;
+
+	var targetRotation = atan2(direction.x, direction.z);
+	if ("ROTATION_OFFSET" in character):
+		targetRotation += character.ROTATION_OFFSET;
+
+	var activeTween = character.get_meta(ROTATION_TWEEN_META) if character.has_meta(ROTATION_TWEEN_META) else null;
+	if (activeTween is Tween and activeTween.is_valid()):
+		activeTween.kill();
+
+	var startQuaternion = character.quaternion.normalized();
+	var targetEuler = character.rotation;
+	targetEuler.y = targetRotation;
+	var targetQuaternion = Quaternion.from_euler(targetEuler).normalized();
+
+	var tween = character.create_tween();
+	character.set_meta(ROTATION_TWEEN_META, tween);
+	tween.tween_method(
+		func(weight: float):
+			if (is_instance_valid(character)):
+				character.quaternion = startQuaternion.slerp(targetQuaternion, weight),
+		0.0,
+		1.0,
+		ROTATION_DURATION
+	);
+	tween.finished.connect(func():
+		if (is_instance_valid(character) and character.has_meta(ROTATION_TWEEN_META) and character.get_meta(ROTATION_TWEEN_META) == tween):
+			character.remove_meta(ROTATION_TWEEN_META);
+	);
 
 func stopCharacter(character, stopTarget = true):
 	character.velocity = Vector3.ZERO;
