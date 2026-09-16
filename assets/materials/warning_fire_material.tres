@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://bky3hncygesbd" path="res://assets/scripts/shaders/warning_fire_shader.tres" id="1_qgerx"]
 
 [resource]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_qgerx")
 shader_parameter/transparency = 1.0

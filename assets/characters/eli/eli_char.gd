@@ -103,6 +103,8 @@ var alreadyHitSpinDamage = [];
 
 const MAX_CHARGE_TIME: float = 4.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
+const Q_FIRE_CIRCLE_INITIAL_SCALE := Vector3(1.5, 1.5, 1.5);
+const Q_FIRE_CIRCLE_FULL_CHARGE_SCALE := Vector3(0.1, 0.5, 0.1);
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -110,6 +112,11 @@ var basicAnimPos = 0;
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $placeholder;
 @onready var animPlayer = $AnimationPlayer;
+@onready var fireMaterial01 = $q_charge_fire/fire1.get_surface_override_material(0) as ShaderMaterial;
+@onready var fireMaterial02 = $q_charge_fire/fire2.get_surface_override_material(0) as ShaderMaterial;
+@onready var fireCircleMaterial01 = $q_fire_circle.get_surface_override_material(0) as ShaderMaterial;
+@onready var fireCircleMaterial02 = $q_full_fire_circle.get_surface_override_material(0) as ShaderMaterial;
+@onready var qFireCircle = $q_fire_circle;
 
 func _ready() -> void:
 	if (is_multiplayer_authority()):
@@ -178,8 +185,24 @@ func _physics_process(delta: float) -> void:
 			chargeTime += delta;
 			if (chargeTime > MAX_CHARGE_TIME):
 				chargeTime = MAX_CHARGE_TIME;
-			
-			$q_charge_fire.scale = Vector3(chargeTime, chargeTime, chargeTime);
+				if not ($q_charge_fire.visible):
+					$q_charge_fire.visible = true;
+					$q_full_fire_circle.visible = true;
+					
+					$q_charge_fire.scale = Vector3(0.5, 0.5, 0.5);
+					$q_full_fire_circle.scale = Vector3(0.5, 0.5, 0.5);
+					
+					fireMaterial01.set_shader_parameter("Transparency", 0.0);
+					fireMaterial02.set_shader_parameter("Transparency", 0.0);
+				
+					var tween = get_tree().create_tween().set_parallel();
+					tween.tween_property(fireMaterial01, "shader_parameter/Transparency", 0.5, 0.5);
+					tween.tween_property(fireMaterial02, "shader_parameter/Transparency", 0.5, 0.5);
+					tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
+					tween.tween_property($q_charge_fire, "scale", Vector3(0.7, 1.0, 0.65), 0.4);
+					tween.tween_property($q_full_fire_circle, "scale", Vector3(0.95, 1.8, 0.92), 0.4);
+					
+			_update_q_fire_circle_scale();
 			
 			speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 			attackRange = 0;
@@ -201,7 +224,7 @@ func _physics_process(delta: float) -> void:
 					
 					chargingPrimary = false;
 					qTimer = Q_COOLDOWN - cooldownReduction;
-					qTimer = clamp(qTimer, 0.9, Q_COOLDOWN);
+					qTimer = clamp(qTimer, 1.25, Q_COOLDOWN);
 					
 					rpc("syncCharging", false);
 	
@@ -282,7 +305,14 @@ func _physics_process(delta: float) -> void:
 		if not (animPlayer.current_animation == "idle"):
 			animPlayer.play("idle");
 
+func _hide_primary_charge_effects() -> void:
+	$q_charge_fire.visible = false;
+	$q_fire_circle.visible = false;
+	$q_full_fire_circle.visible = false;
+
 func _fireProjectile(_chargeLevel: float = 0.0, _projectileTarget: Vector3 = Vector3.ZERO):
+	_hide_primary_charge_effects();
+
 	if (projectileFired):
 		return;
 	
@@ -299,8 +329,6 @@ func _fireProjectile(_chargeLevel: float = 0.0, _projectileTarget: Vector3 = Vec
 	
 	projectile.global_position = global_position + Vector3(0, 2, 0);
 	projectile.fire(self, team, finalDmg, _projectileTarget, _chargeLevel);
-	
-	# $q_charge_fire.scale = 0.1;
 
 func _doSpin():
 	var spinWindHitbox = $w_hitbox_wind;
@@ -369,12 +397,26 @@ func playBasicAttack():
 func _setup_primary():
 	chargingPrimary = true;
 	chargeTime = 0.0;
+	qFireCircle.scale = Q_FIRE_CIRCLE_INITIAL_SCALE;
 	projectileFired = false;
 	basicAttacking = false;
 	basicAttackTimer = 0;
 	speedMultiplier = clamp(1.0 - CHARGE_SLOW_AMOUNT, 0.0, 1.0);
 	rpc("syncSlow", CHARGE_SLOW_AMOUNT);
 	rpc("syncCharging", true);
+
+func _update_q_fire_circle_scale() -> void:
+	if not ($q_fire_circle.visible):
+		$q_fire_circle.visible = true;
+		
+		fireCircleMaterial01.set_shader_parameter("Transparency", 0.0);
+		
+		var fireTween = get_tree().create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
+		fireTween.tween_property(fireCircleMaterial01, "shader_parameter/Transparency", 0.0, 0.25);
+		fireTween.tween_property(fireCircleMaterial01, "shader_parameter/Transparency", 1.0, 2.5);
+		
+	var chargeRatio = clamp(chargeTime / MAX_CHARGE_TIME, 0.0, 1.0);
+	qFireCircle.scale = Q_FIRE_CIRCLE_INITIAL_SCALE.lerp(Q_FIRE_CIRCLE_FULL_CHARGE_SCALE, chargeRatio);
 
 func _setup_secondary():
 	rpc("secondary_ability");
@@ -484,16 +526,19 @@ func syncSlow(_slowAmount):
 	speedMultiplier -= _slowAmount;
 	speedMultiplier = clamp(speedMultiplier, 0.0, 1.0);
 
-@rpc("call_local", "any_peer")
+@rpc("call_local", "any_peer", "reliable")
 func syncCharging(_isCharging: bool):
 	chargingPrimary = _isCharging;
 	
 	if (_isCharging == false):
+		_hide_primary_charge_effects();
 		if (jetMode):
 			animPlayer.play("e_ability_fire");
 		else:
 			animPlayer.play("q_ability");
 	else:
+		chargeTime = 0.0;
+		qFireCircle.scale = Q_FIRE_CIRCLE_INITIAL_SCALE;
 		projectileFired = false;
 
 @rpc("any_peer")
@@ -549,7 +594,7 @@ func syncSound(soundPath: String):
 	var sound = load(soundPath);
 	PlayerFunc.playSound(self, sound);
 
-@rpc("call_local", "any_peer")
+@rpc("call_local", "any_peer", "reliable")
 func syncFireProjectile(_chargeLevel, _projectileTarget):
 	_fireProjectile(_chargeLevel, _projectileTarget);
 

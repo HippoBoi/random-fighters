@@ -117,6 +117,7 @@ rings = 1
 [sub_resource type="SphereMesh" id="SphereMesh_x1n08"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4ypy1"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("5_x1n08")
 shader_parameter/color1 = Color(0.7019608, 0.50980395, 0.62352943, 0.16078432)
@@ -154,6 +155,7 @@ shader_parameter/ripple_fade_distance = 1.5
 shader_parameter/ripple_center = Vector3(0, -1, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tbkib"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("6_5fkia")
 shader_parameter/top_color = Color(3.6007304, 0.9257521, 1.1222756, 1)
@@ -175,6 +177,7 @@ point_count = 2
 curve = SubResource("Curve_2t1nl")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vw8cg"]
+resource_local_to_scene = true
 particle_flag_align_y = true
 direction = Vector3(0, 1, 0)
 initial_velocity_min = 15.0

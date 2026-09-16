@@ -101,7 +101,7 @@ func _onTouchSlow(other: Node3D) -> void:
 		var totalDmg = dmg * 0.25;
 		if (other.team != team):
 			PlayerFunc.dealDamage(character, other, totalDmg);
-			PlayerFunc.slowTarget(other, 0.6);
+			PlayerFunc.slowTarget(other, 0.35);
 
 # aaaweesome animation (tweens)
 func _playFireAnimation(_hitboxScale, _targetPos):

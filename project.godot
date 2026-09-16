@@ -131,3 +131,8 @@ D={
 3d_render/layer_2="characters"
 3d_render/layer_10="game_UI_elements"
 3d_render/layer_11="minimap_icons"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
