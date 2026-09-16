@@ -115,7 +115,6 @@ var basicAnimPos = 0;
 @onready var fireMaterial01 = $q_charge_fire/fire1.get_surface_override_material(0) as ShaderMaterial;
 @onready var fireMaterial02 = $q_charge_fire/fire2.get_surface_override_material(0) as ShaderMaterial;
 @onready var fireCircleMaterial01 = $q_fire_circle.get_surface_override_material(0) as ShaderMaterial;
-@onready var fireCircleMaterial02 = $q_full_fire_circle.get_surface_override_material(0) as ShaderMaterial;
 @onready var qFireCircle = $q_fire_circle;
 
 func _ready() -> void:
@@ -187,20 +186,21 @@ func _physics_process(delta: float) -> void:
 				chargeTime = MAX_CHARGE_TIME;
 				if not ($q_charge_fire.visible):
 					$q_charge_fire.visible = true;
-					$q_full_fire_circle.visible = true;
+					# $q_full_fire_circle.visible = true;
+					$sparkParticle.emitting = true;
 					
-					$q_charge_fire.scale = Vector3(0.5, 0.5, 0.5);
-					$q_full_fire_circle.scale = Vector3(0.5, 0.5, 0.5);
+					$q_charge_fire.scale = Vector3(0.25, 0.25, 0.25);
+					$q_full_fire_circle.scale = Vector3(0.25, 0.25, 0.25);
 					
 					fireMaterial01.set_shader_parameter("Transparency", 0.0);
 					fireMaterial02.set_shader_parameter("Transparency", 0.0);
 				
 					var tween = get_tree().create_tween().set_parallel();
-					tween.tween_property(fireMaterial01, "shader_parameter/Transparency", 0.5, 0.5);
-					tween.tween_property(fireMaterial02, "shader_parameter/Transparency", 0.5, 0.5);
+					tween.tween_property(fireMaterial01, "shader_parameter/Transparency", 0.6, 0.4);
+					tween.tween_property(fireMaterial02, "shader_parameter/Transparency", 0.6, 0.4);
 					tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT);
-					tween.tween_property($q_charge_fire, "scale", Vector3(0.7, 1.0, 0.65), 0.4);
-					tween.tween_property($q_full_fire_circle, "scale", Vector3(0.95, 1.8, 0.92), 0.4);
+					tween.tween_property($q_charge_fire, "scale", Vector3(0.6, 1.0, 0.6), 0.55);
+					tween.tween_property($q_full_fire_circle, "scale", Vector3(0.7, 1.2, 0.7), 0.55);
 					
 			_update_q_fire_circle_scale();
 			
@@ -255,6 +255,15 @@ func _physics_process(delta: float) -> void:
 			usingTertiary = false;
 			onAction = false;
 			jetMode = not jetMode;
+	
+	if (usingUltimate):
+		ultimateTimer -= delta;
+		
+		if (ultimateTimer <= 0):
+			usingUltimate = false;
+			
+			# TODO: enable ulti
+			_toggle_toon_shader(true);
 
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -268,6 +277,9 @@ func _physics_process(delta: float) -> void:
 	# handle animations
 	# ELI edit: animations are overriten a lot
 	if (onAction or basicAttacking):
+		return;
+	
+	if (animPlayer.current_animation == "r_ability"):
 		return;
 	
 	if (usingSecondary):
@@ -309,6 +321,7 @@ func _hide_primary_charge_effects() -> void:
 	$q_charge_fire.visible = false;
 	$q_fire_circle.visible = false;
 	$q_full_fire_circle.visible = false;
+	$q_particles.emitting = false;
 
 func _fireProjectile(_chargeLevel: float = 0.0, _projectileTarget: Vector3 = Vector3.ZERO):
 	_hide_primary_charge_effects();
@@ -353,16 +366,11 @@ func basicAttack():
 	basicAttacking = true;
 	basicTarget = target;
 
-# TODO:
-# create a unique on hit effect
 func _onBasicTouched():
 	var path = "res://assets/sounds/characters/eli/eli_basic_hit.ogg";
 	PlayerFunc.dealDamage(self, basicTarget, dmg * 1.05, "fire_hit_03");
 	rpc("syncSound", path);
 
-# TODO:
-# create a basic attack unique for eli
-# also sfx
 @rpc("call_local")
 func showBasicAttack(_targetPos):
 	if not (_targetPos):
@@ -425,25 +433,16 @@ func _setup_tertiary():
 	rpc("tertiary_ability");
 	
 func _setup_ultimate():
-	if (mousePos.is_empty()):
-		return;
-	
-	rpc("ultimate_ability", mousePos.position);
+	rpc("ultimate_ability");
 
-# TODO: remove if not used
-# we probably wont use this
-# but if we use it cool
 func _toggle_toon_shader(enable: bool):
 	if (enable):
-		for child: MeshInstance3D in $clean/Skeleton3D.get_children():
+		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
 			var toon_shader = preload("res://assets/characters/clean/hacker_material.tres");
 			child.set_surface_override_material(0, toon_shader);
 	else:
-		for child: MeshInstance3D in $clean/Skeleton3D.get_children():
+		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
 			child.set_surface_override_material(0, null);
-	
-	$e_particles/sparkParticle.emitting = enable;
-	$e_particles/spinningParts.emitting = enable;
 
 @rpc("call_local", "reliable")
 func secondary_ability():
@@ -459,9 +458,6 @@ func secondary_ability():
 	alreadyHitSpinDamage = [];
 	alreadyHitWind = [];
 
-	# TODO:
-	# play anim ig
-
 @rpc("call_local", "reliable")
 func tertiary_ability():
 	if (chargingPrimary):
@@ -475,18 +471,29 @@ func tertiary_ability():
 	
 	$fireParticle01.emitting = not jetMode;
 	$fireParticle02.emitting = not jetMode;
-			
+	
 	if not (jetMode):
 		animPlayer.play("e_ability");
 	else:
 		animPlayer.play("e_ability_end");
 
 @rpc("call_local", "reliable")
-func ultimate_ability(_mousePos):
+func ultimate_ability():
 	if (chargingPrimary):
 		return;
 	
-	rpc("syncRotation", _mousePos);
+	usingTertiary = false;
+	jetMode = false;
+	
+	usingUltimate = true;
+	ultimateTimer = 0.75;
+	rTimer = R_COOLDOWN - cooldownReduction;
+	rTimer = clamp(rTimer, 10.0, R_COOLDOWN);
+	
+	$fireParticle01.emitting = false;
+	$fireParticle02.emitting = false;
+	
+	animPlayer.play("r_ability");
 	
 @rpc("call_local", "any_peer", "reliable")
 func syncTarget(_target):
@@ -532,6 +539,7 @@ func syncCharging(_isCharging: bool):
 	
 	if (_isCharging == false):
 		_hide_primary_charge_effects();
+		
 		if (jetMode):
 			animPlayer.play("e_ability_fire");
 		else:
@@ -540,6 +548,7 @@ func syncCharging(_isCharging: bool):
 		chargeTime = 0.0;
 		qFireCircle.scale = Q_FIRE_CIRCLE_INITIAL_SCALE;
 		projectileFired = false;
+		$q_particles.emitting = true;
 
 @rpc("any_peer")
 func syncBufferedInputs(_moveTo = null, _target = null):
