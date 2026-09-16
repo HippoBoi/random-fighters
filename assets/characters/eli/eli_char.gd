@@ -348,9 +348,9 @@ func _doSpin():
 	var spinDamageHitbox = $w_hitbox_damage;
 	var windArea = spinWindHitbox.get_child(0).get_child(0);
 	var damageArea = spinDamageHitbox.get_child(0).get_child(0);
-
-	spinWindHitbox.get_child(0).visible = true;
-	spinDamageHitbox.get_child(0).visible = true;
+	
+	$w_particles.emitting = true;
+	$explosionParts.emitting = true;
 
 	windArea.monitoring = true;
 	damageArea.monitoring = true;

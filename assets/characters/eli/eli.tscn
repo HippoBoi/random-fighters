@@ -1,9 +1,11 @@
-[gd_scene load_steps=80 format=4 uid="uid://b41t31ibk2ikl"]
+[gd_scene load_steps=111 format=4 uid="uid://b41t31ibk2ikl"]
 
 [ext_resource type="Script" uid="uid://2gg8v14elsb3" path="res://assets/characters/eli/eli_char.gd" id="1_yiuic"]
 [ext_resource type="Texture2D" uid="uid://dlvu0djmnnfx" path="res://assets/sprites/character_icons/eli_icon.png" id="4_8cy83"]
 [ext_resource type="Material" uid="uid://437dxqxvoi1j" path="res://assets/materials/hitbox_material.tres" id="6_2yi8k"]
 [ext_resource type="Material" uid="uid://blm0btpc02hs2" path="res://assets/materials/water_material.tres" id="7_8cy83"]
+[ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="7_lwv67"]
+[ext_resource type="Shader" uid="uid://4qwlgrj7npx3" path="res://assets/scripts/shaders/grass_shader.gdshader" id="8_00vsr"]
 [ext_resource type="Shader" uid="uid://6f73lvef8ehm" path="res://assets/characters/eli/eli_basic_shader.gdshader" id="8_lwv67"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="8_vnu0j"]
 
@@ -2598,6 +2600,254 @@ shader_parameter/scroll_speed = 1.58400007524
 shader_parameter/direction = -1.0
 shader_parameter/Transparency = 0.098000004655
 
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_aw4ea"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_6jegx"]
+parameter_name = "auraTexture"
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_i5min"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="Gradient" id="Gradient_tws6v"]
+offsets = PackedFloat32Array(0, 0.30625, 0.98125, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_00vsr"]
+gradient = SubResource("Gradient_tws6v")
+fill_from = Vector2(1, 0)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_s3i38"]
+expanded_output_ports = [0]
+texture = SubResource("GradientTexture2D_00vsr")
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_7fvsu"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_r2s3e"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_22ed4"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeUVFunc" id="VisualShaderNodeUVFunc_h0mhy"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_0iixj"]
+input_name = "time"
+
+[sub_resource type="VisualShaderNodeVec2Parameter" id="VisualShaderNodeVec2Parameter_7abcr"]
+parameter_name = "speed"
+
+[sub_resource type="VisualShader" id="VisualShader_fnemj"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform vec2 speed;
+uniform sampler2D auraTexture : source_color;
+uniform sampler2D tex_frg_2 : source_color;
+
+
+
+void fragment() {
+// Input:3
+	vec4 n_out3p0 = COLOR;
+	float n_out3p4 = n_out3p0.a;
+
+
+// Vector2Parameter:9
+	vec2 n_out9p0 = speed;
+
+
+// Input:8
+	float n_out8p0 = TIME;
+
+
+// FloatOp:10
+	float n_out10p0 = n_out9p0.x * n_out8p0;
+
+
+// UVFunc:7
+	vec2 n_in7p1 = vec2(1.00000, 1.00000);
+	vec2 n_out7p0 = vec2(n_out10p0) * n_in7p1 + UV;
+
+
+	vec4 n_out12p0;
+// Texture2D:12
+	n_out12p0 = texture(auraTexture, n_out7p0);
+	float n_out12p1 = n_out12p0.r;
+
+
+// Texture2D:2
+	vec4 n_out2p0 = texture(tex_frg_2, UV);
+	float n_out2p1 = n_out2p0.r;
+
+
+// FloatOp:6
+	float n_out6p0 = n_out12p1 * n_out2p1;
+
+
+// FloatOp:4
+	float n_out4p0 = n_out3p4 * n_out6p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = n_out4p0;
+
+
+}
+"
+modes/cull = 2
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/fragment/0/position = Vector2(440, 120)
+nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_s3i38")
+nodes/fragment/2/position = Vector2(-520, 280)
+nodes/fragment/3/node = SubResource("VisualShaderNodeInput_7fvsu")
+nodes/fragment/3/position = Vector2(-200, -140)
+nodes/fragment/4/node = SubResource("VisualShaderNodeFloatOp_r2s3e")
+nodes/fragment/4/position = Vector2(140, 160)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatOp_22ed4")
+nodes/fragment/6/position = Vector2(-160, 280)
+nodes/fragment/7/node = SubResource("VisualShaderNodeUVFunc_h0mhy")
+nodes/fragment/7/position = Vector2(-1120, -40)
+nodes/fragment/8/node = SubResource("VisualShaderNodeInput_0iixj")
+nodes/fragment/8/position = Vector2(-1700, -60)
+nodes/fragment/9/node = SubResource("VisualShaderNodeVec2Parameter_7abcr")
+nodes/fragment/9/position = Vector2(-1800, 200)
+nodes/fragment/10/node = SubResource("VisualShaderNodeFloatOp_aw4ea")
+nodes/fragment/10/position = Vector2(-1380, 100)
+nodes/fragment/11/node = SubResource("VisualShaderNodeTexture2DParameter_6jegx")
+nodes/fragment/11/position = Vector2(-1120, 260)
+nodes/fragment/12/node = SubResource("VisualShaderNodeTexture_i5min")
+nodes/fragment/12/position = Vector2(-760, -20)
+nodes/fragment/connections = PackedInt32Array(4, 0, 0, 1, 3, 4, 4, 0, 3, 0, 0, 0, 2, 1, 6, 1, 6, 0, 4, 1, 10, 0, 7, 2, 9, 0, 10, 0, 8, 0, 10, 1, 11, 0, 12, 2, 7, 0, 12, 0, 12, 1, 6, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ujhdr"]
+render_priority = 0
+shader = SubResource("VisualShader_fnemj")
+shader_parameter/speed = Vector2(1, 1)
+shader_parameter/auraTexture = ExtResource("7_lwv67")
+
+[sub_resource type="Gradient" id="Gradient_qndu1"]
+offsets = PackedFloat32Array(0, 0.114583, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4rmd0"]
+gradient = SubResource("Gradient_qndu1")
+
+[sub_resource type="Curve" id="Curve_wxw3u"]
+_data = [Vector2(0.0163934, 0.280899), 0.0, 1.98528, 0, 0, Vector2(0.901639, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_a6c1i"]
+_data = [Vector2(0, 0.101124), 0.0, 0.0, 0, 0, Vector2(0.868852, 0.674157), 0.64932, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ebotb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.459016, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_i0ssb"]
+curve_x = SubResource("Curve_wxw3u")
+curve_y = SubResource("Curve_a6c1i")
+curve_z = SubResource("Curve_ebotb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3fbsy"]
+particle_flag_align_y = true
+orbit_velocity_min = -0.5399999
+orbit_velocity_max = 0.8570001
+gravity = Vector3(0, 0, 0)
+scale_min = 6.0
+scale_max = 6.0
+scale_curve = SubResource("CurveXYZTexture_i0ssb")
+color = Color(2, 0.957261, 0.8353525, 1)
+color_ramp = SubResource("GradientTexture1D_4rmd0")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ljb3k"]
+_surfaces = [{
+"aabb": AABB(-0.809479, 0, -0.809479, 1.61896, 2.31472, 1.61896),
+"format": 34896613377,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEAAgADAAUABgAEAAAABQADAAcABgAIAAQABQAHAAkACgAIAAYACQAHAAsACgAMAAgACQALAA0ADgAMAAoADQALAA8ADgAQAAwADQAPABEAEgAQAA4AEQAPABMAEgAUABAAEQATABUAFgAUABIAFQATABcAFgAYABQAFQAXABkAGgAYABYAGQAXABsAGgAcABgAGQAbAB0AHgAcABoAHQAbAB8AHgAgABwAHQAfACEAIgAgAB4AIQAfACMAIgAkACAAIQAjACUAJgAkACIAJQAjACcAJgAoACQAJQAnACkAKgAoACYAKQAnACsAKgAsACgAKQArAC0ALgAsACoALQArAC8ALgAwACwALQAvADEAMgAwAC4AMQAvADMAMgA0ADAAMQAzADUANgA0ADIANQAzADcANgA4ADQANQA3ADkAOgA4ADYAOQA3ADsAOgA8ADgAOQA7AD0APgA8ADoAPQA7AD8APgA/ADwAPQA/AD4A"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 64,
+"vertex_data": PackedByteArray("/3///wAAAAD/fwAAAAAAAPiY//91AgAA+JgAAHUCAAAGZwAAdQIAAPuw//++CQAABmf//3UCAAD7sAAAvgkAAANPAAC+CQAAHMf//5IVAAADT///vgkAABzHAACSFQAA4jgAAJIVAACB2v//fSUAAOI4//+SFQAAgdoAAH0lAAB9JQAAfSUAAGzq///iOAAAfSX//30lAABs6gAA4jgAAJIVAADiOAAAQPb//wNPAACSFf//4jgAAED2AAADTwAAvgkAAANPAACJ/f//BmcAAL4J//8DTwAAif0AAAZnAAB1AgAABmcAAP//////fwAAdQL//wZnAAD//wAA/38AAAAAAAD/fwAAif3///iYAAAAAP///38AAIn9AAD4mAAAdQIAAPiYAABA9v//+7AAAHUC///4mAAAQPYAAPuwAAC+CQAA+7AAAGzq//8cxwAAvgn///uwAABs6gAAHMcAAJIVAAAcxwAAgdr//4HaAACSFf//HMcAAIHaAACB2gAAfSUAAIHaAAAcx///bOoAAH0l//+B2gAAHMcAAGzqAADiOAAAbOoAAPuw//9A9gAA4jj//2zqAAD7sAAAQPYAAANPAABA9gAA+Jj//4n9AAADT///QPYAAPiYAACJ/QAABmcAAIn9AAD/f/////8AAAZn//+J/QAA/38AAP//AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5kboh"]
+_surfaces = [{
+"aabb": AABB(-0.809479, 0, -0.809479, 1.61896, 2.31472, 1.61896),
+"attribute_data": PackedByteArray("//8AAP//////9wAA//f////3AAD/9////+8AAP/v////7wAA/+/////nAAD/5////+cAAP/n////3wAA/9/////fAAD/3////9cAAP/X////1wAA/9f////PAAD/z////88AAP/P////xwAA/8f////HAAD/x////78AAP+/////vwAA/7////+3AAD/t////7cAAP+3////rwAA/6////+vAAD/r////6cAAP+n////pwAA/6f///+fAAD/n////58AAP+f////lwAA/5f///+XAAD/l////48AAP+P////jwAA/4////+HAAD/h////4cAAP+H////fwAA/3////9/AAD/f////3cAAP93////dwAA/3f///9vAAD/b////28AAP9v////ZwAA/2f///9nAAD/Z////18AAP9f////XwAA/1////9XAAD/V////1cAAP9X////TwAA/0////9PAAD/T////0cAAP9H////RwAA/0f///8/AAD/P////z8AAP8/////NwAA/zf///83AAD/N////y8AAP8v////LwAA/y////8nAAD/J////ycAAP8n////HwAA/x////8fAAD/H////xcAAP8X////FwAA/xf///8PAAD/D////w8AAP8P////BwAA/wf///8HAAD/B///AAAAAAAA//8="),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcACAAJAAoACgAJAAsADAANAA4ADgANAA8AEAARABIAEgARABMAFAAVABYAFgAVABcAGAAZABoAGgAZABsAHAAdAB4AHgAdAB8AIAAhACIAIgAhACMAJAAlACYAJgAlACcAKAApACoAKgApACsALAAtAC4ALgAtAC8AMAAxADIAMgAxADMANAA1ADYANgA1ADcAOAA5ADoAOgA5ADsAPAA9AD4APgA9AD8AQABBAEIAQgBBAEMARABFAEYARgBFAEcASABJAEoASgBJAEsATABNAE4ATgBNAE8AUABRAFIAUgBRAFMAVABVAFYAVgBVAFcAWABZAFoAWgBZAFsAXABdAF4AXgBdAF8AYABhAGIAYgBhAGMAZABlAGYAZgBlAGcAaABpAGoAagBpAGsAbABtAG4AbgBtAG8AcABxAHIAcgBxAHMAdAB1AHYAdgB1AHcAeAB5AHoAegB5AHsAfAB9AH4AfgB9AH8A"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 128,
+"vertex_data": PackedByteArray("/3///wAA//v/fwAAAAD/+/iY//91Av/7+JgAAHUC//v4mP//dQL+8/iYAAB1Av7z+7D//74J/vP7sAAAvgn+8/uw//++Cf7r+7AAAL4J/uscx///khX+6xzHAACSFf7rHMf//5IV/uMcxwAAkhX+44Ha//99Jf7jgdoAAH0l/uOB2v//fSX/24HaAAB9Jf/bbOr//+I4/9ts6gAA4jj/22zq///iOP/TbOoAAOI4/9NA9v//A0//00D2AAADT//TQPb//wNP/8tA9gAAA0//y4n9//8GZ//Lif0AAAZn/8uJ/f//Bmf/w4n9AAAGZ//D//////9//8P//wAA/3//w///////f/+7//8AAP9//7uJ/f//+Jj/u4n9AAD4mP+7if3///iY/7OJ/QAA+Jj/s0D2///7sP+zQPYAAPuw/7NA9v//+7D/q0D2AAD7sP+rbOr//xzH/6ts6gAAHMf/q2zq//8cx/+jbOoAABzH/6OB2v//gdr/o4HaAACB2v+jgdr//4Ha/5uB2gAAgdr/mxzH//9s6v+bHMcAAGzq/5scx///bOr/kxzHAABs6v+T+7D//0D2/5P7sAAAQPb/k/uw//9A9v+L+7AAAED2/4v4mP//if3/i/iYAACJ/f+L+Jj//4n9/4P4mAAAif3/g/9///////+D/38AAP///4P/f///////g/9/AAD///+DBmf//4n9/4MGZwAAif3/gwZn//+J/f+LBmcAAIn9/4sDT///QPb/iwNPAABA9v+LA0///0D2/5MDTwAAQPb/k+I4//9s6v+T4jgAAGzq/5PiOP//bOr/m+I4AABs6v+bfSX//4Ha/5t9JQAAgdr/m30l//+B2v+jfSUAAIHa/6OSFf//HMf/o5IVAAAcx/+jkhX//xzH/6uSFQAAHMf/q74J///7sP+rvgkAAPuw/6u+Cf//+7D/s74JAAD7sP+zdQL///iY/7N1AgAA+Jj/s3UC///4mP+7dQIAAPiY/7sAAP///3//uwAAAAD/f/+7AAD///9//8MAAAAA/3//w3UC//8GZ//DdQIAAAZn/8N1Av//Bmf/y3UCAAAGZ//Lvgn//wNP/8u+CQAAA0//y74J//8DT//TvgkAAANP/9OSFf//4jj/05IVAADiOP/TkhX//+I4/9uSFQAA4jj/230l//99Jf/bfSUAAH0l/9t9Jf//fSX+430lAAB9Jf7j4jj//5IV/uPiOAAAkhX+4+I4//+SFf7r4jgAAJIV/usDT///vgn+6wNPAAC+Cf7rA0///74J/vMDTwAAvgn+8wZn//91Av7zBmcAAHUC/vMGZ///dQL/+wZnAAB1Av/7/3///wAA//v/fwAAAAD/+/9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ljb3k")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ujhdr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qndu1"]
+render_priority = 0
+shader = ExtResource("8_00vsr")
+shader_parameter/color = Color(1.6469477, 0, 0.37045488, 1)
+shader_parameter/secondaryColor = Color(2.0519552, 1.4332414, 0.4934231, 1)
+shader_parameter/noise = SubResource("NoiseTexture2D_ujhdr")
+shader_parameter/noiseScale = 5.0
+shader_parameter/windDirection = Vector2(1, 0.25)
+shader_parameter/windStrength = 5.0
+shader_parameter/windSpeed = 20.0
+shader_parameter/windScale = 5.0
+shader_parameter/tipInfluence = 3.0
+
+[sub_resource type="Curve" id="Curve_lwv67"]
+_data = [Vector2(0, 0.8030304), 0.0, 0.0, 0, 0, Vector2(0.7368421, 0.098968506), -0.96286225, -0.96286225, 0, 0, Vector2(1, 0.036105752), -0.4486249, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_6wiod"]
+curve = SubResource("Curve_lwv67")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00vsr"]
+particle_flag_align_y = true
+angle_min = -90.0
+angle_max = 150.0
+velocity_pivot = Vector3(0, -1, 0)
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 12.0
+initial_velocity_max = 16.0
+orbit_velocity_min = -2.0
+orbit_velocity_max = 2.0
+radial_velocity_min = 0.999978
+radial_velocity_max = 4.99998
+gravity = Vector3(0, -7, 0)
+radial_accel_min = -10.0
+radial_accel_max = 5.0
+tangential_accel_min = 8.33
+tangential_accel_max = 12.5
+damping_max = 8.333
+scale_min = 0.25
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_6wiod")
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_lwv67"]
+
 [node name="eli" type="CharacterBody3D"]
 transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0, 0, 0)
 collision_layer = 6
@@ -2809,7 +3059,7 @@ process_material = SubResource("ParticleProcessMaterial_lwv67")
 draw_pass_1 = SubResource("BoxMesh_00vsr")
 
 [node name="sparkParticle" type="GPUParticles3D" parent="."]
-transform = Transform3D(0.70614403, 0, 0, 0, 0.9999998, 0, 0, 0, 0.65132624, -0.83824956, 2.5861878, 1.6463548)
+transform = Transform3D(0.70614415, 0, 0, 0, 0.9999998, 0, 0, 0, 0.65132624, -0.8382497, 2.5861883, 2.0207992)
 material_override = SubResource("ShaderMaterial_lwv67")
 emitting = false
 amount = 1
@@ -2857,6 +3107,29 @@ visible = false
 mesh = SubResource("ArrayMesh_00vsr")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_00vsr")
+
+[node name="w_particles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.894287, 0)
+material_override = SubResource("ShaderMaterial_ujhdr")
+cast_shadow = 0
+emitting = false
+amount = 1
+one_shot = true
+preprocess = 0.1
+process_material = SubResource("ParticleProcessMaterial_3fbsy")
+draw_pass_1 = SubResource("ArrayMesh_5kboh")
+
+[node name="explosionParts" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9230771, 0)
+material_override = SubResource("ShaderMaterial_qndu1")
+emitting = false
+amount = 40
+sub_emitter = NodePath("../q_particles")
+one_shot = true
+preprocess = 0.1
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_00vsr")
+draw_pass_1 = SubResource("SphereMesh_lwv67")
 
 [connection signal="body_entered" from="w_hitbox_wind/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [true]]
 [connection signal="body_entered" from="w_hitbox_damage/MeshInstance3D/Area3D" to="." method="_on_w_hitbox_hit" binds= [false]]
