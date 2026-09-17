@@ -15,7 +15,7 @@ const CHARACTER_NAME = "Eli";
 const Q_COOLDOWN = 5.5;
 const Q_MAX_RANGE = 12.0;
 const W_COOLDOWN = 9.25;
-const E_COOLDOWN = 1.0;
+const E_COOLDOWN = 5.0;
 const R_COOLDOWN = 10.0;
 
 var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 75% / 125% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
@@ -105,6 +105,7 @@ const MAX_CHARGE_TIME: float = 4.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
 const Q_FIRE_CIRCLE_INITIAL_SCALE := Vector3(1.5, 1.5, 1.5);
 const Q_FIRE_CIRCLE_FULL_CHARGE_SCALE := Vector3(0.1, 0.5, 0.1);
+const R_MAX_DURATION = 5.0;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -158,7 +159,7 @@ func _physics_process(delta: float) -> void:
 			if (Input.is_action_just_pressed("ultimate") and rTimer <= 0):
 				action = Callable(self, "_setup_ultimate");
 			
-			if (action):
+			if (action and not usingUltimate):
 				if not (onAction or stunned or dead):
 					action.call();
 				else:
@@ -438,7 +439,10 @@ func _setup_ultimate():
 func _toggle_toon_shader(enable: bool):
 	if (enable):
 		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
-			var toon_shader = preload("res://assets/characters/clean/hacker_material.tres");
+			if (child.name == "handL" or child.name == "handR"):
+				continue;
+			
+			var toon_shader = preload("res://assets/characters/eli/eli_ulti_material.tres");
 			child.set_surface_override_material(0, toon_shader);
 	else:
 		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
@@ -453,7 +457,7 @@ func secondary_ability():
 	animPlayer.play("w_ability");
 	
 	wTimer = W_COOLDOWN - cooldownReduction;
-	wTimer = clamp(wTimer, 2.0, W_COOLDOWN);
+	wTimer = clamp(wTimer, 2.5, W_COOLDOWN);
 
 	alreadyHitSpinDamage = [];
 	alreadyHitWind = [];
@@ -465,8 +469,12 @@ func tertiary_ability():
 	
 	usingTertiary = true;
 	onAction = true;
-	eTimer = E_COOLDOWN - cooldownReduction;
-	eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
+	if (jetMode):
+		eTimer = E_COOLDOWN - cooldownReduction;
+		eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
+	else:
+		eTimer = 1.0;
+	
 	tertiaryTimer = 0.5;
 	
 	$fireParticle01.emitting = not jetMode;
@@ -486,7 +494,7 @@ func ultimate_ability():
 	jetMode = false;
 	
 	usingUltimate = true;
-	ultimateTimer = 0.75;
+	ultimateTimer = 0.95;
 	rTimer = R_COOLDOWN - cooldownReduction;
 	rTimer = clamp(rTimer, 10.0, R_COOLDOWN);
 	
