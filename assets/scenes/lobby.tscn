@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="4_6ddyr"]
 [ext_resource type="Texture2D" uid="uid://bgxdrts1u2nww" path="res://assets/sprites/circle.png" id="4_mh50d"]
 [ext_resource type="Texture2D" uid="uid://cwomrtxwutbck" path="res://assets/sprites/432352.webp" id="4_ydlbi"]
-[ext_resource type="Texture2D" uid="uid://04agxibx75iw" path="res://rf icon.png" id="6_mh50d"]
+[ext_resource type="Texture2D" uid="uid://cp1smkpw8u66t" path="res://icon.png" id="6_mh50d"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="6_qe23s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qe23s"]

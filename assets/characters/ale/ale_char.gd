@@ -122,27 +122,6 @@ func _ready() -> void:
 	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
 
-func rotateChar(newPos) -> void:
-	if not (newPos):
-		return;
-	
-	var direction = (newPos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-
-	var targetRotation = atan2(direction.x, direction.z);
-
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-
-	var tween = get_tree().create_tween();
-	tween.tween_property(
-		self,
-		"rotation",
-		Vector3(rotation.x, shortestAngle, rotation.z),
-		0.18
-	);
-
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
 		if (Engine.get_physics_frames() % 15 == 0):
@@ -492,7 +471,7 @@ func syncPosition(newPos):
 
 @rpc("call_local", "any_peer")
 func syncRotation(newPos):
-	rotateChar(newPos);
+	PlayerFunc.rotateChar(self, newPos);
 
 @rpc("any_peer")
 func syncStun(_isStunned, _stunDuration):
@@ -517,7 +496,7 @@ func simulateMove(newPos, _global_pos = Vector3.ZERO):
 		moveTo = _global_pos;
 		return;
 	
-	rotateChar(newPos);
+	PlayerFunc.rotateChar(self, newPos);
 	moveTo = newPos;
 
 @rpc("any_peer", "call_local")

@@ -14,6 +14,7 @@ var shield = 0;
 
 const BASIC_ATTACK_COOLDOWN = 300;
 const CHARACTER_NAME = "Rhay";
+const ROTATION_OFFSET = PI;
 const Q_COOLDOWN = 8.5;
 const W_COOLDOWN = 7.5;
 const E_COOLDOWN = 13.0;
@@ -110,26 +111,6 @@ func _ready() -> void:
 			
 	name = str(get_multiplayer_authority());
 	PlayerFunc.setup(self);
-
-func rotateChar(newPos) -> void:
-	var direction = (newPos - global_position);
-	direction.y = 0;
-	direction = direction.normalized();
-
-	var targetRotation = atan2(direction.x, direction.z);
-	var offset = deg_to_rad(180);
-	targetRotation += offset;
-
-	var curRotation = rotation.y;
-	var shortestAngle = lerp_angle(curRotation, targetRotation, 1.0);
-
-	var tween = get_tree().create_tween();
-	tween.tween_property(
-		self,
-		"rotation",
-		Vector3(rotation.x, shortestAngle, rotation.z),
-		0.18
-	);
 
 func _physics_process(delta: float) -> void:
 	if (is_multiplayer_authority()):
@@ -428,7 +409,7 @@ func syncPosition(newPos):
 
 @rpc("call_local", "any_peer")
 func syncRotation(newPos):
-	rotateChar(newPos);
+	PlayerFunc.rotateChar(self, newPos);
 
 @rpc("any_peer")
 func syncStun(_isStunned, _stunDuration):
@@ -454,7 +435,7 @@ func simulateMove(newPos, _global_pos = Vector3.ZERO):
 		return;
 	
 	if not (usingTertiary):
-		rotateChar(newPos);
+		PlayerFunc.rotateChar(self, newPos);
 	
 	moveTo = newPos;
 

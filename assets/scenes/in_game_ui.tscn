@@ -1,18 +1,17 @@
 [gd_scene load_steps=20 format=3 uid="uid://cs5f0x4jchyj2"]
 
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
-
 [ext_resource type="Texture2D" uid="uid://bqvlgjtvn4m72" path="res://assets/sprites/emptyJuiceBar.png" id="1_cjvv2"]
 [ext_resource type="Script" uid="uid://ds1ln6vtwi60r" path="res://assets/scenes/in_game_ui.gd" id="1_grbm3"]
 [ext_resource type="Texture2D" uid="uid://dbckibdh2tcx6" path="res://assets/sprites/live.png" id="1_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://bxihtjbi6dggi" path="res://assets/sprites/healthBar.png" id="2_l0sqe"]
 [ext_resource type="Texture2D" uid="uid://cykk3esfs5ixd" path="res://assets/sprites/juiceBar.png" id="3_grbm3"]
 [ext_resource type="Texture2D" uid="uid://fbshlh7bogar" path="res://assets/textures/Grass001_1K-JPG_NormalDX.jpg" id="4_6hcns"]
-[ext_resource type="Texture2D" uid="uid://04agxibx75iw" path="res://rf icon.png" id="5_ksudb"]
+[ext_resource type="Texture2D" uid="uid://cp1smkpw8u66t" path="res://icon.png" id="5_ksudb"]
 [ext_resource type="Texture2D" uid="uid://bwaiu1jy0cnke" path="res://assets/textures/Ground013_1K-JPG_Color.jpg" id="6_rl4ok"]
 [ext_resource type="Shader" uid="uid://b3pome8s7hhf6" path="res://assets/scripts/shaders/UI_outline.gdshader" id="9_6hcns"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="9_ksudb"]
-[ext_resource type="Texture2D" uid="uid://04agxibx75iw" path="res://rf icon.png" id="11_rl4ok"]
+[ext_resource type="Texture2D" uid="uid://cp1smkpw8u66t" path="res://icon.png" id="11_rl4ok"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4i24o"]
 font = ExtResource("99_mussels")

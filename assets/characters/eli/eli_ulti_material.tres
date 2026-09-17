@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bu0ctgmoik2bx"]
+
+[ext_resource type="Shader" uid="uid://bdt0hojl4mwr" path="res://assets/scripts/shaders/eli_toon_shader.gdshader" id="1_qg3jj"]
+
+[sub_resource type="Gradient" id="Gradient_dm4op"]
+offsets = PackedFloat32Array(0, 0.6694915, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.9552023, 0.40132555, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kdabp"]
+gradient = SubResource("Gradient_dm4op")
+
+[sub_resource type="Gradient" id="Gradient_ov23i"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ohlot"]
+gradient = SubResource("Gradient_ov23i")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qg3jj")
+shader_parameter/albedo = Color(0.56019676, 0.22137907, 0.6662876, 1)
+shader_parameter/color_gradient = SubResource("GradientTexture1D_kdabp")
+shader_parameter/fresnel_gradient = SubResource("GradientTexture1D_ohlot")
+shader_parameter/color_flow_speed = 2.0
+shader_parameter/color_flow_scale = 4.0
+shader_parameter/color_flow_strength = 0.2

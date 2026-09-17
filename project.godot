@@ -12,10 +12,11 @@ config_version=5
 
 config/name="Random Fighters"
 config/description="A MOBA that changes each round."
-config/version="0.15.0"
+config/version="0.16.0"
 run/main_scene="uid://cwq5xwhdfkoh6"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="uid://04agxibx75iw"
+config/icon="uid://cp1smkpw8u66t"
+config/windows_native_icon="res://icon_windows.ico"
 
 [autoload]
 
