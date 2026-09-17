@@ -23,6 +23,7 @@ const SCENES := [
 	"res://assets/characters/rhay/rhay.tscn",
 	"res://assets/characters/rio/rio.tscn",
 	"res://assets/characters/shugo/shugo.tscn",
+	"res://assets/characters/eli/eli.tscn",
 	# character abilities
 	"res://assets/characters/clean/cleanBasic.tscn",
 	"res://assets/characters/clean/cleanSpecialBasic.tscn",
@@ -44,6 +45,9 @@ const SCENES := [
 	"res://assets/characters/rio/rio_e_web.tscn",
 	"res://assets/characters/shugo/shugo_w_ability.tscn",
 	"res://assets/characters/shugo/shugo_k_e_ability.tscn",
+	"res://assets/characters/eli/eliBasic.tscn",
+	"res://assets/characters/eli/eli_projectile.tscn",
+	"res://assets/characters/eli/eli_r_circle.tscn",
 	# shared character nodes
 	"res://assets/characters/dead_particles.tscn",
 	"res://assets/characters/auto_basic_area.tscn",

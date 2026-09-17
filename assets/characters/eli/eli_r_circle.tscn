@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdxw3iwstrno4"]
+
+[ext_resource type="Material" uid="uid://dvy17ydea5q1f" path="res://assets/characters/eli/cool_fire_shader.tres" id="1_eodqv"]
+[ext_resource type="Script" uid="uid://dai2rd88b584m" path="res://assets/characters/eli/eli_r_circle.gd" id="1_i7sr7"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lwv67"]
+height = 0.1
+
+[node name="r_circle" type="Node3D"]
+transform = Transform3D(3.0000007, 0, 0, 0, 4.2480016, 0, 0, 0, 2.766, 0, 0, 0)
+script = ExtResource("1_i7sr7")
+
+[node name="fire1" type="MeshInstance3D" parent="."]
+transform = Transform3D(7.63487, 0, 0, 0, 1, 0, 0, 0, 8, 0, 0, 0)
+mesh = SubResource("CylinderMesh_lwv67")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_eodqv")
+
+[node name="fire2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-6.6119924, 0, 4.0000014, 0, 1, 0, -3.8174362, 0, -6.9282045, 0, 0, 0)
+mesh = SubResource("CylinderMesh_lwv67")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_eodqv")

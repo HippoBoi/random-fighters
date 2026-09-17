@@ -91,6 +91,22 @@ func _getHealthBarColor(character: CharacterBody3D) -> Color:
 	var enemyTeamColor = Color(0.769, 0.17, 0.182);
 	return myTeamColor if character.team == myTeam else enemyTeamColor;
 
+func _isInvincible(character) -> bool:
+	if not (is_instance_valid(character)):
+		return false;
+	if not (character.has_method("isInvincible")):
+		return false;
+
+	return character.isInvincible();
+
+func refreshHealthInvincibility(character: CharacterBody3D) -> void:
+	if not (is_instance_valid(character) and character.has_node("CharacterUI")):
+		return;
+
+	var charUI = character.get_node("CharacterUI");
+	if (charUI.has_method("setInvincible")):
+		charUI.setInvincible(_isInvincible(character));
+
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	
@@ -113,7 +129,7 @@ func _getMousePos(character):
 	var intersection = spaceState.intersect_ray(query);
 	
 	if (intersection.is_empty() or "team" not in intersection.collider):
-		var hoverRadius = 3.5;
+		var hoverRadius = 2.5;
 		var nearestChar = _getNearestCharacterToMouse(character, rayOrigin, hoverRadius);
 		if nearestChar:
 			intersection = {"collider": nearestChar, "position": nearestChar.global_position}
@@ -1197,6 +1213,8 @@ func _applyDealDamage(character, target, dmg, effect := "", trueDamage := false)
 		return null;
 	if ("dead" in target and target.dead):
 		return null;
+	if (_isInvincible(target)):
+		return null;
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
@@ -1413,9 +1431,7 @@ func showCharactersUI(character):
 	for playerID in Server.playersInfo:
 		var player = Server.playersInfo[playerID];
 		var charUI = preload("res://assets/characters/character_ui.tscn").instantiate();
-		var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 		charUI.get_node("PlayerName/SubViewport/Label").text = player.username;
-		healthBar.color = Color(0, 0, 0);
 		player.charInstance.add_child(charUI);
 		updateHealthSize(player.charInstance);
 	
@@ -1476,6 +1492,11 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 	var shieldBar = charUI.get_node("HealthUI/SubViewport/emptyBar/shieldBar");
 	var levelText = charUI.get_node("HealthUI/SubViewport/levelPanel/levelText");
+	if (charUI.has_method("setBaseHealthColor")):
+		charUI.setBaseHealthColor(_getHealthBarColor(character));
+	if (charUI.has_method("setInvincible")):
+		charUI.setInvincible(_isInvincible(character));
+
 	healthBar.scale.x = character.hp / character.maxHp;
 	shieldBar.scale.x = character.shield / character.maxHp;
 	levelText.text = str(character.level);
@@ -1490,19 +1511,10 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	
 	_calculateHealthBars(character);
 	
-	if (healthBar.color == Color(0, 0, 0)):
-		healthBar.color = _getHealthBarColor(character);
-	
 	# adjust shield position so it moves right to left
 	var base_width := 110;
 	shieldBar.position.x = base_width * (1.0 - shieldBar.scale.x)
 	
 	if (damaged):
-		var defaultColor = _getHealthBarColor(character);
-		var duration = 0.1;
-		var damagedColor = Color(1, 0.65, 0.45);
-		if (character.shield > 0):
-			damagedColor = Color(0.6, 0.4, 0.71);
-		var tween = character.create_tween();
-		healthBar.color = damagedColor;
-		tween.tween_property(healthBar, "color", defaultColor, duration);
+		if (charUI.has_method("flashDamage")):
+			charUI.flashDamage(character.shield > 0);

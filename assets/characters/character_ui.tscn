@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpwyventqbr55"]
+[gd_scene load_steps=7 format=3 uid="uid://cpwyventqbr55"]
 
+[ext_resource type="Script" path="res://assets/characters/character_ui.gd" id="1_character_ui"]
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_bwqgb"]
@@ -17,6 +18,7 @@ outline_color = Color(0, 0, 0, 1)
 
 [node name="CharacterUI" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+script = ExtResource("1_character_ui")
 
 [node name="HealthUI" type="Sprite3D" parent="."]
 transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)

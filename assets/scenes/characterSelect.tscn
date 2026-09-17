@@ -6,7 +6,6 @@
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="2_tnaqc"]
 [ext_resource type="Texture2D" uid="uid://cd2dq1xkgmvd2" path="res://assets/sprites/ramon.png" id="3_r2fdo"]
 [ext_resource type="Texture2D" uid="uid://cnr42q30is1ll" path="res://assets/sprites/clean.png" id="4_lp8jo"]
-[ext_resource type="Texture2D" uid="uid://chlq51odogpct" path="res://assets/textures/Kris_Overworld_b.webp" id="5_45thu"]
 [ext_resource type="Shader" uid="uid://dw03usuibtjic" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="5_ei6tf"]
 [ext_resource type="Texture2D" uid="uid://he46kwaimprs" path="res://assets/sprites/shugo.png" id="5_ux7vi"]
 [ext_resource type="Texture2D" uid="uid://ce1p48mexskks" path="res://assets/sprites/nephi.png" id="6_1lgrt"]
@@ -14,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
 [ext_resource type="Texture2D" uid="uid://dqdpwunesijl2" path="res://assets/sprites/rio.png" id="13_dmdnx"]
+[ext_resource type="Texture2D" uid="uid://b50iwytqkrn7d" path="res://assets/sprites/eli.png" id="14_45thu"]
 [ext_resource type="Shader" uid="uid://cmrmtbttdxq26" path="res://assets/scenes/real_UI_outline.gdshader" id="16_0o2ln"]
 [ext_resource type="Texture2D" uid="uid://c256vx6id2hpb" path="res://assets/characters/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="16_ndpmk"]
 [ext_resource type="Texture2D" uid="uid://bhwaxqlikpsvk" path="res://assets/sprites/UI/curves1.png" id="18_45thu"]
@@ -728,7 +728,7 @@ offset_right = 34.0
 offset_bottom = 32.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("5_45thu")
+texture = ExtResource("14_45thu")
 expand_mode = 1
 stretch_mode = 6
 

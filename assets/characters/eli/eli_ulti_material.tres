@@ -17,6 +17,9 @@ gradient = SubResource("Gradient_ov23i")
 [resource]
 render_priority = 0
 shader = ExtResource("1_qg3jj")
-shader_parameter/albedo = Color(0.39304024, 0.19906706, 0.63049984, 1)
+shader_parameter/albedo = Color(0.56019676, 0.22137907, 0.6662876, 1)
 shader_parameter/color_gradient = SubResource("GradientTexture1D_kdabp")
 shader_parameter/fresnel_gradient = SubResource("GradientTexture1D_ohlot")
+shader_parameter/color_flow_speed = 2.0
+shader_parameter/color_flow_scale = 4.0
+shader_parameter/color_flow_strength = 0.2

@@ -3,8 +3,9 @@
 [ext_resource type="Shader" uid="uid://b482ssvtfuccd" path="res://assets/scripts/shaders/electricity_shader.tres" id="1_dt00y"]
 
 [resource]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_dt00y")
 shader_parameter/markColor = Color(2.203179, 1.3302094, 1.3469973, 1)
 shader_parameter/scroll_speed = Vector2(-0.05, -1.27)
-shader_parameter/FloatParameter = 0.5
+shader_parameter/Transparency = 0.5

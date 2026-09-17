@@ -15,16 +15,16 @@ const CHARACTER_NAME = "Eli";
 const Q_COOLDOWN = 5.5;
 const Q_MAX_RANGE = 12.0;
 const W_COOLDOWN = 9.25;
-const E_COOLDOWN = 5.0;
+const E_COOLDOWN = 4.0;
 const R_COOLDOWN = 10.0;
 
 var primaryDesc = "HOLD to charge an explosion at your mouse position. RELEASE to fire. Deals 75% / 125% PHYSICAL DAMAGE depending on charge time. Enemies hit are also slowed.";
 var primaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var secondaryDesc = "Spin around and push enemies away dealing 75% of your PHYSICAL DAMAGE. If used when JET is active, it will deal more DAMAGE instead of pushing enemies.";
+var secondaryDesc = "Spin around and push enemies away dealing 75% of your PHYSICAL DAMAGE. If used when JET is active, it will deal more DAMAGE and cancel the JET ability.";
 var secondaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 var tertiaryDesc = "Get on your JET which allows you to fly at high speeds and double your PHYSICAL DEFENSE. You can NOT use BASIC ATTACKS while flying. Press again to unmount.";
 var tertiaryIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
-var ultiDesc = "";
+var ultiDesc = "Become INVINCIBLE for 5 seconds. Slow and damage nearby enemies dealing 65 of your PHYSICAL DAMAGE";
 var ultiIcon = "res://assets/sprites/clean_abilities/clean_ultimate.png";
 
 var qTimer = 0;
@@ -100,12 +100,16 @@ var jetMode: bool = false;
 
 var alreadyHitWind = [];
 var alreadyHitSpinDamage = [];
+var alreadyHitUlti = [];
 
 const MAX_CHARGE_TIME: float = 4.0;
 const CHARGE_SLOW_AMOUNT: float = 0.4;
 const Q_FIRE_CIRCLE_INITIAL_SCALE := Vector3(1.5, 1.5, 1.5);
 const Q_FIRE_CIRCLE_FULL_CHARGE_SCALE := Vector3(0.1, 0.5, 0.1);
+
 const R_MAX_DURATION = 5.0;
+var rActive = false;
+var rActiveTimer = 0;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
@@ -262,9 +266,14 @@ func _physics_process(delta: float) -> void:
 		
 		if (ultimateTimer <= 0):
 			usingUltimate = false;
-			
-			# TODO: enable ulti
-			_toggle_toon_shader(true);
+
+			if not (dead):
+				_toggleUlti(true);
+	elif (rActive):
+		rActiveTimer -= delta;
+
+		if (dead or rActiveTimer <= 0):
+			_toggleUlti(false);
 
 	if (bufferedMoveTo and moveTo == null):
 		moveTo = bufferedMoveTo;
@@ -356,6 +365,30 @@ func _doSpin():
 	windArea.monitoring = true;
 	damageArea.monitoring = true;
 
+func _toggleUlti(enable: bool = true):
+	rActive = enable;
+	_toggle_toon_shader(enable);
+	PlayerFunc.refreshHealthInvincibility(self);
+
+	if (enable):
+		var rCircle = preload("res://assets/characters/eli/eli_r_circle.tscn").instantiate();
+		add_child(rCircle);
+
+		$r_explosionParts.emitting = true;
+
+		rCircle.global_position = global_position;
+		rCircle.global_position.y = 0;
+		
+		rActiveTimer = R_MAX_DURATION;
+		
+		$r_hitbox/MeshInstance3D/Area3D.monitoring = true;
+		
+		await get_tree().create_timer(0.1).timeout;
+		$r_hitbox/MeshInstance3D/Area3D.monitoring = false;
+
+func isInvincible() -> bool:
+	return rActive;
+
 func basicAttack():
 	if (jetMode or chargingPrimary):
 		return;
@@ -439,8 +472,8 @@ func _setup_ultimate():
 func _toggle_toon_shader(enable: bool):
 	if (enable):
 		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
-			if (child.name == "handL" or child.name == "handR"):
-				continue;
+			# if (child.name == "visor"):
+				# continue;
 			
 			var toon_shader = preload("res://assets/characters/eli/eli_ulti_material.tres");
 			child.set_surface_override_material(0, toon_shader);
@@ -461,6 +494,15 @@ func secondary_ability():
 
 	alreadyHitSpinDamage = [];
 	alreadyHitWind = [];
+	
+	if (jetMode):
+		jetMode = false;
+		
+		$fireParticle01.emitting = false;
+		$fireParticle02.emitting = false;
+		
+		eTimer = E_COOLDOWN - cooldownReduction;
+		eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
 
 @rpc("call_local", "reliable")
 func tertiary_ability():
@@ -492,6 +534,11 @@ func ultimate_ability():
 	
 	usingTertiary = false;
 	jetMode = false;
+	
+	eTimer = E_COOLDOWN - cooldownReduction;
+	eTimer = clamp(eTimer, 1.0, E_COOLDOWN);
+	
+	alreadyHitUlti = [];
 	
 	usingUltimate = true;
 	ultimateTimer = 0.95;
@@ -595,6 +642,11 @@ func syncParticles(effect: String, offset: Vector3 = Vector3(0, 2, 0)):
 
 @rpc("any_peer")
 func syncRespawn(newHp: float, newPos: Vector3):
+	usingUltimate = false;
+	ultimateTimer = 0;
+	if (rActive):
+		_toggleUlti(false);
+
 	global_position = newPos;
 	hp = newHp;
 	dead = false;
@@ -633,12 +685,28 @@ func _on_w_hitbox_hit(other: Node3D, isWind: bool) -> void:
 
 	if (jetMode):
 		dmgMultiplier = 1.5;
-	else:
-		if (isWind) and not (wasHitByWind):
-			alreadyHitWind.append(other);
-			var pushDirection = (other.global_position - global_position).normalized();
-			PlayerFunc.moveTarget(other, 0.5, other.global_position + pushDirection * 8, 12);
+		
+	if (isWind) and not (wasHitByWind):
+		alreadyHitWind.append(other);
+		var pushDirection = (other.global_position - global_position).normalized();
+		PlayerFunc.moveTarget(other, 0.5, other.global_position + pushDirection * 8, 12);
 		
 	if not (wasHitByDamage):
 		alreadyHitSpinDamage.append(other);
 		PlayerFunc.dealDamage(self, other, baseDamage * dmgMultiplier, "fire_hit_01");
+
+func _on_r_hitbox_enter(other: Node3D) -> void:
+	var isCharacter = "CHARACTER_NAME" in other
+	if not (isCharacter):
+		return;
+
+	if (other.team == team):
+		return;
+
+	var wasHit = alreadyHitUlti.has(other);
+	var baseDamage = dmg * 0.65;
+		
+	if not (wasHit):
+		alreadyHitUlti.append(other);
+		PlayerFunc.dealDamage(self, other, baseDamage, "hit_02");
+		PlayerFunc.slowTarget(other, 0.45);

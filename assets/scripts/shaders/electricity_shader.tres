@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=12 format=3 uid="uid://b482ssvtfuccd"]
+[gd_resource type="VisualShader" load_steps=22 format=3 uid="uid://b482ssvtfuccd"]
 
 [ext_resource type="Texture2D" uid="uid://byp1eccdfnj71" path="res://assets/textures/fx/T_groundmark_emissive.png" id="1_db5bu"]
 
@@ -11,9 +11,44 @@ default_value = 0.5
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_h077p"]
 operator = 2
 
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_uv"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeVec2Constant" id="VisualShaderNodeVec2Constant_center"]
+constant = Vector2(0.5, 0.5)
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_centered_uv"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+operator = 1
+
+[sub_resource type="VisualShaderNodeVec2Constant" id="VisualShaderNodeVec2Constant_edge_scale"]
+constant = Vector2(2, 2)
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_edge_scale"]
+default_input_values = [0, Vector2(0, 0), 1, Vector2(0, 0)]
+op_type = 0
+operator = 2
+
+[sub_resource type="VisualShaderNodeVectorLen" id="VisualShaderNodeVectorLen_edge_distance"]
+default_input_values = [0, Vector2(0, 0)]
+op_type = 0
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_one"]
+constant = 1.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_edge_falloff"]
+operator = 1
+
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_h077p"]
 expanded_output_ports = [0]
 texture = ExtResource("1_db5bu")
+
+[sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_clamp_edge_falloff"]
+function = 18
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_apply_edge_falloff"]
+operator = 2
 
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_uif80"]
 expanded_output_ports = [0]
@@ -124,4 +159,24 @@ nodes/fragment/10/node = SubResource("VisualShaderNodeFloatParameter_db5bu")
 nodes/fragment/10/position = Vector2(0, 520)
 nodes/fragment/11/node = SubResource("VisualShaderNodeFloatOp_h077p")
 nodes/fragment/11/position = Vector2(430, 240)
-nodes/fragment/connections = PackedInt32Array(3, 1, 4, 0, 4, 0, 0, 1, 5, 0, 0, 0, 6, 0, 8, 0, 7, 0, 8, 1, 8, 0, 9, 2, 9, 0, 2, 0, 11, 0, 4, 1, 10, 0, 11, 1, 2, 1, 11, 0)
+nodes/fragment/12/node = SubResource("VisualShaderNodeInput_uv")
+nodes/fragment/12/position = Vector2(260, 700)
+nodes/fragment/13/node = SubResource("VisualShaderNodeVec2Constant_center")
+nodes/fragment/13/position = Vector2(260, 800)
+nodes/fragment/14/node = SubResource("VisualShaderNodeVectorOp_centered_uv")
+nodes/fragment/14/position = Vector2(500, 700)
+nodes/fragment/15/node = SubResource("VisualShaderNodeVec2Constant_edge_scale")
+nodes/fragment/15/position = Vector2(500, 820)
+nodes/fragment/16/node = SubResource("VisualShaderNodeVectorOp_edge_scale")
+nodes/fragment/16/position = Vector2(720, 700)
+nodes/fragment/17/node = SubResource("VisualShaderNodeVectorLen_edge_distance")
+nodes/fragment/17/position = Vector2(940, 700)
+nodes/fragment/18/node = SubResource("VisualShaderNodeFloatConstant_one")
+nodes/fragment/18/position = Vector2(940, 820)
+nodes/fragment/19/node = SubResource("VisualShaderNodeFloatOp_edge_falloff")
+nodes/fragment/19/position = Vector2(1160, 700)
+nodes/fragment/20/node = SubResource("VisualShaderNodeFloatFunc_clamp_edge_falloff")
+nodes/fragment/20/position = Vector2(1360, 700)
+nodes/fragment/21/node = SubResource("VisualShaderNodeFloatOp_apply_edge_falloff")
+nodes/fragment/21/position = Vector2(1550, 420)
+nodes/fragment/connections = PackedInt32Array(3, 1, 4, 0, 4, 0, 0, 1, 5, 0, 0, 0, 6, 0, 8, 0, 7, 0, 8, 1, 8, 0, 9, 2, 9, 0, 2, 0, 11, 0, 4, 1, 10, 0, 11, 1, 2, 1, 11, 0, 4, 0, 21, 0, 12, 0, 14, 0, 13, 0, 14, 1, 14, 0, 16, 0, 15, 0, 16, 1, 16, 0, 17, 0, 18, 0, 19, 0, 17, 0, 19, 1, 19, 0, 20, 0, 20, 0, 21, 1)
