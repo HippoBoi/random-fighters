@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=42 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -23,15 +23,16 @@
 [ext_resource type="Texture2D" uid="uid://be82yxmg3noj8" path="res://assets/sprites/UI/curves2.png" id="19_clahg"]
 [ext_resource type="Texture2D" uid="uid://kdgbxlnmycvq" path="res://assets/sprites/UI/curves3.png" id="20_5xwma"]
 [ext_resource type="Texture2D" uid="uid://bgxdrts1u2nww" path="res://assets/sprites/circle.png" id="21_45thu"]
+[ext_resource type="Texture2D" uid="uid://xg2paa6fpjev" path="res://assets/sprites/UI/curves4.png" id="24_26cqg"]
 [ext_resource type="FontFile" uid="uid://bvvenb1cu7le2" path="res://addons/fonts/tl_mussels/TT Mussels Trial Medium.otf" id="99_mussels"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_45thu"]
 shader = ExtResource("2_tnaqc")
-shader_parameter/MOVE_SPEED = 0.75
+shader_parameter/MOVE_SPEED = 0.25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5xwma"]
 shader = ExtResource("2_tnaqc")
-shader_parameter/MOVE_SPEED = 0.25
+shader_parameter/MOVE_SPEED = 0.05
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ro2wk"]
 shader = ExtResource("2_70d5h")
@@ -97,11 +98,14 @@ animations = [{
 "duration": 1.21,
 "texture": ExtResource("18_45thu")
 }, {
-"duration": 1.21,
+"duration": 1.0,
 "texture": ExtResource("19_clahg")
 }, {
 "duration": 1.21,
 "texture": ExtResource("20_5xwma")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_26cqg")
 }],
 "loop": true,
 "name": &"default",
@@ -167,7 +171,7 @@ expand_mode = 1
 stretch_mode = 1
 
 [node name="loopingBG3" type="TextureRect" parent="."]
-modulate = Color(0, 0, 0, 0.337)
+modulate = Color(0.047058824, 0, 0, 0.3372549)
 z_index = -3
 material = SubResource("ShaderMaterial_5xwma")
 layout_mode = 1
@@ -208,9 +212,9 @@ color = Color(0, 0, 0, 1)
 
 [node name="CharacterScroll" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_left = 42.5
+offset_left = 30.5
 offset_top = 63.0
-offset_right = 441.5
+offset_right = 432.5
 offset_bottom = 322.0
 theme = ExtResource("5_bdf08")
 horizontal_scroll_mode = 0
@@ -219,10 +223,10 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 
 [node name="CharacterTemplate" type="Control" parent="CharacterScroll/Characters"]
+visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_bottom = 70.0
-scale = Vector2(0.95, 0.95)
 size_flags_horizontal = 0
 
 [node name="Hexagon" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
@@ -910,9 +914,9 @@ mouse_filter = 2
 
 [node name="BlackTeamText" type="RichTextLabel" parent="MultiplayerOnly"]
 layout_mode = 0
-offset_left = 7.5
+offset_left = 8.5
 offset_top = 17.0
-offset_right = 81.5
+offset_right = 82.5
 offset_bottom = 38.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("99_mussels")
@@ -935,9 +939,9 @@ grow_vertical = 2
 
 [node name="WhiteTeamText" type="RichTextLabel" parent="MultiplayerOnly"]
 layout_mode = 0
-offset_left = 563.5
+offset_left = 567.5
 offset_top = 16.0
-offset_right = 641.5
+offset_right = 645.5
 offset_bottom = 37.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/normal_font = ExtResource("99_mussels")
@@ -1122,18 +1126,18 @@ theme = SubResource("Theme_koq6x")
 text = "Quit"
 
 [node name="leftBorder" type="AnimatedSprite2D" parent="."]
-modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+modulate = Color(0.10851679, 0.11335301, 0.21826538, 1)
 z_index = -2
-position = Vector2(-10.25, 147)
+position = Vector2(13.75, 147)
 scale = Vector2(0.8142857, 0.7913044)
 sprite_frames = SubResource("SpriteFrames_bdf08")
 autoplay = "default"
 speed_scale = 0.75
 
 [node name="rightBorder" type="AnimatedSprite2D" parent="."]
-modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+modulate = Color(0.10980392, 0.11372549, 0.21960784, 1)
 z_index = -2
-position = Vector2(480.75, 147)
+position = Vector2(468.75, 147)
 scale = Vector2(0.8142857, 0.7913044)
 sprite_frames = SubResource("SpriteFrames_bdf08")
 autoplay = "default"
@@ -1146,17 +1150,37 @@ z_index = -2
 layout_mode = 0
 offset_left = -96.0
 offset_top = -35.0
-offset_right = -52.5
+offset_right = -43.5
 offset_bottom = 329.0
+
+[node name="leftRect2" type="ColorRect" parent="."]
+modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+z_index = -3
+layout_mode = 0
+offset_left = -62.0
+offset_top = -35.0
+offset_right = -18.5
+offset_bottom = 329.0
+color = Color(0.92156863, 0.9254902, 0.92941177, 1)
 
 [node name="rightRect" type="ColorRect" parent="."]
 modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
 z_index = -2
 layout_mode = 0
-offset_left = 520.0
+offset_left = 524.0
 offset_top = -35.0
-offset_right = 570.5
+offset_right = 574.5
 offset_bottom = 329.0
+
+[node name="rightRect2" type="ColorRect" parent="."]
+modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+z_index = -3
+layout_mode = 0
+offset_left = 492.0
+offset_top = -35.0
+offset_right = 542.5
+offset_bottom = 329.0
+color = Color(0.9223611, 0.92568135, 0.9311674, 1)
 
 [node name="CoolLines" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_clahg")
