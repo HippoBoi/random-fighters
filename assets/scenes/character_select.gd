@@ -3,8 +3,26 @@ extends Control
 @onready var whiteTeamContainer = $MultiplayerOnly/WhiteTeamContainer;
 @onready var blackTeamContainer = $MultiplayerOnly/BlackTeamContainer;
 @onready var playerTemplate = $PlayerTemplate;
-@onready var characterList = $Characters;
+@onready var characterScroll = $CharacterScroll;
+@onready var characterList = $CharacterScroll/Characters;
 @onready var secondsRemaining = $MultiplayerOnly/secondsRemaining;
+
+const CHARACTER_FOLDER = "res://assets/characters";
+const CHARACTERS_PER_ROW = 3;
+const VISIBLE_ROWS = 3.25;
+
+const CHARACTER_DISPLAY_NAMES = {
+	"ale": "Ale",
+	"clean": "Clean",
+	"eli": "Eli",
+	"mystery": "Mystery",
+	"nephi": "Nephi",
+	"ramon": "Ramón",
+	"rhay": "Rhay",
+	"rhay_v2": "Rhay V2",
+	"rio": "Rio",
+	"shugo": "Shugo",
+};
 
 var playersLength = 0;
 var playersLockedIn = [];
@@ -13,6 +31,8 @@ var selectedChar = "";
 var selectedButton: Button = null;
 var gameStarted = false;
 var singlePlayer: bool = false;
+
+var characterNames: Array[String] = [];
 
 signal onCharacterPressed(character);
 signal startGame;
@@ -23,6 +43,8 @@ var msTimer = 0;
 var timeInSeconds = 60;
 
 func _ready() -> void:
+	_generate_characters();
+
 	for character in characterList.get_children():
 		var charName = character.name;
 		var button: Button = character.get_node("Button");
@@ -36,6 +58,74 @@ func _ready() -> void:
 		$QuitButton.pressed.connect(_on_quit_button_pressed);
 
 		$MultiplayerOnly.visible = false;
+
+func _generate_characters() -> void:
+	characterNames = _get_character_names();
+
+	var template = characterList.get_node("CharacterTemplate");
+	template.visible = false;
+
+	for i in characterNames.size():
+		var character = template.duplicate();
+		character.name = characterNames[i];
+		_set_character_splash(character, characterNames[i]);
+		character.get_node("CharacterName").text = _display_name(characterNames[i]);
+		character.visible = true;
+		characterList.add_child(character);
+
+	template.free();
+
+	_position_characters();
+
+func _get_character_names() -> Array[String]:
+	var names: Array[String] = [];
+	var dir = DirAccess.open(CHARACTER_FOLDER);
+	if (dir == null):
+		push_error("[character_select]: could not open characters folder %s" % CHARACTER_FOLDER);
+		return names;
+
+	dir.list_dir_begin();
+	var entry = dir.get_next();
+	while (entry != ""):
+		if (dir.current_is_dir() and entry != "." and entry != ".."):
+			names.append(entry);
+		entry = dir.get_next();
+
+	return names;
+
+func _display_name(folder: String) -> String:
+	if (CHARACTER_DISPLAY_NAMES.has(folder)):
+		return CHARACTER_DISPLAY_NAMES[folder];
+	return folder.capitalize();
+
+func _set_character_splash(character: Control, folder: String) -> void:
+	var texture = load("res://assets/sprites/%s.png" % folder);
+	if (texture is Texture2D):
+		character.get_node("CharacterSplash").texture = texture;
+
+func _position_characters() -> void:
+	var characters = characterList.get_children();
+	var count = characters.size();
+	if (count == 0):
+		return;
+
+	var viewportSize = characterScroll.size;
+	var columns = CHARACTERS_PER_ROW;
+	var rows = ceili(float(count) / float(columns));
+	var cellWidth = viewportSize.x / float(columns);
+	var cellHeight = viewportSize.y / float(VISIBLE_ROWS);
+	var templateSize = characters[0].size;
+
+	for i in count:
+		var col = i % columns;
+		var row = i / columns;
+		var cellCenter = Vector2(
+			cellWidth * col + cellWidth / 2.0,
+			cellHeight * row + cellHeight / 2.0
+		);
+		characters[i].position = cellCenter - templateSize / 2.0;
+
+	characterList.custom_minimum_size = Vector2(viewportSize.x, float(rows) * cellHeight);
 
 func _process(delta: float) -> void:
 	timer += delta;

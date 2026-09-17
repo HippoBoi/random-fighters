@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=41 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -6,9 +6,12 @@
 [ext_resource type="Shader" uid="uid://d1qawo6wk7hfb" path="res://assets/scripts/shaders/scroll_faces_shader.gdshader" id="2_tnaqc"]
 [ext_resource type="Texture2D" uid="uid://cd2dq1xkgmvd2" path="res://assets/sprites/ramon.png" id="3_r2fdo"]
 [ext_resource type="Texture2D" uid="uid://cnr42q30is1ll" path="res://assets/sprites/clean.png" id="4_lp8jo"]
+[ext_resource type="Texture2D" uid="uid://c7v8t8k7iqbrx" path="res://assets/sprites/UI/hexagon.png" id="5_5xwma"]
+[ext_resource type="Theme" uid="uid://brkdfuu0bjgdx" path="res://assets/materials/menu_theme.tres" id="5_bdf08"]
 [ext_resource type="Shader" uid="uid://dw03usuibtjic" path="res://assets/scenes/wobbly_UI_shader.gdshader" id="5_ei6tf"]
 [ext_resource type="Texture2D" uid="uid://he46kwaimprs" path="res://assets/sprites/shugo.png" id="5_ux7vi"]
 [ext_resource type="Texture2D" uid="uid://ce1p48mexskks" path="res://assets/sprites/nephi.png" id="6_1lgrt"]
+[ext_resource type="FontFile" uid="uid://cwpd2roekfxay" path="res://addons/fonts/tl_mussels/TT Mussels Trial ExtraBold.otf" id="7_bdf08"]
 [ext_resource type="Shader" uid="uid://c7crpvx38smj" path="res://assets/scenes/UI_outline_solid.gdshader" id="10_0h5le"]
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
@@ -25,6 +28,10 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_45thu"]
 shader = ExtResource("2_tnaqc")
 shader_parameter/MOVE_SPEED = 0.75
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xwma"]
+shader = ExtResource("2_tnaqc")
+shader_parameter/MOVE_SPEED = 0.25
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ro2wk"]
 shader = ExtResource("2_70d5h")
@@ -159,6 +166,26 @@ texture = ExtResource("21_45thu")
 expand_mode = 1
 stretch_mode = 1
 
+[node name="loopingBG3" type="TextureRect" parent="."]
+modulate = Color(0, 0, 0, 0.337)
+z_index = -3
+material = SubResource("ShaderMaterial_5xwma")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -41.0
+offset_right = 770.0
+offset_bottom = 411.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("21_45thu")
+expand_mode = 1
+stretch_mode = 1
+
 [node name="bg" type="Panel" parent="."]
 visible = false
 material = SubResource("ShaderMaterial_ro2wk")
@@ -179,29 +206,45 @@ offset_right = 474.0
 offset_bottom = 10.0
 color = Color(0, 0, 0, 1)
 
-[node name="Characters" type="Control" parent="."]
+[node name="CharacterScroll" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 42.5
+offset_top = 63.0
+offset_right = 441.5
+offset_bottom = 322.0
+theme = ExtResource("5_bdf08")
+horizontal_scroll_mode = 0
+
+[node name="Characters" type="Control" parent="CharacterScroll"]
+layout_mode = 2
+
+[node name="CharacterTemplate" type="Control" parent="CharacterScroll/Characters"]
+layout_mode = 1
+anchors_preset = 0
+offset_bottom = 70.0
+scale = Vector2(0.95, 0.95)
+size_flags_horizontal = 0
+
+[node name="Hexagon" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
+z_index = -1
+texture_filter = 1
+texture_repeat = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -216.0
-offset_top = -16.0
-offset_right = 216.0
-offset_bottom = 54.0
+offset_left = -34.0
+offset_top = -32.5
+offset_right = 34.0
+offset_bottom = 32.5
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("5_5xwma")
+expand_mode = 1
 
-[node name="rhay_v2" type="Control" parent="Characters"]
-anchors_preset = 0
-offset_left = 84.0
-offset_top = -64.0
-offset_right = 84.0
-offset_bottom = 6.0
-size_flags_horizontal = 0
-
-[node name="CharacterSplash" type="TextureRect" parent="Characters/rhay_v2"]
+[node name="CharacterSplash" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
 texture_filter = 6
 texture_repeat = 1
 layout_mode = 1
@@ -220,7 +263,88 @@ texture = ExtResource("2_ctrvq")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/rhay_v2"]
+[node name="CharacterName" type="RichTextLabel" parent="CharacterScroll/Characters/CharacterTemplate"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -49.5
+offset_right = 37.0
+offset_bottom = -18.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = ExtResource("7_bdf08")
+text = "Rhay"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CharacterScroll/Characters/CharacterTemplate"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.5
+offset_top = -35.0
+offset_right = 35.5
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
+
+[node name="Characters_OLD" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -216.0
+offset_top = -16.0
+offset_right = 216.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="rhay_v2" type="Control" parent="Characters_OLD"]
+anchors_preset = 0
+offset_left = 84.0
+offset_top = -64.0
+offset_right = 84.0
+offset_bottom = 6.0
+size_flags_horizontal = 0
+
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/rhay_v2"]
+texture_filter = 6
+texture_repeat = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -32.5
+offset_right = 34.0
+offset_bottom = 32.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ctrvq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/rhay_v2"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -241,7 +365,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/rhay_v2"]
+[node name="Button" type="Button" parent="Characters_OLD/rhay_v2"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -259,7 +383,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="ramon" type="Control" parent="Characters"]
+[node name="ramon" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 172.0
 offset_top = -64.0
@@ -267,7 +391,7 @@ offset_right = 172.0
 offset_bottom = 6.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/ramon"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/ramon"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -283,7 +407,7 @@ grow_vertical = 2
 texture = ExtResource("3_r2fdo")
 expand_mode = 1
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/ramon"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/ramon"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -304,7 +428,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/ramon"]
+[node name="Button" type="Button" parent="Characters_OLD/ramon"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -322,7 +446,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="clean" type="Control" parent="Characters"]
+[node name="clean" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 259.0
 offset_top = -64.0
@@ -330,7 +454,7 @@ offset_right = 259.0
 offset_bottom = 6.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/clean"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/clean"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -347,7 +471,7 @@ texture = ExtResource("4_lp8jo")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/clean"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/clean"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -368,7 +492,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/clean"]
+[node name="Button" type="Button" parent="Characters_OLD/clean"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -386,7 +510,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="shugo" type="Control" parent="Characters"]
+[node name="shugo" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 348.0
 offset_top = -64.0
@@ -394,7 +518,7 @@ offset_right = 348.0
 offset_bottom = 6.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/shugo"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/shugo"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -411,7 +535,7 @@ texture = ExtResource("5_ux7vi")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/shugo"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/shugo"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -432,7 +556,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/shugo"]
+[node name="Button" type="Button" parent="Characters_OLD/shugo"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -450,7 +574,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="nephi" type="Control" parent="Characters"]
+[node name="nephi" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 46.0
 offset_top = 12.0
@@ -458,7 +582,7 @@ offset_right = 126.0
 offset_bottom = 82.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/nephi"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/nephi"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -475,7 +599,7 @@ texture = ExtResource("6_1lgrt")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/nephi"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/nephi"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -496,7 +620,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/nephi"]
+[node name="Button" type="Button" parent="Characters_OLD/nephi"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -514,7 +638,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="ale" type="Control" parent="Characters"]
+[node name="ale" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 131.0
 offset_top = 12.0
@@ -522,7 +646,7 @@ offset_right = 211.0
 offset_bottom = 82.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/ale"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/ale"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -539,7 +663,7 @@ texture = ExtResource("11_3vvea")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/ale"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/ale"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -560,7 +684,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/ale"]
+[node name="Button" type="Button" parent="Characters_OLD/ale"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -578,7 +702,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="mystery" type="Control" parent="Characters"]
+[node name="mystery" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 223.0
 offset_top = 12.0
@@ -586,7 +710,7 @@ offset_right = 303.0
 offset_bottom = 82.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/mystery"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/mystery"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -603,7 +727,7 @@ texture = ExtResource("12_x2it3")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/mystery"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/mystery"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -624,7 +748,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/mystery"]
+[node name="Button" type="Button" parent="Characters_OLD/mystery"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -642,7 +766,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="rio" type="Control" parent="Characters"]
+[node name="rio" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 311.0
 offset_top = 12.0
@@ -650,7 +774,7 @@ offset_right = 391.0
 offset_bottom = 82.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/rio"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/rio"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -666,7 +790,7 @@ grow_vertical = 2
 texture = ExtResource("13_dmdnx")
 expand_mode = 1
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/rio"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/rio"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -687,7 +811,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/rio"]
+[node name="Button" type="Button" parent="Characters_OLD/rio"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
@@ -705,7 +829,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
 
-[node name="eli" type="Control" parent="Characters"]
+[node name="eli" type="Control" parent="Characters_OLD"]
 anchors_preset = 0
 offset_left = 220.0
 offset_top = 88.0
@@ -713,7 +837,7 @@ offset_right = 220.0
 offset_bottom = 158.0
 size_flags_horizontal = 0
 
-[node name="CharacterSplash" type="TextureRect" parent="Characters/eli"]
+[node name="CharacterSplash" type="TextureRect" parent="Characters_OLD/eli"]
 texture_filter = 6
 texture_repeat = 1
 layout_mode = 1
@@ -732,7 +856,7 @@ texture = ExtResource("14_45thu")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="CharacterName" type="RichTextLabel" parent="Characters/eli"]
+[node name="CharacterName" type="RichTextLabel" parent="Characters_OLD/eli"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -753,7 +877,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="Characters/eli"]
+[node name="Button" type="Button" parent="Characters_OLD/eli"]
 z_index = 1
 layout_mode = 1
 anchors_preset = 8
