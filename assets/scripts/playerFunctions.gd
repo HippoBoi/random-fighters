@@ -4,6 +4,8 @@ const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
 const BASIC_ATTACK_COOLDOWN = 300;
 const HEALTH_AUTHORITY_PEER_ID = 1;
+const ROTATION_DURATION = 0.18;
+const ROTATION_TWEEN_META = &"_player_func_rotation_tween";
 
 var gameMode = "";
 var gameUI;
@@ -89,6 +91,22 @@ func _getHealthBarColor(character: CharacterBody3D) -> Color:
 	var enemyTeamColor = Color(0.769, 0.17, 0.182);
 	return myTeamColor if character.team == myTeam else enemyTeamColor;
 
+func _isInvincible(character) -> bool:
+	if not (is_instance_valid(character)):
+		return false;
+	if not (character.has_method("isInvincible")):
+		return false;
+
+	return character.isInvincible();
+
+func refreshHealthInvincibility(character: CharacterBody3D) -> void:
+	if not (is_instance_valid(character) and character.has_node("CharacterUI")):
+		return;
+
+	var charUI = character.get_node("CharacterUI");
+	if (charUI.has_method("setInvincible")):
+		charUI.setInvincible(_isInvincible(character));
+
 func _ready() -> void:
 	userPreferences = UserPreferences.loadOrCreate();
 	
@@ -111,7 +129,7 @@ func _getMousePos(character):
 	var intersection = spaceState.intersect_ray(query);
 	
 	if (intersection.is_empty() or "team" not in intersection.collider):
-		var hoverRadius = 3.5;
+		var hoverRadius = 2.5;
 		var nearestChar = _getNearestCharacterToMouse(character, rayOrigin, hoverRadius);
 		if nearestChar:
 			intersection = {"collider": nearestChar, "position": nearestChar.global_position}
@@ -1053,7 +1071,44 @@ func syncMovement(character):
 		if (character.CHARACTER_NAME == "Rhay" and character.usingTertiary):
 			return ;
 		
-		character.rotateChar(character.moveTo);
+		rotateChar(character, character.moveTo);
+
+func rotateChar(character: Node3D, newPos) -> void:
+	if not (is_instance_valid(character)) or newPos == null:
+		return;
+
+	var direction = newPos - character.global_position;
+	direction.y = 0;
+	if (direction.is_zero_approx()):
+		return;
+
+	var targetRotation = atan2(direction.x, direction.z);
+	if ("ROTATION_OFFSET" in character):
+		targetRotation += character.ROTATION_OFFSET;
+
+	var activeTween = character.get_meta(ROTATION_TWEEN_META) if character.has_meta(ROTATION_TWEEN_META) else null;
+	if (activeTween is Tween and activeTween.is_valid()):
+		activeTween.kill();
+
+	var startQuaternion = character.quaternion.normalized();
+	var targetEuler = character.rotation;
+	targetEuler.y = targetRotation;
+	var targetQuaternion = Quaternion.from_euler(targetEuler).normalized();
+
+	var tween = character.create_tween();
+	character.set_meta(ROTATION_TWEEN_META, tween);
+	tween.tween_method(
+		func(weight: float):
+			if (is_instance_valid(character)):
+				character.quaternion = startQuaternion.slerp(targetQuaternion, weight),
+		0.0,
+		1.0,
+		ROTATION_DURATION
+	);
+	tween.finished.connect(func():
+		if (is_instance_valid(character) and character.has_meta(ROTATION_TWEEN_META) and character.get_meta(ROTATION_TWEEN_META) == tween):
+			character.remove_meta(ROTATION_TWEEN_META);
+	);
 
 func stopCharacter(character, stopTarget = true):
 	character.velocity = Vector3.ZERO;
@@ -1158,6 +1213,8 @@ func _applyDealDamage(character, target, dmg, effect := "", trueDamage := false)
 		return null;
 	if ("dead" in target and target.dead):
 		return null;
+	if (_isInvincible(target)):
+		return null;
 	
 	var totalDmg = dmg * dmg / (dmg + target.armor);
 	var dmgAfterShield = 0;
@@ -1255,6 +1312,8 @@ func moveTarget(target, duration, finalPos, moveSpeed = 20, effect := ""): # bad
 		target.rpc("syncParticles", effect);
 
 func basicAttack(character):
+	if ("chargingPrimary" in character and character.chargingPrimary):
+		return;
 	stopCharacter(character, false);
 	if not (character.onAction or character.basicAttacking) and character.basicAttackTimer <= 0 and (character.target):
 		character.basicAttacking = true;
@@ -1372,9 +1431,7 @@ func showCharactersUI(character):
 	for playerID in Server.playersInfo:
 		var player = Server.playersInfo[playerID];
 		var charUI = preload("res://assets/characters/character_ui.tscn").instantiate();
-		var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 		charUI.get_node("PlayerName/SubViewport/Label").text = player.username;
-		healthBar.color = Color(0, 0, 0);
 		player.charInstance.add_child(charUI);
 		updateHealthSize(player.charInstance);
 	
@@ -1435,6 +1492,11 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	var healthBar = charUI.get_node("HealthUI/SubViewport/emptyBar/healthBar");
 	var shieldBar = charUI.get_node("HealthUI/SubViewport/emptyBar/shieldBar");
 	var levelText = charUI.get_node("HealthUI/SubViewport/levelPanel/levelText");
+	if (charUI.has_method("setBaseHealthColor")):
+		charUI.setBaseHealthColor(_getHealthBarColor(character));
+	if (charUI.has_method("setInvincible")):
+		charUI.setInvincible(_isInvincible(character));
+
 	healthBar.scale.x = character.hp / character.maxHp;
 	shieldBar.scale.x = character.shield / character.maxHp;
 	levelText.text = str(character.level);
@@ -1449,19 +1511,10 @@ func updateHealthSize(character: CharacterBody3D, damaged = false):
 	
 	_calculateHealthBars(character);
 	
-	if (healthBar.color == Color(0, 0, 0)):
-		healthBar.color = _getHealthBarColor(character);
-	
 	# adjust shield position so it moves right to left
 	var base_width := 110;
 	shieldBar.position.x = base_width * (1.0 - shieldBar.scale.x)
 	
 	if (damaged):
-		var defaultColor = _getHealthBarColor(character);
-		var duration = 0.1;
-		var damagedColor = Color(1, 0.65, 0.45);
-		if (character.shield > 0):
-			damagedColor = Color(0.6, 0.4, 0.71);
-		var tween = character.create_tween();
-		healthBar.color = damagedColor;
-		tween.tween_property(healthBar, "color", defaultColor, duration);
+		if (charUI.has_method("flashDamage")):
+			charUI.flashDamage(character.shield > 0);

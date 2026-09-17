@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://plq0tk2bbye2"]
+
+[ext_resource type="Shader" uid="uid://6f73lvef8ehm" path="res://assets/characters/eli/eli_basic_shader.gdshader" id="1_bboai"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bboai")
+shader_parameter/top_color = Color(2.18877, 1.0759717, 0, 1)
+shader_parameter/bottom_color = Color(1.6659015, 0, 0, 1)
+shader_parameter/scroll_speed = 3.058000145255
+shader_parameter/direction = -1.0
