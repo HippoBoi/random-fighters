@@ -49,6 +49,10 @@ func _ready() -> void:
 		var button: Button = character.get_node("Button");
 		button.pressed.connect(_on_character_pressed.bind(charName, button))
 
+		var hexagon: TextureRect = character.get_node("Hexagon");
+		button.mouse_entered.connect(_on_character_hover.bind(button, hexagon, true))
+		button.mouse_exited.connect(_on_character_hover.bind(button, hexagon, false))
+
 	if (singlePlayer):
 		$StartButton.visible = true;
 		$StartButton.disabled = true;
@@ -70,6 +74,12 @@ func _generate_characters() -> void:
 		_set_character_splash(character, characterNames[i]);
 		character.get_node("CharacterName").text = _display_name(characterNames[i]);
 		character.visible = true;
+
+		var hexagon: TextureRect = character.get_node("Hexagon");
+		hexagon.material = hexagon.material.duplicate();
+		character.set_meta("hexagon_modulate", hexagon.modulate);
+		character.set_meta("splash_modulate", character.get_node("CharacterSplash").modulate);
+
 		characterList.add_child(character);
 
 	template.free();
@@ -147,8 +157,7 @@ func updateTeams():
 	for child in whiteTeamContainer.get_children():
 		child.queue_free();
 	for character in characterList.get_children():
-		var button: Button = character.get_node("Button");
-		button.disabled = false;
+		_set_character_disabled(character, false);
 	
 	var playerList = Server.playersInfo;
 	playersLength = 0;
@@ -164,8 +173,7 @@ func updateTeams():
 		if (player.character):
 			for character in characterList.get_children():
 				if (character.name == player.character):
-					var button: Button = character.get_node("Button");
-					button.disabled = true;
+					_set_character_disabled(character, true);
 			
 			playerInfo.get_node("CharacterSplash").texture = load("res://assets/sprites/%s.png" % player.character);
 		
@@ -174,11 +182,34 @@ func updateTeams():
 		else:
 			whiteTeamContainer.add_child(playerInfo);
 
+func _set_character_disabled(character: Control, disabled: bool) -> void:
+	var button: Button = character.get_node("Button");
+	button.disabled = disabled;
+
+	var hexagon: TextureRect = character.get_node("Hexagon");
+	var splash: TextureRect = character.get_node("CharacterSplash");
+
+	if (disabled):
+		var hex = hexagon.modulate;
+		hexagon.modulate = Color(hex.r, hex.g, hex.b, 50.0 / 255.0);
+		var spl = splash.modulate;
+		splash.modulate = Color(spl.r, spl.g, spl.b, 90.0 / 255.0);
+	else:
+		hexagon.modulate = character.get_meta("hexagon_modulate");
+		splash.modulate = character.get_meta("splash_modulate");
+
+func _on_character_hover(button: Button, hexagon: TextureRect, shaking: bool) -> void:
+	if (button.disabled):
+		return;
+
+	if (hexagon.material is ShaderMaterial):
+		hexagon.material.set_shader_parameter("shaking", shaking);
+
 func _on_character_pressed(character: String, button: Button) -> void:
 	if (selectedButton):
-		selectedButton.disabled = false;
+		_set_character_disabled(selectedButton.get_parent(), false);
 	
-	button.disabled = true;
+	_set_character_disabled(button.get_parent(), true);
 	selectedChar = character;
 	selectedButton = button;
 

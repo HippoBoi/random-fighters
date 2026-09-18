@@ -4,6 +4,7 @@ uniform bool shaking       = false;
 uniform float amplitude    = 1.0;
 uniform float noise_scale  = 20.0;
 uniform float noise_speed  = 20.0;
+uniform vec4 color : source_color = vec4(1.0);
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123);
@@ -42,6 +43,6 @@ void fragment() {
 
     // Offset along a random direction
     vec2 uv2 = uv + rand_dir * off * TEXTURE_PIXEL_SIZE;
-    COLOR = texture(TEXTURE, uv2);
+    COLOR = texture(TEXTURE, uv2) * color;
   }
 }

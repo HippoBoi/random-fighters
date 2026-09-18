@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=48 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -39,6 +39,24 @@ shader = ExtResource("2_70d5h")
 shader_parameter/initial_color = Color(0.141519, 0.22597, 0.320184, 1)
 shader_parameter/final_color = Color(0.161417, 0.145697, 0.193517, 1)
 shader_parameter/vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_26cqg"]
+shader = ExtResource("5_ei6tf")
+shader_parameter/shaking = false
+shader_parameter/amplitude = 1.5
+shader_parameter/noise_scale = 20.0
+shader_parameter/noise_speed = 20.0
+shader_parameter/color = Color(0.5810141, 0.1615195, 0.39969972, 0.78039217)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_26cqg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_atdnr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yh7w6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yb7uc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8sebi"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wsrkv"]
 
@@ -118,6 +136,7 @@ shader_parameter/shaking = true
 shader_parameter/amplitude = 4.0
 shader_parameter/noise_scale = 200.0
 shader_parameter/noise_speed = 5.0
+shader_parameter/color = Color(1, 1, 1, 1)
 
 [node name="CharSelect" type="Control"]
 z_index = 1
@@ -223,16 +242,21 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 
 [node name="CharacterTemplate" type="Control" parent="CharacterScroll/Characters"]
+visible = false
 layout_mode = 1
 anchors_preset = 0
+offset_left = 32.0
+offset_right = 32.0
 offset_bottom = 70.0
 scale = Vector2(0.9, 0.9)
 size_flags_horizontal = 0
 
 [node name="Hexagon" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
+modulate = Color(0.31764707, 0.18431373, 0.19607843, 0.5529412)
 z_index = -1
 texture_filter = 1
 texture_repeat = 1
+material = SubResource("ShaderMaterial_26cqg")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -302,9 +326,11 @@ offset_right = 35.5
 offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_wsrkv")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ctrvq")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_wsrkv")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_26cqg")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_atdnr")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_yh7w6")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_yb7uc")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8sebi")
 
 [node name="Characters_OLD" type="Control" parent="."]
 visible = false
