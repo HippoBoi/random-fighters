@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://tpyci5cwaubk" path="res://assets/maps/lake_script.gd" id="1_smvvh"]
 [ext_resource type="PackedScene" uid="uid://bqxl78epgrfeg" path="res://assets/mapAssets/lake/lake_map.tscn" id="1_xgn1c"]
 [ext_resource type="PackedScene" uid="uid://s2mx8uv7sghg" path="res://assets/npcs/hippo/hippo.tscn" id="2_6plii"]
-[ext_resource type="Material" uid="uid://blm0btpc02hs2" path="res://assets/materials/water_material.tres" id="4_hu550"]
+[ext_resource type="Material" uid="uid://b4emk302klj7a" path="res://assets/materials/lake_water_material.tres" id="4_0ydox"]
 [ext_resource type="ArrayMesh" uid="uid://bwu7g8kwf155m" path="res://assets/mapAssets/grassMeshV2.res" id="5_0ydox"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_6plii"]
@@ -42,7 +42,7 @@ radius = 7.43372
 height = 24.4416
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0ydox"]
-material = ExtResource("4_hu550")
+material = ExtResource("4_0ydox")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hu550"]
 size = Vector3(0.224869, 64.772316, 2.49158)

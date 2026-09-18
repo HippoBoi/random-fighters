@@ -1,0 +1,42 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://brkdfuu0bjgdx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_or84x"]
+content_margin_right = 10.0
+bg_color = Color(0.25490198, 0.2509804, 0.49803922, 0.23529412)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14509805, 0, 0.14509805, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 2
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wr7a6"]
+content_margin_right = 10.0
+bg_color = Color(0.25490198, 0.2509804, 0.49803922, 0.23529412)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.12156863, 0.03529412, 0.19215687, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ycisa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycisa"]
+content_margin_right = 10.0
+bg_color = Color(0.25490198, 0.2509804, 0.49803922, 0.07450981)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wr7a6"]
+
+[resource]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_or84x")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_wr7a6")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_ycisa")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_ycisa")
+VScrollBar/styles/scroll_focus = SubResource("StyleBoxEmpty_wr7a6")

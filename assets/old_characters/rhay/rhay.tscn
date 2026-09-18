@@ -1,10 +1,10 @@
 [gd_scene load_steps=81 format=3 uid="uid://dyg5f2p8gyby2"]
 
 [ext_resource type="PackedScene" uid="uid://bpcg3054sbph0" path="res://assets/characters/rhay.glb" id="1_l5qm4"]
-[ext_resource type="Script" uid="uid://bt1li3vyfdhpt" path="res://assets/characters/rhay/rhay_char.gd" id="2_v1ns3"]
-[ext_resource type="Shader" uid="uid://bxyubbwwnlbv4" path="res://assets/characters/rhay/epic_q_shader.tres" id="3_hpohn"]
+[ext_resource type="Script" uid="uid://bt1li3vyfdhpt" path="res://assets/old_characters/rhay/rhay_char.gd" id="2_v1ns3"]
+[ext_resource type="Shader" uid="uid://bxyubbwwnlbv4" path="res://assets/old_characters/rhay/epic_q_shader.tres" id="3_hpohn"]
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="3_inplr"]
-[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="3_q3isg"]
+[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/old_characters/rhay/slash_hitbox.tscn" id="3_q3isg"]
 [ext_resource type="Shader" uid="uid://roshs55vbswx" path="res://assets/effects/slash_shader.tres" id="4_6fwau"]
 [ext_resource type="ArrayMesh" uid="uid://kn5uqpnyi8pf" path="res://assets/characters/rhay.obj" id="5_5op7a"]
 [ext_resource type="Texture2D" uid="uid://dimbrpwfm1c8l" path="res://assets/textures/fx/thunder_texture.png" id="5_qpi53"]
