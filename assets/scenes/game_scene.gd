@@ -200,7 +200,11 @@ func startGameMode(gameMode: String):
 	for _playerId in Server.playersInfo:
 		var player = Server.playersInfo[_playerId];
 		var character = player.charInstance;
-		PlayerFunc.spawnCharacter(character);
+		if (character is PackedScene):
+			addCharacter(player, _playerId);
+			character = player.charInstance;
+		if (character is CharacterBody3D):
+			PlayerFunc.spawnCharacter(character);
 
 	var isScene = has_node("choosingMode");
 	if (isScene):

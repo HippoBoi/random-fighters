@@ -212,9 +212,9 @@ color = Color(0, 0, 0, 1)
 
 [node name="CharacterScroll" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_left = 30.5
+offset_left = 36.5
 offset_top = 63.0
-offset_right = 432.5
+offset_right = 438.5
 offset_bottom = 322.0
 theme = ExtResource("5_bdf08")
 horizontal_scroll_mode = 0
@@ -223,10 +223,10 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 
 [node name="CharacterTemplate" type="Control" parent="CharacterScroll/Characters"]
-visible = false
 layout_mode = 1
 anchors_preset = 0
 offset_bottom = 70.0
+scale = Vector2(0.9, 0.9)
 size_flags_horizontal = 0
 
 [node name="Hexagon" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
@@ -968,9 +968,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -79.0
+offset_left = -73.0
 offset_top = 41.0
-offset_right = 75.0
+offset_right = 81.0
 offset_bottom = 94.0
 grow_horizontal = 2
 theme_override_constants/shadow_outline_size = 4
@@ -1035,10 +1035,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -143.0
-offset_top = -28.000002
-offset_right = -43.0
-offset_bottom = 14.999998
+offset_left = -137.0
+offset_top = -28.000004
+offset_right = -37.0
+offset_bottom = 14.999996
 grow_horizontal = 2
 rotation = 0.017453292
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -1055,10 +1055,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -53.0
-offset_top = -24.0
-offset_right = 44.5
-offset_bottom = 18.0
+offset_left = -47.0
+offset_top = -23.999998
+offset_right = 50.5
+offset_bottom = 18.000002
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -1074,9 +1074,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 30.0
+offset_left = 36.0
 offset_top = -27.000002
-offset_right = 187.0
+offset_right = 193.0
 offset_bottom = 15.999998
 grow_horizontal = 2
 rotation = -0.017453292
@@ -1128,16 +1128,16 @@ text = "Quit"
 [node name="leftBorder" type="AnimatedSprite2D" parent="."]
 modulate = Color(0.10851679, 0.11335301, 0.21826538, 1)
 z_index = -2
-position = Vector2(13.75, 147)
+position = Vector2(10.75, 147)
 scale = Vector2(0.8142857, 0.7913044)
 sprite_frames = SubResource("SpriteFrames_bdf08")
 autoplay = "default"
 speed_scale = 0.75
 
 [node name="rightBorder" type="AnimatedSprite2D" parent="."]
-modulate = Color(0.10980392, 0.11372549, 0.21960784, 1)
+modulate = Color(0.1907267, 0.13898939, 0.24250478, 1)
 z_index = -2
-position = Vector2(468.75, 147)
+position = Vector2(478.75, 147)
 scale = Vector2(0.8142857, 0.7913044)
 sprite_frames = SubResource("SpriteFrames_bdf08")
 autoplay = "default"
@@ -1148,39 +1148,38 @@ flip_h = true
 modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
 z_index = -2
 layout_mode = 0
-offset_left = -96.0
+offset_left = -99.0
 offset_top = -35.0
-offset_right = -43.5
+offset_right = -46.5
 offset_bottom = 329.0
 
 [node name="leftRect2" type="ColorRect" parent="."]
 modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
 z_index = -3
 layout_mode = 0
-offset_left = -62.0
+offset_left = -66.0
 offset_top = -35.0
-offset_right = -18.5
+offset_right = -22.5
 offset_bottom = 329.0
 color = Color(0.92156863, 0.9254902, 0.92941177, 1)
 
 [node name="rightRect" type="ColorRect" parent="."]
-modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+modulate = Color(0.14459631, 0.089468725, 0.17004234, 1)
 z_index = -2
 layout_mode = 0
-offset_left = 524.0
+offset_left = 533.0
 offset_top = -35.0
-offset_right = 574.5
+offset_right = 583.5
 offset_bottom = 329.0
 
 [node name="rightRect2" type="ColorRect" parent="."]
-modulate = Color(0.12940133, 0.16535833, 0.28572267, 1)
+modulate = Color(0.17401597, 0.10355035, 0.20717317, 1)
 z_index = -3
 layout_mode = 0
-offset_left = 492.0
+offset_left = 496.0
 offset_top = -35.0
-offset_right = 542.5
+offset_right = 546.5
 offset_bottom = 329.0
-color = Color(0.9223611, 0.92568135, 0.9311674, 1)
 
 [node name="CoolLines" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_clahg")

@@ -9,7 +9,7 @@ extends Control
 
 const CHARACTER_FOLDER = "res://assets/characters";
 const CHARACTERS_PER_ROW = 3;
-const VISIBLE_ROWS = 3.15;
+const VISIBLE_ROWS = 3.1;
 
 const CHARACTER_DISPLAY_NAMES = {
 	"ale": "Ale",
@@ -18,8 +18,7 @@ const CHARACTER_DISPLAY_NAMES = {
 	"mystery": "Mystery",
 	"nephi": "Nephi",
 	"ramon": "Ramón",
-	"rhay": "Rhay",
-	"rhay_v2": "Rhay V2",
+	"rhay_v2": "Rhay",
 	"rio": "Rio",
 	"shugo": "Shugo",
 };

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjb371raxm7pw"]
 
-[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="1_d34tf"]
+[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/old_characters/rhay/slash_hitbox.tscn" id="1_d34tf"]
 
 [node name="paperHitbox" type="Node3D"]
 

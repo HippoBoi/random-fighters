@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bc3abcp8ps8jl"]
 
 [ext_resource type="Script" uid="uid://0hadcsbktvkh" path="res://assets/characters/ramon/ramon_r_ability.gd" id="1_ei0gp"]
-[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/characters/rhay/slash_hitbox.tscn" id="1_sntli"]
+[ext_resource type="PackedScene" uid="uid://dgx18jbxq67vn" path="res://assets/old_characters/rhay/slash_hitbox.tscn" id="1_sntli"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryhqh"]
 blend_mode = 1
