@@ -46,7 +46,7 @@ shader_parameter/shaking = false
 shader_parameter/amplitude = 1.5
 shader_parameter/noise_scale = 20.0
 shader_parameter/noise_speed = 20.0
-shader_parameter/color = Color(0.5810141, 0.1615195, 0.39969972, 0.78039217)
+shader_parameter/color = Color(0.5803922, 0.16078432, 0.4, 0.9098039)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_26cqg"]
 
@@ -252,7 +252,7 @@ scale = Vector2(0.9, 0.9)
 size_flags_horizontal = 0
 
 [node name="Hexagon" type="TextureRect" parent="CharacterScroll/Characters/CharacterTemplate"]
-modulate = Color(0.31764707, 0.18431373, 0.19607843, 0.5529412)
+modulate = Color(0.44313726, 0.19215687, 0.28627452, 0.6509804)
 z_index = -1
 texture_filter = 1
 texture_repeat = 1

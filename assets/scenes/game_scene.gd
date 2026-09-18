@@ -5,6 +5,9 @@ var playerId = 0;
 var myCharacter = null;
 var addedCharacters = [];
 var currentGameMode = "";
+var defer_match_start := false;
+var _match_started := false;
+var initial_load_completed := false;
 
 const BLACK_TEAM = 0;
 const WHITE_TEAM = 1;
@@ -22,6 +25,7 @@ signal roundVictory(team);
 signal syncTeamWins(blackTeamWins, whiteTeamWins);
 signal teamWonGame(teamThatHasWon);
 signal returnToLobby;
+signal initial_load_finished;
 
 @onready var underwaterShaderPlane = $MainCamera/UnderwaterCameraPlane;
 
@@ -30,7 +34,7 @@ func _ready() -> void:
 	$OptionsUI.controls_changed.connect($InGameUI.update_ability_keybind_labels);
 	_connect_options_ui();
 
-	if (currentGameMode.is_empty() and PlayerFunc.matchType == Constants.MatchTypes.Versus):
+	if (currentGameMode.is_empty() and PlayerFunc.matchType == Constants.MatchTypes.Versus and not defer_match_start):
 		_selectGameMode();
 	
 	if (PlayerFunc.matchType == Constants.MatchTypes.Training):
@@ -41,7 +45,9 @@ func _ready() -> void:
 	$OptionsUI/ScrollContainer/VBoxContainer/music/musicSlider.value = userPreferences.musicVolume;
 	$OptionsUI/ScrollContainer/VBoxContainer/sounds/soundsSlider.value = userPreferences.soundsVolume;
 
-	spawnPlayers();
+	await spawnPlayers();
+	initial_load_completed = true;
+	initial_load_finished.emit();
 
 func _connect_options_ui() -> void:
 	var optionsUI = $OptionsUI;
@@ -145,7 +151,15 @@ func _get_player_username(_playerId: int) -> String:
 
 	return "Player %s" % _playerId;
 
-func startGameMode(gameMode: String):
+func beginMatchAfterLoading() -> void:
+	if (_match_started):
+		return;
+
+	_match_started = true;
+	if (currentGameMode.is_empty() and PlayerFunc.matchType == Constants.MatchTypes.Versus):
+		_selectGameMode();
+
+func startGameMode(gameMode: String, deferIntro := false):
 	var newMap = null;
 	var minimapCamera: Camera3D = $MinimapUI/SubViewport/Camera3D;
 
@@ -200,10 +214,9 @@ func startGameMode(gameMode: String):
 	for _playerId in Server.playersInfo:
 		var player = Server.playersInfo[_playerId];
 		var character = player.charInstance;
-		if (character is PackedScene):
-			addCharacter(player, _playerId);
-			character = player.charInstance;
-		if (character is CharacterBody3D):
+		if not (character is CharacterBody3D and is_instance_valid(character)):
+			character = addCharacter(player, _playerId);
+		if (character is CharacterBody3D and is_instance_valid(character)):
 			PlayerFunc.spawnCharacter(character);
 
 	var isScene = has_node("choosingMode");
@@ -211,7 +224,14 @@ func startGameMode(gameMode: String):
 		var choosingMode = get_node("choosingMode");
 		choosingMode.queue_free();
 
-	_introSequence(gameMode)
+	if not (deferIntro):
+		_introSequence(gameMode)
+
+func beginRoundAfterLoading(gameMode: String) -> void:
+	if (currentGameMode != gameMode):
+		return;
+
+	_introSequence(gameMode);
 
 func _introSequence(gameMode):
 	if (PlayerFunc.matchType == Constants.MatchTypes.Training):
@@ -313,8 +333,17 @@ func addCharacter(player, _playerId):
 		print("[WARNING]: spawn locations not found");
 		return null;
 
-	var character = player.charInstance;
-	var charInstance = character.instantiate();
+	var charInstance = player.charInstance;
+
+	if (charInstance is PackedScene):
+		charInstance = charInstance.instantiate();
+	else:
+		if (player.character == null or str(player.character).strip_edges().is_empty()):
+			return null;
+		var characterScene = load("res://assets/characters/%s/%s.tscn" % [player.character, player.character]);
+		if (characterScene == null):
+			return null;
+		charInstance = characterScene.instantiate();
 
 	if (addedCharacters.find(charInstance) != -1):
 		print("player %s already spawned character" % player.username);
@@ -340,6 +369,8 @@ func addCharacter(player, _playerId):
 	player.charInstance = charInstance;
 
 	updatePlayerList();
+
+	return charInstance;
 
 func updatePlayerList():
 	totalPlayers = 0;

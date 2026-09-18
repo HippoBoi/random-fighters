@@ -7,8 +7,23 @@ extends Control
 
 var _spinning := false;
 var _stop_spinning := false;
+var wait_for_release := false;
+var _release_requested := false;
 
 signal transition_finished;
+signal release_requested;
+
+func release(immediate := false) -> void:
+	if (_release_requested):
+		return;
+
+	_release_requested = true;
+	if (immediate):
+		transition_finished.emit();
+		queue_free();
+		return;
+
+	release_requested.emit();
 
 func _playBarsIn():
 	for bar: ColorRect in bars.get_children():
@@ -85,10 +100,15 @@ func _ready() -> void:
 	await _playBarsIn();
 	await get_tree().create_timer(0.1).timeout;
 
-	if not ShaderWarmup.is_done():
+	if (wait_for_release):
+		_playBarSpinLoop();
+		if not (_release_requested):
+			await release_requested;
+	elif not ShaderWarmup.is_done():
 		_playBarSpinLoop();
 
-	await ShaderWarmup.warm_up();
+	if not (wait_for_release):
+		await ShaderWarmup.warm_up();
 	_stop_spinning = true;
 	
 	print("LOADING FINISHED")

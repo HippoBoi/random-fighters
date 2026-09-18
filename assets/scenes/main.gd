@@ -7,6 +7,7 @@ const LOCALHOST: String = "127.0.0.1";
 const PORT: int = NetworkConfig.NORAY_PORT;
 const ADDRESS: String = NetworkConfig.NORAY_ADDRESS;
 const SINGLE_PLAYER_ID: int = 1;
+const LOAD_BARRIER_TIMEOUT_SECONDS: float = 20.0;
 
 var username: String = "noname";
 var gameIdInput: String;
@@ -31,6 +32,22 @@ var enetSignalsConnected = false;
 var activeConnectionMode: String = "";
 var singlePlayerMatch: bool = false;
 
+var loadBarrierGeneration: int = 0;
+var loadBarrierActive: bool = false;
+var loadBarrierPhase: String = "";
+var loadBarrierExpected := {};
+var loadBarrierReady := {};
+var loadBarrierRemaining: float = 0.0;
+var loadBarrierDeadlineMsec: int = 0;
+
+var localLoadGeneration: int = -1;
+var localLoadPhase: String = "";
+var localLoadPrepared: bool = false;
+var localLoadReleased: bool = false;
+var localLoadStarted: bool = false;
+var pendingRoundMode: String = "";
+var activeLoadingTransition: Control = null;
+
 var pendingDirectIp: String = "";
 var pendingDirectPort: int = 0;
 var directFallbackAttempted: bool = false;
@@ -44,6 +61,8 @@ func _ready() -> void:
 	_loadSettings();
 
 func _process(delta: float) -> void:
+	_updateLoadBarrier(delta);
+
 	if not (connected):
 		return;
 	if (startRoundTimer > 0 and roundStarted == false and not curGameMode.is_empty()):
@@ -51,9 +70,10 @@ func _process(delta: float) -> void:
 
 		if (startRoundTimer <= 0.1):
 			if (singlePlayerMatch):
-				startRound(curGameMode);
+				startRound(curGameMode, 0);
 			elif (multiplayer.is_server()):
-				rpc("startRound", curGameMode);
+				var generation = _beginLoadBarrier("round");
+				rpc("startRound", curGameMode, generation);
 
 	timer += delta;
 	if not (singlePlayerMatch) and (int(round(timer * 100)) % 32 == 0):
@@ -410,6 +430,17 @@ func _resetConnectionState():
 	matchHasEnded = false;
 	networkDisconnectInProgress = false;
 	returnToLobbyInProgress = false;
+	loadBarrierActive = false;
+	loadBarrierExpected.clear();
+	loadBarrierReady.clear();
+	loadBarrierRemaining = 0.0;
+	loadBarrierDeadlineMsec = 0;
+	localLoadGeneration = -1;
+	localLoadPhase = "";
+	localLoadPrepared = false;
+	localLoadReleased = false;
+	localLoadStarted = false;
+	pendingRoundMode = "";
 
 func _connectEnetSignals():
 	if (enetSignalsConnected):
@@ -442,6 +473,10 @@ func _disconnectEnetSignals():
 func _onPeerConnected(newPlayerID):
 	if not (multiplayer.is_server()):
 		return;
+	if (gameStarted):
+		push_warning("[main]: rejecting peer %s because the match is already loading or active" % newPlayerID);
+		multiplayerPeer.disconnect_peer(newPlayerID);
+		return;
 
 	rpc("addPlayer", newPlayerID);
 	rpc_id(newPlayerID, "addPreviousPlayers", Server.playersInfo);
@@ -452,6 +487,7 @@ func _onPeerDisconnected(playerID):
 		return;
 
 	rpc("disconnectPlayer", playerID);
+	_removePeerFromLoadBarrier(playerID);
 
 func _onConnectedToServer():
 	connected = true;
@@ -467,9 +503,156 @@ func _onServerDisconnected():
 
 func onStartGame() -> void:
 	if (singlePlayerMatch):
-		startGame();
+		startGame(0);
+	elif (multiplayer.is_server()):
+		var generation = _beginLoadBarrier("match");
+		rpc("startGame", generation);
+
+func _beginLoadBarrier(phase: String) -> int:
+	if not (multiplayer.is_server()):
+		return -1;
+
+	if (loadBarrierActive):
+		push_warning("[main]: replacing active load barrier %s:%s" % [loadBarrierPhase, loadBarrierGeneration]);
+
+	loadBarrierGeneration += 1;
+	loadBarrierActive = true;
+	loadBarrierPhase = phase;
+	loadBarrierExpected.clear();
+	loadBarrierReady.clear();
+	loadBarrierRemaining = LOAD_BARRIER_TIMEOUT_SECONDS;
+	loadBarrierDeadlineMsec = Time.get_ticks_msec() + int(LOAD_BARRIER_TIMEOUT_SECONDS * 1000.0);
+
+	loadBarrierExpected[_getLocalPlayerId()] = true;
+	for peerId in multiplayer.get_peers():
+		loadBarrierExpected[int(peerId)] = true;
+
+	print("[main]: load barrier %s:%s waiting for %s" % [phase, loadBarrierGeneration, loadBarrierExpected.keys()]);
+	return loadBarrierGeneration;
+
+func _updateLoadBarrier(_delta: float) -> void:
+	if not (loadBarrierActive and multiplayer.is_server()):
+		return;
+
+	var remainingMsec = maxi(0, loadBarrierDeadlineMsec - Time.get_ticks_msec());
+	loadBarrierRemaining = float(remainingMsec) / 1000.0;
+	if (remainingMsec <= 0):
+		_releaseLoadBarrier(true);
+
+func _removePeerFromLoadBarrier(playerId: int) -> void:
+	if not (loadBarrierActive and multiplayer.is_server()):
+		return;
+
+	loadBarrierExpected.erase(playerId);
+	loadBarrierReady.erase(playerId);
+	print("[main]: removed disconnected peer %s from load barrier %s:%s" % [playerId, loadBarrierPhase, loadBarrierGeneration]);
+	_checkLoadBarrierComplete();
+
+func _reportLocalLoadReady(generation: int, phase: String) -> void:
+	if (generation != localLoadGeneration or phase != localLoadPhase):
+		return;
+
+	if (multiplayer.is_server()):
+		_acceptLoadReady(_getLocalPlayerId(), generation, phase);
 	else:
-		rpc("startGame");
+		rpc_id(1, "reportLoadReady", generation, phase);
+
+@rpc("any_peer", "call_remote", "reliable")
+func reportLoadReady(generation: int, phase: String) -> void:
+	if not (multiplayer.is_server()):
+		return;
+
+	_acceptLoadReady(multiplayer.get_remote_sender_id(), generation, phase);
+
+func _acceptLoadReady(playerId: int, generation: int, phase: String) -> void:
+	if not (loadBarrierActive):
+		return;
+	if (generation != loadBarrierGeneration or phase != loadBarrierPhase):
+		return;
+	if not (loadBarrierExpected.has(playerId)):
+		return;
+
+	loadBarrierReady[playerId] = true;
+	print("[main]: peer %s ready for load barrier %s:%s (%s/%s)" % [playerId, phase, generation, loadBarrierReady.size(), loadBarrierExpected.size()]);
+	_checkLoadBarrierComplete();
+
+func _checkLoadBarrierComplete() -> void:
+	if not (loadBarrierActive):
+		return;
+
+	for playerId in loadBarrierExpected:
+		if not (loadBarrierReady.has(playerId)):
+			return;
+
+	_releaseLoadBarrier(false);
+
+func _releaseLoadBarrier(timedOut: bool) -> void:
+	if not (loadBarrierActive and multiplayer.is_server()):
+		return;
+
+	var generation = loadBarrierGeneration;
+	var phase = loadBarrierPhase;
+	if (timedOut):
+		var missing = [];
+		for playerId in loadBarrierExpected:
+			if not (loadBarrierReady.has(playerId)):
+				missing.append(playerId);
+		push_warning("[main]: load barrier %s:%s timed out; starting without peers %s" % [phase, generation, missing]);
+	else:
+		print("[main]: all peers ready for load barrier %s:%s" % [phase, generation]);
+
+	loadBarrierActive = false;
+	loadBarrierRemaining = 0.0;
+	loadBarrierDeadlineMsec = 0;
+	rpc("finishLoadBarrier", generation, phase, timedOut);
+	loadBarrierExpected.clear();
+	loadBarrierReady.clear();
+
+@rpc("authority", "call_local", "reliable")
+func finishLoadBarrier(generation: int, phase: String, timedOut: bool) -> void:
+	if (generation != localLoadGeneration or phase != localLoadPhase):
+		return;
+
+	localLoadReleased = true;
+	_tryStartLoadedPhase();
+
+	if (activeLoadingTransition and is_instance_valid(activeLoadingTransition)):
+		activeLoadingTransition.release(timedOut);
+
+func _beginLocalLoad(generation: int, phase: String, roundMode := "") -> void:
+	localLoadGeneration = generation;
+	localLoadPhase = phase;
+	localLoadPrepared = false;
+	localLoadReleased = false;
+	localLoadStarted = false;
+	pendingRoundMode = roundMode;
+
+func _showLoadingTransition(waitForServer: bool) -> void:
+	if (activeLoadingTransition and is_instance_valid(activeLoadingTransition)):
+		activeLoadingTransition.queue_free();
+
+	var transition = preload("res://assets/scenes/transition_scene.tscn").instantiate();
+	transition.wait_for_release = waitForServer;
+	activeLoadingTransition = transition;
+	transition.transition_finished.connect(func():
+		if (activeLoadingTransition == transition):
+			activeLoadingTransition = null;
+	);
+	add_child(transition);
+
+func _tryStartLoadedPhase() -> void:
+	if (localLoadStarted or not localLoadPrepared or not localLoadReleased):
+		return;
+
+	var gameScene = get_node_or_null("Game");
+	if not (gameScene):
+		return;
+
+	localLoadStarted = true;
+	if (localLoadPhase == "match"):
+		gameScene.beginMatchAfterLoading();
+	elif (localLoadPhase == "round"):
+		gameScene.beginRoundAfterLoading(pendingRoundMode);
 
 func onFindMatch():
 	$UI.playLeave();
@@ -596,6 +779,21 @@ func _clearRoundData():
 	totalPlayers = 0;
 	timer = 0;
 	startRoundTimer = 0.0;
+	loadBarrierActive = false;
+	loadBarrierPhase = "";
+	loadBarrierExpected.clear();
+	loadBarrierReady.clear();
+	loadBarrierRemaining = 0.0;
+	loadBarrierDeadlineMsec = 0;
+	localLoadGeneration = -1;
+	localLoadPhase = "";
+	localLoadPrepared = false;
+	localLoadReleased = false;
+	localLoadStarted = false;
+	pendingRoundMode = "";
+	if (activeLoadingTransition and is_instance_valid(activeLoadingTransition)):
+		activeLoadingTransition.queue_free();
+	activeLoadingTransition = null;
 	playersLockedIn = [];
 	selectedCharacters = [];
 	Server.playersInfo = {};
@@ -769,7 +967,7 @@ func addPreviousPlayers(playersList):
 	for playerID in playersList.keys():
 		addPlayer(playerID);
 
-@rpc("authority", "call_local")
+@rpc("authority", "call_local", "reliable")
 func disconnectPlayer(playerID):
 	var playersInfoKey = playerID;
 	if not (Server.playersInfo.has(playersInfoKey)):
@@ -800,18 +998,17 @@ func updateGameMode(gameMode: String):
 		gameScene.setGameMode(gameMode);
 
 @rpc("authority", "call_local", "reliable")
-func startGame():
+func startGame(generation: int):
 	if (gameStarted):
 		return;
 
 	gameStarted = true;
 	$UI.visible = false;
 
-	var transition = preload("res://assets/scenes/transition_scene.tscn").instantiate();
-	transition.transition_finished.connect(func():
-		transition.queue_free();
-	);
-	add_child(transition);
+	var coordinatedLoad = not singlePlayerMatch;
+	if (coordinatedLoad):
+		_beginLocalLoad(generation, "match");
+	_showLoadingTransition(coordinatedLoad);
 
 	await get_tree().create_timer(0.5).timeout;
 
@@ -820,10 +1017,9 @@ func startGame():
 			get_node("CharSelect").queue_free();
 		await get_tree().create_timer(0.1).timeout;
 
-	await ShaderWarmup.warm_up();
-
 	var playerId = _getLocalPlayerId();
 	var gameScene = preload("res://assets/scenes/gameScene.tscn").instantiate();
+	gameScene.defer_match_start = coordinatedLoad;
 	gameScene.gameModeSelected.connect(_gameModeSelected);
 	gameScene.roundVictory.connect(_onRoundVictory);
 	gameScene.syncTeamWins.connect(_onSyncTeamWins);
@@ -832,28 +1028,45 @@ func startGame():
 	gameScene.playerId = playerId;
 	add_child(gameScene);
 
+	if not (gameScene.initial_load_completed):
+		await gameScene.initial_load_finished;
+
+	if (coordinatedLoad):
+		localLoadPrepared = true;
+		_tryStartLoadedPhase();
+
+	await ShaderWarmup.warm_up();
+
+	if (coordinatedLoad):
+		_reportLocalLoadReady(generation, "match");
+
 @rpc("authority", "call_local", "reliable")
-func startRound(gameMode: String):
+func startRound(gameMode: String, generation: int):
 	if (roundStarted):
 		return;
 
 	roundStarted = true;
 	startRoundTimer = 0;
 
+	var coordinatedLoad = not singlePlayerMatch;
+	if (coordinatedLoad):
+		_beginLocalLoad(generation, "round", gameMode);
+	_showLoadingTransition(coordinatedLoad);
+
+	var gameScene = get_node_or_null("Game");
+	if not (gameScene):
+		return;
+
+	await gameScene.startGameMode(gameMode, coordinatedLoad);
+
+	if (coordinatedLoad):
+		localLoadPrepared = true;
+		_tryStartLoadedPhase();
+
 	await ShaderWarmup.warm_up();
 
-	var isScene = has_node("Game");
-	if (isScene):
-		var gameScene = get_node("Game");
-		gameScene.startGameMode(gameMode);
-
-	var transition = preload("res://assets/scenes/transition_scene.tscn").instantiate();
-	transition.transition_finished.connect(func():
-		transition.queue_free();
-	);
-	add_child(transition);
-
-	await get_tree().create_timer(0.5).timeout;
+	if (coordinatedLoad):
+		_reportLocalLoadReady(generation, "round");
 
 @rpc("authority", "call_local", "reliable")
 func syncRoundVictory(winnerTeam: int):
