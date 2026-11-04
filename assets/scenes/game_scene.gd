@@ -206,6 +206,10 @@ func startGameMode(gameMode: String, deferIntro := false):
 		newMap = preload("res://assets/maps/seaweeds.tscn").instantiate();
 		minimapCamera.size = 95.0;
 		underwaterShaderPlane.visible = true;
+	
+	elif (gameMode.to_lower() == "space_station"):
+		newMap = preload("res://assets/maps/space_station.tscn").instantiate();
+		minimapCamera.size = 125.0;
 
 	$Map.add_child(newMap);
 
@@ -312,6 +316,8 @@ func _getModeDescription(gameMode: String):
 		description = "Eliminate the other team!"
 	elif (gameMode.to_lower() == "seaweeds"):
 		description = "Take it slow..."
+	elif (gameMode.to_lower() == "space_station"):
+		description = "Dodge the laser!"
 
 	return description;
 

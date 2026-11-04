@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=4 uid="uid://btsyheaprli1o"]
+[gd_scene load_steps=28 format=4 uid="uid://btsyheaprli1o"]
 
 [ext_resource type="Script" uid="uid://c4p8fmctg4hmy" path="res://assets/maps/heaven.gd" id="1_cxoqp"]
 [ext_resource type="PackedScene" uid="uid://ciy5da8k6k7mx" path="res://assets/mapAssets/heaven/mesh_heaven.tscn" id="1_f258d"]
 [ext_resource type="Script" uid="uid://cpva013qyep8u" path="res://assets/maps/cloud_behaviour.gd" id="3_51426"]
+[ext_resource type="Script" uid="uid://djwixdc034bci" path="res://assets/effects/wind_effect.gd" id="4_l2cky"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_51426"]
 size = Vector3(131, 0.260262, 134)
@@ -415,3 +416,6 @@ mesh = SubResource("ArrayMesh_51426")
 skeleton = NodePath("")
 script = ExtResource("3_51426")
 speed = 0.75
+
+[node name="wind" type="Node3D" parent="."]
+script = ExtResource("4_l2cky")

@@ -202,6 +202,10 @@ func _getMapMargins(_gameMode: String) -> Array:
 		xMargins = [-30, 42];
 		zMargins = [-39, 41];
 	
+	if (gameMode.to_lower() == "space_station"):
+		xMargins = [-48, 60];
+		zMargins = [-55, 65];
+	
 	return [xMargins, zMargins];
 
 func _cameraMovement(character: CharacterBody3D, delta):
