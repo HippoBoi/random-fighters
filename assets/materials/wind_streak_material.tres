@@ -29,4 +29,4 @@ shader_parameter/wind_animation_speed = 1.0
 shader_parameter/wind_amplitude = 1.0
 shader_parameter/mote_mode = false
 shader_parameter/near_fade_distance = 2.5
-shader_parameter/far_fade_distance = 50.0
+shader_parameter/far_fade_distance = 100.0

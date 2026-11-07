@@ -3,7 +3,6 @@ extends Node3D
 const DEFAULT_GRASS_MATERIAL := preload("res://assets/materials/wind_foliage_grass_material.tres");
 const STREAK_MATERIAL := preload("res://assets/materials/wind_streak_material.tres");
 const PARTICLE_SHADER := preload("res://assets/scripts/shaders/wind/wind_particles.gdshader");
-const EMISSION_EXTENTS := Vector3(18.7, 2.6, 18.7);
 const WIND_DIR := Vector2(1.0, 0.35);
 const WIND_PARAMETERS := [
 	"wind_noise", "wind_direction", "wind_strength", "wind_speed",
@@ -12,24 +11,31 @@ const WIND_PARAMETERS := [
 	"wind_vertical_strength", "wind_vertical_speed",
 ];
 
+@export_group("Coverage")
+@export var _emission_extents := Vector3(20.0, 2.5, 200.0);
+
+@export_group("Shared wind")
+@export_range(0.0, 2.0, 0.01) var _wind_strength := 0.8;
+@export_range(0.0, 5.0, 0.01) var _wind_speed := 1.4;
+@export_range(0.0, 2.0, 0.01) var _gust_strength := 1.25;
+@export_range(0.0, 10.0, 0.1) var _gust_speed := 4.0;
+
+@export_group("Wind ribbons")
+@export_range(1, 150, 1) var _streak_count := 72;
+@export_range(1, 50, 1) var _long_streak_count := 20;
+@export_range(0.0, 10.0, 0.1) var _streak_speed := 4.4;
+@export_range(0.01, 0.3, 0.01) var _streak_width := 0.25;
+@export_range(0.0, 2.0, 0.01) var _streak_sway := 1.1;
+
+@export_group("Drifting motes")
+@export_range(1, 200, 1) var _mote_count := 90;
+@export_range(0.0, 10.0, 0.1) var _mote_speed := 1.4;
+
+@export_group("Scene foliage")
+@export var _grass: MultiMeshInstance3D;
+@export var _grass_material: ShaderMaterial = DEFAULT_GRASS_MATERIAL;
+
 var _wind_direction := WIND_DIR;
-var _wind_strength := 0.6;
-var _wind_speed := 1.0;
-var _gust_strength := 1.1;
-var _gust_speed := 3.2;
-
-var _streak_count := 64;
-var _long_streak_count := 14;
-var _streak_speed := 3.4;
-var _streak_width := 0.14;
-var _streak_sway := 0.6;
-
-var _mote_count := 90;
-var _mote_speed := 1.4;
-
-var _grass: MultiMeshInstance3D;
-var _grass_material: ShaderMaterial = DEFAULT_GRASS_MATERIAL;
-
 var _foliage_material: ShaderMaterial;
 var _process_materials: Array[ShaderMaterial] = [];
 var _draw_materials: Array[ShaderMaterial] = [];
@@ -46,9 +52,16 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_sync_wind();
 
+func _update_wind_direction() -> void:
+	var forward := -global_basis.z;
+	var horizontal := Vector2(forward.x, forward.z);
+	if horizontal.length_squared() > 0.0001:
+		_wind_direction = horizontal.normalized();
+
 func _sync_wind() -> void:
+	_update_wind_direction();
 	var settings := [_wind_direction, _wind_strength, _wind_speed, _gust_strength, _gust_speed,
-		_streak_speed, _streak_width, _streak_sway, _mote_speed];
+		_streak_speed, _streak_width, _streak_sway, _mote_speed, _emission_extents];
 	if settings == _last_wind_settings:
 		return;
 	_last_wind_settings = settings;
@@ -59,6 +72,7 @@ func _sync_wind() -> void:
 	_foliage_material.set_shader_parameter("wind_gust_speed", _gust_speed);
 
 	for material in _process_materials:
+		material.set_shader_parameter("emission_extents", _emission_extents);
 		for parameter in WIND_PARAMETERS:
 			material.set_shader_parameter(parameter, _foliage_material.get_shader_parameter(parameter));
 
@@ -83,7 +97,7 @@ func _sync_wind() -> void:
 		var wander: float = process_material.get_shader_parameter("wandering");
 		var max_flow := 1.0 + _gust_strength + turbulence + absf(vertical) * 2.0 + wander * 1.6;
 		var travel := speed * layer.lifetime * maxf(_wind_strength * 2.0, 1.0) * max_flow * 1.2;
-		var reach := EMISSION_EXTENTS.length() + travel * 1.5 + 10.0;
+		var reach := _emission_extents.length() + travel * 1.5 + 10.0;
 		layer.visibility_aabb = AABB(Vector3.ONE * -reach, Vector3.ONE * reach * 2.0);
 
 func _setup_streaks() -> void:
@@ -117,10 +131,10 @@ func _add_wind_layer(layer_name: String, material: ShaderMaterial, count: int,
 
 	var process_material := ShaderMaterial.new();
 	process_material.shader = PARTICLE_SHADER;
-	process_material.set_shader_parameter("emission_extents", EMISSION_EXTENTS);
+	process_material.set_shader_parameter("emission_extents", _emission_extents);
 	process_material.set_shader_parameter("travel_speed", speed);
 	process_material.set_shader_parameter("calm_visibility", calm_visibility);
-	process_material.set_shader_parameter("wandering", 0.45 if motes else 0.28);
+	process_material.set_shader_parameter("wandering", 0.65 if motes else 0.6);
 	_process_materials.append(process_material);
 	_draw_materials.append(material);
 

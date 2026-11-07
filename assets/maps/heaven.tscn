@@ -418,4 +418,5 @@ script = ExtResource("3_51426")
 speed = 0.75
 
 [node name="wind" type="Node3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 script = ExtResource("4_l2cky")
