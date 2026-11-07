@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://dx2wme7pb12v2"]
+
+[ext_resource type="Shader" uid="uid://bmddkat5fb68f" path="res://assets/scripts/shaders/wind/wind_streak.gdshader" id="1_streak"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_streak"]
+seed = 13
+frequency = 0.02
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_streak"]
+width = 128
+height = 128
+noise = SubResource("FastNoiseLite_streak")
+seamless = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_streak")
+shader_parameter/streak_color = Color(0.88, 0.94, 0.98, 0.65)
+shader_parameter/streak_noise = SubResource("NoiseTexture2D_streak")
+shader_parameter/noise_scale = 2.0
+shader_parameter/flow_speed = 0.9
+shader_parameter/alpha_power = 1.2
+shader_parameter/core_glow = 1.0
+shader_parameter/sway_strength = 0.6
+shader_parameter/ribbon_length = 3.5
+shader_parameter/ribbon_width = 0.14
+shader_parameter/wind_animation_speed = 1.0
+shader_parameter/wind_amplitude = 1.0
+shader_parameter/mote_mode = false
+shader_parameter/near_fade_distance = 2.5
+shader_parameter/far_fade_distance = 100.0

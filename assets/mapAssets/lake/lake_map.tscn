@@ -1,6 +1,7 @@
 [gd_scene load_steps=11 format=4 uid="uid://bqxl78epgrfeg"]
 
 [ext_resource type="Texture2D" uid="uid://c7cr8jmm7umg6" path="res://assets/mapAssets/lake/lake_map_lake_terrain_mask.png" id="1_ymray"]
+[ext_resource type="Material" uid="uid://c4i8ucc20djvv" path="res://assets/materials/lake_terrain_material.tres" id="2_g8bub"]
 [ext_resource type="Shader" uid="uid://k2ktbojx7ji8" path="res://assets/mapAssets/lake/terrain_shader_lake.tres" id="2_rb33f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yx2rp"]
@@ -42,10 +43,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_nc2s7")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g8bub"]
-render_priority = 0
-shader = ExtResource("2_rb33f")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bu5jt"]
 resource_name = "Material"
@@ -97,7 +94,7 @@ shader = ExtResource("2_rb33f")
 transform = Transform3D(30.3844, 0, 0, 0, 30.3844, 0, 0, 0, 30.3844, 0, -0.127199, 7.66704)
 mesh = SubResource("ArrayMesh_3wjr6")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("ShaderMaterial_g8bub")
+surface_material_override/0 = ExtResource("2_g8bub")
 
 [node name="bgMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-3.36075e-06, 0, -101.488, 0, 93.0307, 0, 76.8849, 0, -4.43619e-06, -25.6477, -19.9291, -21.3831)
