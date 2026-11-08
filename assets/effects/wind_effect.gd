@@ -1,6 +1,7 @@
 extends Node3D
 
 const DEFAULT_GRASS_MATERIAL := preload("res://assets/materials/wind_foliage_grass_material.tres");
+const DEFAULT_TREE_MATERIAL := preload("res://assets/materials/wind_tree_material.tres");
 const STREAK_MATERIAL := preload("res://assets/materials/wind_streak_material.tres");
 const PARTICLE_SHADER := preload("res://assets/scripts/shaders/wind/wind_particles.gdshader");
 const WIND_DIR := Vector2(1.0, 0.35);
@@ -35,10 +36,20 @@ const WIND_PARAMETERS := [
 @export var _grass: MultiMeshInstance3D;
 @export var _grass_material: ShaderMaterial = DEFAULT_GRASS_MATERIAL;
 
+@export_group("Scene trees")
+@export var _trees_root: Node3D;
+@export var _tree_name_prefix := "tree";
+@export var _tree_material: ShaderMaterial = DEFAULT_TREE_MATERIAL;
+@export_range(0.0, 2.0, 0.01) var _tree_bend_strength := 0.22;
+@export_range(0.0, 1.0, 0.01) var _tree_flutter_strength := 0.04;
+@export_range(0.0, 20.0, 0.1) var _tree_flutter_speed := 2.4;
+
 var _wind_direction := WIND_DIR;
 var _foliage_material: ShaderMaterial;
 var _process_materials: Array[ShaderMaterial] = [];
 var _draw_materials: Array[ShaderMaterial] = [];
+var _tree_materials: Array[ShaderMaterial] = [];
+var _tree_material_cache: Dictionary = {};
 var _last_wind_settings: Array = [];
 
 func _ready() -> void:
@@ -47,6 +58,7 @@ func _ready() -> void:
 	if _grass:
 		_grass.material_override = _foliage_material;
 	_setup_streaks();
+	_setup_trees();
 	_sync_wind();
 
 func _process(_delta: float) -> void:
@@ -70,6 +82,10 @@ func _sync_wind() -> void:
 	_foliage_material.set_shader_parameter("wind_speed", _wind_speed);
 	_foliage_material.set_shader_parameter("wind_gust_strength", _gust_strength);
 	_foliage_material.set_shader_parameter("wind_gust_speed", _gust_speed);
+
+	for material in _tree_materials:
+		for parameter in WIND_PARAMETERS:
+			material.set_shader_parameter(parameter, _foliage_material.get_shader_parameter(parameter));
 
 	for material in _process_materials:
 		material.set_shader_parameter("emission_extents", _emission_extents);
@@ -120,6 +136,71 @@ func _setup_streaks() -> void:
 	mote_material.set_shader_parameter("ribbon_width", 0.07);
 	mote_material.set_shader_parameter("streak_color", Color(0.9, 0.93, 0.82, 0.42));
 	_add_wind_layer("DriftingMotes", mote_material, _mote_count, 8.0, _mote_speed, 0.65, true);
+
+func _setup_trees() -> void:
+	if _trees_root == null:
+		return;
+	var template := _tree_material if _tree_material != null else DEFAULT_TREE_MATERIAL;
+	_tree_materials.clear();
+	_tree_material_cache.clear();
+	_apply_tree_materials(_trees_root, template);
+
+func _apply_tree_materials(node: Node, template: ShaderMaterial) -> void:
+	for child in node.get_children():
+		if child is MeshInstance3D:
+			_apply_tree_material_to_mesh(child as MeshInstance3D, template);
+		_apply_tree_materials(child, template);
+
+func _apply_tree_material_to_mesh(mesh_instance: MeshInstance3D, template: ShaderMaterial) -> void:
+	if mesh_instance.mesh == null:
+		return;
+	var node_name := mesh_instance.name.to_lower();
+	if not node_name.begins_with(_tree_name_prefix.to_lower()):
+		return;
+
+	var is_leaf_node := node_name.begins_with("tree_leave");
+	for surface in range(mesh_instance.mesh.get_surface_count()):
+		var original := mesh_instance.get_surface_override_material(surface);
+		if original == null:
+			original = mesh_instance.mesh.surface_get_material(surface);
+		var is_leaf_surface := is_leaf_node and surface == 0;
+		var original_id := original.get_instance_id() if original != null else 0;
+		var cache_key := "%s:%s:%s" % [original_id, is_leaf_node, is_leaf_surface];
+		var material := _tree_material_cache.get(cache_key) as ShaderMaterial;
+		if material == null:
+			material = template.duplicate() as ShaderMaterial;
+			_configure_tree_material(material, original, is_leaf_node, is_leaf_surface);
+			_tree_material_cache[cache_key] = material;
+			_tree_materials.append(material);
+		mesh_instance.set_surface_override_material(surface, material);
+
+func _configure_tree_material(material: ShaderMaterial, original: Material,
+		is_leaf_node: bool, is_leaf_surface: bool) -> void:
+	material.set_shader_parameter("bend_strength", _tree_bend_strength);
+	material.set_shader_parameter("flutter_strength", _tree_flutter_strength);
+	material.set_shader_parameter("flutter_speed", _tree_flutter_speed);
+
+	if is_leaf_node:
+		material.set_shader_parameter("pivot_mode", 1);
+		material.set_shader_parameter("wind_base_height", -8.4);
+		material.set_shader_parameter("wind_height_range", 8.6);
+	else:
+		material.set_shader_parameter("pivot_mode", 0);
+		material.set_shader_parameter("wind_base_height", -1.0);
+		material.set_shader_parameter("wind_height_range", 7.8);
+
+	material.set_shader_parameter("tree_mode", 1 if is_leaf_surface else 0);
+
+	if original is StandardMaterial3D:
+		var standard := original as StandardMaterial3D;
+		if standard.albedo_texture != null:
+			material.set_shader_parameter("albedo_texture", standard.albedo_texture);
+		material.set_shader_parameter("albedo_color", standard.albedo_color);
+		material.set_shader_parameter("uv_scale", Vector2(standard.uv1_scale.x, standard.uv1_scale.y));
+		material.set_shader_parameter("uv_offset", Vector2(standard.uv1_offset.x, standard.uv1_offset.y));
+		material.set_shader_parameter("roughness", standard.roughness);
+		material.set_shader_parameter("metallic", standard.metallic);
+		material.set_shader_parameter("use_vertex_color", standard.vertex_color_use_as_albedo);
 
 func _add_wind_layer(layer_name: String, material: ShaderMaterial, count: int,
 		life: float, speed: float, calm_visibility: float, motes: bool) -> void:

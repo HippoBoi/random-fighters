@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=47 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://he46kwaimprs" path="res://assets/sprites/shugo.png" id="5_ux7vi"]
 [ext_resource type="Texture2D" uid="uid://ce1p48mexskks" path="res://assets/sprites/nephi.png" id="6_1lgrt"]
 [ext_resource type="FontFile" uid="uid://cwpd2roekfxay" path="res://addons/fonts/tl_mussels/TT Mussels Trial ExtraBold.otf" id="7_bdf08"]
-[ext_resource type="Shader" uid="uid://c7crpvx38smj" path="res://assets/scenes/UI_outline_solid.gdshader" id="10_0h5le"]
 [ext_resource type="Texture2D" uid="uid://42246g24ashi" path="res://assets/sprites/ale.png" id="11_3vvea"]
 [ext_resource type="Texture2D" uid="uid://cekon4tq0oyhx" path="res://assets/sprites/mystery.png" id="12_x2it3"]
 [ext_resource type="Texture2D" uid="uid://dqdpwunesijl2" path="res://assets/sprites/rio.png" id="13_dmdnx"]
@@ -68,11 +67,7 @@ modulate_color = Color(0, 0.592157, 0.592157, 0.470588)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsrkv"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tnaqc"]
-shader = ExtResource("10_0h5le")
-shader_parameter/allow_out_of_bounds = true
-shader_parameter/outline_thickness = 1.0
-shader_parameter/outline_color = Color(0.515867, 0.515867, 0.515867, 0.537255)
+[sub_resource type="Theme" id="Theme_bdf08"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ndpmk"]
 shader = ExtResource("16_0o2ln")
@@ -1009,13 +1004,13 @@ text = "60"
 horizontal_alignment = 1
 
 [node name="PlayerTemplate" type="Button" parent="."]
-visible = false
 clip_contents = true
 layout_mode = 0
 offset_left = -80.0
 offset_top = 20.0
 offset_right = -5.0
 offset_bottom = 74.0
+scale = Vector2(0.9, 0.9)
 action_mode = 0
 text = "
 
@@ -1048,13 +1043,14 @@ horizontal_alignment = 1
 
 [node name="BgColor" type="ColorRect" parent="PlayerTemplate"]
 z_index = -1
-material = SubResource("ShaderMaterial_tnaqc")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_bdf08")
+color = Color(0, 0, 0.16862746, 1)
 
 [node name="SelectText" type="Label" parent="."]
 layout_mode = 1
