@@ -1,0 +1,36 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bdklh3li2jgan"]
+
+[ext_resource type="Shader" uid="uid://db02d51xla1tp" path="res://assets/scripts/shaders/wind/tree_wind.gdshader" id="1_tree"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_tree")
+shader_parameter/wind_direction = Vector2(1, 0.35)
+shader_parameter/wind_strength = 0.35
+shader_parameter/wind_speed = 1.0
+shader_parameter/wind_noise_scale = 0.12
+shader_parameter/wind_noise_speed = 1.0
+shader_parameter/wind_gust_scale = 0.035
+shader_parameter/wind_gust_speed = 0.35
+shader_parameter/wind_gust_strength = 0.8
+shader_parameter/wind_turbulence = 0.3
+shader_parameter/wind_swirl = 0.5
+shader_parameter/wind_vertical_strength = 0.1
+shader_parameter/wind_vertical_speed = 0.08
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/alpha_scissor = 0.35
+shader_parameter/use_vertex_color = false
+shader_parameter/roughness = 0.85
+shader_parameter/metallic = 0.0
+shader_parameter/backlight_strength = 0.2
+shader_parameter/backlight_color = Color(0.45, 0.85, 0.3, 1)
+shader_parameter/tree_mode = 0
+shader_parameter/pivot_mode = 0
+shader_parameter/bend_power = 2.0
+shader_parameter/bend_strength = 0.22
+shader_parameter/flutter_strength = 0.04
+shader_parameter/flutter_speed = 2.4
+shader_parameter/wind_base_height = -1.0
+shader_parameter/wind_height_range = 7.8

@@ -10,6 +10,9 @@ extends Control
 const CHARACTER_FOLDER = "res://assets/characters";
 const CHARACTERS_PER_ROW = 3;
 const VISIBLE_ROWS = 3.1;
+const CHARACTER_SCALE = 1.0;
+const CHARACTER_COLUMN_SPACING = 0.9;
+const CHARACTER_TOP_PADDING = 8.0;
 
 const CHARACTER_DISPLAY_NAMES = {
 	"ale": "Ale",
@@ -121,20 +124,22 @@ func _position_characters() -> void:
 	var viewportSize = characterScroll.size;
 	var columns = CHARACTERS_PER_ROW;
 	var rows = ceili(float(count) / float(columns));
-	var cellWidth = viewportSize.x / float(columns);
+	var cellWidth = viewportSize.x / float(columns) * CHARACTER_COLUMN_SPACING;
 	var cellHeight = viewportSize.y / float(VISIBLE_ROWS);
-	var templateSize = characters[0].size;
+	var templateSize = characters[0].size * CHARACTER_SCALE;
+	var gridOffsetX = (viewportSize.x - cellWidth * columns) / 2.0;
 
 	for i in count:
 		var col = i % columns;
 		var row = i / columns;
 		var cellCenter = Vector2(
-			cellWidth * col + cellWidth / 2.0,
-			cellHeight * row + cellHeight / 2.0
+			gridOffsetX + cellWidth * col + cellWidth / 2.0,
+			CHARACTER_TOP_PADDING + cellHeight * row + cellHeight / 2.0
 		);
+		characters[i].scale = Vector2.ONE * CHARACTER_SCALE;
 		characters[i].position = cellCenter - templateSize / 2.0;
 
-	characterList.custom_minimum_size = Vector2(viewportSize.x, float(rows) * cellHeight);
+	characterList.custom_minimum_size = Vector2(viewportSize.x, float(rows) * cellHeight + CHARACTER_TOP_PADDING);
 
 func _process(delta: float) -> void:
 	timer += delta;

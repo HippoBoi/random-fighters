@@ -104,7 +104,7 @@ shape = SubResource("BoxShape3D_4t2fk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.70348406, -1.262579)
 multimesh = SubResource("MultiMesh_o8odc")
 
-[node name="wind" type="Node3D" parent="."]
+[node name="wind" type="Node3D" parent="." node_paths=PackedStringArray("_trees_root")]
 script = ExtResource("3_o8odc")
 _wind_strength = 0.69
 _wind_speed = 1.24
@@ -115,3 +115,4 @@ _streak_width = 0.06999999999999999
 _streak_sway = 0.54
 _mote_count = 50
 _mote_speed = 1.0
+_trees_root = NodePath("../heaven_battlefield_map2")
