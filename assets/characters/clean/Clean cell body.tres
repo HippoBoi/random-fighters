@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/Clean cell.gdshader" id="1_cell"]
+
+[resource]
+resource_name = "Clean cell body"
+shader = ExtResource("1_cell")
+shader_parameter/albedo_color = Color(0.32890183, 0.27983126, 0.90652454, 1)

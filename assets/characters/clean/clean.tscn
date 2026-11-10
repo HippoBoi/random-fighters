@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://bqs8rrhxj3nm1"]
+[gd_scene load_steps=77 format=4 uid="uid://bqs8rrhxj3nm1"]
 
 [ext_resource type="PackedScene" uid="uid://cqr0ntsypomg4" path="res://assets/characters/clean.glb" id="1_aihlf"]
 [ext_resource type="Script" uid="uid://ccgsst7b23eor" path="res://assets/characters/clean/clean_char.gd" id="2_vhd32"]
@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://08841tb5t151" path="res://assets/textures/fx/T_circle42.PNG" id="8_ohlot"]
 [ext_resource type="Texture2D" uid="uid://dmr7hbd7o0iy4" path="res://assets/sprites/character_icons/clean_icon.png" id="9_qn3ih"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="10_2dtim"]
+[ext_resource type="Material" path="res://assets/characters/clean/Clean cell body.tres" id="11_cell_body"]
+[ext_resource type="Material" path="res://assets/characters/clean/Clean cell dark.tres" id="12_cell_dark"]
+[ext_resource type="Material" path="res://assets/characters/clean/Clean cell skin.tres" id="13_cell_skin"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qn3ih"]
 radius = 1.0415039
@@ -1983,36 +1986,48 @@ bones/22/rotation = Quaternion(-0.009231376, 0.00070142193, 0.07575902, 0.997083
 
 [node name="armL" parent="clean/Skeleton3D" index="0"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="armR" parent="clean/Skeleton3D" index="1"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="body" parent="clean/Skeleton3D" index="2"]
 layers = 2
+surface_material_override/0 = ExtResource("11_cell_body")
 
 [node name="earL" parent="clean/Skeleton3D" index="3"]
 layers = 2
+surface_material_override/0 = ExtResource("11_cell_body")
 
 [node name="earR" parent="clean/Skeleton3D" index="4"]
 layers = 2
+surface_material_override/0 = ExtResource("11_cell_body")
 
 [node name="eyeL" parent="clean/Skeleton3D" index="5"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="eyeR" parent="clean/Skeleton3D" index="6"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="glasses" parent="clean/Skeleton3D" index="7"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="head" parent="clean/Skeleton3D" index="8"]
 layers = 2
+surface_material_override/0 = ExtResource("11_cell_body")
+surface_material_override/1 = ExtResource("13_cell_skin")
 
 [node name="legL" parent="clean/Skeleton3D" index="9"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="legR" parent="clean/Skeleton3D" index="10"]
 layers = 2
+surface_material_override/0 = ExtResource("12_cell_dark")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9458106, 0)
