@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/soft_toon.gdshader" id="1_wae7f"]
+
+[resource]
+resource_name = "Clean Soft Toon Skin"
+render_priority = 0
+shader = ExtResource("1_wae7f")
+shader_parameter/albedo_color = Color(0.9261678, 0.61137325, 0.42583552, 1)

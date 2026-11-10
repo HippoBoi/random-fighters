@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/soft_toon.gdshader" id="1_887fa"]
+
+[resource]
+resource_name = "Clean Soft Toon Body"
+render_priority = 0
+shader = ExtResource("1_887fa")
+shader_parameter/albedo_color = Color(0.32890183, 0.27983126, 0.90652454, 1)

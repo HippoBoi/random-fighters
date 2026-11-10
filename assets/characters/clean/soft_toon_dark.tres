@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/soft_toon.gdshader" id="1_yuxs7"]
+
+[resource]
+resource_name = "Clean Soft Toon Dark"
+render_priority = 0
+shader = ExtResource("1_yuxs7")
+shader_parameter/albedo_color = Color(0, 0, 0, 1)
+shader_parameter/highlight_strength = 0.025
+shader_parameter/rim_strength = 0.04
