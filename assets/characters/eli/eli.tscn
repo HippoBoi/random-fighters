@@ -1,4 +1,4 @@
-[gd_scene load_steps=116 format=4 uid="uid://b41t31ibk2ikl"]
+[gd_scene load_steps=124 format=4 uid="uid://b41t31ibk2ikl"]
 
 [ext_resource type="Script" uid="uid://2gg8v14elsb3" path="res://assets/characters/eli/eli_char.gd" id="1_yiuic"]
 [ext_resource type="Texture2D" uid="uid://dlvu0djmnnfx" path="res://assets/sprites/character_icons/eli_icon.png" id="4_8cy83"]
@@ -8,6 +8,14 @@
 [ext_resource type="Shader" uid="uid://4qwlgrj7npx3" path="res://assets/scripts/shaders/grass_shader.gdshader" id="8_00vsr"]
 [ext_resource type="Shader" uid="uid://6f73lvef8ehm" path="res://assets/characters/eli/eli_basic_shader.gdshader" id="8_lwv67"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="8_vnu0j"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellDark.tres" id="11_eli_dark"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellBody.tres" id="12_eli_body"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellBodyDark.tres" id="13_eli_body_dark"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellHead.tres" id="14_eli_head"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellHands.tres" id="15_eli_hands"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellJetpack.tres" id="16_eli_jetpack"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellLegs.tres" id="17_eli_legs"]
+[ext_resource type="Material" path="res://assets/characters/eli/eliCellVisor.tres" id="18_eli_visor"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ihwgt"]
 resource_name = "Material.009"
@@ -2998,38 +3006,49 @@ bones/12/scale = Vector3(1, 1, 1)
 [node name="armL" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_2r048")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("11_eli_dark")
 
 [node name="armR" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_l883a")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("11_eli_dark")
 
 [node name="body" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_87o2l")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("12_eli_body")
+surface_material_override/1 = ExtResource("13_eli_body_dark")
 
 [node name="handL" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_s600f")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("15_eli_hands")
 
 [node name="handR" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_q5hge")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("15_eli_hands")
 
 [node name="head" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_2gpik")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("12_eli_body")
+surface_material_override/1 = ExtResource("14_eli_head")
 
 [node name="jetpack" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_yrfj4")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("16_eli_jetpack")
 
 [node name="legs" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_p7g24")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("17_eli_legs")
 
 [node name="visor" type="MeshInstance3D" parent="eli_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_wngcw")
 skin = SubResource("Skin_jv0xm")
+surface_material_override/0 = ExtResource("18_eli_visor")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

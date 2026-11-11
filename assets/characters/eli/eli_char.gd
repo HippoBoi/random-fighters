@@ -113,6 +113,7 @@ var rActiveTimer = 0;
 
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
+var _normal_materials: Dictionary[MeshInstance3D, Array] = {};
 
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $placeholder;
@@ -123,6 +124,12 @@ var basicAnimPos = 0;
 @onready var qFireCircle = $q_fire_circle;
 
 func _ready() -> void:
+	for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
+		var materials: Array = [];
+		for surface in child.mesh.get_surface_count():
+			materials.append(child.get_surface_override_material(surface));
+		_normal_materials[child] = materials;
+
 	if (is_multiplayer_authority()):
 		var gameScene = get_parent();
 		if (gameScene.name == "Game"):
@@ -479,7 +486,9 @@ func _toggle_toon_shader(enable: bool):
 			child.set_surface_override_material(0, toon_shader);
 	else:
 		for child: MeshInstance3D in $eli_armature/Skeleton3D.get_children():
-			child.set_surface_override_material(0, null);
+			var materials: Array = _normal_materials[child];
+			for surface in materials.size():
+				child.set_surface_override_material(surface, materials[surface]);
 
 @rpc("call_local", "reliable")
 func secondary_ability():

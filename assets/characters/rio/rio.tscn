@@ -1,4 +1,4 @@
-[gd_scene load_steps=134 format=4 uid="uid://bqqrsgkx6enps"]
+[gd_scene load_steps=140 format=4 uid="uid://bqqrsgkx6enps"]
 
 [ext_resource type="PackedScene" uid="uid://c67b1ynuo1arx" path="res://assets/characters/rio/rio.glb" id="1_kl43q"]
 [ext_resource type="Texture2D" uid="uid://bvsoxc7kyalvv" path="res://assets/sprites/character_icons/rio_icon.png" id="2_hbss5"]
@@ -8,6 +8,12 @@
 [ext_resource type="Material" uid="uid://5i1ak8q32qln" path="res://assets/materials/gradient_material.tres" id="6_pj1es"]
 [ext_resource type="Texture2D" uid="uid://cedf5ox6ou3ic" path="res://assets/textures/fx/T_flare81.png" id="7_61rq6"]
 [ext_resource type="Material" uid="uid://cpxrdjqho0rya" path="res://assets/materials/transparent.tres" id="8_me532"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellDark.tres" id="9_rio_dark"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellBody.tres" id="10_rio_body"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellCollar.tres" id="11_rio_collar"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellCapBand.tres" id="12_rio_cap_band"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellCapDetail.tres" id="13_rio_cap_detail"]
+[ext_resource type="Material" path="res://assets/characters/rio/rioCellSkin.tres" id="14_rio_skin"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_me532"]
 radius = 0.999927
@@ -2109,6 +2115,42 @@ bones/15/position = Vector3(1.545996e-08, 1.0347234, 2.0554391e-07)
 bones/15/rotation = Quaternion(0.16422087, 0.55694014, 0.7850143, -0.21587439)
 bones/16/rotation = Quaternion(-0.2924923, -0.48089525, 0.404111, 0.7210287)
 bones/17/rotation = Quaternion(-0.057586394, -0.28526554, -0.11272562, 0.9500528)
+
+[node name="armL" parent="rio_armature/Skeleton3D" index="0"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="armR" parent="rio_armature/Skeleton3D" index="1"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="body" parent="rio_armature/Skeleton3D" index="2"]
+surface_material_override/0 = ExtResource("10_rio_body")
+surface_material_override/1 = ExtResource("11_rio_collar")
+
+[node name="cap" parent="rio_armature/Skeleton3D" index="3"]
+surface_material_override/0 = ExtResource("10_rio_body")
+surface_material_override/1 = ExtResource("12_rio_cap_band")
+surface_material_override/2 = ExtResource("13_rio_cap_detail")
+
+[node name="eyebrowL" parent="rio_armature/Skeleton3D" index="4"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="eyebrowR" parent="rio_armature/Skeleton3D" index="5"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="eyeL" parent="rio_armature/Skeleton3D" index="6"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="eyeR" parent="rio_armature/Skeleton3D" index="7"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="head" parent="rio_armature/Skeleton3D" index="8"]
+surface_material_override/0 = ExtResource("14_rio_skin")
+
+[node name="legL" parent="rio_armature/Skeleton3D" index="9"]
+surface_material_override/0 = ExtResource("9_rio_dark")
+
+[node name="legR" parent="rio_armature/Skeleton3D" index="10"]
+surface_material_override/0 = ExtResource("9_rio_dark")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.129347, 0)
