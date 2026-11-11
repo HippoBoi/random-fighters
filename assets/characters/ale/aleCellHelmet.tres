@@ -1,8 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3]
 
-[ext_resource type="Shader" path="res://assets/scripts/shaders/Ale cell.gdshader" id="1_cell"]
+[ext_resource type="Shader" path="res://assets/scripts/shaders/aleCell.gdshader" id="1_cell"]
 
 [resource]
-resource_name = "Ale cell helmet"
+resource_name = "aleCellHelmet"
 shader = ExtResource("1_cell")
 shader_parameter/albedo_color = Color(0.70442754, 0.59775895, 0.9073246, 1)

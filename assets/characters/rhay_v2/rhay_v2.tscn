@@ -11,11 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="9_gf6lk"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="9_y4od6"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="10_4er5v"]
-[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell dark.tres" id="11_rhay_dark"]
-[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell body.tres" id="12_rhay_body"]
-[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell skin.tres" id="13_rhay_skin"]
-[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell pack.tres" id="14_rhay_pack"]
-[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell pants.tres" id="15_rhay_pants"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/rhayCellDark.tres" id="11_rhay_dark"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/rhayCellBody.tres" id="12_rhay_body"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/rhayCellSkin.tres" id="13_rhay_skin"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/rhayCellPack.tres" id="14_rhay_pack"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/rhayCellPants.tres" id="15_rhay_pants"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d342v"]
 resource_name = "Material.002"

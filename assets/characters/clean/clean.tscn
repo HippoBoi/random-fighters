@@ -10,9 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://08841tb5t151" path="res://assets/textures/fx/T_circle42.PNG" id="8_ohlot"]
 [ext_resource type="Texture2D" uid="uid://dmr7hbd7o0iy4" path="res://assets/sprites/character_icons/clean_icon.png" id="9_qn3ih"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="10_2dtim"]
-[ext_resource type="Material" path="res://assets/characters/clean/Clean cell body.tres" id="11_cell_body"]
-[ext_resource type="Material" path="res://assets/characters/clean/Clean cell dark.tres" id="12_cell_dark"]
-[ext_resource type="Material" path="res://assets/characters/clean/Clean cell skin.tres" id="13_cell_skin"]
+[ext_resource type="Material" path="res://assets/characters/clean/cleanCellBody.tres" id="11_cell_body"]
+[ext_resource type="Material" path="res://assets/characters/clean/cleanCellDark.tres" id="12_cell_dark"]
+[ext_resource type="Material" path="res://assets/characters/clean/cleanCellSkin.tres" id="13_cell_skin"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qn3ih"]
 radius = 1.0415039

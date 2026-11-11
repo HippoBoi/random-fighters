@@ -5,7 +5,7 @@ group_uniforms Base;
 uniform vec4 albedo_color : source_color = vec4(1.0);
 uniform sampler2D albedo_texture : source_color, hint_default_white, filter_linear_mipmap;
 
-#include "character_cell_lighting.gdshaderinc"
+#include "characterCellLighting.gdshaderinc"
 
 void fragment() {
 	ALBEDO = albedo_color.rgb * texture(albedo_texture, UV).rgb;
