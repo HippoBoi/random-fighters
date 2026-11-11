@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=4 uid="uid://cse7ugqqkmkn5"]
+[gd_scene load_steps=203 format=4 uid="uid://cse7ugqqkmkn5"]
 
 [ext_resource type="Script" uid="uid://cov3jhsp7n4ad" path="res://assets/characters/rhay_v2/rhay_char_v2.gd" id="1_j16sn"]
 [ext_resource type="ArrayMesh" uid="uid://bn3bj2t4erqj7" path="res://assets/effects/slash.obj" id="2_q5vqc"]
@@ -11,6 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://ryis145r3qs3" path="res://assets/textures/fx/spark_06_rotated.png" id="9_gf6lk"]
 [ext_resource type="Texture2D" uid="uid://csxgofw3r45gl" path="res://assets/sprites/character_icons/rhay_icon.png" id="9_y4od6"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="10_4er5v"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell dark.tres" id="11_rhay_dark"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell body.tres" id="12_rhay_body"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell skin.tres" id="13_rhay_skin"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell pack.tres" id="14_rhay_pack"]
+[ext_resource type="Material" path="res://assets/characters/rhay_v2/Rhay cell pants.tres" id="15_rhay_pants"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d342v"]
 resource_name = "Material.002"
@@ -9800,50 +9805,62 @@ bones/21/scale = Vector3(0.99999994, 0.99999994, 0.99999994)
 [node name="amrR" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_qpi53")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="armL" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_muese")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="body" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_msvpl")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("12_rhay_body")
 
 [node name="eyeL" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_4qtsf")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="eyeR" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_es27p")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="hair" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_j7kkc")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("12_rhay_body")
 
 [node name="head" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_n8gvt")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("13_rhay_skin")
 
 [node name="legL" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_jlqnf")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="legR" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_voxx8")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("11_rhay_dark")
 
 [node name="packL" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_if8pf")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("14_rhay_pack")
 
 [node name="packR" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_365l8")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("14_rhay_pack")
 
 [node name="pants" type="MeshInstance3D" parent="rhay_armature/Skeleton3D"]
 mesh = SubResource("ArrayMesh_u6w30")
 skin = SubResource("Skin_ycejn")
+surface_material_override/0 = ExtResource("15_rhay_pants")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
