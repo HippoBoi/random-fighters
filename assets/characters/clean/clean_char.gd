@@ -100,6 +100,8 @@ var appliedBuffs = false;
 var basicAnimList = ["basic_01", "basic_02"];
 var basicAnimPos = 0;
 
+var _normal_materials: Dictionary[MeshInstance3D, Material] = {};
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $clean;
 @onready var animPlayer = $AnimationPlayerReal
@@ -109,6 +111,9 @@ var basicAnimPos = 0;
 @onready var wParticles = $w_particles;
 
 func _ready() -> void:
+	for child: MeshInstance3D in $clean/Skeleton3D.get_children():
+		_normal_materials[child] = child.get_surface_override_material(0);
+
 	if (is_multiplayer_authority()):
 		var gameScene = get_parent();
 		if (gameScene.name == "Game"):
@@ -344,7 +349,7 @@ func _toggle_toon_shader(enable: bool):
 			child.set_surface_override_material(0, toon_shader);
 	else:
 		for child: MeshInstance3D in $clean/Skeleton3D.get_children():
-			child.set_surface_override_material(0, null);
+			child.set_surface_override_material(0, _normal_materials[child]);
 	
 	$e_particles/sparkParticle.emitting = enable;
 	$e_particles/spinningParts.emitting = enable;

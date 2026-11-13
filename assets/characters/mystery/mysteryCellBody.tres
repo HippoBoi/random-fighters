@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/mysteryCell.gdshader" id="1_cell"]
+[ext_resource type="Texture2D" path="res://assets/characters/mystery/mystery_TCom_Leather_Plain09_008x008_512_normal.png" id="2_cloth"]
+
+[resource]
+resource_name = "mysteryCellBody"
+shader = ExtResource("1_cell")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/cloth_texture = ExtResource("2_cloth")
+shader_parameter/cloth_scale = 0.5
+shader_parameter/cloth_offset = 0.45

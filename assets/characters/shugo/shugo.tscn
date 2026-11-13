@@ -1,4 +1,4 @@
-[gd_scene load_steps=143 format=4 uid="uid://c6yxe5iwkc02y"]
+[gd_scene load_steps=150 format=4 uid="uid://c6yxe5iwkc02y"]
 
 [ext_resource type="PackedScene" uid="uid://bsqe8egdp7w15" path="res://assets/characters/lucho.glb" id="1_ijeav"]
 [ext_resource type="Script" uid="uid://v4wsl5tnt2p5" path="res://assets/characters/shugo/shugo_char.gd" id="2_b10fr"]
@@ -8,6 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://cedf5ox6ou3ic" path="res://assets/textures/fx/T_flare81.png" id="6_12s6e"]
 [ext_resource type="PackedScene" uid="uid://1lp2bywmnppe" path="res://assets/characters/mystery/mystery_shield.tscn" id="7_macv4"]
 [ext_resource type="Shader" uid="uid://dq1chk3u8wlvb" path="res://assets/characters/mystery/mystery_shield.gdshader" id="8_3wruc"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellDark.tres" id="9_shugo_dark"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellBody.tres" id="10_shugo_body"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellSkin.tres" id="11_shugo_skin"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellHat.tres" id="12_shugo_hat"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellHatDark.tres" id="13_shugo_hat_dark"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellScarf.tres" id="14_shugo_scarf"]
+[ext_resource type="Material" path="res://assets/characters/shugo/shugoCellKirbySkin.tres" id="15_shugo_kirby_skin"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5fiy4"]
 resource_name = "Material.005"
@@ -4889,33 +4896,44 @@ bones/21/rotation = Quaternion(-0.2310308, -0.4120088, -0.0031691317, 0.8813986)
 
 [node name="armL" parent="Armature/Skeleton3D" index="0"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="armR" parent="Armature/Skeleton3D" index="1"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="body" parent="Armature/Skeleton3D" index="2"]
 layers = 2
+surface_material_override/0 = ExtResource("10_shugo_body")
 
 [node name="eyeL" parent="Armature/Skeleton3D" index="3"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="eyeR" parent="Armature/Skeleton3D" index="4"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="hat" parent="Armature/Skeleton3D" index="5"]
 layers = 2
+surface_material_override/0 = ExtResource("12_shugo_hat")
+surface_material_override/1 = ExtResource("13_shugo_hat_dark")
 
 [node name="head" parent="Armature/Skeleton3D" index="6"]
 layers = 2
+surface_material_override/0 = ExtResource("11_shugo_skin")
 
 [node name="legL" parent="Armature/Skeleton3D" index="7"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="legR" parent="Armature/Skeleton3D" index="8"]
 layers = 2
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="scarf" parent="Armature/Skeleton3D" index="9"]
 layers = 2
+surface_material_override/0 = ExtResource("14_shugo_scarf")
 
 [node name="shugo_kirby" type="CharacterBody3D" parent="." index="1"]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.106271, 0, 0.00761461)
@@ -5042,38 +5060,48 @@ bones/15/scale = Vector3(1, 1, 1)
 [node name="eyeL_001" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="0"]
 mesh = SubResource("ArrayMesh_spm4a")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="eyeR_001" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="1"]
 mesh = SubResource("ArrayMesh_8xmyc")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("9_shugo_dark")
 
 [node name="footL" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="2"]
 mesh = SubResource("ArrayMesh_3dteg")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("10_shugo_body")
 
 [node name="footR" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="3"]
 mesh = SubResource("ArrayMesh_y783c")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("13_shugo_hat_dark")
 
 [node name="handL" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="4"]
 mesh = SubResource("ArrayMesh_qty8v")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("15_shugo_kirby_skin")
 
 [node name="handR" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="5"]
 mesh = SubResource("ArrayMesh_om1vu")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("15_shugo_kirby_skin")
 
 [node name="hat_001" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="6"]
 mesh = SubResource("ArrayMesh_ebrof")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("12_shugo_hat")
+surface_material_override/1 = ExtResource("13_shugo_hat_dark")
 
 [node name="head_001" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="7"]
 mesh = SubResource("ArrayMesh_44sw6")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("15_shugo_kirby_skin")
 
 [node name="scarf_001" type="MeshInstance3D" parent="shugo_kirby/Armature_001/Skeleton3D" index="8"]
 mesh = SubResource("ArrayMesh_r10cx")
 skin = SubResource("Skin_bwrii")
+surface_material_override/0 = ExtResource("14_shugo_scarf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="shugo_kirby" index="1"]
 libraries = {

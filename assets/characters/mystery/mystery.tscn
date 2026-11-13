@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://chsuri7n1cwcg"]
+[gd_scene load_steps=52 format=3 uid="uid://chsuri7n1cwcg"]
 
 [ext_resource type="PackedScene" uid="uid://cd4qwltvi8kxa" path="res://assets/characters/mystery/mystery.glb" id="1_sh7qi"]
 [ext_resource type="Script" uid="uid://xwlu62q743iv" path="res://assets/characters/mystery/mystery_char.gd" id="2_0i4rp"]
@@ -11,6 +11,13 @@
 [ext_resource type="Shader" uid="uid://bwj4uly1w7xsx" path="res://assets/characters/mystery/magic_circle.tres" id="9_l16uc"]
 [ext_resource type="Texture2D" uid="uid://cgeucr66tfh2x" path="res://assets/sprites/character_icons/mystery_icon.png" id="10_itf3g"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="11_fqjyq"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellDark.tres" id="12_mystery_dark"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellBody.tres" id="13_mystery_body"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellWhite.tres" id="14_mystery_white"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellScarf.tres" id="15_mystery_scarf"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellStaffShaft.tres" id="16_mystery_staff_shaft"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellStaffHead.tres" id="17_mystery_staff_head"]
+[ext_resource type="Material" path="res://assets/characters/mystery/mysteryCellStaffBand.tres" id="18_mystery_staff_band"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mf77p"]
 render_priority = 0
@@ -2449,11 +2456,43 @@ bones/21/rotation = Quaternion(-0.04474327, -1.7850834e-15, 3.378023e-09, 0.9989
 bones/22/position = Vector3(1.4995356, 3.9315646, 4.513484)
 bones/22/rotation = Quaternion(0.31680712, 0.16811326, -0.8276954, 0.43161508)
 
+[node name="armLeft" parent="mystery_armature/Skeleton3D" index="0"]
+surface_material_override/0 = ExtResource("12_mystery_dark")
+
+[node name="armRight" parent="mystery_armature/Skeleton3D" index="1"]
+surface_material_override/0 = ExtResource("12_mystery_dark")
+
 [node name="body" parent="mystery_armature/Skeleton3D" index="2"]
-surface_material_override/0 = SubResource("ShaderMaterial_mf77p")
+surface_material_override/0 = ExtResource("13_mystery_body")
+
+[node name="eyeLeft" parent="mystery_armature/Skeleton3D" index="3"]
+surface_material_override/0 = ExtResource("14_mystery_white")
+
+[node name="eyeRight" parent="mystery_armature/Skeleton3D" index="4"]
+surface_material_override/0 = ExtResource("14_mystery_white")
+
+[node name="glasses" parent="mystery_armature/Skeleton3D" index="5"]
+surface_material_override/0 = ExtResource("14_mystery_white")
 
 [node name="hat" parent="mystery_armature/Skeleton3D" index="6"]
-surface_material_override/0 = SubResource("ShaderMaterial_6yj01")
+surface_material_override/0 = ExtResource("13_mystery_body")
+
+[node name="head" parent="mystery_armature/Skeleton3D" index="7"]
+surface_material_override/0 = ExtResource("12_mystery_dark")
+
+[node name="legRight" parent="mystery_armature/Skeleton3D" index="8"]
+surface_material_override/0 = ExtResource("12_mystery_dark")
+
+[node name="legRight_001" parent="mystery_armature/Skeleton3D" index="9"]
+surface_material_override/0 = ExtResource("12_mystery_dark")
+
+[node name="scarf" parent="mystery_armature/Skeleton3D" index="10"]
+surface_material_override/0 = ExtResource("15_mystery_scarf")
+
+[node name="staff" parent="mystery_armature/Skeleton3D" index="11"]
+surface_material_override/0 = ExtResource("16_mystery_staff_shaft")
+surface_material_override/1 = ExtResource("17_mystery_staff_head")
+surface_material_override/2 = ExtResource("18_mystery_staff_band")
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="2"]
 libraries = {

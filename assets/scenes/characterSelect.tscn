@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://cyymvk7nsgj5t"]
+[gd_scene load_steps=55 format=3 uid="uid://cyymvk7nsgj5t"]
 
 [ext_resource type="Script" uid="uid://h0rs84h2em76" path="res://assets/scenes/character_select.gd" id="1_wsrkv"]
 [ext_resource type="Shader" uid="uid://ctain7f44qshm" path="res://assets/scenes/gradient.gdshader" id="2_70d5h"]
@@ -67,7 +67,43 @@ modulate_color = Color(0, 0.592157, 0.592157, 0.470588)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wsrkv"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bdf08"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ame1t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rsqtr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b1d73"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d8bin"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jqd4l"]
+
+[sub_resource type="Theme" id="Theme_ac53y"]
+Button/styles/disabled = SubResource("StyleBoxEmpty_bdf08")
+Button/styles/focus = SubResource("StyleBoxEmpty_ame1t")
+Button/styles/hover = SubResource("StyleBoxEmpty_rsqtr")
+Button/styles/hover_pressed = SubResource("StyleBoxEmpty_rsqtr")
+Button/styles/normal = SubResource("StyleBoxEmpty_bdf08")
+Button/styles/pressed = SubResource("StyleBoxEmpty_bdf08")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_b1d73")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_d8bin")
+LineEdit/styles/read_only = SubResource("StyleBoxEmpty_jqd4l")
+
 [sub_resource type="Theme" id="Theme_bdf08"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_background"]
+bg_color = Color(0.05490196, 0, 0.14117648, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.47058824, 0.6901961, 1, 0.34509805)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ndpmk"]
 shader = ExtResource("16_0o2ln")
@@ -1004,13 +1040,15 @@ text = "60"
 horizontal_alignment = 1
 
 [node name="PlayerTemplate" type="Button" parent="."]
+visible = false
 clip_contents = true
+custom_minimum_size = Vector2(75, 54)
 layout_mode = 0
 offset_left = -80.0
 offset_top = 20.0
 offset_right = -5.0
 offset_bottom = 74.0
-scale = Vector2(0.9, 0.9)
+theme = SubResource("Theme_ac53y")
 action_mode = 0
 text = "
 
@@ -1018,16 +1056,13 @@ text = "
 
 [node name="CharacterSplash" type="TextureRect" parent="PlayerTemplate"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
+offset_left = 10.0
+offset_right = -8.5
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 expand_mode = 1
 
 [node name="PlayerUsername" type="RichTextLabel" parent="PlayerTemplate"]
@@ -1041,16 +1076,22 @@ text = "nadie xdxd"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="BgColor" type="ColorRect" parent="PlayerTemplate"]
+[node name="BgColor" type="Panel" parent="PlayerTemplate"]
+modulate = Color(1, 1, 1, 0.7254902)
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 7.7777786
+offset_top = 11.111122
+offset_right = 7.7777786
+offset_bottom = 11.111122
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.8, 0.8)
 theme = SubResource("Theme_bdf08")
-color = Color(0, 0, 0.16862746, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_player_background")
 
 [node name="SelectText" type="Label" parent="."]
 layout_mode = 1
