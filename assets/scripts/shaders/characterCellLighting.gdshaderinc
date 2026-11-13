@@ -1,10 +1,10 @@
 group_uniforms Cel_Lighting;
-uniform vec3 shadow_tint : source_color = vec3(0.34, 0.38, 0.50);
-uniform vec3 midtone_tint : source_color = vec3(0.80, 0.82, 0.88);
+uniform vec3 shadow_tint : source_color = vec3(0.3, 0.32, 0.42);
+uniform vec3 midtone_tint : source_color = vec3(0.72, 0.76, 0.81);
 uniform vec3 light_tint : source_color = vec3(1.0, 0.98, 0.94);
-uniform float shadow_threshold : hint_range(0.0, 1.0, 0.01) = 0.32;
-uniform float light_threshold : hint_range(0.0, 1.0, 0.01) = 0.72;
-uniform float band_softness : hint_range(0.01, 0.3, 0.01) = 0.02;
+uniform float shadow_threshold : hint_range(0.0, 1.0, 0.01) = 0.3;
+uniform float light_threshold : hint_range(0.0, 1.0, 0.01) = 0.65;
+uniform float band_softness : hint_range(0.01, 0.3, 0.01) = 0.01;
 
 group_uniforms Highlights;
 uniform vec3 rim_color : source_color = vec3(0.72, 0.80, 1.0);
