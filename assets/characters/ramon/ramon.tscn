@@ -1,10 +1,14 @@
-[gd_scene load_steps=23 format=3 uid="uid://b7k5757bu7dcb"]
+[gd_scene load_steps=27 format=3 uid="uid://b7k5757bu7dcb"]
 
 [ext_resource type="PackedScene" uid="uid://cmnqthmyc3qp5" path="res://assets/characters/ramon.glb" id="1_ifwot"]
 [ext_resource type="Script" uid="uid://dilxl3o3ibo3i" path="res://assets/characters/ramon/ramon_char.gd" id="2_6gwxh"]
 [ext_resource type="PackedScene" uid="uid://cjb371raxm7pw" path="res://assets/characters/ramon/paper_hitbox.tscn" id="3_gwnqa"]
 [ext_resource type="Texture2D" uid="uid://dmuun3wigxfe6" path="res://assets/sprites/character_icons/ramon_icon.png" id="4_ynh7j"]
 [ext_resource type="Script" uid="uid://bj1jkceeje0ob" path="res://assets/characters/characterIcon.gd" id="5_k4x2y"]
+[ext_resource type="Material" path="res://assets/characters/ramon/ramonCellBody.tres" id="6_ramon_body"]
+[ext_resource type="Material" path="res://assets/characters/ramon/ramonCellFlag.tres" id="7_ramon_flag"]
+[ext_resource type="Material" path="res://assets/characters/ramon/ramonCellEyes.tres" id="8_ramon_eyes"]
+[ext_resource type="Material" path="res://assets/characters/ramon/ramonCellDark.tres" id="9_ramon_dark"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ynh7j"]
 radius = 0.7919922
@@ -1201,33 +1205,43 @@ bones/26/rotation = Quaternion(-6.78119e-09, -4.65675e-10, -6.98492e-10, 1)
 
 [node name="armR" parent="Armature/Skeleton3D" index="0"]
 layers = 2
+surface_material_override/0 = ExtResource("9_ramon_dark")
 
 [node name="armR_001" parent="Armature/Skeleton3D" index="1"]
 layers = 2
+surface_material_override/0 = ExtResource("9_ramon_dark")
 
 [node name="body" parent="Armature/Skeleton3D" index="2"]
 layers = 2
+surface_material_override/0 = ExtResource("6_ramon_body")
 
 [node name="Cube" parent="Armature/Skeleton3D" index="3"]
 layers = 2
+surface_material_override/0 = ExtResource("7_ramon_flag")
 
 [node name="eyeL" parent="Armature/Skeleton3D" index="4"]
 layers = 2
+surface_material_override/0 = ExtResource("8_ramon_eyes")
 
 [node name="eyeR" parent="Armature/Skeleton3D" index="5"]
 layers = 2
+surface_material_override/0 = ExtResource("8_ramon_eyes")
 
 [node name="head" parent="Armature/Skeleton3D" index="6"]
 layers = 2
+surface_material_override/0 = ExtResource("9_ramon_dark")
 
 [node name="helmet" parent="Armature/Skeleton3D" index="7"]
 layers = 2
+surface_material_override/0 = ExtResource("6_ramon_body")
 
 [node name="legL" parent="Armature/Skeleton3D" index="8"]
 layers = 2
+surface_material_override/0 = ExtResource("9_ramon_dark")
 
 [node name="legR" parent="Armature/Skeleton3D" index="9"]
 layers = 2
+surface_material_override/0 = ExtResource("9_ramon_dark")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999976, 0, 3.4064183, 0)

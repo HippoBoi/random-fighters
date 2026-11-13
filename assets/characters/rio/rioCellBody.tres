@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/rioCell.gdshader" id="1_cell"]
+
+[resource]
+resource_name = "rioCellBody"
+shader = ExtResource("1_cell")
+shader_parameter/albedo_color = Color(0.9064818, 0.023545244, 0.16780086, 1)

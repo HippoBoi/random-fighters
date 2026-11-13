@@ -112,6 +112,8 @@ var spawnedThunder = false;
 var electricMode = false;
 var electricCooldown = 0;
 
+var _normal_materials: Dictionary[MeshInstance3D, Array] = {};
+
 @onready var camera = get_viewport().get_camera_3d();
 @onready var charModel = $Armature;
 @onready var animPlayer = $AnimationPlayer2;
@@ -122,6 +124,12 @@ var electricCooldown = 0;
 @onready var q_hitbox3 = $q_hitbox/MeshInstance3D2;
 
 func _ready() -> void:
+	for child: MeshInstance3D in $Armature/Skeleton3D.get_children():
+		var materials: Array = [];
+		for surface in child.mesh.get_surface_count():
+			materials.append(child.get_surface_override_material(surface));
+		_normal_materials[child] = materials;
+
 	if (is_multiplayer_authority()):
 		var gameScene = get_parent();
 		if (gameScene.name == "Game"):
@@ -328,7 +336,9 @@ func _toggle_toon_shader(enable: bool):
 				child.set_surface_override_material(1, toon_shader);
 	else:
 		for child: MeshInstance3D in $Armature/Skeleton3D.get_children():
-			child.set_surface_override_material(0, null);
+			var materials: Array = _normal_materials[child];
+			for surface in materials.size():
+				child.set_surface_override_material(surface, materials[surface]);
 	
 	$r_particles/shockwave.emitting = enable;
 	$r_particles/spinningParts.emitting = enable;

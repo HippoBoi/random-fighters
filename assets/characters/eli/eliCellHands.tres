@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/eliCell.gdshader" id="1_cell"]
+
+[resource]
+resource_name = "eliCellHands"
+shader = ExtResource("1_cell")
+shader_parameter/albedo_color = Color(1, 0.2920281, 0.23919432, 1)

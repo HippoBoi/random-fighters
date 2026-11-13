@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/scripts/shaders/aleCell.gdshader" id="1_cell"]
+
+[resource]
+resource_name = "aleCellSwordGuard"
+shader = ExtResource("1_cell")
+shader_parameter/albedo_color = Color(0.60368574, 0.121562295, 0.38825688, 1)
